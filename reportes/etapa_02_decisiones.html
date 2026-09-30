@@ -1,0 +1,516 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tres decisiones de features</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: memo de decisiones; cada decisión es un bloque pregunta → opciones → evidencia → recomendación, en un carril de lectura. */
+:root {
+  --bg: #f6f7f9;
+  --surface: #ffffff;
+  --ink: #16191f;
+  --ink-2: #4a5160;
+  --ink-3: #7a8191;
+  --rule: #dde1e7;
+  --accent: #b3122a;
+  --accent-soft: #f6e3e6;
+  --bar: #2f4a6d;
+  --sea: #2b6cb0;
+  --alt: #c21f3a;
+  --good: #1f7a4d;
+  --good-soft: #e3f2ea;
+  --display: "Barlow Condensed", "Arial Narrow", "Helvetica Neue", sans-serif;
+  --body: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --step--1: 0.8125rem;
+  --step-0: 1rem;
+  --step-1: 1.25rem;
+  --step-2: 1.75rem;
+  --step-3: 2.75rem;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #111418; --surface: #1a1e24; --ink: #e8eaee; --ink-2: #b3b9c4; --ink-3: #858c99;
+    --rule: #2c323b; --accent: #ff5a6e; --accent-soft: #3a1c22; --bar: #7fa3d1;
+    --sea: #4f8ad6; --alt: #e0405a; --good: #5cc28f; --good-soft: #17301f; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #111418; --surface: #1a1e24; --ink: #e8eaee; --ink-2: #b3b9c4; --ink-3: #858c99;
+  --rule: #2c323b; --accent: #ff5a6e; --accent-soft: #3a1c22; --bar: #7fa3d1;
+  --sea: #4f8ad6; --alt: #e0405a; --good: #5cc28f; --good-soft: #17301f; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font: 400 var(--step-0)/1.55 var(--body);
+  padding-inline: 16px; padding-block: 40px 64px;
+}
+main { max-width: 60rem; margin-inline: auto; display: grid; gap: 56px; }
+h1, h2 { font-family: var(--display); font-weight: 700; line-height: 1.05; text-wrap: balance; margin: 0; }
+h1 { font-size: var(--step-3); }
+h2 { font-size: var(--step-2); }
+h3 { font: 600 var(--step-1)/1.25 var(--body); margin: 0; }
+p, ul { margin: 0; }
+.eyebrow { font: 600 var(--step--1)/1 var(--mono); text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent); }
+header { display: grid; gap: 12px; }
+header p { color: var(--ink-2); font-size: var(--step-1); max-width: 42rem; }
+.prose { display: grid; gap: 12px; max-width: 44rem; color: var(--ink-2); }
+.prose strong { color: var(--ink); font-weight: 600; }
+.scroll { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: var(--step--1); background: var(--surface); }
+th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+th { font: 600 0.75rem/1.2 var(--mono); text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-3); }
+td.num, th.num { text-align: right; font-family: var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+code { font-family: var(--mono); font-size: 0.9em; }
+.chip { display: inline-block; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--rule); font: 600 0.72rem/1.4 var(--mono); color: var(--ink-2); white-space: nowrap; }
+.chip.rec { color: var(--good); border-color: var(--good); background: var(--good-soft); }
+.chip.changed { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
+
+.decision { display: grid; gap: 24px; padding-top: 32px; border-top: 2px solid var(--ink); }
+.decision-head { display: grid; gap: 8px; }
+.decision-head .num { font: 700 var(--step-1)/1 var(--mono); color: var(--ink-3); }
+.why { background: var(--surface); border: 1px solid var(--rule); border-radius: 6px; padding: 16px 20px; display: grid; gap: 6px; max-width: 44rem; }
+.why b { font: 600 0.75rem/1.2 var(--mono); text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-3); }
+
+.options { display: grid; gap: 0; border: 1px solid var(--rule); border-radius: 6px; background: var(--surface); overflow: hidden; }
+.option { display: grid; grid-template-columns: 2.25rem minmax(0, 1fr); gap: 12px; padding: 16px 20px; }
+.option + .option { border-top: 1px solid var(--rule); }
+.option.recommended { box-shadow: inset 4px 0 0 var(--good); }
+.option .letter { font: 700 var(--step-1)/1 var(--display); color: var(--ink-3); padding-top: 2px; }
+.option.recommended .letter { color: var(--good); }
+.option-body { display: grid; gap: 6px; min-width: 0; }
+.option-title { display: flex; flex-wrap: wrap; gap: 8px; align-items: baseline; font-weight: 600; }
+.option-body p { color: var(--ink-2); }
+.option-body .implies { color: var(--ink); }
+.option-body .implies::before { content: "Implica: "; font-weight: 600; }
+
+.evidence { display: grid; grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr)); gap: 32px; }
+.evidence > figure { margin: 0; display: grid; gap: 10px; min-width: 0; align-content: start; }
+figcaption { font-size: var(--step--1); color: var(--ink-3); }
+.chart { width: 100%; height: auto; display: block; overflow: visible; }
+.chart text { fill: var(--ink-2); font: 400 11px var(--mono); }
+.chart .grid { stroke: var(--rule); stroke-width: 1; }
+.chart .axis { stroke: var(--ink-3); stroke-width: 1; }
+.legend { display: flex; flex-wrap: wrap; gap: 16px; font-size: var(--step--1); color: var(--ink-2); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend i { width: 14px; height: 3px; border-radius: 2px; display: inline-block; }
+.minibar { display: inline-block; height: 8px; border-radius: 0 3px 3px 0; background: var(--ink-3); vertical-align: middle; margin-right: 8px; }
+
+.verdict { display: grid; gap: 8px; padding: 18px 20px; border-radius: 6px; background: var(--good-soft); border: 1px solid var(--good); max-width: 44rem; }
+.verdict b { font: 600 0.75rem/1.2 var(--mono); text-transform: uppercase; letter-spacing: 0.06em; color: var(--good); }
+.verdict ul { padding-left: 1.1rem; display: grid; gap: 4px; }
+
+.tooltip { position: fixed; pointer-events: none; z-index: 10; max-width: 18rem; padding: 8px 10px; background: var(--ink); color: var(--bg); border-radius: 6px; font-size: var(--step--1); line-height: 1.4; }
+footer { color: var(--ink-3); font-size: var(--step--1); border-top: 1px solid var(--rule); padding-top: 16px; display: grid; gap: 4px; }
+@media (max-width: 40rem) { .option { padding: 14px 16px; } }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <span class="eyebrow">Etapa 2 · Features · Decisiones para el equipo</span>
+    <h1>Tres decisiones de features</h1>
+    <p>Antes de construir las variables del modelo hay tres decisiones abiertas. Para cada una: qué se decide, qué opciones hay, qué implica cada opción y qué dicen los datos de la LMB.</p>
+  </header>
+
+  <section class="prose">
+    <h2>Resumen</h2>
+    <div class="scroll"><table id="summary"></table></div>
+    <p>La decisión 1 cambió respecto al plan original: los datos mostraron que la propuesta tenía el mismo problema que quería evitar.</p>
+  </section>
+
+  <!-- Decisión 1 -->
+  <section class="decision">
+    <div class="decision-head">
+      <span class="num">Decisión 1</span>
+      <h2>¿Qué ángulo vertical entra a Stuff+?</h2>
+    </div>
+    <div class="why">
+      <b>Por qué importa</b>
+      <p>Stuff+ debe medir el pitch, no dónde lo pusieron; la ubicación es trabajo de Location+. Pero una recta que llega arriba siempre llega más plana que una que llega abajo. Si el modelo ve el ángulo crudo, premia la ubicación y la hace pasar por calidad del pitch.</p>
+    </div>
+
+    <div class="options">
+      <div class="option">
+        <span class="letter">A</span>
+        <div class="option-body">
+          <div class="option-title">Ángulo de llegada (VAA) crudo</div>
+          <p>Usar <code>VertApprAngle</code> tal como viene.</p>
+          <p class="implies">Stuff+ absorbe la ubicación. Un pitcher que tira arriba parecería tener mejor stuff. Mezcla Stuff+ con Location+, que la convocatoria pide separar.</p>
+        </div>
+      </div>
+      <div class="option">
+        <span class="letter">B</span>
+        <div class="option-body">
+          <div class="option-title">Ángulo de salida de la mano <span class="chip changed">Era la propuesta del plan</span></div>
+          <p>Usar <code>VertRelAngle</code>, pensando que no depende de la ubicación.</p>
+          <p class="implies">El mismo problema. El ángulo de salida es básicamente a dónde apuntó el pitcher: la altura de llegada explica casi tanto de él como del VAA (tabla de abajo).</p>
+        </div>
+      </div>
+      <div class="option recommended">
+        <span class="letter">C</span>
+        <div class="option-body">
+          <div class="option-title">VAA relativo <span class="chip rec">Recomendada</span></div>
+          <p>VAA menos el VAA esperado para un pitch de ese tipo que llega a esa altura. Dice qué tan plano llega el pitch <em>comparado con otros en el mismo lugar</em>.</p>
+          <p class="implies">La ubicación solo se usa para quitar su efecto. Lo que queda depende del pitcher: su altura de release y su ride. Es un feature que el coach entiende: "tu recta llega plana".</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="evidence">
+      <figure>
+        <h3>Cuánto del ángulo explica la altura de llegada</h3>
+        <div class="scroll"><table id="vaa-r2"></table></div>
+        <figcaption>R² de una regresión del ángulo contra la altura a la que cruza el plato. 0.80 significa que la altura explica 80 % de la variación del ángulo.</figcaption>
+      </figure>
+      <figure>
+        <h3>El VAA relativo predice swings fallidos</h3>
+        <svg class="chart" id="vaa-whiff" role="img" aria-label="Whiff por swing según cuartil de VAA relativo"></svg>
+        <figcaption>Rectas de cuatro costuras que cruzan arriba de 3 pies, en cuartiles de VAA relativo. Mismo lugar, distinta planitud.</figcaption>
+      </figure>
+    </div>
+    <p class="prose" id="vaa-rel-text"></p>
+
+    <div class="verdict">
+      <b>Qué implica elegir C</b>
+      <ul>
+        <li>Stuff+ y Location+ quedan separados de forma limpia y defendible ante el jurado.</li>
+        <li>Stuff+ no usa ni el VAA crudo ni el ángulo de salida crudo; usa <code>vaa_rel</code>. El VAA crudo queda disponible para Pitching+.</li>
+        <li>Aplicamos lo mismo al ángulo horizontal (<code>HorzApprAngle</code> contra <code>PlateLocSide</code>) y lo medimos al construir la etapa.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Decisión 2 -->
+  <section class="decision">
+    <div class="decision-head">
+      <span class="num">Decisión 2</span>
+      <h2>¿Cómo separamos sweeper de slider?</h2>
+    </div>
+    <div class="why">
+      <b>Por qué importa</b>
+      <p>El índice Magnus y el perfil ideal para Diablos distinguen el sweeper, que rompe mucho hacia el guante gracias al spin, del gyro slider, que casi no depende del spin. Si la etiqueta cambia con el estadio, el mismo pitch del mismo pitcher contaría como dos pitches distintos.</p>
+    </div>
+
+    <div class="options">
+      <div class="option">
+        <span class="letter">A</span>
+        <div class="option-body">
+          <div class="option-title">Umbral fijo de 12 in sobre el movimiento observado</div>
+          <p>Sweeper = slider con 12 pulgadas o más hacia el lado del guante, medido tal cual.</p>
+          <p class="implies">En altitud casi no habría sweepers. Una conclusión como "los sweepers rinden peor en CDMX" sería un artefacto de la etiqueta.</p>
+        </div>
+      </div>
+      <div class="option">
+        <span class="letter">B</span>
+        <div class="option-body">
+          <div class="option-title">Umbral fijo de 12 in sobre la forma a nivel del mar</div>
+          <p>Primero convertir el movimiento a su equivalente a nivel del mar y luego aplicar las 12 pulgadas.</p>
+          <p class="implies">Consistente entre estadios, pero el 12 viene de MLB. No sabemos si es el corte natural de la LMB.</p>
+        </div>
+      </div>
+      <div class="option recommended">
+        <span class="letter">C</span>
+        <div class="option-body">
+          <div class="option-title">Corte sacado de los datos, sobre la forma a nivel del mar <span class="chip rec">Recomendada</span></div>
+          <p>Convertir a forma de nivel del mar y dejar que un modelo de mezclas encuentre dónde se separan los dos grupos de sliders de la LMB. El 12 solo es el punto de partida.</p>
+          <p class="implies">Grupos defendibles para esta liga y la misma etiqueta en casa y de visita. Cuesta un paso más, y el corte hay que reportarlo y validarlo.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="evidence">
+      <figure>
+        <h3>Movimiento horizontal de las sliders</h3>
+        <div class="legend"><span><i style="background:var(--sea)"></i>Nivel del mar</span><span><i style="background:var(--alt)"></i>Altitud extrema</span></div>
+        <svg class="chart" id="sweeper-hist" role="img" aria-label="Distribución del movimiento horizontal de sliders por altitud"></svg>
+        <figcaption>% de sliders en cada pulgada de movimiento (negativo = hacia el guante). La línea punteada es el umbral fijo de 12 in.</figcaption>
+      </figure>
+      <figure>
+        <h3>Lo que pasa con el umbral fijo</h3>
+        <div class="scroll"><table id="sweeper-pct"></table></div>
+        <p class="prose" id="sweeper-same"></p>
+      </figure>
+    </div>
+
+    <div class="verdict">
+      <b>Qué implica elegir C</b>
+      <ul>
+        <li>La clasificación es una propiedad del pitcher, no del estadio: un pitcher tiene el mismo arsenal en casa y de visita.</li>
+        <li>Validación: el % de sweepers debe quedar parecido entre altitudes después del ajuste.</li>
+        <li>Depende de estimar bien la conversión a nivel del mar, que también es la etapa A del modelo.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Decisión 3 -->
+  <section class="decision">
+    <div class="decision-head">
+      <span class="num">Decisión 3</span>
+      <h2>¿Contra qué recta medimos las diferencias de arsenal?</h2>
+    </div>
+    <div class="why">
+      <b>Por qué importa</b>
+      <p>Variables como "el cambio va 9 mph más lento que la recta" comparan cada pitch con la recta principal del pitcher. Esa referencia puede fallar de dos formas. Con pocas rectas es ruidosa. Si viene de otro ambiente está sesgada, y el sesgo depende de la altitud, que es justo lo que queremos medir.</p>
+    </div>
+
+    <div class="options">
+      <div class="option">
+        <span class="letter">A</span>
+        <div class="option-body">
+          <div class="option-title">Recta de toda la temporada</div>
+          <p>Una sola referencia por pitcher y temporada, mezclando todos los estadios.</p>
+          <p class="implies">Poco ruido, pero sesgo sistemático: en altitud la referencia exagera el ride de la recta y a nivel del mar lo subestima (tabla de abajo). Contamina la comparación de altitud.</p>
+        </div>
+      </div>
+      <div class="option">
+        <span class="letter">B</span>
+        <div class="option-body">
+          <div class="option-title">Solo la recta del mismo juego, con un mínimo de rectas <span class="chip changed">Era la propuesta del plan (mínimo 5)</span></div>
+          <p>Usar la recta del juego si hay al menos N; si no, otra referencia.</p>
+          <p class="implies">Sin sesgo, pero hay que escoger un corte: con 5 cubre 82.6 % de las salidas con un error de ~0.9 in de IVB; con 15, solo 30.9 %. El corte tira información.</p>
+        </div>
+      </div>
+      <div class="option recommended">
+        <span class="letter">C</span>
+        <div class="option-body">
+          <div class="option-title">Mezcla ponderada por número de rectas <span class="chip rec">Recomendada</span></div>
+          <p>Referencia = combinación de la recta del juego y la del pitcher <em>en esa altitud y temporada</em>. El juego pesa más mientras más rectas tenga: peso = n / (n + 5).</p>
+          <p class="implies">Usa todas las salidas, no mezcla altitudes, y con pocas rectas el ruido baja solo. El "mínimo de 5" pasa a ser el punto donde el juego pesa la mitad.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="evidence">
+      <figure>
+        <h3>Salidas con suficientes rectas</h3>
+        <svg class="chart" id="fb-coverage" role="img" aria-label="Porcentaje de salidas con al menos N rectas"></svg>
+        <figcaption>% de salidas (pitcher × juego) con al menos N rectas de cuatro costuras o sinker.</figcaption>
+      </figure>
+      <figure>
+        <h3>Ruido contra sesgo</h3>
+        <div class="scroll"><table id="fb-noise"></table></div>
+        <figcaption id="fb-noise-caption"></figcaption>
+        <div class="scroll"><table id="fb-bias"></table></div>
+        <figcaption>Diferencia entre la recta de cada salida y la recta de toda la temporada del mismo pitcher. El signo cambia con la altitud: es sesgo, no ruido.</figcaption>
+      </figure>
+    </div>
+
+    <div class="verdict">
+      <b>Qué implica elegir C</b>
+      <ul>
+        <li>Las diferencias de arsenal quedan libres del efecto altitud, que se mide aparte con <code>air_ratio</code>.</li>
+        <li>No se descarta ninguna salida por tener pocas rectas.</li>
+        <li>Al construirlo verificamos que la referencia de respaldo (misma altitud y temporada) no tenga sesgo propio.</li>
+      </ul>
+    </div>
+  </section>
+
+  <footer>
+    <span>Fuente de todas las cifras: <code>reportes/etapa_02_decisiones.json</code>, generado por <code>src/decisiones_etapa_02.py</code> sobre el dataset limpio.</span>
+    <span>Contexto completo: <code>docs/02_plan_features.md</code>. Decisiones registradas en <code>docs/decisiones.md</code>.</span>
+  </footer>
+</main>
+<div class="tooltip" id="tooltip" hidden></div>
+
+<script>
+const DATA = {"vaa": {"dependencia_de_ubicacion": [{"pitch_group": "Four-Seam", "r2_vaa_por_altura": 0.7988, "grados_vaa_por_pie": 1.0632, "r2_salida_por_altura": 0.7071, "grados_salida_por_pie": 1.0287, "pitches": 216908}, {"pitch_group": "Slider", "r2_vaa_por_altura": 0.7031, "grados_vaa_por_pie": 1.1206, "r2_salida_por_altura": 0.5899, "grados_salida_por_pie": 0.9971, "pitches": 139389}, {"pitch_group": "Sinker", "r2_vaa_por_altura": 0.7552, "grados_vaa_por_pie": 1.1372, "r2_salida_por_altura": 0.4899, "grados_salida_por_pie": 0.9707, "pitches": 110477}, {"pitch_group": "Changeup", "r2_vaa_por_altura": 0.7239, "grados_vaa_por_pie": 1.1813, "r2_salida_por_altura": 0.5086, "grados_salida_por_pie": 0.9876, "pitches": 78698}, {"pitch_group": "Curveball", "r2_vaa_por_altura": 0.54, "grados_vaa_por_pie": 1.038, "r2_salida_por_altura": 0.6808, "grados_salida_por_pie": 1.0978, "pitches": 53909}], "vaa_relativo": {"corr_con_altura_llegada": 0.0, "corr_con_altura_release": -0.769, "corr_con_extension": 0.0785, "corr_con_ivb": 0.273, "desviacion_grados": 0.475}, "whiff_por_vaa_relativo_rectas_altas": [{"cuartil": 1, "whiff_por_swing": 0.2189, "pitches": 22494}, {"cuartil": 2, "whiff_por_swing": 0.2534, "pitches": 22494}, {"cuartil": 3, "whiff_por_swing": 0.3003, "pitches": 22493}, {"cuartil": 4, "whiff_por_swing": 0.3676, "pitches": 22493}]}, "sweeper": {"histograma": [{"altitude_category": "Extreme Altitude", "hb_in": -21.0, "sliders": 1}, {"altitude_category": "Extreme Altitude", "hb_in": -20.0, "sliders": 2}, {"altitude_category": "Extreme Altitude", "hb_in": -19.0, "sliders": 9}, {"altitude_category": "Extreme Altitude", "hb_in": -18.0, "sliders": 16}, {"altitude_category": "Extreme Altitude", "hb_in": -17.0, "sliders": 49}, {"altitude_category": "Extreme Altitude", "hb_in": -16.0, "sliders": 116}, {"altitude_category": "Extreme Altitude", "hb_in": -15.0, "sliders": 216}, {"altitude_category": "Extreme Altitude", "hb_in": -14.0, "sliders": 414}, {"altitude_category": "Extreme Altitude", "hb_in": -13.0, "sliders": 522}, {"altitude_category": "Extreme Altitude", "hb_in": -12.0, "sliders": 723}, {"altitude_category": "Extreme Altitude", "hb_in": -11.0, "sliders": 836}, {"altitude_category": "Extreme Altitude", "hb_in": -10.0, "sliders": 1050}, {"altitude_category": "Extreme Altitude", "hb_in": -9.0, "sliders": 1269}, {"altitude_category": "Extreme Altitude", "hb_in": -8.0, "sliders": 1768}, {"altitude_category": "Extreme Altitude", "hb_in": -7.0, "sliders": 2403}, {"altitude_category": "Extreme Altitude", "hb_in": -6.0, "sliders": 3414}, {"altitude_category": "Extreme Altitude", "hb_in": -5.0, "sliders": 4260}, {"altitude_category": "Extreme Altitude", "hb_in": -4.0, "sliders": 4734}, {"altitude_category": "Extreme Altitude", "hb_in": -3.0, "sliders": 5088}, {"altitude_category": "Extreme Altitude", "hb_in": -2.0, "sliders": 4683}, {"altitude_category": "Extreme Altitude", "hb_in": -1.0, "sliders": 3803}, {"altitude_category": "Extreme Altitude", "hb_in": 0.0, "sliders": 2814}, {"altitude_category": "Extreme Altitude", "hb_in": 1.0, "sliders": 1727}, {"altitude_category": "Extreme Altitude", "hb_in": 2.0, "sliders": 1129}, {"altitude_category": "Extreme Altitude", "hb_in": 3.0, "sliders": 775}, {"altitude_category": "Extreme Altitude", "hb_in": 4.0, "sliders": 507}, {"altitude_category": "Extreme Altitude", "hb_in": 5.0, "sliders": 343}, {"altitude_category": "Extreme Altitude", "hb_in": 6.0, "sliders": 178}, {"altitude_category": "Extreme Altitude", "hb_in": 7.0, "sliders": 92}, {"altitude_category": "Extreme Altitude", "hb_in": 8.0, "sliders": 49}, {"altitude_category": "Extreme Altitude", "hb_in": 9.0, "sliders": 28}, {"altitude_category": "No Altitude", "hb_in": -25.0, "sliders": 24}, {"altitude_category": "No Altitude", "hb_in": -24.0, "sliders": 45}, {"altitude_category": "No Altitude", "hb_in": -23.0, "sliders": 100}, {"altitude_category": "No Altitude", "hb_in": -22.0, "sliders": 160}, {"altitude_category": "No Altitude", "hb_in": -21.0, "sliders": 225}, {"altitude_category": "No Altitude", "hb_in": -20.0, "sliders": 365}, {"altitude_category": "No Altitude", "hb_in": -19.0, "sliders": 484}, {"altitude_category": "No Altitude", "hb_in": -18.0, "sliders": 701}, {"altitude_category": "No Altitude", "hb_in": -17.0, "sliders": 859}, {"altitude_category": "No Altitude", "hb_in": -16.0, "sliders": 964}, {"altitude_category": "No Altitude", "hb_in": -15.0, "sliders": 1105}, {"altitude_category": "No Altitude", "hb_in": -14.0, "sliders": 1280}, {"altitude_category": "No Altitude", "hb_in": -13.0, "sliders": 1250}, {"altitude_category": "No Altitude", "hb_in": -12.0, "sliders": 1356}, {"altitude_category": "No Altitude", "hb_in": -11.0, "sliders": 1559}, {"altitude_category": "No Altitude", "hb_in": -10.0, "sliders": 1641}, {"altitude_category": "No Altitude", "hb_in": -9.0, "sliders": 2188}, {"altitude_category": "No Altitude", "hb_in": -8.0, "sliders": 2852}, {"altitude_category": "No Altitude", "hb_in": -7.0, "sliders": 3690}, {"altitude_category": "No Altitude", "hb_in": -6.0, "sliders": 4480}, {"altitude_category": "No Altitude", "hb_in": -5.0, "sliders": 5107}, {"altitude_category": "No Altitude", "hb_in": -4.0, "sliders": 5414}, {"altitude_category": "No Altitude", "hb_in": -3.0, "sliders": 5335}, {"altitude_category": "No Altitude", "hb_in": -2.0, "sliders": 4780}, {"altitude_category": "No Altitude", "hb_in": -1.0, "sliders": 4003}, {"altitude_category": "No Altitude", "hb_in": 0.0, "sliders": 3039}, {"altitude_category": "No Altitude", "hb_in": 1.0, "sliders": 2170}, {"altitude_category": "No Altitude", "hb_in": 2.0, "sliders": 1577}, {"altitude_category": "No Altitude", "hb_in": 3.0, "sliders": 1105}, {"altitude_category": "No Altitude", "hb_in": 4.0, "sliders": 732}, {"altitude_category": "No Altitude", "hb_in": 5.0, "sliders": 490}, {"altitude_category": "No Altitude", "hb_in": 6.0, "sliders": 274}, {"altitude_category": "No Altitude", "hb_in": 7.0, "sliders": 119}, {"altitude_category": "No Altitude", "hb_in": 8.0, "sliders": 48}, {"altitude_category": "No Altitude", "hb_in": 9.0, "sliders": 25}], "pct_mas_alla_del_umbral": [{"altitude_category": "Extreme Altitude", "sliders": 43087, "pct_sweeper_fijo": 0.0312}, {"altitude_category": "Medium Altitude", "sliders": 36037, "pct_sweeper_fijo": 0.0557}, {"altitude_category": "No Altitude", "sliders": 59704, "pct_sweeper_fijo": 0.1269}], "mismo_pitcher": {"pitchers": 300, "sweeper_a_nivel_del_mar": 19, "dejan_de_serlo_en_altitud": 16, "razon_hb_altitud_vs_mar": 0.7828}}, "recta_referencia": {"cobertura_por_umbral": {"1": 0.9718, "3": 0.9119, "5": 0.8263, "10": 0.5232, "15": 0.3087}, "ruido_dentro_del_juego": {"sd_velo_mph": 0.9654, "sd_ivb_in": 2.1113}, "error_referencia_de_temporada": [{"altitude_category": "Extreme Altitude", "error_ivb_in": 1.1175, "sesgo_ivb_in": -0.8917, "salidas": 5448}, {"altitude_category": "Medium Altitude", "error_ivb_in": 0.8846, "sesgo_ivb_in": -0.4786, "salidas": 4521}, {"altitude_category": "No Altitude", "error_ivb_in": 1.3606, "sesgo_ivb_in": 1.0108, "salidas": 8598}]}, "parametros": {"umbral_sweeper_in": 12, "umbrales_rectas": [1, 3, 5, 10, 15]}};
+const int = new Intl.NumberFormat("es-MX");
+const pct = (x, d = 1) => (x * 100).toFixed(d) + " %";
+const fixed = (x, d = 2) => Number(x).toFixed(d);
+const SVG = "http://www.w3.org/2000/svg";
+const tooltip = document.getElementById("tooltip");
+
+function table(id, columns, rows) {
+  const head = "<thead><tr>" + columns.map(c => `<th class="${c.num ? "num" : ""}">${c.label}</th>`).join("") + "</tr></thead>";
+  const body = "<tbody>" + rows.map(r => "<tr>" + columns.map(c =>
+    `<td class="${c.num ? "num" : ""}">${c.format ? c.format(r[c.key], r) : r[c.key]}</td>`).join("") + "</tr>").join("") + "</tbody>";
+  document.getElementById(id).innerHTML = head + body;
+}
+
+function el(tag, attrs, parent) {
+  const node = document.createElementNS(SVG, tag);
+  for (const [k, v] of Object.entries(attrs)) node.setAttribute(k, v);
+  if (parent) parent.appendChild(node);
+  return node;
+}
+
+function showTip(text, x, y) {
+  tooltip.textContent = text;
+  tooltip.hidden = false;
+  tooltip.style.left = Math.min(x + 12, window.innerWidth - tooltip.offsetWidth - 8) + "px";
+  tooltip.style.top = y + 12 + "px";
+}
+const hideTip = () => { tooltip.hidden = true; };
+
+function hoverable(node, text) {
+  node.addEventListener("pointermove", e => showTip(text, e.clientX, e.clientY));
+  node.addEventListener("pointerleave", hideTip);
+}
+
+/* Barras verticales de una sola serie, con etiqueta de valor sobre cada barra. */
+function columnChart(id, items, { max, format, highlight }) {
+  const svg = document.getElementById(id);
+  const W = 420, H = 230, m = { t: 24, r: 8, b: 36, l: 8 };
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  const band = (W - m.l - m.r) / items.length;
+  const y = v => m.t + (H - m.t - m.b) * (1 - v / max);
+  el("line", { x1: m.l, x2: W - m.r, y1: y(0), y2: y(0), class: "axis" }, svg);
+  items.forEach((it, i) => {
+    const x = m.l + i * band + band * 0.2, w = band * 0.6;
+    const bar = el("rect", { x, y: y(it.value), width: w, height: y(0) - y(it.value), rx: 4,
+      fill: highlight && highlight(it) ? "var(--accent)" : "var(--bar)" }, svg);
+    hoverable(bar, it.tip);
+    const label = el("text", { x: x + w / 2, y: y(it.value) - 6, "text-anchor": "middle" }, svg);
+    label.textContent = format(it.value);
+    const cat = el("text", { x: x + w / 2, y: H - m.b + 18, "text-anchor": "middle" }, svg);
+    cat.textContent = it.label;
+  });
+}
+
+function renderSummary() {
+  table("summary", [
+    { key: "d", label: "Decisión" },
+    { key: "plan", label: "Plan original" },
+    { key: "rec", label: "Recomendación" },
+    { key: "changed", label: "", format: v => v ? '<span class="chip changed">Cambió</span>' : '<span class="chip">Se afina</span>' },
+  ], [
+    { d: "1 · Ángulo vertical en Stuff+", plan: "Ángulo de salida", rec: "VAA relativo a la altura de llegada", changed: true },
+    { d: "2 · Sweeper vs slider", plan: "Corte de los datos, 12 in de partida", rec: "Igual, pero sobre la forma a nivel del mar", changed: false },
+    { d: "3 · Recta de referencia", plan: "Mismo juego si hay ≥ 5 rectas", rec: "Mezcla ponderada juego + misma altitud y temporada", changed: false },
+  ]);
+}
+
+function renderVaa() {
+  const rows = DATA.vaa.dependencia_de_ubicacion;
+  const bar = v => `<span class="minibar" style="width:${v * 60}px"></span>${fixed(v)}`;
+  table("vaa-r2", [
+    { key: "pitch_group", label: "Pitch" },
+    { key: "r2_vaa_por_altura", label: "R² VAA", num: true, format: bar },
+    { key: "r2_salida_por_altura", label: "R² ángulo de salida", num: true, format: bar },
+    { key: "pitches", label: "Pitches", num: true, format: v => int.format(v) },
+  ], rows);
+
+  const q = DATA.vaa.whiff_por_vaa_relativo_rectas_altas;
+  const names = ["Más inclinado", "2", "3", "Más plano"];
+  columnChart("vaa-whiff", q.map((r, i) => ({
+    label: names[i], value: r.whiff_por_swing,
+    tip: `Cuartil ${r.cuartil}: ${pct(r.whiff_por_swing)} de whiff por swing (${int.format(r.pitches)} pitches)`,
+  })), { max: 0.45, format: v => pct(v), highlight: it => it.label === "Más plano" });
+
+  const rel = DATA.vaa.vaa_relativo;
+  document.getElementById("vaa-rel-text").innerHTML =
+    `<span>El VAA relativo de las rectas tiene correlación <strong>${fixed(rel.corr_con_altura_llegada)}</strong> con la altura de llegada: ya no mide ubicación. ` +
+    `Lo explican rasgos del pitcher: altura de release (<strong>${fixed(rel.corr_con_altura_release)}</strong>) y ride o IVB (<strong>${fixed(rel.corr_con_ivb)}</strong>). ` +
+    `Su desviación típica es ${fixed(rel.desviacion_grados)}°.</span>`;
+}
+
+function renderSweeper() {
+  const hist = DATA.sweeper.histograma;
+  const series = [
+    { key: "No Altitude", color: "var(--sea)", name: "Nivel del mar" },
+    { key: "Extreme Altitude", color: "var(--alt)", name: "Altitud extrema" },
+  ].map(s => {
+    const pts = hist.filter(r => r.altitude_category === s.key);
+    const total = pts.reduce((a, r) => a + r.sliders, 0);
+    return { ...s, pts: pts.map(r => ({ x: r.hb_in, y: r.sliders / total })) };
+  });
+
+  const svg = document.getElementById("sweeper-hist");
+  const W = 440, H = 250, m = { t: 16, r: 12, b: 34, l: 40 };
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  const xMin = -25, xMax = 10;
+  const yMax = Math.ceil(Math.max(...series.flatMap(s => s.pts.map(p => p.y))) * 100) / 100;
+  const x = v => m.l + (v - xMin) / (xMax - xMin) * (W - m.l - m.r);
+  const y = v => m.t + (1 - v / yMax) * (H - m.t - m.b);
+
+  for (let t = 0; t <= yMax + 1e-9; t += 0.02) {
+    el("line", { x1: m.l, x2: W - m.r, y1: y(t), y2: y(t), class: "grid" }, svg);
+    const lab = el("text", { x: m.l - 6, y: y(t) + 4, "text-anchor": "end" }, svg);
+    lab.textContent = Math.round(t * 100) + "%";
+  }
+  for (let t = -25; t <= 10; t += 5) {
+    const lab = el("text", { x: x(t), y: H - m.b + 16, "text-anchor": "middle" }, svg);
+    lab.textContent = t;
+  }
+  const xl = el("text", { x: (m.l + W - m.r) / 2, y: H - 4, "text-anchor": "middle" }, svg);
+  xl.textContent = "pulgadas (− hacia el guante)";
+
+  const thr = -DATA.parametros.umbral_sweeper_in;
+  el("line", { x1: x(thr), x2: x(thr), y1: m.t, y2: y(0), stroke: "var(--ink-2)", "stroke-width": 1.5, "stroke-dasharray": "4 4" }, svg);
+  const tl = el("text", { x: x(thr) - 4, y: m.t + 10, "text-anchor": "end" }, svg);
+  tl.textContent = "sweeper ←";
+
+  series.forEach(s => {
+    const d = s.pts.map((p, i) => `${i ? "L" : "M"}${x(p.x + 0.5)},${y(p.y)}`).join("");
+    el("path", { d, fill: "none", stroke: s.color, "stroke-width": 2, "stroke-linejoin": "round" }, svg);
+  });
+
+  const cross = el("line", { y1: m.t, y2: y(0), stroke: "var(--ink-3)", "stroke-width": 1, visibility: "hidden" }, svg);
+  const hit = el("rect", { x: m.l, y: m.t, width: W - m.l - m.r, height: H - m.t - m.b, fill: "transparent" }, svg);
+  hit.addEventListener("pointermove", e => {
+    const box = svg.getBoundingClientRect();
+    const vx = xMin + ((e.clientX - box.left) / box.width * W - m.l) / (W - m.l - m.r) * (xMax - xMin);
+    const bin = Math.floor(vx);
+    cross.setAttribute("x1", x(bin + 0.5)); cross.setAttribute("x2", x(bin + 0.5));
+    cross.setAttribute("visibility", "visible");
+    const parts = series.map(s => {
+      const p = s.pts.find(q => q.x === bin);
+      return `${s.name}: ${p ? pct(p.y) : "—"}`;
+    });
+    showTip(`${bin} a ${bin + 1} in · ${parts.join(" · ")}`, e.clientX, e.clientY);
+  });
+  hit.addEventListener("pointerleave", () => { cross.setAttribute("visibility", "hidden"); hideTip(); });
+
+  const names = { "Extreme Altitude": "Altitud extrema", "Medium Altitude": "Altitud media", "No Altitude": "Nivel del mar" };
+  table("sweeper-pct", [
+    { key: "altitude_category", label: "Altitud", format: v => names[v] },
+    { key: "sliders", label: "Sliders", num: true, format: v => int.format(v) },
+    { key: "pct_sweeper_fijo", label: "≥ 12 in al guante", num: true, format: v => pct(v) },
+  ], DATA.sweeper.pct_mas_alla_del_umbral);
+
+  const s = DATA.sweeper.mismo_pitcher;
+  document.getElementById("sweeper-same").innerHTML =
+    `<span>Mismo pitcher en ambos ambientes (${s.pitchers} pitchers): de los <strong>${s.sweeper_a_nivel_del_mar}</strong> cuya slider es sweeper a nivel del mar con el umbral fijo, ` +
+    `<strong>${s.dejan_de_serlo_en_altitud}</strong> dejan de serlo en altitud. Su movimiento horizontal en altitud es ${pct(s.razon_hb_altitud_vs_mar, 0)} del que tienen a nivel del mar.</span>`;
+}
+
+function renderFastball() {
+  const cov = DATA.recta_referencia.cobertura_por_umbral;
+  columnChart("fb-coverage", DATA.parametros.umbrales_rectas.map(n => ({
+    label: `≥ ${n}`, value: cov[n],
+    tip: `${pct(cov[n])} de las salidas tienen al menos ${n} rectas`,
+  })), { max: 1, format: v => pct(v, 0), highlight: it => it.label === "≥ 5" });
+
+  const noise = DATA.recta_referencia.ruido_dentro_del_juego;
+  table("fb-noise", [
+    { key: "n", label: "Rectas en el juego", num: true },
+    { key: "velo", label: "Error velocidad", num: true, format: v => "±" + fixed(v) + " mph" },
+    { key: "ivb", label: "Error IVB", num: true, format: v => "±" + fixed(v) + " in" },
+  ], [3, 5, 10, 15].map(n => ({ n, velo: noise.sd_velo_mph / Math.sqrt(n), ivb: noise.sd_ivb_in / Math.sqrt(n) })));
+  document.getElementById("fb-noise-caption").textContent =
+    `Error típico de la referencia del mismo juego = variación de la recta dentro de un juego (${fixed(noise.sd_velo_mph)} mph, ${fixed(noise.sd_ivb_in)} in) ÷ √n. Es ruido aleatorio: se promedia.`;
+
+  const names = { "Extreme Altitude": "Altitud extrema", "Medium Altitude": "Altitud media", "No Altitude": "Nivel del mar" };
+  const signed = v => (v > 0 ? "+" : "") + fixed(v) + " in";
+  table("fb-bias", [
+    { key: "altitude_category", label: "Altitud de la salida", format: v => names[v] },
+    { key: "sesgo_ivb_in", label: "Sesgo IVB", num: true, format: signed },
+    { key: "error_ivb_in", label: "Error típico", num: true, format: v => fixed(v) + " in" },
+    { key: "salidas", label: "Salidas", num: true, format: v => int.format(v) },
+  ], DATA.recta_referencia.error_referencia_de_temporada);
+}
+
+renderSummary();
+renderVaa();
+renderSweeper();
+renderFastball();
+</script>
+</body>
+</html>
