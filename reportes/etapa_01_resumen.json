@@ -1,0 +1,263 @@
+{
+  "total_pitches": 635002,
+  "usable_stuff": 633050,
+  "lado_bateador_sin_resolver": 1163,
+  "banderas": [
+    {
+      "flag": "flag_sin_altitud",
+      "descripcion": "Sin categoría de altitud",
+      "pitches": 3020,
+      "pct": 0.00476
+    },
+    {
+      "flag": "flag_sin_fisica",
+      "descripcion": "Falta alguna variable física clave en el dato original",
+      "pitches": 1555,
+      "pct": 0.00245
+    },
+    {
+      "flag": "flag_fisica_imposible",
+      "descripcion": "Algún valor físico fuera de límites imposibles",
+      "pitches": 340,
+      "pct": 0.00054
+    },
+    {
+      "flag": "flag_valor_anulado",
+      "descripcion": "Spin o release mal medido para ese pitcher; solo ese valor se anuló",
+      "pitches": 12643,
+      "pct": 0.01991
+    },
+    {
+      "flag": "flag_posible_mal_etiquetado",
+      "descripcion": "Velocidad o movimiento muy distinto a su tipo de pitch; se conserva",
+      "pitches": 2187,
+      "pct": 0.00344
+    },
+    {
+      "flag": "flag_tipo_pitch_raro",
+      "descripcion": "Tipo de pitch sin grupo modelable (Other, Knuckleball)",
+      "pitches": 62,
+      "pct": 0.0001
+    },
+    {
+      "flag": "flag_mano_inferida",
+      "descripcion": "Mano del pitcher faltante, inferida",
+      "pitches": 1421,
+      "pct": 0.00224
+    },
+    {
+      "flag": "flag_lado_bateador_inferido",
+      "descripcion": "Lado del bateador faltante o switch, inferido",
+      "pitches": 339,
+      "pct": 0.00053
+    },
+    {
+      "flag": "flag_resultado_corregido",
+      "descripcion": "Banderas de resultado inconsistentes con PitchCall, recalculadas",
+      "pitches": 1591,
+      "pct": 0.00251
+    },
+    {
+      "flag": "flag_pitchcall_indefinido",
+      "descripcion": "PitchCall = Undefined, no sirve como target",
+      "pitches": 841,
+      "pct": 0.00132
+    },
+    {
+      "flag": "flag_outs_invalido",
+      "descripcion": "Outs = 3 antes del pitch (imposible)",
+      "pitches": 8,
+      "pct": 1e-05
+    },
+    {
+      "flag": "flag_sin_exit_speed",
+      "descripcion": "Bola en juego sin ExitSpeed (se conserva, decisión D-007)",
+      "pitches": 7764,
+      "pct": 0.01223
+    },
+    {
+      "flag": "flag_exit_speed_sospechosa",
+      "descripcion": "ExitSpeed mayor a 125 mph (se conserva)",
+      "pitches": 32,
+      "pct": 5e-05
+    }
+  ],
+  "valores_anulados_por_variable": [
+    {
+      "variable": "SpinRate",
+      "valores_anulados": 8147
+    },
+    {
+      "variable": "Extension",
+      "valores_anulados": 1401
+    },
+    {
+      "variable": "RelHeight",
+      "valores_anulados": 804
+    },
+    {
+      "variable": "RelSide",
+      "valores_anulados": 2861
+    }
+  ],
+  "batazos_con_y_sin_exit_speed": [
+    {
+      "sin_exit_speed": false,
+      "bolas_en_juego": 108182,
+      "hit_rate": 0.3716,
+      "hr_rate": 0.0424
+    },
+    {
+      "sin_exit_speed": true,
+      "bolas_en_juego": 7764,
+      "hit_rate": 0.1928,
+      "hr_rate": 0.0032
+    }
+  ],
+  "por_split": [
+    {
+      "split": "holdout",
+      "pitches": 135604,
+      "usable_stuff": 134735
+    },
+    {
+      "split": "train",
+      "pitches": 499398,
+      "usable_stuff": 498315
+    }
+  ],
+  "por_grupo_pitch": [
+    {
+      "pitch_group": "Four-Seam",
+      "pitches": 217618,
+      "usable_stuff": 216908
+    },
+    {
+      "pitch_group": "Slider",
+      "pitches": 139717,
+      "usable_stuff": 139389
+    },
+    {
+      "pitch_group": "Sinker",
+      "pitches": 110899,
+      "usable_stuff": 110477
+    },
+    {
+      "pitch_group": "Changeup",
+      "pitches": 78925,
+      "usable_stuff": 78698
+    },
+    {
+      "pitch_group": "Curveball",
+      "pitches": 54024,
+      "usable_stuff": 53909
+    },
+    {
+      "pitch_group": "Cutter",
+      "pitches": 26468,
+      "usable_stuff": 26419
+    },
+    {
+      "pitch_group": "Splitter",
+      "pitches": 7289,
+      "usable_stuff": 7250
+    },
+    {
+      "pitch_group": "Other",
+      "pitches": 62,
+      "usable_stuff": 0
+    }
+  ],
+  "por_altitud": [
+    {
+      "altitud": "Extreme Altitude",
+      "pitches": 183267,
+      "usable_stuff": 182223
+    },
+    {
+      "altitud": "Medium Altitude",
+      "pitches": 154840,
+      "usable_stuff": 154335
+    },
+    {
+      "altitud": "No Altitude",
+      "pitches": 293875,
+      "usable_stuff": 293475
+    },
+    {
+      "altitud": "Sin dato",
+      "pitches": 3020,
+      "usable_stuff": 3017
+    }
+  ],
+  "correcciones_resultado": [
+    {
+      "PitchCall": "BallCalled",
+      "pitches": 463,
+      "swing_quitado": 463,
+      "contacto_quitado": 463
+    },
+    {
+      "PitchCall": "StrikeSwinging",
+      "pitches": 450,
+      "swing_quitado": 0,
+      "contacto_quitado": 450
+    },
+    {
+      "PitchCall": "StrikeCalled",
+      "pitches": 403,
+      "swing_quitado": 403,
+      "contacto_quitado": 403
+    },
+    {
+      "PitchCall": "HitByPitch",
+      "pitches": 230,
+      "swing_quitado": 230,
+      "contacto_quitado": 230
+    },
+    {
+      "PitchCall": "BallinDirt",
+      "pitches": 45,
+      "swing_quitado": 45,
+      "contacto_quitado": 45
+    }
+  ],
+  "resolucion_mano": [
+    {
+      "original": "NULL",
+      "resuelta": "Right",
+      "pitches": 975
+    },
+    {
+      "original": "NULL",
+      "resuelta": "Left",
+      "pitches": 186
+    },
+    {
+      "original": "Undefined",
+      "resuelta": "Right",
+      "pitches": 175
+    },
+    {
+      "original": "Undefined",
+      "resuelta": "Left",
+      "pitches": 85
+    }
+  ],
+  "recta_por_mano_antes_despues": [
+    {
+      "pitcher_hand": "Left",
+      "hb_original": -8.2858,
+      "hb_lado_brazo": 8.2858,
+      "eje_original": 149.8236,
+      "eje_lado_brazo": 210.1764
+    },
+    {
+      "pitcher_hand": "Right",
+      "hb_original": 8.4284,
+      "hb_lado_brazo": 8.4284,
+      "eje_original": 211.3152,
+      "eje_lado_brazo": 211.3152
+    }
+  ]
+}
