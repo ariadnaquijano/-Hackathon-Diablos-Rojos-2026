@@ -43,7 +43,7 @@ Lee los documentos en este orden; cada uno se apoya en el anterior.
 |---|---|---|---|---|
 | 0 | Exploración y validación del enfoque | ✅ Hecha | `docs/00_contexto_y_approach.md` | — |
 | 1 | Limpieza de datos | ✅ Hecha | `docs/01_limpieza.md` | `reportes/etapa_01_limpieza.html` |
-| 2 | Features (física, arsenal, densidad del aire) | 📝 Plan en revisión | `docs/02_plan_features.md` | — |
+| 2 | Features (física, arsenal, densidad del aire) | 📝 Plan aprobado | `docs/02_plan_features.md` | `reportes/etapa_02_decisiones.html` |
 | 3 | Target xRunValue y baseline | ⏳ | — | — |
 | 4 | Modelo de dos etapas (forma → resultado) | ⏳ | — | — |
 | 5 | Validación (pitcher, temporada, altitud) | ⏳ | — | — |

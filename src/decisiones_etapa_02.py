@@ -126,6 +126,33 @@ def fastball_reference_evidence(con) -> dict:
         "ruido_dentro_del_juego": one(con, """
             select median(sd_velo) sd_velo_mph, median(sd_ivb) sd_ivb_in
             from game_fb where rectas >= 10"""),
+        # Encogimiento empírico-bayesiano: peso del juego = n / (n + k), con k = σ² / τ².
+        # σ² = variación entre rectas del mismo juego; τ² = variación real entre juegos del
+        # mismo pitcher, altitud y temporada (lo que sobra después de quitar el ruido de muestreo).
+        "encogimiento": rows(con, f"""
+            with pitches as (
+                select pitcher_anon_id, altitude_category, year, game_anon_id,
+                       RelSpeed velo, InducedVertBreak ivb
+                from clean where usable_stuff and pitch_group in ({fastballs})
+                  and altitude_category is not null),
+            games as (
+                select pitcher_anon_id, altitude_category, year, game_anon_id, count(*) n,
+                       avg(velo) velo, var_samp(velo) var_velo, avg(ivb) ivb, var_samp(ivb) var_ivb
+                from pitches group by all having count(*) >= 2),
+            spread as (
+                select var_samp(velo) var_between_velo, avg(var_velo / n) noise_velo,
+                       var_samp(ivb) var_between_ivb, avg(var_ivb / n) noise_ivb,
+                       avg(var_velo) sigma2_velo, avg(var_ivb) sigma2_ivb, count(*) juegos
+                from games group by pitcher_anon_id, altitude_category, year
+                having count(*) >= 3)
+            select 'velocidad' as medida, avg(sigma2_velo) as sigma2,
+                   avg(var_between_velo) - avg(noise_velo) tau2,
+                   avg(sigma2_velo) / (avg(var_between_velo) - avg(noise_velo)) k
+            from spread
+            union all
+            select 'ivb', avg(sigma2_ivb), avg(var_between_ivb) - avg(noise_ivb),
+                   avg(sigma2_ivb) / (avg(var_between_ivb) - avg(noise_ivb))
+            from spread"""),
         "error_referencia_de_temporada": rows(con, """
             with season as (
                 select pitcher_anon_id, year, median(InducedVertBreak) ivb_temporada

@@ -7,6 +7,37 @@ se agrega una nueva entrada que la reemplaza y se marca la anterior como *Reempl
 
 ---
 
+### D-014 · 2026-10-01 · Recta de referencia: mezcla ponderada con peso estimado de los datos
+- **Qué:** referencia = combinación de la recta del mismo juego y la del pitcher en esa altitud y
+  temporada, con peso n / (n + k). k = varianza dentro del juego ÷ varianza real entre juegos:
+  **k = 2.4 para velocidad y 4.8 para IVB**.
+- **Por qué (estadística):** es el estimador de encogimiento empírico-bayesiano; minimiza el error
+  cuadrático al combinar una estimación ruidosa con una referencia estable.
+- **Por qué (béisbol):** la recta cambia de verdad entre salidas (±0.77 mph, ±1.1 in de IVB) y el
+  bateador juzga contra la recta de hoy. El respaldo es de la misma altitud, así no mezcla aires.
+- **Alternativas descartadas:** recta de toda la temporada (sesgo de −0.9 in en altitud y +1.0 a
+  nivel del mar); solo mismo juego con mínimo de 5 (descarta 17 % de las salidas).
+- **Prueba pendiente:** validación de mitades dentro de cada juego.
+- **Estado:** Vigente. Reemplaza la propuesta de "mínimo 5" del plan.
+
+### D-013 · 2026-10-01 · Sweeper vs slider: corte de los datos sobre la forma a nivel del mar
+- **Por qué:** con el umbral fijo sobre el movimiento observado, 16 de 19 pitchers cuya slider es
+  sweeper a nivel del mar dejan de serlo en altitud. La etiqueta debe ser del pitcher, no del
+  estadio; si no, cualquier comparación entre estadios tiene sesgo de selección.
+- **Si no hay un corte natural:** se usa 12 in sobre la forma a nivel del mar y se reporta.
+- **Prueba pendiente:** % de sweepers parecido entre altitudes; misma etiqueta en casa y de visita.
+- **Estado:** Vigente.
+
+### D-012 · 2026-10-01 · Stuff+ usa el VAA relativo, no el VAA ni el ángulo de salida crudos
+- **Por qué:** la altura de llegada explica 54–80 % del VAA y 49–71 % del ángulo de salida; ambos
+  meten ubicación en Stuff+. El VAA relativo (VAA menos el esperado para ese tipo de pitch a esa
+  altura) tiene correlación 0 con la altura, depende de rasgos del pitcher (altura de release −0.77,
+  IVB 0.27) y predice whiffs: 21.9 % → 36.8 % en rectas altas, de las más inclinadas a las más planas.
+- **Alternativas descartadas:** VAA crudo; ángulo de salida (era la propuesta del plan y tenía el
+  mismo problema).
+- **Prueba pendiente:** ablación con y sin `vaa_rel` en el holdout de pitchers.
+- **Estado:** Vigente.
+
 ### D-011 · 2026-09-30 · Un valor mal medido se anula; la fila se conserva
 - **Por qué:** la primera versión de la regla de atípicos marcaba 2.2 % de los pitches para
   excluirlos. Al revisarlos, casi todos eran **un solo valor malo en un pitch bueno**: lecturas de

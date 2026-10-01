@@ -106,6 +106,15 @@ figcaption { font-size: var(--step--1); color: var(--ink-3); }
 .verdict b { font: 600 0.75rem/1.2 var(--mono); text-transform: uppercase; letter-spacing: 0.06em; color: var(--good); }
 .verdict ul { padding-left: 1.1rem; display: grid; gap: 4px; }
 
+.args { display: grid; grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr)); gap: 0; border-block: 1px solid var(--rule); }
+.args > div { display: grid; gap: 6px; padding: 16px 20px 16px 0; align-content: start; min-width: 0; }
+.args > div:nth-child(even) { padding-left: 20px; border-left: 1px solid var(--rule); }
+.args > div:nth-child(n+3) { border-top: 1px solid var(--rule); }
+.args b { font: 600 0.75rem/1.2 var(--mono); text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-3); }
+.args p { color: var(--ink-2); }
+.args .answer { color: var(--ink); }
+.args .answer::before { content: "Respuesta: "; font-weight: 600; }
+@media (max-width: 40rem) { .args > div, .args > div:nth-child(even) { padding: 14px 0; border-left: 0; } .args > div + div { border-top: 1px solid var(--rule); } }
 .tooltip { position: fixed; pointer-events: none; z-index: 10; max-width: 18rem; padding: 8px 10px; background: var(--ink); color: var(--bg); border-radius: 6px; font-size: var(--step--1); line-height: 1.4; }
 footer { color: var(--ink-3); font-size: var(--step--1); border-top: 1px solid var(--rule); padding-top: 16px; display: grid; gap: 4px; }
 @media (max-width: 40rem) { .option { padding: 14px 16px; } }
@@ -177,6 +186,13 @@ footer { color: var(--ink-3); font-size: var(--step--1); border-top: 1px solid v
     </div>
     <p class="prose" id="vaa-rel-text"></p>
 
+    <div class="args">
+      <div><b>Argumento estadístico</b><p>Stuff+ por definición no debe depender de la ubicación. En rectas, la altura de llegada explica 80 % de la variación del VAA: meterlo crudo es meter ubicación por la puerta de atrás. El VAA relativo tiene correlación 0 con la altura y conserva lo que sí es del pitcher.</p></div>
+      <div><b>Argumento beisbolístico</b><p>La recta "plana" es uno de los conceptos centrales del análisis moderno de rectas: si llega más plana de lo esperado a esa altura, el bateador la ve subir y le pasa por debajo. La determinan la altura de release y el ride, que es justo lo que muestran los datos (−0.77 y 0.27). Son cosas que un coach puede trabajar.</p></div>
+      <div><b>La mejor objeción</b><p>"Es redundante: el modelo ya ve IVB, velocidad y altura de release, y podría aprender la planitud solo."</p><p class="answer">En parte es cierto. Pero los árboles aproximan mal una relación geométrica entre varias variables, y el feature hace el modelo explicable. Por eso no lo damos por bueno: lo probamos.</p></div>
+      <div><b>La prueba que lo confirma o lo tumba</b><p>Ablación: entrenar Stuff+ con y sin <code>vaa_rel</code> y comparar en el holdout de pitchers no vistos. Si no mejora, queda solo como variable para explicar. También revisamos con un ajuste no lineal que no quede dependencia de la altura.</p></div>
+    </div>
+
     <div class="verdict">
       <b>Qué implica elegir C</b>
       <ul>
@@ -239,6 +255,13 @@ footer { color: var(--ink-3); font-size: var(--step--1); border-top: 1px solid v
       </figure>
     </div>
 
+    <div class="args">
+      <div><b>Argumento estadístico</b><p>Si la etiqueta depende del ambiente, comparar "sweepers en CDMX contra nivel del mar" compara grupos distintos. Es sesgo de selección: en altitud solo sobreviven a la etiqueta los sweepers más extremos. Para comparar estadios, la etiqueta tiene que ser la misma en todos.</p></div>
+      <div><b>Argumento beisbolístico</b><p>El tipo de pitch es lo que el pitcher intenta lanzar, por su agarre y su intención, no cuánto rompió ese día. Ningún coach diría que su pitcher dejó de tirar sweeper al llegar a la CDMX; diría que su sweeper rompe menos. La etiqueta tiene que reflejar eso.</p></div>
+      <div><b>La mejor objeción</b><p>"Puede que en la LMB no exista un corte natural entre sweeper y slider."</p><p class="answer">Es posible: el histograma muestra un hombro, no dos picos. Si el modelo de mezclas no encuentra una separación clara, usamos 12 in sobre la forma a nivel del mar (opción B) y lo reportamos. El riesgo para la precisión es bajo, porque el modelo usa el movimiento continuo; la etiqueta solo sirve para reportar y para el índice Magnus.</p></div>
+      <div><b>La prueba que lo confirma o lo tumba</b><p>Después del ajuste, el % de sweepers debe quedar parecido entre altitudes (hoy 12.7 % contra 3.1 %) y la etiqueta de cada pitcher debe coincidir en casa y de visita.</p></div>
+    </div>
+
     <div class="verdict">
       <b>Qué implica elegir C</b>
       <ul>
@@ -281,8 +304,8 @@ footer { color: var(--ink-3); font-size: var(--step--1); border-top: 1px solid v
         <span class="letter">C</span>
         <div class="option-body">
           <div class="option-title">Mezcla ponderada por número de rectas <span class="chip rec">Recomendada</span></div>
-          <p>Referencia = combinación de la recta del juego y la del pitcher <em>en esa altitud y temporada</em>. El juego pesa más mientras más rectas tenga: peso = n / (n + 5).</p>
-          <p class="implies">Usa todas las salidas, no mezcla altitudes, y con pocas rectas el ruido baja solo. El "mínimo de 5" pasa a ser el punto donde el juego pesa la mitad.</p>
+          <p>Referencia = combinación de la recta del juego y la del pitcher <em>en esa altitud y temporada</em>. El juego pesa más mientras más rectas tenga: peso = n / (n + k), con k estimado de los datos para cada variable (<span id="k-inline"></span>).</p>
+          <p class="implies">Usa todas las salidas, no mezcla altitudes, y con pocas rectas el ruido baja solo. No hay un mínimo arbitrario: k es el número de rectas con el que el juego pesa la mitad.</p>
         </div>
       </div>
     </div>
@@ -300,6 +323,13 @@ footer { color: var(--ink-3); font-size: var(--step--1); border-top: 1px solid v
         <div class="scroll"><table id="fb-bias"></table></div>
         <figcaption>Diferencia entre la recta de cada salida y la recta de toda la temporada del mismo pitcher. El signo cambia con la altitud: es sesgo, no ruido.</figcaption>
       </figure>
+    </div>
+
+    <div class="args">
+      <div><b>Argumento estadístico</b><p>Es el estimador de encogimiento empírico-bayesiano (agrupamiento parcial). Al combinar una estimación ruidosa con una referencia estable, minimiza el error cuadrático (James–Stein; Efron y Morris lo ilustraron justo con promedios de bateo). El peso no se inventa: k = varianza dentro del juego ÷ varianza real entre juegos, estimada de los datos.</p></div>
+      <div><b>Argumento beisbolístico</b><p>La recta de un pitcher sí cambia de un día a otro: hay una variación real entre salidas (<span id="tau-inline"></span>) por cansancio o porque "no traía la recta". El bateador juzga el cambio contra la recta que está viendo hoy, no contra el promedio de la temporada. Y la referencia de respaldo es de la misma altitud, así que no mezcla aires.</p></div>
+      <div><b>La mejor objeción</b><p>"Es más complicado que un corte fijo."</p><p class="answer">Son dos líneas de SQL, y quitan las dos fallas medidas: el sesgo de ±1 in de la referencia de temporada y el descarte de 17 % de las salidas con un corte de 5.</p></div>
+      <div><b>La prueba que lo confirma o lo tumba</b><p>Validación de mitades: partir las rectas de cada juego en dos, estimar la referencia con una mitad por cada método y medir cuál predice mejor la otra mitad.</p></div>
     </div>
 
     <div class="verdict">
@@ -383,7 +413,7 @@ function renderSummary() {
   ], [
     { d: "1 · Ángulo vertical en Stuff+", plan: "Ángulo de salida", rec: "VAA relativo a la altura de llegada", changed: true },
     { d: "2 · Sweeper vs slider", plan: "Corte de los datos, 12 in de partida", rec: "Igual, pero sobre la forma a nivel del mar", changed: false },
-    { d: "3 · Recta de referencia", plan: "Mismo juego si hay ≥ 5 rectas", rec: "Mezcla ponderada juego + misma altitud y temporada", changed: false },
+    { d: "3 · Recta de referencia", plan: "Mismo juego si hay ≥ 5 rectas", rec: "Mezcla ponderada juego + misma altitud y temporada, con peso estimado de los datos", changed: false },
   ]);
 }
 
@@ -482,6 +512,12 @@ function renderSweeper() {
 }
 
 function renderFastball() {
+  const shrink = Object.fromEntries(DATA.recta_referencia.encogimiento.map(r => [r.medida, r]));
+  document.getElementById("k-inline").textContent =
+    `k = ${fixed(shrink.velocidad.k, 1)} para velocidad, k = ${fixed(shrink.ivb.k, 1)} para IVB`;
+  document.getElementById("tau-inline").textContent =
+    `±${fixed(Math.sqrt(shrink.velocidad.tau2), 2)} mph y ±${fixed(Math.sqrt(shrink.ivb.tau2), 2)} in de IVB`;
+
   const cov = DATA.recta_referencia.cobertura_por_umbral;
   columnChart("fb-coverage", DATA.parametros.umbrales_rectas.map(n => ({
     label: `≥ ${n}`, value: cov[n],

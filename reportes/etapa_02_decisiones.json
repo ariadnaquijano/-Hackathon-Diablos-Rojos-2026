@@ -441,6 +441,20 @@
       "sd_velo_mph": 0.9654,
       "sd_ivb_in": 2.1113
     },
+    "encogimiento": [
+      {
+        "medida": "velocidad",
+        "sigma2": 1.4389,
+        "tau2": 0.5997,
+        "k": 2.3995
+      },
+      {
+        "medida": "ivb",
+        "sigma2": 6.0106,
+        "tau2": 1.2485,
+        "k": 4.8141
+      }
+    ],
     "error_referencia_de_temporada": [
       {
         "altitude_category": "Extreme Altitude",

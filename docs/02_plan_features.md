@@ -1,6 +1,6 @@
 # 02 · Plan de features
 
-> **Estado:** plan en revisión del equipo. Todavía no se construye nada.
+> **Estado:** plan aprobado (D-012 a D-014). Listo para construir en `src/features.py`.
 > **Entrada:** `data/processed/pitches_limpios.parquet`.
 > **Salida prevista:** `data/processed/features.parquet` (un renglón por pitch).
 > **Evidencia:** todas las cifras salen de `src/exploracion_etapa_02.py`.
@@ -103,7 +103,7 @@ altitud y temporada.
 | `InducedVertBreak`, `hb_arm_side` | Movimiento observado |
 | `ivb_sea_level`, `hb_sea_level` | Movimiento equivalente a nivel del mar (`movimiento / air_ratio^k`, con k estimado) |
 | `Extension`, `RelHeight`, `rel_side_arm` | Punto de release |
-| `VertRelAngle`, `horz_rel_angle_arm` | Ángulo de salida de la mano |
+| `vaa_rel`, `haa_rel` | Ángulo de llegada relativo: VAA y HAA menos el esperado para ese tipo de pitch en esa ubicación (D-012) |
 | `magnus_dependence` | Movimiento total ÷ (spin / velocidad). Qué tanto del movimiento depende del giro; base del índice Magnus |
 | `total_break` | √(IVB² + HB²) |
 
@@ -112,7 +112,7 @@ altitud y temporada.
 | Feature | Qué es |
 |---|---|
 | `primary_fb_type` | Recta principal del pitcher (four-seam, sinker o cutter) |
-| `velo_diff_vs_fb`, `ivb_diff_vs_fb`, `hb_diff_vs_fb` | Diferencias contra la recta principal del **mismo juego** |
+| `velo_diff_vs_fb`, `ivb_diff_vs_fb`, `hb_diff_vs_fb` | Diferencias contra la recta principal, referencia ponderada juego + misma altitud y temporada (D-014) |
 | `axis_diff_vs_fb` | Diferencia de eje de spin contra la recta |
 | `release_dist_vs_fb` | Distancia del punto de release contra la recta; proxy del efecto túnel |
 | `pitch_usage_pct` | % de uso de ese pitch en la temporada del pitcher |
@@ -149,11 +149,16 @@ altitud y temporada.
 - `reportes/etapa_02_features.html`: mapa de movimiento antes y después del ajuste por aire,
   distribución de `air_ratio` y ejemplos de arsenal.
 
-## Preguntas para el equipo
+## Decisiones tomadas
 
-1. **¿El ángulo de llegada (VAA) entra a Stuff+?** Es física pura, pero depende de dónde llega el
-   pitch, y Stuff+ no debería usar ubicación. Propuesta: Stuff+ usa el ángulo de salida
-   (`VertRelAngle`) y el VAA ajustado por altura queda para Pitching+.
-2. **¿El umbral de sweeper es fijo (12 in) o lo sacamos de los datos** con un modelo de mezclas?
-   Propuesta: de los datos, usando el 12 in solo como punto de partida.
-3. **¿Mínimo de 5 rectas en el juego** para usar referencia del mismo juego? Propuesta: sí.
+Las tres preguntas abiertas se resolvieron con evidencia; detalle, opciones e implicaciones en
+`reportes/etapa_02_decisiones.html` (generado por `src/decisiones_etapa_02.py`).
+
+| Pregunta | Decisión | Registro |
+|---|---|---|
+| ¿Qué ángulo vertical entra a Stuff+? | **VAA relativo** a la altura de llegada. Ni el VAA crudo ni el ángulo de salida: los dos dependen de la ubicación | D-012 |
+| ¿Cómo separar sweeper de slider? | Corte sacado de los datos sobre la **forma a nivel del mar** | D-013 |
+| ¿Contra qué recta medir el arsenal? | **Mezcla ponderada** juego + misma altitud y temporada, k = 2.4 (velocidad) y 4.8 (IVB) | D-014 |
+
+Esto reemplaza en la sección C la regla de "referencia del mismo juego si hay ≥ 5 rectas" y en la
+sección B el uso de `VertRelAngle` como sustituto del VAA.
