@@ -12,4 +12,4 @@ Las bases originales están en https://drive.google.com/drive/folders/1C_YUOpZP7
   * H3: Los groundball pitchers son más valiosos en altitud
   * H4: El spin rate por sí solo resulta insuficiente como predictor de Stuff+ 
 
-* Por definirse, qué más haremos
+* Por definir qué más haremos
