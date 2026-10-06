@@ -4,6 +4,24 @@ Construimos un modelo Stuff+ calibrado para la Liga Mexicana de Béisbol que exp
 **qué tan bueno es cada pitch en el Harp Helú (2,240 m)** y **qué debe hacer el club con esa
 información**: a quién fichar, cómo planear el juego en casa y cómo ajustar a cada pitcher.
 
+## En lo que estamos trabajando ahora...
+**Próxima reunión**: Martes 6 de octubre, 3:00 pm
+
+### 1. Revisión inicial de los datos
+- Revisar la estructura general del dataset.
+- Consultar el diccionario de variables.
+- Identificar valores faltantes, variables relevantes y posibles problemas de calidad.
+- Definir qué limpieza mínima es necesaria para comenzar los análisis (SIN HACERLLA!!)
+
+### 2. Análisis preliminar de las hipótesis
+Trabajaremos en un análisis sencillo, principalmente estadístico, de las hipótesis dadas para el proyecto.
+**No vamos a demostrar definitivamente las hipótesis**, solo queremos identificar patrones y relaciones para decidir qué análisis vale la pena desarrollar más adelante. Trabajaremos sobre el dataset original.
+
+* H1: La baja densidad reduce el movimiento inducido por spin - Max
+* H2: Los pitcheos basados en diferencial de velocidad ganan valor relativo - Ben
+* H3: Los groundball pitchers son más valiosos en altitud - Ari
+* H4: El spin rate por sí solo resulta insuficiente como predictor de Stuff+ - Alexis
+
 ## Fechas que mandan
 
 | Fecha | Hito |
