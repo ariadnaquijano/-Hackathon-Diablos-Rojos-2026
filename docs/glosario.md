@@ -89,3 +89,14 @@ Términos ordenados por tema. Si algo del proyecto no está aquí, agrégalo.
 | **Recta principal** | El pitch rápido (four-seam, sinker o cutter) que más usa un pitcher; referencia para las diferencias de arsenal. |
 | **Platoon** | Si el bateador batea del mismo lado que lanza el pitcher (en general favorece al pitcher). |
 | **Gyro slider** | Slider con mucho spin "de bala" y poco movimiento por Magnus; en los datos casi no pierde efectividad en altitud. |
+| **Exponente k** | Cuánto cambia el movimiento cuando cambia el aire: movimiento ∝ aire^k. k = 1.5 significa que con 10 % menos aire el pitch se mueve ~15 % menos. |
+| **Atenuación** | Cuando la variable explicativa se mide con ruido, la pendiente estimada sale más chica que la real. |
+| **Variable instrumental** | Técnica para corregir la atenuación: se usa solo la parte de la variable que explica otra medida precisa (aquí, el aire típico de la categoría de altitud). |
+| **Leave-one-out** | Calcular un promedio excluyendo el dato que se está evaluando, para no contarlo dos veces. |
+| **Turno al bat (PA)** | Todos los pitches de un pitcher a un bateador hasta que el turno termina (out, hit, base por bolas, golpe). |
+| **Punto de decisión** | Momento, ~175 ms antes de llegar al plato, en que el bateador decide si hace swing. |
+| **Tunneling** | Que dos pitches seguidos se vean iguales hasta el punto de decisión y se separen después. |
+| **Vuelta al orden** | Cuántas veces ha visto el bateador al mismo pitcher en el juego; cada vuelta favorece al bateador. |
+| **Abridor / relevista** | El pitcher que empieza el juego / los que entran después. |
+| **wOBA** | Promedio ponderado de embase: como el OPS, pero da a cada resultado (base por bolas, sencillo, doble, jonrón) su valor real en carreras. |
+| **D de Ashman** | Mide qué tan separados están dos grupos: por encima de 2, hay un corte natural entre ellos. |

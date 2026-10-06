@@ -7,6 +7,44 @@ se agrega una nueva entrada que la reemplaza y se marca la anterior como *Reempl
 
 ---
 
+### D-019 · 2026-10-06 · Retroalimentación del experto: minimizar al bateador
+- **Qué:** Pitching+ y las herramientas se orientan a contener al bateador: mapa de daño por zona con
+  wOBA, bateador contra forma del pitch (no la pareja exacta, que tiene mediana de 6 pitches),
+  asistente de bullpen durante el juego y encaje de bateadores con la altura. Stuff+ se queda sin
+  bateador, como pide la convocatoria.
+- **Por qué:** recomendación de un lanzador con experiencia; detalle en `retroalimentacion_experto.md`.
+- **Estado:** Vigente.
+
+### D-018 · 2026-10-06 · La zona usa la misma caja que la bandera del dataset
+- **Por qué:** medimos la caja de `in_strike_zone`: 1.62–3.21 ft de alto y ±0.708 ft. Usarla hace que
+  nuestra cuadrícula coincida con la bandera en todos los pitches salvo 83 en el borde.
+- **Alternativa descartada:** caja de 1.5–3.5 ft y ±0.83 ft (no coincidía en 73 mil pitches).
+- **Estado:** Vigente.
+
+### D-017 · 2026-10-06 · Sweeper: no hay corte natural; se usa 12 in sobre la forma a nivel del mar
+- **Por qué:** la mezcla de dos normales da una D de Ashman de 1.59 (< 2): los grupos se enciman. Es la
+  salida prevista en D-013.
+- **Pendiente:** la conversión cierra casi la mitad de la brecha de sweepers entre altitudes (7.3 %
+  contra 12.6 %), no toda. Siguiente paso: un k que dependa del tamaño del movimiento.
+- **Estado:** Vigente.
+
+### D-016 · 2026-10-06 · El exponente k se estima con variable instrumental
+- **Por qué:** el aire de cada juego se mide con ruido, y eso achica la pendiente (atenuación). La
+  primera estimación (k = 1.37) dejaba al mismo pitcher con ~1 in menos de movimiento después de
+  convertir. Instrumentando el aire del juego con el aire típico de su categoría y temporada, k sube a
+  1.58 y la diferencia que queda es casi nula (sinker −0.04 in de HB, recta +0.11 in de IVB).
+- **Además:** k por tipo de pitch y componente, porque el horizontal responde más que el vertical
+  (1.67 contra 1.33 en la liga). Un tipo con menos de 100 pitchers usa el de la liga.
+- **Estado:** Vigente.
+
+### D-015 · 2026-10-06 · El orden de las filas es el orden cronológico de los pitches
+- **Por qué:** dentro de cada juego la entrada nunca retrocede (99.94 %) ni el conteo de cada turno
+  (99.99 %); los juegos vienen por fecha (el siguiente juego de un bateador es en la misma altitud
+  74 % de las veces contra 36 % al azar). La limpieza guarda el orden en `pitch_seq`.
+- **Corrige:** lo que dijimos en `02_plan_features.md` y en `00_contexto_y_approach.md`: que no había
+  orden de pitches.
+- **Estado:** Vigente.
+
 ### D-014 · 2026-10-01 · Recta de referencia: mezcla ponderada con peso estimado de los datos
 - **Qué:** referencia = combinación de la recta del mismo juego y la del pitcher en esa altitud y
   temporada, con peso n / (n + k). k = varianza dentro del juego ÷ varianza real entre juegos:
@@ -18,6 +56,9 @@ se agrega una nueva entrada que la reemplaza y se marca la anterior como *Reempl
 - **Alternativas descartadas:** recta de toda la temporada (sesgo de −0.9 in en altitud y +1.0 a
   nivel del mar); solo mismo juego con mínimo de 5 (descarta 17 % de las salidas).
 - **Prueba pendiente:** validación de mitades dentro de cada juego.
+- **Valores finales (etapa 2):** medidos sobre la recta principal de cada pitcher, k = 1.9 velocidad,
+  4.1 IVB, 3.4 HB, 5.3 eje, 0.9 release y extensión. El reporte de decisiones daba 2.4 y 4.8 porque
+  usaba todas las four-seam y sinkers.
 - **Estado:** Vigente. Reemplaza la propuesta de "mínimo 5" del plan.
 
 ### D-013 · 2026-10-01 · Sweeper vs slider: corte de los datos sobre la forma a nivel del mar

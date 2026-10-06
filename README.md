@@ -40,6 +40,8 @@ Lee los documentos en este orden; cada uno se apoya en el anterior.
 3. [`docs/convenciones.md`](docs/convenciones.md) — cómo escribimos código, documentos y commits.
 4. [`docs/decisiones.md`](docs/decisiones.md) — bitácora de cada decisión, con alternativas descartadas.
 5. [`docs/01_limpieza.md`](docs/01_limpieza.md) — limpieza de datos (etapa 1).
+6. [`docs/02_features.md`](docs/02_features.md) — variables del modelo (etapa 2).
+7. [`docs/retroalimentacion_experto.md`](docs/retroalimentacion_experto.md) — lo que nos dijo un lanzador y qué cambió.
 
 ## Estructura
 
@@ -61,7 +63,7 @@ Lee los documentos en este orden; cada uno se apoya en el anterior.
 |---|---|---|---|---|
 | 0 | Exploración y validación del enfoque | ✅ Hecha | `docs/00_contexto_y_approach.md` | — |
 | 1 | Limpieza de datos | ✅ Hecha | `docs/01_limpieza.md` | `reportes/etapa_01_limpieza.html` |
-| 2 | Features (física, arsenal, densidad del aire) | 📝 Plan aprobado | `docs/02_plan_features.md` | `reportes/etapa_02_decisiones.html` |
+| 2 | Features (física, arsenal, aire, secuencia) | ✅ Hecha | `docs/02_features.md` | `reportes/etapa_02_features.html` |
 | 3 | Target xRunValue y baseline | ⏳ | — | — |
 | 4 | Modelo de dos etapas (forma → resultado) | ⏳ | — | — |
 | 5 | Validación (pitcher, temporada, altitud) | ⏳ | — | — |
@@ -81,6 +83,9 @@ python src/perfil_calidad_datos.py     # mediciones que justifican las reglas de
 python src/limpieza.py                 # etapa 1: genera data/processed/ y el resumen
 python src/reporte_limpieza.py         # etapa 1: genera reportes/etapa_01_limpieza.html
 python src/exploracion_etapa_02.py     # evidencia del plan de features
+python src/decisiones_etapa_02.py      # reporte de las tres decisiones de features
+python src/features.py                 # etapa 2: genera data/processed/features.parquet y el resumen
+python src/reporte_features.py         # etapa 2: genera reportes/etapa_02_features.html
 ```
 
 ## Datos

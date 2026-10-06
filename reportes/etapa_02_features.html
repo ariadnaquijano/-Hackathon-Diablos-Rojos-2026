@@ -1,0 +1,424 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Variables del modelo Stuff+</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: reporte de etapa en un carril; cada sección = hallazgo en una frase, luego su gráfica o tabla. */
+:root {
+  --bg: #f6f7f9;
+  --surface: #ffffff;
+  --ink: #16191f;
+  --ink-2: #4a5160;
+  --ink-3: #7a8191;
+  --rule: #dde1e7;
+  --accent: #b3122a;
+  --accent-soft: #f6e3e6;
+  --bar: #2f4a6d;
+  --sea: #2b6cb0;
+  --mid: #b7791f;
+  --alt: #c21f3a;
+  --display: "Barlow Condensed", "Arial Narrow", "Helvetica Neue", sans-serif;
+  --body: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --step--1: 0.8125rem;
+  --step-0: 1rem;
+  --step-1: 1.25rem;
+  --step-2: 1.75rem;
+  --step-3: 2.75rem;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #111418; --surface: #1a1e24; --ink: #e8eaee; --ink-2: #b3b9c4; --ink-3: #858c99;
+    --rule: #2c323b; --accent: #ff5a6e; --accent-soft: #3a1c22; --bar: #7fa3d1;
+    --sea: #4f8ad6; --mid: #c08a1e; --alt: #e0405a; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #111418; --surface: #1a1e24; --ink: #e8eaee; --ink-2: #b3b9c4; --ink-3: #858c99;
+  --rule: #2c323b; --accent: #ff5a6e; --accent-soft: #3a1c22; --bar: #7fa3d1;
+  --sea: #4f8ad6; --mid: #c08a1e; --alt: #e0405a; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 400 var(--step-0)/1.55 var(--body); padding-inline: 16px; padding-block: 40px 64px; }
+main { max-width: 64rem; margin-inline: auto; display: grid; gap: 56px; }
+h1, h2 { font-family: var(--display); font-weight: 700; line-height: 1.05; text-wrap: balance; margin: 0; }
+h1 { font-size: var(--step-3); }
+h2 { font-size: var(--step-2); }
+h3 { font: 600 var(--step-1)/1.25 var(--body); margin: 0; }
+p { margin: 0; }
+.eyebrow { font: 600 var(--step--1)/1 var(--mono); text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent); }
+header { display: grid; gap: 12px; }
+header p { color: var(--ink-2); font-size: var(--step-1); max-width: 42rem; }
+section { display: grid; gap: 16px; }
+section > p, .lead { color: var(--ink-2); max-width: 46rem; }
+.lead strong, section > p strong { color: var(--ink); font-weight: 600; }
+.figures { display: grid; grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr)); border-block: 1px solid var(--rule); }
+.figure { padding: 20px 20px 20px 0; display: grid; gap: 4px; }
+.figure + .figure { padding-left: 20px; border-left: 1px solid var(--rule); }
+.figure b { font: 700 var(--step-3)/1 var(--display); font-variant-numeric: tabular-nums; }
+.figure span { color: var(--ink-2); font-size: var(--step--1); }
+.scroll { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: var(--step--1); background: var(--surface); }
+th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+th { font: 600 0.75rem/1.2 var(--mono); text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-3); }
+td.num, th.num { text-align: right; font-family: var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+code { font-family: var(--mono); font-size: 0.9em; }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr)); gap: 32px; }
+.grid2 > * { min-width: 0; }
+figure { margin: 0; display: grid; gap: 10px; align-content: start; min-width: 0; }
+figcaption { font-size: var(--step--1); color: var(--ink-3); }
+.chart { width: 100%; height: auto; display: block; overflow: visible; }
+.chart text { fill: var(--ink-2); font: 400 11px var(--mono); }
+.chart .grid { stroke: var(--rule); stroke-width: 1; }
+.chart .axis { stroke: var(--ink-3); stroke-width: 1; }
+.legend { display: flex; flex-wrap: wrap; gap: 16px; font-size: var(--step--1); color: var(--ink-2); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend i { width: 14px; height: 3px; border-radius: 2px; display: inline-block; }
+.legend i.dot { width: 10px; height: 10px; border-radius: 50%; }
+.legend i.hollow { width: 10px; height: 10px; border-radius: 50%; border: 2px solid var(--ink-3); background: transparent; }
+.note { border-left: 3px solid var(--accent); background: var(--surface); padding: 14px 18px; max-width: 46rem; color: var(--ink-2); }
+.note b { color: var(--ink); }
+.tooltip { position: fixed; pointer-events: none; z-index: 10; max-width: 18rem; padding: 8px 10px; background: var(--ink); color: var(--bg); border-radius: 6px; font-size: var(--step--1); line-height: 1.4; }
+footer { color: var(--ink-3); font-size: var(--step--1); border-top: 1px solid var(--rule); padding-top: 16px; display: grid; gap: 4px; }
+@media (max-width: 40rem) { .figure, .figure + .figure { padding: 16px 0; border-left: 0; } .figure + .figure { border-top: 1px solid var(--rule); } }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <span class="eyebrow">Etapa 2 · Variables del modelo · ISAC Hackathon 2026</span>
+    <h1>Variables del modelo Stuff+</h1>
+    <p>Qué información ve el modelo de cada pitch: el aire del juego, la forma equivalente a nivel del mar, el arsenal, el contexto y la secuencia. Ninguna variable usa el resultado del pitch.</p>
+  </header>
+
+  <div class="figures" id="figures"></div>
+
+  <section>
+    <h2>El aire de cada juego, medido con las rectas</h2>
+    <p class="lead" id="air-lead"></p>
+    <figure>
+      <div class="legend"><span><i style="background:var(--sea)"></i>Nivel del mar</span><span><i style="background:var(--mid)"></i>Altitud media</span><span><i style="background:var(--alt)"></i>Altitud extrema</span></div>
+      <svg class="chart" id="air-chart" role="img" aria-label="Distribución del aire por juego según altitud"></svg>
+      <figcaption>% de juegos de cada categoría en cada intervalo de 0.02 de aire. 1.0 = nivel del mar de la misma temporada.</figcaption>
+    </figure>
+  </section>
+
+  <section>
+    <h2>Cuánto cambia el movimiento con el aire</h2>
+    <p class="lead">Movimiento ∝ aire<sup>k</sup>. Comparamos a cada pitcher contra sí mismo en juegos con distinto aire. El aire de cada juego se mide con ruido, y eso achica la pendiente; lo corregimos con una <strong>variable instrumental</strong> (el aire típico de la categoría de altitud y temporada). <span id="k-lead"></span></p>
+    <div class="grid2">
+      <figure>
+        <h3>Vertical (IVB)</h3>
+        <svg class="chart" id="k-ivb" role="img" aria-label="Exponente k vertical por tipo de pitch"></svg>
+      </figure>
+      <figure>
+        <h3>Horizontal (HB)</h3>
+        <svg class="chart" id="k-hb" role="img" aria-label="Exponente k horizontal por tipo de pitch"></svg>
+      </figure>
+    </div>
+    <div class="legend"><span><i class="dot" style="background:var(--bar)"></i>k propio del tipo, con intervalo de 95 %</span><span><i class="hollow"></i>Pocos pitchers: usa el de la liga</span><span><i style="background:var(--ink-3)"></i>Línea punteada: k de la liga</span></div>
+  </section>
+
+  <section>
+    <h2>El mismo pitcher queda con la misma forma en casa y de visita</h2>
+    <p class="lead">Diferencia de movimiento del mismo pitcher con el mismo pitch: altitud extrema menos nivel del mar. Lo observado se aleja de cero; convertido a nivel del mar queda cerca de cero.</p>
+    <figure>
+      <div class="legend"><span><i class="hollow"></i>Observado</span><span><i class="dot" style="background:var(--accent)"></i>Convertido a nivel del mar</span></div>
+      <svg class="chart" id="shape-chart" role="img" aria-label="Diferencia de movimiento antes y después de convertir"></svg>
+      <figcaption>Pulgadas. Esta revisión usa los mismos pitchers que la estimación; la prueba fuera de muestra es parte de la etapa 5.</figcaption>
+    </figure>
+  </section>
+
+  <section>
+    <h2>Sweeper contra slider: no hay corte natural</h2>
+    <p class="lead" id="sweeper-lead"></p>
+    <div class="scroll"><table id="sweeper-table"></table></div>
+    <div class="note"><b>Resultado honesto.</b> La conversión cierra casi la mitad de la brecha entre altitudes, no toda. La mediana de la slider queda bien corregida, pero los sweepers, que son la cola de la distribución, parecen perder más que la slider típica. Siguiente paso: un k que dependa del tamaño del movimiento. El modelo usa el movimiento continuo, no la etiqueta.</div>
+  </section>
+
+  <section>
+    <h2>Ángulo de llegada relativo: ya no mide ubicación</h2>
+    <p class="lead">Parábola por tipo de pitch ajustada solo con 2024–2025 y revisada en 2026, que el ajuste nunca vio.</p>
+    <div class="scroll"><table id="vaa-table"></table></div>
+  </section>
+
+  <section>
+    <h2>Arsenal contra la recta principal</h2>
+    <div class="grid2">
+      <div class="scroll"><table id="shrink-table"></table></div>
+      <p class="lead">La referencia mezcla la recta del mismo juego con la del resto de sus salidas en esa altitud y temporada, con peso n / (n + k). Con k menor que 1, el release cambia más entre salidas que dentro de una: ahí manda el juego. El eje de spin es ruidoso dentro del juego (k ≈ 5): ahí manda el resto de sus salidas.</p>
+    </div>
+    <div class="scroll"><table id="reclass-table"></table></div>
+  </section>
+
+  <section>
+    <h2>La secuencia importa</h2>
+    <p class="lead" id="seq-lead"></p>
+    <div class="grid2">
+      <figure>
+        <h3>Separación después de que el bateador decide</h3>
+        <svg class="chart" id="tunnel-chart" role="img" aria-label="Whiff por swing según separación después del punto de decisión"></svg>
+        <figcaption>Pares de pitches seguidos de distinto tipo, en cuartiles de cuánto se separan entre el punto de decisión (175 ms antes del plato) y el plato.</figcaption>
+      </figure>
+      <figure>
+        <h3>Vuelta al orden</h3>
+        <div class="scroll"><table id="tto-table"></table></div>
+        <div class="scroll"><table id="roles-table"></table></div>
+      </figure>
+    </div>
+  </section>
+
+  <footer>
+    <span>Fuente de todas las cifras: <code>reportes/etapa_02_resumen.json</code>, generado por <code>src/features.py</code>.</span>
+    <span>Documento completo: <code>docs/02_features.md</code>. Decisiones: <code>docs/decisiones.md</code> (D-012 a D-019).</span>
+  </footer>
+</main>
+<div class="tooltip" id="tooltip" hidden></div>
+
+<script>
+const DATA = {"aire": {"por_altitud_y_temporada": [{"altitud": "Extreme Altitude", "year": 2024, "juegos": 223, "p10": 0.817, "p50": 0.8506, "p90": 0.8987}, {"altitud": "Extreme Altitude", "year": 2025, "juegos": 237, "p10": 0.8052, "p50": 0.8384, "p90": 0.8761}, {"altitud": "Extreme Altitude", "year": 2026, "juegos": 142, "p10": 0.7914, "p50": 0.8355, "p90": 0.9021}, {"altitud": "Medium Altitude", "year": 2024, "juegos": 204, "p10": 0.851, "p50": 0.8941, "p90": 0.9604}, {"altitud": "Medium Altitude", "year": 2025, "juegos": 213, "p10": 0.8403, "p50": 0.8786, "p90": 0.9478}, {"altitud": "Medium Altitude", "year": 2026, "juegos": 91, "p10": 0.8691, "p50": 0.9109, "p90": 0.9518}, {"altitud": "No Altitude", "year": 2024, "juegos": 404, "p10": 0.9482, "p50": 1.0, "p90": 1.0556}, {"altitud": "No Altitude", "year": 2025, "juegos": 386, "p10": 0.9529, "p50": 1.0, "p90": 1.0502}, {"altitud": "No Altitude", "year": 2026, "juegos": 212, "p10": 0.9464, "p50": 1.0, "p90": 1.0653}, {"altitud": "Sin dato", "year": 2025, "juegos": 3, "p10": 0.8329, "p50": 0.8593, "p90": 0.8779}, {"altitud": "Sin dato", "year": 2026, "juegos": 7, "p10": 0.8113, "p50": 0.8321, "p90": 0.8416}], "fuente": [{"fuente": "juego", "juegos": 2122}, {"fuente": "categoria", "juegos": 3}], "histograma": [{"altitud": "Extreme Altitude", "air_ratio": 0.74, "juegos": 6}, {"altitud": "Extreme Altitude", "air_ratio": 0.76, "juegos": 9}, {"altitud": "Extreme Altitude", "air_ratio": 0.78, "juegos": 29}, {"altitud": "Extreme Altitude", "air_ratio": 0.8, "juegos": 94}, {"altitud": "Extreme Altitude", "air_ratio": 0.82, "juegos": 145}, {"altitud": "Extreme Altitude", "air_ratio": 0.84, "juegos": 124}, {"altitud": "Extreme Altitude", "air_ratio": 0.86, "juegos": 102}, {"altitud": "Extreme Altitude", "air_ratio": 0.88, "juegos": 53}, {"altitud": "Extreme Altitude", "air_ratio": 0.9, "juegos": 27}, {"altitud": "Extreme Altitude", "air_ratio": 0.92, "juegos": 13}, {"altitud": "Medium Altitude", "air_ratio": 0.78, "juegos": 2}, {"altitud": "Medium Altitude", "air_ratio": 0.8, "juegos": 10}, {"altitud": "Medium Altitude", "air_ratio": 0.82, "juegos": 20}, {"altitud": "Medium Altitude", "air_ratio": 0.84, "juegos": 70}, {"altitud": "Medium Altitude", "air_ratio": 0.86, "juegos": 88}, {"altitud": "Medium Altitude", "air_ratio": 0.88, "juegos": 96}, {"altitud": "Medium Altitude", "air_ratio": 0.9, "juegos": 71}, {"altitud": "Medium Altitude", "air_ratio": 0.92, "juegos": 74}, {"altitud": "Medium Altitude", "air_ratio": 0.94, "juegos": 40}, {"altitud": "Medium Altitude", "air_ratio": 0.96, "juegos": 29}, {"altitud": "Medium Altitude", "air_ratio": 0.98, "juegos": 5}, {"altitud": "Medium Altitude", "air_ratio": 1.0, "juegos": 3}, {"altitud": "No Altitude", "air_ratio": 0.82, "juegos": 2}, {"altitud": "No Altitude", "air_ratio": 0.84, "juegos": 2}, {"altitud": "No Altitude", "air_ratio": 0.86, "juegos": 3}, {"altitud": "No Altitude", "air_ratio": 0.88, "juegos": 3}, {"altitud": "No Altitude", "air_ratio": 0.9, "juegos": 10}, {"altitud": "No Altitude", "air_ratio": 0.92, "juegos": 43}, {"altitud": "No Altitude", "air_ratio": 0.94, "juegos": 81}, {"altitud": "No Altitude", "air_ratio": 0.96, "juegos": 156}, {"altitud": "No Altitude", "air_ratio": 0.98, "juegos": 201}, {"altitud": "No Altitude", "air_ratio": 1.0, "juegos": 182}, {"altitud": "No Altitude", "air_ratio": 1.02, "juegos": 142}, {"altitud": "No Altitude", "air_ratio": 1.04, "juegos": 93}, {"altitud": "No Altitude", "air_ratio": 1.06, "juegos": 49}, {"altitud": "No Altitude", "air_ratio": 1.08, "juegos": 21}, {"altitud": "No Altitude", "air_ratio": 1.1, "juegos": 10}, {"altitud": "No Altitude", "air_ratio": 1.12, "juegos": 3}, {"altitud": "No Altitude", "air_ratio": 1.14, "juegos": 1}, {"altitud": "Sin dato", "air_ratio": 0.8, "juegos": 2}, {"altitud": "Sin dato", "air_ratio": 0.82, "juegos": 5}, {"altitud": "Sin dato", "air_ratio": 0.84, "juegos": 2}, {"altitud": "Sin dato", "air_ratio": 0.88, "juegos": 1}]}, "exponente_k": {"liga": {"movimiento_total": {"k": 1.5772, "ic95": [1.5507, 1.6096], "k_sin_corregir_atenuacion": 1.3692, "salidas": 39621, "pitchers": 1035}, "ivb": {"k": 1.3293, "ic95": [1.2966, 1.3613], "k_sin_corregir_atenuacion": 1.1751, "salidas": 32923, "pitchers": 1029}, "hb": {"k": 1.6728, "ic95": [1.6384, 1.7135], "k_sin_corregir_atenuacion": 1.4113, "salidas": 33228, "pitchers": 1023}}, "por_tipo": {"Four-Seam": {"ivb": {"k": 1.4996, "ic95": [1.4674, 1.5301], "k_sin_corregir_atenuacion": 1.3367, "salidas": 13397, "pitchers": 927, "usa_propio": true, "k_usado": 1.4996}, "hb": {"k": 1.6383, "ic95": [1.5744, 1.6961], "k_sin_corregir_atenuacion": 1.3484, "salidas": 12351, "pitchers": 907, "usa_propio": true, "k_usado": 1.6383}}, "Sinker": {"ivb": {"k": 1.3978, "ic95": [1.3379, 1.4622], "k_sin_corregir_atenuacion": 1.2326, "salidas": 7026, "pitchers": 686, "usa_propio": true, "k_usado": 1.3978}, "hb": {"k": 1.7527, "ic95": [1.6978, 1.8042], "k_sin_corregir_atenuacion": 1.5151, "salidas": 7502, "pitchers": 693, "usa_propio": true, "k_usado": 1.7527}}, "Cutter": {"ivb": {"k": 1.2795, "ic95": [1.1632, 1.4057], "k_sin_corregir_atenuacion": 1.1654, "salidas": 1661, "pitchers": 301, "usa_propio": true, "k_usado": 1.2795}, "hb": {"k": 0.9655, "ic95": [0.2769, 1.5115], "k_sin_corregir_atenuacion": 0.8188, "salidas": 233, "pitchers": 88, "usa_propio": false, "k_usado": 1.6728}}, "Slider": {"ivb": {"k": 0.6776, "ic95": [0.5956, 0.7635], "k_sin_corregir_atenuacion": 0.5986, "salidas": 3871, "pitchers": 585, "usa_propio": true, "k_usado": 0.6776}, "hb": {"k": 1.2213, "ic95": [1.112, 1.3494], "k_sin_corregir_atenuacion": 1.0054, "salidas": 4721, "pitchers": 622, "usa_propio": true, "k_usado": 1.2213}}, "Curveball": {"ivb": {"k": 1.1896, "ic95": [1.0753, 1.328], "k_sin_corregir_atenuacion": 1.0343, "salidas": 2963, "pitchers": 444, "usa_propio": true, "k_usado": 1.1896}, "hb": {"k": 1.6658, "ic95": [1.5533, 1.8034], "k_sin_corregir_atenuacion": 1.4328, "salidas": 3037, "pitchers": 451, "usa_propio": true, "k_usado": 1.6658}}, "Changeup": {"ivb": {"k": 1.2992, "ic95": [1.1502, 1.4066], "k_sin_corregir_atenuacion": 1.1255, "salidas": 3815, "pitchers": 568, "usa_propio": true, "k_usado": 1.2992}, "hb": {"k": 2.0558, "ic95": [1.9543, 2.1276], "k_sin_corregir_atenuacion": 1.7754, "salidas": 5131, "pitchers": 642, "usa_propio": true, "k_usado": 2.0558}}, "Splitter": {"ivb": {"k": 1.5181, "ic95": [1.1187, 2.1261], "k_sin_corregir_atenuacion": 0.9704, "salidas": 190, "pitchers": 69, "usa_propio": false, "k_usado": 1.3293}, "hb": {"k": 1.7171, "ic95": [1.1484, 2.1453], "k_sin_corregir_atenuacion": 1.3537, "salidas": 253, "pitchers": 79, "usa_propio": false, "k_usado": 1.6728}}}}, "reclasificacion": {"escala_robusta": {"velo": 1.312, "ivb": 2.5056, "hb": 2.641}, "posibles_mal_etiquetados": 2163, "reasignados": 1342, "confirmados": 98, "cambios": [{"original": "Changeup", "nuevo": "Sinker", "pitches": 249}, {"original": "Changeup", "nuevo": "Four-Seam", "pitches": 225}, {"original": "Four-Seam", "nuevo": "Changeup", "pitches": 214}, {"original": "Slider", "nuevo": "Changeup", "pitches": 106}, {"original": "Slider", "nuevo": "Curveball", "pitches": 79}, {"original": "Sinker", "nuevo": "Changeup", "pitches": 73}, {"original": "Slider", "nuevo": "Sinker", "pitches": 64}, {"original": "Slider", "nuevo": "Cutter", "pitches": 50}, {"original": "Changeup", "nuevo": "Slider", "pitches": 48}, {"original": "Slider", "nuevo": "Four-Seam", "pitches": 35}, {"original": "Four-Seam", "nuevo": "Cutter", "pitches": 26}, {"original": "Four-Seam", "nuevo": "Sinker", "pitches": 24}]}, "sweeper": {"medias_in": [-2.67, -9.93], "desviaciones_in": [3.77, 5.23], "pesos": [0.747, 0.253], "ashman_d": 1.594, "corte_mezcla_in": -9.03, "hay_corte_natural": false, "corte_usado_in": -12.0}, "encogimiento": {"velo": {"sigma2": 1.1407, "tau2": 0.6001, "k": 1.9008}, "ivb": {"sigma2": 4.0692, "tau2": 0.9911, "k": 4.1059}, "hb": {"sigma2": 4.2527, "tau2": 1.2455, "k": 3.4144}, "axis": {"sigma2": 73.0074, "tau2": 13.8609, "k": 5.2672}, "rel_height": {"sigma2": 0.0097, "tau2": 0.0108, "k": 0.8976}, "rel_side": {"sigma2": 0.0387, "tau2": 0.0414, "k": 0.9345}, "extension": {"sigma2": 0.0336, "tau2": 0.0394, "k": 0.8536}}, "angulos_ajuste": {"Changeup": {"vaa": [-0.03216, 1.31031, -9.63078], "haa": [-0.04116, 1.07923, -0.94614]}, "Curveball": {"vaa": [-0.07641, 1.33109, -11.31004], "haa": [-0.07235, 1.06791, -2.59482]}, "Cutter": {"vaa": [-0.01135, 1.14393, -8.89385], "haa": [0.00645, 1.08497, -1.82419]}, "Four-Seam": {"vaa": [-0.01623, 1.15279, -8.18268], "haa": [-0.01864, 1.0498, -0.99093]}, "Sinker": {"vaa": [-0.02974, 1.28817, -8.6169], "haa": [-0.02004, 1.05156, -0.92021]}, "Slider": {"vaa": [-0.03733, 1.26177, -9.8468], "haa": [-0.06575, 1.01239, -2.3767]}, "Splitter": {"vaa": [0.01396, 1.15386, -9.82437], "haa": [-0.04639, 1.05745, -1.39414]}}, "validacion": {"sweeper_por_altitud": [{"altitud": "Extreme Altitude", "sliders": 42997, "pct_sweeper_observado": 0.0313, "pct_sweeper_nivel_del_mar": 0.0728}, {"altitud": "Medium Altitude", "sliders": 35967, "pct_sweeper_observado": 0.056, "pct_sweeper_nivel_del_mar": 0.0836}, {"altitud": "No Altitude", "sliders": 59626, "pct_sweeper_observado": 0.1264, "pct_sweeper_nivel_del_mar": 0.1259}], "sweeper_mismo_pitcher": [{"pitchers": 300, "misma_etiqueta_observado": 0.9467, "misma_etiqueta_nivel_del_mar": 0.96}], "forma_mismo_pitcher": [{"pitch_class": "Four-Seam", "pares": 403, "delta_ivb_observado": -3.8278, "delta_ivb_nivel_del_mar": 0.1089, "delta_hb_observado": -2.8195, "delta_hb_nivel_del_mar": -0.502}, {"pitch_class": "Slider", "pares": 300, "delta_ivb_observado": -0.7096, "delta_ivb_nivel_del_mar": -0.4781, "delta_hb_observado": 0.6519, "delta_hb_nivel_del_mar": -0.0449}, {"pitch_class": "Sinker", "pares": 203, "delta_ivb_observado": -2.6603, "delta_ivb_nivel_del_mar": -0.1188, "delta_hb_observado": -4.0478, "delta_hb_nivel_del_mar": -0.0428}, {"pitch_class": "Changeup", "pares": 138, "delta_ivb_observado": -2.0584, "delta_ivb_nivel_del_mar": -0.7056, "delta_hb_observado": -4.2198, "delta_hb_nivel_del_mar": -0.4282}, {"pitch_class": "Curveball", "pares": 99, "delta_ivb_observado": 1.6754, "delta_ivb_nivel_del_mar": 0.3269, "delta_hb_observado": 3.0952, "delta_hb_nivel_del_mar": 0.5704}, {"pitch_class": "Cutter", "pares": 41, "delta_ivb_observado": -1.9919, "delta_ivb_nivel_del_mar": -0.1141, "delta_hb_observado": -0.5342, "delta_hb_nivel_del_mar": -0.6925}], "angulos_relativos": [{"pitch_class": "Changeup", "corr_vaa_rel_altura": -0.0352, "corr_vaa_altura": 0.8499, "corr_haa_rel_lado": -0.0073, "sd_vaa_rel": 0.6876}, {"pitch_class": "Curveball", "corr_vaa_rel_altura": 0.0282, "corr_vaa_altura": 0.7326, "corr_haa_rel_lado": 0.0113, "sd_vaa_rel": 0.9854}, {"pitch_class": "Cutter", "corr_vaa_rel_altura": -0.0216, "corr_vaa_altura": 0.9001, "corr_haa_rel_lado": -0.0312, "sd_vaa_rel": 0.4737}, {"pitch_class": "Four-Seam", "corr_vaa_rel_altura": 0.006, "corr_vaa_altura": 0.8892, "corr_haa_rel_lado": 0.0048, "sd_vaa_rel": 0.4919}, {"pitch_class": "Sinker", "corr_vaa_rel_altura": -0.0095, "corr_vaa_altura": 0.8698, "corr_haa_rel_lado": -0.0187, "sd_vaa_rel": 0.5392}, {"pitch_class": "Slider", "corr_vaa_rel_altura": 0.0217, "corr_vaa_altura": 0.8269, "corr_haa_rel_lado": 0.0033, "sd_vaa_rel": 0.6995}, {"pitch_class": "Splitter", "corr_vaa_rel_altura": -0.0766, "corr_vaa_altura": 0.852, "corr_haa_rel_lado": 0.106, "sd_vaa_rel": 0.8024}], "vaa_rel_por_decil_de_altura": [{"decil": 1, "media_vaa_rel": -0.0184}, {"decil": 2, "media_vaa_rel": -0.0097}, {"decil": 3, "media_vaa_rel": -0.0053}, {"decil": 4, "media_vaa_rel": -0.0195}, {"decil": 5, "media_vaa_rel": -0.0055}, {"decil": 6, "media_vaa_rel": -0.0065}, {"decil": 7, "media_vaa_rel": -0.0143}, {"decil": 8, "media_vaa_rel": -0.0117}, {"decil": 9, "media_vaa_rel": -0.0036}, {"decil": 10, "media_vaa_rel": -0.0109}], "recta_principal": [{"primary_fb_type": "Four-Seam", "pitchers": 788}, {"primary_fb_type": "Sinker", "pitchers": 350}, {"primary_fb_type": "Cutter", "pitchers": 54}], "cobertura": [{"pitches_usables": 633050, "con_diferencias_arsenal": 0.9948, "con_rectas_en_el_juego": 0.9833, "con_air_ratio": 1.0, "con_vaa_rel": 1.0, "con_magnus_dependence": 0.9872, "con_zona": 0.9982}], "zona_contra_bandera_dataset": [{"dentro_cuadricula": false, "in_strike_zone": 0, "pitches": 411097}, {"dentro_cuadricula": false, "in_strike_zone": 1, "pitches": 83}, {"dentro_cuadricula": true, "in_strike_zone": 1, "pitches": 222659}], "magnus_por_tipo": [{"pitch_class": "Four-Seam", "mediana": 0.7836, "p10": 0.6081, "p90": 0.9319}, {"pitch_class": "Sinker", "mediana": 0.7747, "p10": 0.6181, "p90": 0.9269}, {"pitch_class": "Changeup", "mediana": 0.7371, "p10": 0.5274, "p90": 0.9382}, {"pitch_class": "Splitter", "mediana": 0.7299, "p10": 0.3408, "p90": 1.2833}, {"pitch_class": "Curveball", "mediana": 0.4134, "p10": 0.2045, "p90": 0.5838}, {"pitch_class": "Cutter", "mediana": 0.4074, "p10": 0.2537, "p90": 0.6128}, {"pitch_class": "Slider", "mediana": 0.2422, "p10": 0.1072, "p90": 0.4327}]}, "secuencia": {"turnos": [{"turnos": 165649, "primer_pitch_en_0_0": 0.9871, "resto_con_conteo_avanzado": 0.999}], "roles": [{"pitcher_role": "abridor", "salidas": 4303, "pitches": 317356, "entrada_mediana": 1.0}, {"pitcher_role": "relevista", "salidas": 18256, "pitches": 312892, "entrada_mediana": 7.0}, {"pitcher_role": null, "salidas": 106, "pitches": 4754, "entrada_mediana": null}], "vuelta_al_orden": [{"times_through_order": 1, "pitches": 452869}, {"times_through_order": 2, "pitches": 130092}, {"times_through_order": 3, "pitches": 45205}, {"times_through_order": 4, "pitches": 1333}, {"times_through_order": 5, "pitches": 42}, {"times_through_order": 6, "pitches": 16}, {"times_through_order": null, "pitches": 5445}], "tunneling": [{"mismo_tipo": false, "pares": 280341, "separacion_decision_ft": 0.9208, "separacion_plato_ft": 1.5971}, {"mismo_tipo": true, "pares": 184095, "separacion_decision_ft": 0.7917, "separacion_plato_ft": 1.3033}], "efecto_tunneling": [{"cuartil": 1, "separacion_despues_ft": 0.1627, "whiff_por_swing": 0.2028, "pitches": 69857}, {"cuartil": 2, "separacion_despues_ft": 0.5342, "whiff_por_swing": 0.2187, "pitches": 69856}, {"cuartil": 3, "separacion_despues_ft": 0.8509, "whiff_por_swing": 0.2496, "pitches": 69856}, {"cuartil": 4, "separacion_despues_ft": 1.2986, "whiff_por_swing": 0.3127, "pitches": 69856}], "efecto_vuelta_al_orden": [{"times_through_order": 1, "whiff_por_swing": 0.2498, "hit_por_bola_en_juego": 0.3579, "pitches": 451511}, {"times_through_order": 2, "whiff_por_swing": 0.2265, "hit_por_bola_en_juego": 0.3599, "pitches": 129753}, {"times_through_order": 3, "whiff_por_swing": 0.2179, "hit_por_bola_en_juego": 0.3691, "pitches": 45102}], "efecto_repetir": [{"mismo_tipo": false, "whiff_por_swing": 0.2409, "pitches": 279425}, {"mismo_tipo": true, "whiff_por_swing": 0.2347, "pitches": 183455}], "cobertura": [{"con_tunneling": 0.7314, "pitches_con_anterior": 0.7372}]}, "columnas": 145, "pitches": 635002};
+const int = new Intl.NumberFormat("es-MX");
+const pct = (x, d = 1) => (x * 100).toFixed(d) + " %";
+const fixed = (x, d = 2) => Number(x).toFixed(d);
+const signed = (x, d = 2) => (x > 0 ? "+" : "") + Number(x).toFixed(d);
+const SVG = "http://www.w3.org/2000/svg";
+const tooltip = document.getElementById("tooltip");
+const ALT_NAMES = { "Extreme Altitude": "Altitud extrema", "Medium Altitude": "Altitud media", "No Altitude": "Nivel del mar", "Sin dato": "Sin dato" };
+const ALT_COLORS = { "No Altitude": "var(--sea)", "Medium Altitude": "var(--mid)", "Extreme Altitude": "var(--alt)" };
+const TYPE_NAMES = { "Four-Seam": "Recta 4 costuras", "Sinker": "Sinker", "Cutter": "Cutter", "Slider": "Slider", "Curveball": "Curva", "Changeup": "Cambio", "Splitter": "Splitter" };
+
+function table(id, columns, rows) {
+  const head = "<thead><tr>" + columns.map(c => `<th class="${c.num ? "num" : ""}">${c.label}</th>`).join("") + "</tr></thead>";
+  const body = "<tbody>" + rows.map(r => "<tr>" + columns.map(c =>
+    `<td class="${c.num ? "num" : ""}">${c.format ? c.format(r[c.key], r) : r[c.key]}</td>`).join("") + "</tr>").join("") + "</tbody>";
+  document.getElementById(id).innerHTML = head + body;
+}
+function el(tag, attrs, parent) {
+  const node = document.createElementNS(SVG, tag);
+  for (const [k, v] of Object.entries(attrs)) node.setAttribute(k, v);
+  if (parent) parent.appendChild(node);
+  return node;
+}
+function text(parent, x, y, words, attrs = {}) {
+  const t = el("text", { x, y, ...attrs }, parent);
+  t.textContent = words;
+  return t;
+}
+function showTip(words, x, y) {
+  tooltip.textContent = words;
+  tooltip.hidden = false;
+  tooltip.style.left = Math.min(x + 12, window.innerWidth - tooltip.offsetWidth - 8) + "px";
+  tooltip.style.top = y + 12 + "px";
+}
+const hideTip = () => { tooltip.hidden = true; };
+function hoverable(node, words) {
+  node.addEventListener("pointermove", e => showTip(words, e.clientX, e.clientY));
+  node.addEventListener("pointerleave", hideTip);
+}
+
+function renderFigures() {
+  const seq = DATA.secuencia.turnos[0];
+  const reclass = DATA.reclasificacion;
+  const games = DATA.aire.fuente.reduce((a, r) => a + r.juegos, 0);
+  const own = DATA.aire.fuente.find(r => r.fuente === "juego").juegos;
+  const figures = [
+    { value: int.format(DATA.pitches), label: "pitches, ninguno perdido" },
+    { value: DATA.columnas, label: "columnas en el dataset de variables" },
+    { value: `${int.format(own)} / ${int.format(games)}`, label: "juegos con su propia medida de aire" },
+    { value: int.format(reclass.reasignados), label: "pitches mal etiquetados reclasificados" },
+    { value: int.format(seq.turnos), label: "turnos al bat reconstruidos" },
+  ];
+  document.getElementById("figures").innerHTML = figures.map(f =>
+    `<div class="figure"><b>${f.value}</b><span>${f.label}</span></div>`).join("");
+}
+
+function renderAir() {
+  const rows = DATA.aire.histograma.filter(r => ALT_COLORS[r.altitud]);
+  const groups = Object.keys(ALT_COLORS).map(alt => {
+    const pts = rows.filter(r => r.altitud === alt);
+    const total = pts.reduce((a, r) => a + r.juegos, 0);
+    return { alt, pts: pts.map(r => ({ x: r.air_ratio, y: r.juegos / total, n: r.juegos })) };
+  });
+  const svg = document.getElementById("air-chart");
+  const W = 760, H = 260, m = { t: 16, r: 16, b: 36, l: 44 };
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  const xMin = 0.70, xMax = 1.16;
+  const yMax = Math.ceil(Math.max(...groups.flatMap(g => g.pts.map(p => p.y))) * 20) / 20;
+  const x = v => m.l + (v - xMin) / (xMax - xMin) * (W - m.l - m.r);
+  const y = v => m.t + (1 - v / yMax) * (H - m.t - m.b);
+  for (let t = 0; t <= yMax + 1e-9; t += 0.05) {
+    el("line", { x1: m.l, x2: W - m.r, y1: y(t), y2: y(t), class: "grid" }, svg);
+    text(svg, m.l - 6, y(t) + 4, Math.round(t * 100) + "%", { "text-anchor": "end" });
+  }
+  for (let t = 0.7; t <= 1.15 + 1e-9; t += 0.05) text(svg, x(t), H - m.b + 16, t.toFixed(2), { "text-anchor": "middle" });
+  text(svg, (m.l + W - m.r) / 2, H - 4, "aire del juego (1.0 = nivel del mar)", { "text-anchor": "middle" });
+  groups.forEach(g => {
+    const d = g.pts.map((p, i) => `${i ? "L" : "M"}${x(p.x + 0.01)},${y(p.y)}`).join("");
+    el("path", { d, fill: "none", stroke: ALT_COLORS[g.alt], "stroke-width": 2, "stroke-linejoin": "round" }, svg);
+    const peak = g.pts.reduce((a, p) => p.y > a.y ? p : a, g.pts[0]);
+    text(svg, x(peak.x + 0.01), y(peak.y) - 8, ALT_NAMES[g.alt], { "text-anchor": "middle", style: "fill:var(--ink)" });
+  });
+  const cross = el("line", { y1: m.t, y2: y(0), stroke: "var(--ink-3)", visibility: "hidden" }, svg);
+  const hit = el("rect", { x: m.l, y: m.t, width: W - m.l - m.r, height: H - m.t - m.b, fill: "transparent" }, svg);
+  hit.addEventListener("pointermove", e => {
+    const box = svg.getBoundingClientRect();
+    const v = xMin + ((e.clientX - box.left) / box.width * W - m.l) / (W - m.l - m.r) * (xMax - xMin);
+    const bin = Math.floor(v * 50) / 50;
+    cross.setAttribute("x1", x(bin + 0.01)); cross.setAttribute("x2", x(bin + 0.01)); cross.setAttribute("visibility", "visible");
+    const parts = groups.map(g => { const p = g.pts.find(q => Math.abs(q.x - bin) < 1e-6); return `${ALT_NAMES[g.alt]}: ${p ? pct(p.y) : "—"}`; });
+    showTip(`Aire ${bin.toFixed(2)}–${(bin + 0.02).toFixed(2)} · ${parts.join(" · ")}`, e.clientX, e.clientY);
+  });
+  hit.addEventListener("pointerleave", () => { cross.setAttribute("visibility", "hidden"); hideTip(); });
+
+  const med = alt => { const r = DATA.aire.por_altitud_y_temporada.filter(q => q.altitud === alt); return r.reduce((a, q) => a + q.p50, 0) / r.length; };
+  document.getElementById("air-lead").innerHTML =
+    `El frenado de las rectas es proporcional a la densidad del aire. En la mediana, la altitud extrema tiene <strong>${fixed(med("Extreme Altitude"))}</strong> del aire de nivel del mar y la media <strong>${fixed(med("Medium Altitude"))}</strong>. El aire también varía dentro de cada categoría: es una medida más fina que las tres categorías del dataset.`;
+}
+
+function kChart(id, component) {
+  const types = Object.keys(DATA.exponente_k.por_tipo);
+  const rows = types.map(t => ({ t, ...DATA.exponente_k.por_tipo[t][component] }));
+  const league = DATA.exponente_k.liga[component].k;
+  const svg = document.getElementById(id);
+  const W = 380, rowH = 30, m = { t: 12, r: 16, b: 32, l: 124 };
+  const H = m.t + rows.length * rowH + m.b;
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  const xMin = 0, xMax = 2.5;
+  const x = v => m.l + (Math.min(Math.max(v, xMin), xMax) - xMin) / (xMax - xMin) * (W - m.l - m.r);
+  for (let t = 0; t <= 2.5 + 1e-9; t += 0.5) {
+    el("line", { x1: x(t), x2: x(t), y1: m.t, y2: H - m.b, class: "grid" }, svg);
+    text(svg, x(t), H - m.b + 16, t.toFixed(1), { "text-anchor": "middle" });
+  }
+  el("line", { x1: x(league), x2: x(league), y1: m.t, y2: H - m.b, stroke: "var(--ink-3)", "stroke-dasharray": "4 4" }, svg);
+  rows.forEach((r, i) => {
+    const cy = m.t + i * rowH + rowH / 2;
+    text(svg, m.l - 10, cy + 4, TYPE_NAMES[r.t], { "text-anchor": "end", style: "fill:var(--ink)" });
+    const g = el("g", {}, svg);
+    el("line", { x1: x(r.ic95[0]), x2: x(r.ic95[1]), y1: cy, y2: cy, stroke: r.usa_propio ? "var(--bar)" : "var(--ink-3)", "stroke-width": 2 }, g);
+    el("circle", { cx: x(r.usa_propio ? r.k : r.k_usado), cy, r: 5, fill: r.usa_propio ? "var(--bar)" : "var(--surface)", stroke: r.usa_propio ? "var(--surface)" : "var(--ink-3)", "stroke-width": 2 }, g);
+    el("rect", { x: m.l, y: cy - rowH / 2, width: W - m.l - m.r, height: rowH, fill: "transparent" }, g);
+    hoverable(g, `${TYPE_NAMES[r.t]}: k = ${fixed(r.k)} (IC 95 % ${fixed(r.ic95[0])}–${fixed(r.ic95[1])}), ${int.format(r.pitchers)} pitchers${r.usa_propio ? "" : `; usa el de la liga, ${fixed(r.k_usado)}`}`);
+  });
+}
+
+function renderK() {
+  kChart("k-ivb", "ivb");
+  kChart("k-hb", "hb");
+  const l = DATA.exponente_k.liga.movimiento_total;
+  document.getElementById("k-lead").innerHTML =
+    `Para el movimiento total de la liga, k pasa de ${fixed(l.k_sin_corregir_atenuacion)} sin corregir a <strong>${fixed(l.k)}</strong> (IC 95 % ${fixed(l.ic95[0])}–${fixed(l.ic95[1])}). k mayor que 1 significa que el movimiento cae más que el aire: hay menos fuerza de Magnus y además la pelota llega antes.`;
+}
+
+function renderShape() {
+  const rows = DATA.validacion.forma_mismo_pitcher.flatMap(r => [
+    { label: `${TYPE_NAMES[r.pitch_class]} · IVB`, obs: r.delta_ivb_observado, sea: r.delta_ivb_nivel_del_mar, n: r.pares },
+    { label: `${TYPE_NAMES[r.pitch_class]} · HB`, obs: r.delta_hb_observado, sea: r.delta_hb_nivel_del_mar, n: r.pares },
+  ]);
+  const svg = document.getElementById("shape-chart");
+  const W = 760, rowH = 24, m = { t: 12, r: 24, b: 32, l: 170 };
+  const H = m.t + rows.length * rowH + m.b;
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  const xMin = -5, xMax = 4;
+  const x = v => m.l + (v - xMin) / (xMax - xMin) * (W - m.l - m.r);
+  for (let t = xMin; t <= xMax; t += 1) {
+    el("line", { x1: x(t), x2: x(t), y1: m.t, y2: H - m.b, class: t === 0 ? "axis" : "grid" }, svg);
+    text(svg, x(t), H - m.b + 16, signed(t, 0), { "text-anchor": "middle" });
+  }
+  rows.forEach((r, i) => {
+    const cy = m.t + i * rowH + rowH / 2;
+    text(svg, m.l - 10, cy + 4, r.label, { "text-anchor": "end", style: "fill:var(--ink)" });
+    const g = el("g", {}, svg);
+    el("line", { x1: x(r.obs), x2: x(r.sea), y1: cy, y2: cy, stroke: "var(--rule)", "stroke-width": 2 }, g);
+    el("circle", { cx: x(r.obs), cy, r: 5, fill: "var(--surface)", stroke: "var(--ink-3)", "stroke-width": 2 }, g);
+    el("circle", { cx: x(r.sea), cy, r: 5, fill: "var(--accent)", stroke: "var(--surface)", "stroke-width": 2 }, g);
+    el("rect", { x: m.l, y: cy - rowH / 2, width: W - m.l - m.r, height: rowH, fill: "transparent" }, g);
+    hoverable(g, `${r.label}: observado ${signed(r.obs)} in → a nivel del mar ${signed(r.sea)} in (${r.n} pitchers)`);
+  });
+}
+
+function renderSweeper() {
+  const s = DATA.sweeper;
+  const same = DATA.validacion.sweeper_mismo_pitcher[0];
+  document.getElementById("sweeper-lead").innerHTML =
+    `Una mezcla de dos normales sobre el movimiento horizontal a nivel del mar encuentra grupos en ${fixed(s.medias_in[0], 1)} y ${fixed(s.medias_in[1], 1)} in, pero con una D de Ashman de <strong>${fixed(s.ashman_d)}</strong>: por debajo de 2 los grupos se enciman. Como acordamos (D-013), usamos <strong>${Math.abs(s.corte_usado_in)} in hacia el guante sobre la forma a nivel del mar</strong>. La etiqueta coincide en casa y de visita para ${pct(same.misma_etiqueta_nivel_del_mar)} de los pitchers (${pct(same.misma_etiqueta_observado)} sin convertir).`;
+  table("sweeper-table", [
+    { key: "altitud", label: "Altitud", format: v => ALT_NAMES[v] },
+    { key: "sliders", label: "Sliders", num: true, format: v => int.format(v) },
+    { key: "pct_sweeper_observado", label: "Sweeper, movimiento observado", num: true, format: v => pct(v) },
+    { key: "pct_sweeper_nivel_del_mar", label: "Sweeper, forma a nivel del mar", num: true, format: v => pct(v) },
+  ], DATA.validacion.sweeper_por_altitud);
+}
+
+function renderVaa() {
+  table("vaa-table", [
+    { key: "pitch_class", label: "Pitch", format: v => TYPE_NAMES[v] },
+    { key: "corr_vaa_altura", label: "Correlación VAA crudo con altura", num: true, format: v => fixed(v) },
+    { key: "corr_vaa_rel_altura", label: "Correlación VAA relativo con altura", num: true, format: v => fixed(v, 3) },
+    { key: "corr_haa_rel_lado", label: "Correlación HAA relativo con lado", num: true, format: v => fixed(v, 3) },
+  ], DATA.validacion.angulos_relativos);
+}
+
+function renderArsenal() {
+  const names = { velo: "Velocidad", ivb: "IVB", hb: "HB", axis: "Eje de spin", rel_height: "Altura de release", rel_side: "Lado de release", extension: "Extensión" };
+  table("shrink-table", [
+    { key: "name", label: "Variable de la recta" },
+    { key: "k", label: "k (peso del juego = n / (n + k))", num: true, format: v => fixed(v, 1) },
+  ], Object.entries(DATA.encogimiento).map(([k, v]) => ({ name: names[k], k: v.k })));
+  table("reclass-table", [
+    { key: "original", label: "Etiqueta de Trackman", format: v => TYPE_NAMES[v] || v },
+    { key: "nuevo", label: "Tipo por forma en su repertorio", format: v => TYPE_NAMES[v] || v },
+    { key: "pitches", label: "Pitches", num: true, format: v => int.format(v) },
+  ], DATA.reclasificacion.cambios.slice(0, 6));
+}
+
+function renderSequence() {
+  const tq = DATA.secuencia.efecto_tunneling;
+  const rep = DATA.secuencia.efecto_repetir;
+  document.getElementById("seq-lead").innerHTML =
+    `El dataset no trae número de pitch, pero sus filas vienen en orden cronológico (D-015). Con eso reconstruimos turnos, el pitch anterior y el tunneling. Cuando el pitch se separa más del anterior <em>después</em> de que el bateador decide, el whiff por swing sube de <strong>${pct(tq[0].whiff_por_swing)}</strong> a <strong>${pct(tq.at(-1).whiff_por_swing)}</strong>. Repetir el mismo pitch o cambiarlo, en cambio, apenas mueve el whiff (${pct(rep[1].whiff_por_swing)} contra ${pct(rep[0].whiff_por_swing)}).`;
+
+  const svg = document.getElementById("tunnel-chart");
+  const W = 380, H = 230, m = { t: 24, r: 8, b: 40, l: 8 };
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  const band = (W - m.l - m.r) / tq.length, max = 0.4;
+  const y = v => m.t + (H - m.t - m.b) * (1 - v / max);
+  el("line", { x1: m.l, x2: W - m.r, y1: y(0), y2: y(0), class: "axis" }, svg);
+  tq.forEach((r, i) => {
+    const bx = m.l + i * band + band * 0.2, w = band * 0.6;
+    const bar = el("rect", { x: bx, y: y(r.whiff_por_swing), width: w, height: y(0) - y(r.whiff_por_swing), rx: 4, fill: i === tq.length - 1 ? "var(--accent)" : "var(--bar)" }, svg);
+    hoverable(bar, `Cuartil ${r.cuartil}: se separan ${fixed(r.separacion_despues_ft)} ft después de decidir; whiff ${pct(r.whiff_por_swing)} (${int.format(r.pitches)} pitches)`);
+    text(svg, bx + w / 2, y(r.whiff_por_swing) - 6, pct(r.whiff_por_swing), { "text-anchor": "middle" });
+    text(svg, bx + w / 2, H - m.b + 16, `${fixed(r.separacion_despues_ft)} ft`, { "text-anchor": "middle" });
+  });
+  text(svg, W / 2, H - 6, "separación mediana después del punto de decisión", { "text-anchor": "middle" });
+
+  table("tto-table", [
+    { key: "times_through_order", label: "Vez que lo enfrenta" },
+    { key: "whiff_por_swing", label: "Whiff por swing", num: true, format: v => pct(v) },
+    { key: "hit_por_bola_en_juego", label: "Hit por bola en juego", num: true, format: v => pct(v) },
+    { key: "pitches", label: "Pitches", num: true, format: v => int.format(v) },
+  ], DATA.secuencia.efecto_vuelta_al_orden);
+  table("roles-table", [
+    { key: "pitcher_role", label: "Rol" },
+    { key: "salidas", label: "Salidas", num: true, format: v => int.format(v) },
+    { key: "entrada_mediana", label: "Entra en la entrada (mediana)", num: true },
+  ], DATA.secuencia.roles.filter(r => r.pitcher_role));
+}
+
+renderFigures();
+renderAir();
+renderK();
+renderShape();
+renderSweeper();
+renderVaa();
+renderArsenal();
+renderSequence();
+</script>
+</body>
+</html>

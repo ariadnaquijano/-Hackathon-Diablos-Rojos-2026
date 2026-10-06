@@ -1,0 +1,1149 @@
+{
+  "aire": {
+    "por_altitud_y_temporada": [
+      {
+        "altitud": "Extreme Altitude",
+        "year": 2024,
+        "juegos": 223,
+        "p10": 0.817,
+        "p50": 0.8506,
+        "p90": 0.8987
+      },
+      {
+        "altitud": "Extreme Altitude",
+        "year": 2025,
+        "juegos": 237,
+        "p10": 0.8052,
+        "p50": 0.8384,
+        "p90": 0.8761
+      },
+      {
+        "altitud": "Extreme Altitude",
+        "year": 2026,
+        "juegos": 142,
+        "p10": 0.7914,
+        "p50": 0.8355,
+        "p90": 0.9021
+      },
+      {
+        "altitud": "Medium Altitude",
+        "year": 2024,
+        "juegos": 204,
+        "p10": 0.851,
+        "p50": 0.8941,
+        "p90": 0.9604
+      },
+      {
+        "altitud": "Medium Altitude",
+        "year": 2025,
+        "juegos": 213,
+        "p10": 0.8403,
+        "p50": 0.8786,
+        "p90": 0.9478
+      },
+      {
+        "altitud": "Medium Altitude",
+        "year": 2026,
+        "juegos": 91,
+        "p10": 0.8691,
+        "p50": 0.9109,
+        "p90": 0.9518
+      },
+      {
+        "altitud": "No Altitude",
+        "year": 2024,
+        "juegos": 404,
+        "p10": 0.9482,
+        "p50": 1.0,
+        "p90": 1.0556
+      },
+      {
+        "altitud": "No Altitude",
+        "year": 2025,
+        "juegos": 386,
+        "p10": 0.9529,
+        "p50": 1.0,
+        "p90": 1.0502
+      },
+      {
+        "altitud": "No Altitude",
+        "year": 2026,
+        "juegos": 212,
+        "p10": 0.9464,
+        "p50": 1.0,
+        "p90": 1.0653
+      },
+      {
+        "altitud": "Sin dato",
+        "year": 2025,
+        "juegos": 3,
+        "p10": 0.8329,
+        "p50": 0.8593,
+        "p90": 0.8779
+      },
+      {
+        "altitud": "Sin dato",
+        "year": 2026,
+        "juegos": 7,
+        "p10": 0.8113,
+        "p50": 0.8321,
+        "p90": 0.8416
+      }
+    ],
+    "fuente": [
+      {
+        "fuente": "juego",
+        "juegos": 2122
+      },
+      {
+        "fuente": "categoria",
+        "juegos": 3
+      }
+    ],
+    "histograma": [
+      {
+        "altitud": "Extreme Altitude",
+        "air_ratio": 0.74,
+        "juegos": 6
+      },
+      {
+        "altitud": "Extreme Altitude",
+        "air_ratio": 0.76,
+        "juegos": 9
+      },
+      {
+        "altitud": "Extreme Altitude",
+        "air_ratio": 0.78,
+        "juegos": 29
+      },
+      {
+        "altitud": "Extreme Altitude",
+        "air_ratio": 0.8,
+        "juegos": 94
+      },
+      {
+        "altitud": "Extreme Altitude",
+        "air_ratio": 0.82,
+        "juegos": 145
+      },
+      {
+        "altitud": "Extreme Altitude",
+        "air_ratio": 0.84,
+        "juegos": 124
+      },
+      {
+        "altitud": "Extreme Altitude",
+        "air_ratio": 0.86,
+        "juegos": 102
+      },
+      {
+        "altitud": "Extreme Altitude",
+        "air_ratio": 0.88,
+        "juegos": 53
+      },
+      {
+        "altitud": "Extreme Altitude",
+        "air_ratio": 0.9,
+        "juegos": 27
+      },
+      {
+        "altitud": "Extreme Altitude",
+        "air_ratio": 0.92,
+        "juegos": 13
+      },
+      {
+        "altitud": "Medium Altitude",
+        "air_ratio": 0.78,
+        "juegos": 2
+      },
+      {
+        "altitud": "Medium Altitude",
+        "air_ratio": 0.8,
+        "juegos": 10
+      },
+      {
+        "altitud": "Medium Altitude",
+        "air_ratio": 0.82,
+        "juegos": 20
+      },
+      {
+        "altitud": "Medium Altitude",
+        "air_ratio": 0.84,
+        "juegos": 70
+      },
+      {
+        "altitud": "Medium Altitude",
+        "air_ratio": 0.86,
+        "juegos": 88
+      },
+      {
+        "altitud": "Medium Altitude",
+        "air_ratio": 0.88,
+        "juegos": 96
+      },
+      {
+        "altitud": "Medium Altitude",
+        "air_ratio": 0.9,
+        "juegos": 71
+      },
+      {
+        "altitud": "Medium Altitude",
+        "air_ratio": 0.92,
+        "juegos": 74
+      },
+      {
+        "altitud": "Medium Altitude",
+        "air_ratio": 0.94,
+        "juegos": 40
+      },
+      {
+        "altitud": "Medium Altitude",
+        "air_ratio": 0.96,
+        "juegos": 29
+      },
+      {
+        "altitud": "Medium Altitude",
+        "air_ratio": 0.98,
+        "juegos": 5
+      },
+      {
+        "altitud": "Medium Altitude",
+        "air_ratio": 1.0,
+        "juegos": 3
+      },
+      {
+        "altitud": "No Altitude",
+        "air_ratio": 0.82,
+        "juegos": 2
+      },
+      {
+        "altitud": "No Altitude",
+        "air_ratio": 0.84,
+        "juegos": 2
+      },
+      {
+        "altitud": "No Altitude",
+        "air_ratio": 0.86,
+        "juegos": 3
+      },
+      {
+        "altitud": "No Altitude",
+        "air_ratio": 0.88,
+        "juegos": 3
+      },
+      {
+        "altitud": "No Altitude",
+        "air_ratio": 0.9,
+        "juegos": 10
+      },
+      {
+        "altitud": "No Altitude",
+        "air_ratio": 0.92,
+        "juegos": 43
+      },
+      {
+        "altitud": "No Altitude",
+        "air_ratio": 0.94,
+        "juegos": 81
+      },
+      {
+        "altitud": "No Altitude",
+        "air_ratio": 0.96,
+        "juegos": 156
+      },
+      {
+        "altitud": "No Altitude",
+        "air_ratio": 0.98,
+        "juegos": 201
+      },
+      {
+        "altitud": "No Altitude",
+        "air_ratio": 1.0,
+        "juegos": 182
+      },
+      {
+        "altitud": "No Altitude",
+        "air_ratio": 1.02,
+        "juegos": 142
+      },
+      {
+        "altitud": "No Altitude",
+        "air_ratio": 1.04,
+        "juegos": 93
+      },
+      {
+        "altitud": "No Altitude",
+        "air_ratio": 1.06,
+        "juegos": 49
+      },
+      {
+        "altitud": "No Altitude",
+        "air_ratio": 1.08,
+        "juegos": 21
+      },
+      {
+        "altitud": "No Altitude",
+        "air_ratio": 1.1,
+        "juegos": 10
+      },
+      {
+        "altitud": "No Altitude",
+        "air_ratio": 1.12,
+        "juegos": 3
+      },
+      {
+        "altitud": "No Altitude",
+        "air_ratio": 1.14,
+        "juegos": 1
+      },
+      {
+        "altitud": "Sin dato",
+        "air_ratio": 0.8,
+        "juegos": 2
+      },
+      {
+        "altitud": "Sin dato",
+        "air_ratio": 0.82,
+        "juegos": 5
+      },
+      {
+        "altitud": "Sin dato",
+        "air_ratio": 0.84,
+        "juegos": 2
+      },
+      {
+        "altitud": "Sin dato",
+        "air_ratio": 0.88,
+        "juegos": 1
+      }
+    ]
+  },
+  "exponente_k": {
+    "liga": {
+      "movimiento_total": {
+        "k": 1.5772,
+        "ic95": [
+          1.5507,
+          1.6096
+        ],
+        "k_sin_corregir_atenuacion": 1.3692,
+        "salidas": 39621,
+        "pitchers": 1035
+      },
+      "ivb": {
+        "k": 1.3293,
+        "ic95": [
+          1.2966,
+          1.3613
+        ],
+        "k_sin_corregir_atenuacion": 1.1751,
+        "salidas": 32923,
+        "pitchers": 1029
+      },
+      "hb": {
+        "k": 1.6728,
+        "ic95": [
+          1.6384,
+          1.7135
+        ],
+        "k_sin_corregir_atenuacion": 1.4113,
+        "salidas": 33228,
+        "pitchers": 1023
+      }
+    },
+    "por_tipo": {
+      "Four-Seam": {
+        "ivb": {
+          "k": 1.4996,
+          "ic95": [
+            1.4674,
+            1.5301
+          ],
+          "k_sin_corregir_atenuacion": 1.3367,
+          "salidas": 13397,
+          "pitchers": 927,
+          "usa_propio": true,
+          "k_usado": 1.4996
+        },
+        "hb": {
+          "k": 1.6383,
+          "ic95": [
+            1.5744,
+            1.6961
+          ],
+          "k_sin_corregir_atenuacion": 1.3484,
+          "salidas": 12351,
+          "pitchers": 907,
+          "usa_propio": true,
+          "k_usado": 1.6383
+        }
+      },
+      "Sinker": {
+        "ivb": {
+          "k": 1.3978,
+          "ic95": [
+            1.3379,
+            1.4622
+          ],
+          "k_sin_corregir_atenuacion": 1.2326,
+          "salidas": 7026,
+          "pitchers": 686,
+          "usa_propio": true,
+          "k_usado": 1.3978
+        },
+        "hb": {
+          "k": 1.7527,
+          "ic95": [
+            1.6978,
+            1.8042
+          ],
+          "k_sin_corregir_atenuacion": 1.5151,
+          "salidas": 7502,
+          "pitchers": 693,
+          "usa_propio": true,
+          "k_usado": 1.7527
+        }
+      },
+      "Cutter": {
+        "ivb": {
+          "k": 1.2795,
+          "ic95": [
+            1.1632,
+            1.4057
+          ],
+          "k_sin_corregir_atenuacion": 1.1654,
+          "salidas": 1661,
+          "pitchers": 301,
+          "usa_propio": true,
+          "k_usado": 1.2795
+        },
+        "hb": {
+          "k": 0.9655,
+          "ic95": [
+            0.2769,
+            1.5115
+          ],
+          "k_sin_corregir_atenuacion": 0.8188,
+          "salidas": 233,
+          "pitchers": 88,
+          "usa_propio": false,
+          "k_usado": 1.6728
+        }
+      },
+      "Slider": {
+        "ivb": {
+          "k": 0.6776,
+          "ic95": [
+            0.5956,
+            0.7635
+          ],
+          "k_sin_corregir_atenuacion": 0.5986,
+          "salidas": 3871,
+          "pitchers": 585,
+          "usa_propio": true,
+          "k_usado": 0.6776
+        },
+        "hb": {
+          "k": 1.2213,
+          "ic95": [
+            1.112,
+            1.3494
+          ],
+          "k_sin_corregir_atenuacion": 1.0054,
+          "salidas": 4721,
+          "pitchers": 622,
+          "usa_propio": true,
+          "k_usado": 1.2213
+        }
+      },
+      "Curveball": {
+        "ivb": {
+          "k": 1.1896,
+          "ic95": [
+            1.0753,
+            1.328
+          ],
+          "k_sin_corregir_atenuacion": 1.0343,
+          "salidas": 2963,
+          "pitchers": 444,
+          "usa_propio": true,
+          "k_usado": 1.1896
+        },
+        "hb": {
+          "k": 1.6658,
+          "ic95": [
+            1.5533,
+            1.8034
+          ],
+          "k_sin_corregir_atenuacion": 1.4328,
+          "salidas": 3037,
+          "pitchers": 451,
+          "usa_propio": true,
+          "k_usado": 1.6658
+        }
+      },
+      "Changeup": {
+        "ivb": {
+          "k": 1.2992,
+          "ic95": [
+            1.1502,
+            1.4066
+          ],
+          "k_sin_corregir_atenuacion": 1.1255,
+          "salidas": 3815,
+          "pitchers": 568,
+          "usa_propio": true,
+          "k_usado": 1.2992
+        },
+        "hb": {
+          "k": 2.0558,
+          "ic95": [
+            1.9543,
+            2.1276
+          ],
+          "k_sin_corregir_atenuacion": 1.7754,
+          "salidas": 5131,
+          "pitchers": 642,
+          "usa_propio": true,
+          "k_usado": 2.0558
+        }
+      },
+      "Splitter": {
+        "ivb": {
+          "k": 1.5181,
+          "ic95": [
+            1.1187,
+            2.1261
+          ],
+          "k_sin_corregir_atenuacion": 0.9704,
+          "salidas": 190,
+          "pitchers": 69,
+          "usa_propio": false,
+          "k_usado": 1.3293
+        },
+        "hb": {
+          "k": 1.7171,
+          "ic95": [
+            1.1484,
+            2.1453
+          ],
+          "k_sin_corregir_atenuacion": 1.3537,
+          "salidas": 253,
+          "pitchers": 79,
+          "usa_propio": false,
+          "k_usado": 1.6728
+        }
+      }
+    }
+  },
+  "reclasificacion": {
+    "escala_robusta": {
+      "velo": 1.312,
+      "ivb": 2.5056,
+      "hb": 2.641
+    },
+    "posibles_mal_etiquetados": 2163,
+    "reasignados": 1342,
+    "confirmados": 98,
+    "cambios": [
+      {
+        "original": "Changeup",
+        "nuevo": "Sinker",
+        "pitches": 249
+      },
+      {
+        "original": "Changeup",
+        "nuevo": "Four-Seam",
+        "pitches": 225
+      },
+      {
+        "original": "Four-Seam",
+        "nuevo": "Changeup",
+        "pitches": 214
+      },
+      {
+        "original": "Slider",
+        "nuevo": "Changeup",
+        "pitches": 106
+      },
+      {
+        "original": "Slider",
+        "nuevo": "Curveball",
+        "pitches": 79
+      },
+      {
+        "original": "Sinker",
+        "nuevo": "Changeup",
+        "pitches": 73
+      },
+      {
+        "original": "Slider",
+        "nuevo": "Sinker",
+        "pitches": 64
+      },
+      {
+        "original": "Slider",
+        "nuevo": "Cutter",
+        "pitches": 50
+      },
+      {
+        "original": "Changeup",
+        "nuevo": "Slider",
+        "pitches": 48
+      },
+      {
+        "original": "Slider",
+        "nuevo": "Four-Seam",
+        "pitches": 35
+      },
+      {
+        "original": "Four-Seam",
+        "nuevo": "Cutter",
+        "pitches": 26
+      },
+      {
+        "original": "Four-Seam",
+        "nuevo": "Sinker",
+        "pitches": 24
+      }
+    ]
+  },
+  "sweeper": {
+    "medias_in": [
+      -2.67,
+      -9.93
+    ],
+    "desviaciones_in": [
+      3.77,
+      5.23
+    ],
+    "pesos": [
+      0.747,
+      0.253
+    ],
+    "ashman_d": 1.594,
+    "corte_mezcla_in": -9.03,
+    "hay_corte_natural": false,
+    "corte_usado_in": -12.0
+  },
+  "encogimiento": {
+    "velo": {
+      "sigma2": 1.1407,
+      "tau2": 0.6001,
+      "k": 1.9008
+    },
+    "ivb": {
+      "sigma2": 4.0692,
+      "tau2": 0.9911,
+      "k": 4.1059
+    },
+    "hb": {
+      "sigma2": 4.2527,
+      "tau2": 1.2455,
+      "k": 3.4144
+    },
+    "axis": {
+      "sigma2": 73.0074,
+      "tau2": 13.8609,
+      "k": 5.2672
+    },
+    "rel_height": {
+      "sigma2": 0.0097,
+      "tau2": 0.0108,
+      "k": 0.8976
+    },
+    "rel_side": {
+      "sigma2": 0.0387,
+      "tau2": 0.0414,
+      "k": 0.9345
+    },
+    "extension": {
+      "sigma2": 0.0336,
+      "tau2": 0.0394,
+      "k": 0.8536
+    }
+  },
+  "angulos_ajuste": {
+    "Changeup": {
+      "vaa": [
+        -0.03216,
+        1.31031,
+        -9.63078
+      ],
+      "haa": [
+        -0.04116,
+        1.07923,
+        -0.94614
+      ]
+    },
+    "Curveball": {
+      "vaa": [
+        -0.07641,
+        1.33109,
+        -11.31004
+      ],
+      "haa": [
+        -0.07235,
+        1.06791,
+        -2.59482
+      ]
+    },
+    "Cutter": {
+      "vaa": [
+        -0.01135,
+        1.14393,
+        -8.89385
+      ],
+      "haa": [
+        0.00645,
+        1.08497,
+        -1.82419
+      ]
+    },
+    "Four-Seam": {
+      "vaa": [
+        -0.01623,
+        1.15279,
+        -8.18268
+      ],
+      "haa": [
+        -0.01864,
+        1.0498,
+        -0.99093
+      ]
+    },
+    "Sinker": {
+      "vaa": [
+        -0.02974,
+        1.28817,
+        -8.6169
+      ],
+      "haa": [
+        -0.02004,
+        1.05156,
+        -0.92021
+      ]
+    },
+    "Slider": {
+      "vaa": [
+        -0.03733,
+        1.26177,
+        -9.8468
+      ],
+      "haa": [
+        -0.06575,
+        1.01239,
+        -2.3767
+      ]
+    },
+    "Splitter": {
+      "vaa": [
+        0.01396,
+        1.15386,
+        -9.82437
+      ],
+      "haa": [
+        -0.04639,
+        1.05745,
+        -1.39414
+      ]
+    }
+  },
+  "validacion": {
+    "sweeper_por_altitud": [
+      {
+        "altitud": "Extreme Altitude",
+        "sliders": 42997,
+        "pct_sweeper_observado": 0.0313,
+        "pct_sweeper_nivel_del_mar": 0.0728
+      },
+      {
+        "altitud": "Medium Altitude",
+        "sliders": 35967,
+        "pct_sweeper_observado": 0.056,
+        "pct_sweeper_nivel_del_mar": 0.0836
+      },
+      {
+        "altitud": "No Altitude",
+        "sliders": 59626,
+        "pct_sweeper_observado": 0.1264,
+        "pct_sweeper_nivel_del_mar": 0.1259
+      }
+    ],
+    "sweeper_mismo_pitcher": [
+      {
+        "pitchers": 300,
+        "misma_etiqueta_observado": 0.9467,
+        "misma_etiqueta_nivel_del_mar": 0.96
+      }
+    ],
+    "forma_mismo_pitcher": [
+      {
+        "pitch_class": "Four-Seam",
+        "pares": 403,
+        "delta_ivb_observado": -3.8278,
+        "delta_ivb_nivel_del_mar": 0.1089,
+        "delta_hb_observado": -2.8195,
+        "delta_hb_nivel_del_mar": -0.502
+      },
+      {
+        "pitch_class": "Slider",
+        "pares": 300,
+        "delta_ivb_observado": -0.7096,
+        "delta_ivb_nivel_del_mar": -0.4781,
+        "delta_hb_observado": 0.6519,
+        "delta_hb_nivel_del_mar": -0.0449
+      },
+      {
+        "pitch_class": "Sinker",
+        "pares": 203,
+        "delta_ivb_observado": -2.6603,
+        "delta_ivb_nivel_del_mar": -0.1188,
+        "delta_hb_observado": -4.0478,
+        "delta_hb_nivel_del_mar": -0.0428
+      },
+      {
+        "pitch_class": "Changeup",
+        "pares": 138,
+        "delta_ivb_observado": -2.0584,
+        "delta_ivb_nivel_del_mar": -0.7056,
+        "delta_hb_observado": -4.2198,
+        "delta_hb_nivel_del_mar": -0.4282
+      },
+      {
+        "pitch_class": "Curveball",
+        "pares": 99,
+        "delta_ivb_observado": 1.6754,
+        "delta_ivb_nivel_del_mar": 0.3269,
+        "delta_hb_observado": 3.0952,
+        "delta_hb_nivel_del_mar": 0.5704
+      },
+      {
+        "pitch_class": "Cutter",
+        "pares": 41,
+        "delta_ivb_observado": -1.9919,
+        "delta_ivb_nivel_del_mar": -0.1141,
+        "delta_hb_observado": -0.5342,
+        "delta_hb_nivel_del_mar": -0.6925
+      }
+    ],
+    "angulos_relativos": [
+      {
+        "pitch_class": "Changeup",
+        "corr_vaa_rel_altura": -0.0352,
+        "corr_vaa_altura": 0.8499,
+        "corr_haa_rel_lado": -0.0073,
+        "sd_vaa_rel": 0.6876
+      },
+      {
+        "pitch_class": "Curveball",
+        "corr_vaa_rel_altura": 0.0282,
+        "corr_vaa_altura": 0.7326,
+        "corr_haa_rel_lado": 0.0113,
+        "sd_vaa_rel": 0.9854
+      },
+      {
+        "pitch_class": "Cutter",
+        "corr_vaa_rel_altura": -0.0216,
+        "corr_vaa_altura": 0.9001,
+        "corr_haa_rel_lado": -0.0312,
+        "sd_vaa_rel": 0.4737
+      },
+      {
+        "pitch_class": "Four-Seam",
+        "corr_vaa_rel_altura": 0.006,
+        "corr_vaa_altura": 0.8892,
+        "corr_haa_rel_lado": 0.0048,
+        "sd_vaa_rel": 0.4919
+      },
+      {
+        "pitch_class": "Sinker",
+        "corr_vaa_rel_altura": -0.0095,
+        "corr_vaa_altura": 0.8698,
+        "corr_haa_rel_lado": -0.0187,
+        "sd_vaa_rel": 0.5392
+      },
+      {
+        "pitch_class": "Slider",
+        "corr_vaa_rel_altura": 0.0217,
+        "corr_vaa_altura": 0.8269,
+        "corr_haa_rel_lado": 0.0033,
+        "sd_vaa_rel": 0.6995
+      },
+      {
+        "pitch_class": "Splitter",
+        "corr_vaa_rel_altura": -0.0766,
+        "corr_vaa_altura": 0.852,
+        "corr_haa_rel_lado": 0.106,
+        "sd_vaa_rel": 0.8024
+      }
+    ],
+    "vaa_rel_por_decil_de_altura": [
+      {
+        "decil": 1,
+        "media_vaa_rel": -0.0184
+      },
+      {
+        "decil": 2,
+        "media_vaa_rel": -0.0097
+      },
+      {
+        "decil": 3,
+        "media_vaa_rel": -0.0053
+      },
+      {
+        "decil": 4,
+        "media_vaa_rel": -0.0195
+      },
+      {
+        "decil": 5,
+        "media_vaa_rel": -0.0055
+      },
+      {
+        "decil": 6,
+        "media_vaa_rel": -0.0065
+      },
+      {
+        "decil": 7,
+        "media_vaa_rel": -0.0143
+      },
+      {
+        "decil": 8,
+        "media_vaa_rel": -0.0117
+      },
+      {
+        "decil": 9,
+        "media_vaa_rel": -0.0036
+      },
+      {
+        "decil": 10,
+        "media_vaa_rel": -0.0109
+      }
+    ],
+    "recta_principal": [
+      {
+        "primary_fb_type": "Four-Seam",
+        "pitchers": 788
+      },
+      {
+        "primary_fb_type": "Sinker",
+        "pitchers": 350
+      },
+      {
+        "primary_fb_type": "Cutter",
+        "pitchers": 54
+      }
+    ],
+    "cobertura": [
+      {
+        "pitches_usables": 633050,
+        "con_diferencias_arsenal": 0.9948,
+        "con_rectas_en_el_juego": 0.9833,
+        "con_air_ratio": 1.0,
+        "con_vaa_rel": 1.0,
+        "con_magnus_dependence": 0.9872,
+        "con_zona": 0.9982
+      }
+    ],
+    "zona_contra_bandera_dataset": [
+      {
+        "dentro_cuadricula": false,
+        "in_strike_zone": 0,
+        "pitches": 411097
+      },
+      {
+        "dentro_cuadricula": false,
+        "in_strike_zone": 1,
+        "pitches": 83
+      },
+      {
+        "dentro_cuadricula": true,
+        "in_strike_zone": 1,
+        "pitches": 222659
+      }
+    ],
+    "magnus_por_tipo": [
+      {
+        "pitch_class": "Four-Seam",
+        "mediana": 0.7836,
+        "p10": 0.6081,
+        "p90": 0.9319
+      },
+      {
+        "pitch_class": "Sinker",
+        "mediana": 0.7747,
+        "p10": 0.6181,
+        "p90": 0.9269
+      },
+      {
+        "pitch_class": "Changeup",
+        "mediana": 0.7371,
+        "p10": 0.5274,
+        "p90": 0.9382
+      },
+      {
+        "pitch_class": "Splitter",
+        "mediana": 0.7299,
+        "p10": 0.3408,
+        "p90": 1.2833
+      },
+      {
+        "pitch_class": "Curveball",
+        "mediana": 0.4134,
+        "p10": 0.2045,
+        "p90": 0.5838
+      },
+      {
+        "pitch_class": "Cutter",
+        "mediana": 0.4074,
+        "p10": 0.2537,
+        "p90": 0.6128
+      },
+      {
+        "pitch_class": "Slider",
+        "mediana": 0.2422,
+        "p10": 0.1072,
+        "p90": 0.4327
+      }
+    ]
+  },
+  "secuencia": {
+    "turnos": [
+      {
+        "turnos": 165649,
+        "primer_pitch_en_0_0": 0.9871,
+        "resto_con_conteo_avanzado": 0.999
+      }
+    ],
+    "roles": [
+      {
+        "pitcher_role": "abridor",
+        "salidas": 4303,
+        "pitches": 317356,
+        "entrada_mediana": 1.0
+      },
+      {
+        "pitcher_role": "relevista",
+        "salidas": 18256,
+        "pitches": 312892,
+        "entrada_mediana": 7.0
+      },
+      {
+        "pitcher_role": null,
+        "salidas": 106,
+        "pitches": 4754,
+        "entrada_mediana": null
+      }
+    ],
+    "vuelta_al_orden": [
+      {
+        "times_through_order": 1,
+        "pitches": 452869
+      },
+      {
+        "times_through_order": 2,
+        "pitches": 130092
+      },
+      {
+        "times_through_order": 3,
+        "pitches": 45205
+      },
+      {
+        "times_through_order": 4,
+        "pitches": 1333
+      },
+      {
+        "times_through_order": 5,
+        "pitches": 42
+      },
+      {
+        "times_through_order": 6,
+        "pitches": 16
+      },
+      {
+        "times_through_order": null,
+        "pitches": 5445
+      }
+    ],
+    "tunneling": [
+      {
+        "mismo_tipo": false,
+        "pares": 280341,
+        "separacion_decision_ft": 0.9208,
+        "separacion_plato_ft": 1.5971
+      },
+      {
+        "mismo_tipo": true,
+        "pares": 184095,
+        "separacion_decision_ft": 0.7917,
+        "separacion_plato_ft": 1.3033
+      }
+    ],
+    "efecto_tunneling": [
+      {
+        "cuartil": 1,
+        "separacion_despues_ft": 0.1627,
+        "whiff_por_swing": 0.2028,
+        "pitches": 69857
+      },
+      {
+        "cuartil": 2,
+        "separacion_despues_ft": 0.5342,
+        "whiff_por_swing": 0.2187,
+        "pitches": 69856
+      },
+      {
+        "cuartil": 3,
+        "separacion_despues_ft": 0.8509,
+        "whiff_por_swing": 0.2496,
+        "pitches": 69856
+      },
+      {
+        "cuartil": 4,
+        "separacion_despues_ft": 1.2986,
+        "whiff_por_swing": 0.3127,
+        "pitches": 69856
+      }
+    ],
+    "efecto_vuelta_al_orden": [
+      {
+        "times_through_order": 1,
+        "whiff_por_swing": 0.2498,
+        "hit_por_bola_en_juego": 0.3579,
+        "pitches": 451511
+      },
+      {
+        "times_through_order": 2,
+        "whiff_por_swing": 0.2265,
+        "hit_por_bola_en_juego": 0.3599,
+        "pitches": 129753
+      },
+      {
+        "times_through_order": 3,
+        "whiff_por_swing": 0.2179,
+        "hit_por_bola_en_juego": 0.3691,
+        "pitches": 45102
+      }
+    ],
+    "efecto_repetir": [
+      {
+        "mismo_tipo": false,
+        "whiff_por_swing": 0.2409,
+        "pitches": 279425
+      },
+      {
+        "mismo_tipo": true,
+        "whiff_por_swing": 0.2347,
+        "pitches": 183455
+      }
+    ],
+    "cobertura": [
+      {
+        "con_tunneling": 0.7314,
+        "pitches_con_anterior": 0.7372
+      }
+    ]
+  },
+  "columnas": 145,
+  "pitches": 635002
+}
