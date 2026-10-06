@@ -45,8 +45,9 @@ resultado del pitch y del batazo, conteo y ubicación.
   El nivel `Extreme` probablemente mezcla CDMX con otros parques altos (≈ 223 juegos por temporada
   no caben en un solo estadio). No podemos aislar el Harp Helú directamente.
 - **No hay corredores en base**, clima, ni equipo local.
-- **No hay fecha**: los `game_anon_id` no siguen orden cronológico, así que no podemos estudiar
-  secuencias entre juegos (por ejemplo, adaptación después de viajar).
+- **No hay fecha ni número de pitch** en ninguna columna. *Corrección del 6 de octubre:* el orden sí
+  existe, en el orden de las filas: dentro de cada juego los pitches vienen en orden cronológico y
+  los juegos vienen por fecha (decisión D-015). Eso permite secuencias, turnos al bat y series.
 
 ## 5. Qué encontramos al explorar (por qué el enfoque es válido)
 

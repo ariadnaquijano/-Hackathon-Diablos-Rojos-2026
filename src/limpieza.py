@@ -79,15 +79,21 @@ FLAG_DESCRIPTIONS = {
 
 
 def create_typed(con):
-    """Regla A: tipos correctos y grupo de pitch limpio."""
+    """Regla A: tipos correctos, grupo de pitch limpio y orden cronológico.
+
+    El dataset no trae número de pitch, pero sus filas vienen en orden cronológico: dentro de cada
+    juego la entrada y el conteo nunca retroceden, y los juegos vienen por fecha (decisión D-015).
+    `pitch_seq` guarda ese orden para construir secuencias, series y relevos.
+    """
     flags = ", ".join(f"cast({c} as tinyint) as {c}" for c in OUTCOME_FLAGS)
     counts = ", ".join(f"cast({c} as integer) as {c}" for c in COUNT_COLUMNS)
     pitch_group = " ".join(f"when '{raw}' then '{group}'" for raw, group in PITCH_GROUPS.items())
     con.execute(f"""
         create or replace view typed as
         select * replace (try_cast(EffectiveVelo as double) as EffectiveVelo, {flags}, {counts}),
-               case AutoPitchType {pitch_group} else 'Other' end as pitch_group
-        from read_parquet('{RAW_PARQUET}')""")
+               case AutoPitchType {pitch_group} else 'Other' end as pitch_group,
+               file_row_number as pitch_seq
+        from read_parquet('{RAW_PARQUET}', file_row_number = true)""")
 
 
 def create_handedness(con):
@@ -260,7 +266,7 @@ def main():
     create_clean(con)
 
     CLEAN_PARQUET.parent.mkdir(parents=True, exist_ok=True)
-    con.execute(f"copy clean to '{CLEAN_PARQUET}' (format parquet, compression zstd)")
+    con.execute(f"copy (select * from clean order by pitch_seq) to '{CLEAN_PARQUET}' (format parquet, compression zstd)")
 
     summary = build_summary(con)
     SUMMARY_JSON.write_text(json.dumps(summary, indent=2, ensure_ascii=False))

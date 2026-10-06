@@ -39,11 +39,11 @@ delgado son los candidatos a ser el Harp Helú (no lo podemos confirmar sin ID d
 del mar: 0.211 en 2024, 0.216 en 2025, 0.219 en 2026). Puede ser la pelota o la calibración de
 Trackman. Por eso lo **normalizamos por temporada**.
 
-### 2. No hay orden de pitches dentro del juego
+### 2. ~~No hay orden de pitches dentro del juego~~ (corregido)
 
-No existe ninguna columna de número de pitch, hora ni turno al bat. **No podemos construir
-"pitch anterior" ni secuencias**, aunque la convocatoria los sugiere. Lo reportamos como límite
-del dataset. El conteo (`Balls`, `Strikes`) captura parte de ese contexto.
+No existe ninguna columna de número de pitch, hora ni turno al bat, y aquí concluimos que no se
+podían construir secuencias. **Era incorrecto:** las filas del dataset vienen en orden cronológico
+(decisión D-015). Las variables de secuencia se construyeron en la etapa 2; ver `docs/02_features.md`.
 
 ### 3. La altitud cambia la forma lo suficiente para confundir una clasificación
 
