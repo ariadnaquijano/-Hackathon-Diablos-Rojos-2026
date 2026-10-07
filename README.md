@@ -43,6 +43,7 @@ Lee los documentos en este orden; cada uno se apoya en el anterior.
 6. [`docs/02_features.md`](docs/02_features.md) — variables del modelo (etapa 2).
 7. [`docs/retroalimentacion_experto.md`](docs/retroalimentacion_experto.md) — lo que nos dijo un lanzador y qué cambió.
 8. [`docs/hipotesis_h4.md`](docs/hipotesis_h4.md) — H4: ¿el spin rate basta para predecir un buen pitch? (reporte: `reportes/h4_spin_rate.html`).
+9. [`docs/03_target.md`](docs/03_target.md) — target de carreras esperadas y modelos base (etapa 3; plan en `docs/03_plan_target.md`).
 
 ## Estructura
 
@@ -65,7 +66,7 @@ Lee los documentos en este orden; cada uno se apoya en el anterior.
 | 0 | Exploración y validación del enfoque | ✅ Hecha | `docs/00_contexto_y_approach.md` | — |
 | 1 | Limpieza de datos | ✅ Hecha | `docs/01_limpieza.md` | `reportes/etapa_01_limpieza.html` |
 | 2 | Features (física, arsenal, aire, secuencia) | ✅ Hecha | `docs/02_features.md` | `reportes/etapa_02_features.html` |
-| 3 | Target xRunValue y baseline | ⏳ | — | — |
+| 3 | Target xRunValue y modelos base | ✅ Hecha | `docs/03_target.md` | `reportes/etapa_03_target.html` |
 | 4 | Modelo de dos etapas (forma → resultado) | ⏳ | — | — |
 | 5 | Validación (pitcher, temporada, altitud) | ⏳ | — | — |
 | 6 | Herramientas: pasaporte, índice Magnus, punto de mira | ⏳ | — | — |
@@ -89,6 +90,10 @@ python src/features.py                 # etapa 2: genera data/processed/features
 python src/reporte_features.py         # etapa 2: genera reportes/etapa_02_features.html
 python src/hipotesis_h4.py             # H4: análisis y reporte reportes/h4_spin_rate.html
 python src/evidencia_acarreo.py        # acarreo de batazos en altitud (jonrones regalados por el aire)
+python src/exploracion_etapa_03.py     # evidencia del plan del target
+python src/target.py                   # etapa 3: genera data/processed/dataset_modelo.parquet y el resumen
+python src/modelos_base.py             # etapa 3: modelos base a superar
+python src/reporte_target.py           # etapa 3: genera reportes/etapa_03_target.html
 ```
 
 ## Datos

@@ -6,6 +6,7 @@ ROOT = Path(__file__).resolve().parents[1]
 RAW_PARQUET = ROOT / "data" / "raw" / "stuff_model_df.parquet"
 CLEAN_PARQUET = ROOT / "data" / "processed" / "pitches_limpios.parquet"
 FEATURES_PARQUET = ROOT / "data" / "processed" / "features.parquet"
+MODEL_PARQUET = ROOT / "data" / "processed" / "dataset_modelo.parquet"
 REPORTS_DIR = ROOT / "reportes"
 
 # Límites físicos duros: fuera de ellos el valor es imposible, no solo raro (decisión D-008).

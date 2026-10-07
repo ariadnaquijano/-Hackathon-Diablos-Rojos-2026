@@ -1,0 +1,359 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Target de carreras esperadas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: reporte de etapa en un carril; cada sección = hallazgo en una frase, luego su gráfica o tabla. */
+:root {
+  --bg: #f6f7f9;
+  --surface: #ffffff;
+  --ink: #16191f;
+  --ink-2: #4a5160;
+  --ink-3: #7a8191;
+  --rule: #dde1e7;
+  --accent: #b3122a;
+  --accent-soft: #f6e3e6;
+  --bar: #2f4a6d;
+  --sea: #2b6cb0;
+  --mid: #b7791f;
+  --alt: #c21f3a;
+  --display: "Barlow Condensed", "Arial Narrow", "Helvetica Neue", sans-serif;
+  --body: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --step--1: 0.8125rem;
+  --step-0: 1rem;
+  --step-1: 1.25rem;
+  --step-2: 1.75rem;
+  --step-3: 2.75rem;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #111418; --surface: #1a1e24; --ink: #e8eaee; --ink-2: #b3b9c4; --ink-3: #858c99;
+    --rule: #2c323b; --accent: #ff5a6e; --accent-soft: #3a1c22; --bar: #7fa3d1;
+    --sea: #4f8ad6; --mid: #c08a1e; --alt: #e0405a; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #111418; --surface: #1a1e24; --ink: #e8eaee; --ink-2: #b3b9c4; --ink-3: #858c99;
+  --rule: #2c323b; --accent: #ff5a6e; --accent-soft: #3a1c22; --bar: #7fa3d1;
+  --sea: #4f8ad6; --mid: #c08a1e; --alt: #e0405a; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 400 var(--step-0)/1.55 var(--body); padding-inline: 16px; padding-block: 40px 64px; }
+main { max-width: 64rem; margin-inline: auto; display: grid; gap: 56px; }
+h1, h2 { font-family: var(--display); font-weight: 700; line-height: 1.05; text-wrap: balance; margin: 0; }
+h1 { font-size: var(--step-3); }
+h2 { font-size: var(--step-2); }
+h3 { font: 600 var(--step-1)/1.25 var(--body); margin: 0; }
+p { margin: 0; }
+.eyebrow { font: 600 var(--step--1)/1 var(--mono); text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent); }
+header { display: grid; gap: 12px; }
+header p { color: var(--ink-2); font-size: var(--step-1); max-width: 42rem; }
+section { display: grid; gap: 16px; }
+section > p, .lead { color: var(--ink-2); max-width: 46rem; }
+.lead strong, section > p strong { color: var(--ink); font-weight: 600; }
+.figures { display: grid; grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr)); border-block: 1px solid var(--rule); }
+.figure { padding: 20px 20px 20px 0; display: grid; gap: 4px; }
+.figure + .figure { padding-left: 20px; border-left: 1px solid var(--rule); }
+.figure b { font: 700 var(--step-3)/1 var(--display); font-variant-numeric: tabular-nums; }
+.figure span { color: var(--ink-2); font-size: var(--step--1); }
+.scroll { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: var(--step--1); background: var(--surface); }
+th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+th { font: 600 0.75rem/1.2 var(--mono); text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-3); }
+td.num, th.num { text-align: right; font-family: var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+code { font-family: var(--mono); font-size: 0.9em; }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr)); gap: 32px; }
+.grid2 > * { min-width: 0; }
+figure { margin: 0; display: grid; gap: 10px; align-content: start; min-width: 0; }
+figcaption { font-size: var(--step--1); color: var(--ink-3); }
+.chart { width: 100%; height: auto; display: block; overflow: visible; }
+.chart text { fill: var(--ink-2); font: 400 11px var(--mono); }
+.chart .grid { stroke: var(--rule); stroke-width: 1; }
+.chart .axis { stroke: var(--ink-3); stroke-width: 1; }
+.legend { display: flex; flex-wrap: wrap; gap: 16px; font-size: var(--step--1); color: var(--ink-2); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend i { width: 14px; height: 3px; border-radius: 2px; display: inline-block; }
+.legend i.dot { width: 10px; height: 10px; border-radius: 50%; }
+.legend i.hollow { width: 10px; height: 10px; border-radius: 50%; border: 2px solid var(--ink-3); background: transparent; }
+.note { border-left: 3px solid var(--accent); background: var(--surface); padding: 14px 18px; max-width: 46rem; color: var(--ink-2); }
+.note b { color: var(--ink); }
+.tooltip { position: fixed; pointer-events: none; z-index: 10; max-width: 18rem; padding: 8px 10px; background: var(--ink); color: var(--bg); border-radius: 6px; font-size: var(--step--1); line-height: 1.4; }
+footer { color: var(--ink-3); font-size: var(--step--1); border-top: 1px solid var(--rule); padding-top: 16px; display: grid; gap: 4px; }
+@media (max-width: 40rem) { .figure, .figure + .figure { padding: 16px 0; border-left: 0; } .figure + .figure { border-top: 1px solid var(--rule); } }
+.heat { max-width: 18rem; }
+.heat text { font: 600 12px var(--mono); }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <span class="eyebrow">Etapa 3 · Target y modelos base · ISAC Hackathon 2026</span>
+    <h1>Cuántas carreras vale cada pitch</h1>
+    <p>Cada pitch tiene ahora un valor en carreras para el rival (xRV), sin la suerte de dónde cae la pelota. También medimos qué tan alto está la barra: lo que logran los modelos simples que el modelo final debe superar.</p>
+  </header>
+
+  <div class="figures" id="figures"></div>
+
+  <section>
+    <h2>Lo que vale cada desenlace, según la altitud</h2>
+    <p class="lead">Regresión de las carreras de cada media entrada completa de 2024–2025 sobre sus desenlaces. No necesita saber dónde estaban los corredores, que el dataset no trae.</p>
+    <figure>
+      <div class="legend"><span><i class="dot" style="background:var(--sea)"></i>Nivel del mar</span><span><i class="dot" style="background:var(--mid)"></i>Altitud media</span><span><i class="dot" style="background:var(--alt)"></i>Altitud extrema</span><span><i style="background:var(--ink-3)"></i>Raya: liga</span></div>
+      <svg class="chart" id="weights-chart" role="img" aria-label="Carreras por desenlace según altitud"></svg>
+      <figcaption>Carreras por desenlace. Error, sacrificio y bola ocupada se valúan como out (no aparecen): en la regresión salen sesgados porque solo pasan con corredores en base.</figcaption>
+    </figure>
+    <div class="note" id="weights-note"></div>
+  </section>
+
+  <section>
+    <h2>Ponerse adelante vale más en la CDMX</h2>
+    <p class="lead" id="count-lead"></p>
+    <div class="grid2">
+      <figure><h3>Liga</h3><svg class="chart heat" id="count-league" role="img" aria-label="Valor de cada conteo en la liga"></svg></figure>
+      <figure><h3>Altitud extrema</h3><svg class="chart heat" id="count-extreme" role="img" aria-label="Valor de cada conteo en altitud extrema"></svg></figure>
+    </div>
+    <figcaption>Carreras esperadas para el rival desde cada conteo (B = bolas, S = strikes). Más oscuro = más carreras.</figcaption>
+  </section>
+
+  <section>
+    <h2>El valor del pitch suma bien</h2>
+    <p class="lead">Un pitch vale el cambio de conteo que provoca; si termina el turno, el desenlace menos el conteo que había. La suma de los pitches de un turno debe dar el desenlace menos el valor de 0-0.</p>
+    <div class="scroll"><table id="checks-table"></table></div>
+  </section>
+
+  <section>
+    <h2>Bola en juego: el valor del contacto, no el del resultado</h2>
+    <p class="lead">Cada batazo vale lo que suele valer un batazo con su velocidad de salida, ángulo y dirección. En 2024–2025 cada uno recibe la predicción de un modelo que no lo vio.</p>
+    <div class="scroll"><table id="r2-table"></table></div>
+    <div class="scroll"><table id="choice-table"></table></div>
+    <div class="note" id="choice-note"></div>
+  </section>
+
+  <section>
+    <h2>La barra a superar: modelos base</h2>
+    <p class="lead">Entrenados con 2024–2025 y evaluados en 2026. Por pitch, casi nada le gana a la media: el resultado de un pitch es casi todo azar. La prueba que importa es por pitcher.</p>
+    <div class="scroll"><table id="pitch-table"></table></div>
+    <figure>
+      <h3>Por pitcher: ¿qué predice mejor su xRV de 2026?</h3>
+      <svg class="chart" id="pitcher-chart" role="img" aria-label="Correlación de cada modelo base con el xRV real de 2026 por pitcher"></svg>
+      <figcaption id="pitcher-caption"></figcaption>
+    </figure>
+    <div class="scroll"><table id="pitcher-table"></table></div>
+    <div class="note" id="bar-note"></div>
+  </section>
+
+  <footer>
+    <span>Fuente de todas las cifras: <code>reportes/etapa_03_resumen.json</code> (<code>src/target.py</code>) y <code>reportes/modelos_base.json</code> (<code>src/modelos_base.py</code>).</span>
+    <span>Documento completo: <code>docs/03_target.md</code>. Decisiones: <code>docs/decisiones.md</code> (D-020, D-022 a D-024).</span>
+  </footer>
+</main>
+<div class="tooltip" id="tooltip" hidden></div>
+
+<script>
+const DATA = __DATA__;
+const T = DATA.target, B = DATA.base;
+const int = new Intl.NumberFormat("es-MX");
+const pct = (x, d = 1) => (x * 100).toFixed(d) + " %";
+const fixed = (x, d = 2) => Number(x).toFixed(d);
+const signed = (x, d = 2) => (x > 0 ? "+" : "") + Number(x).toFixed(d);
+const SVG = "http://www.w3.org/2000/svg";
+const tooltip = document.getElementById("tooltip");
+const ALT_NAMES = { "Extreme Altitude": "Altitud extrema", "Medium Altitude": "Altitud media", "No Altitude": "Nivel del mar", "Sin dato": "Sin dato" };
+const ALT_COLORS = { "No Altitude": "var(--sea)", "Medium Altitude": "var(--mid)", "Extreme Altitude": "var(--alt)" };
+const TYPE_NAMES = { "Four-Seam": "Recta 4 costuras", "Sinker": "Sinker", "Cutter": "Cutter", "Slider": "Slider", "Curveball": "Curva", "Changeup": "Cambio", "Splitter": "Splitter" };
+
+function table(id, columns, rows) {
+  const head = "<thead><tr>" + columns.map(c => `<th class="${c.num ? "num" : ""}">${c.label}</th>`).join("") + "</tr></thead>";
+  const body = "<tbody>" + rows.map(r => "<tr>" + columns.map(c =>
+    `<td class="${c.num ? "num" : ""}">${c.format ? c.format(r[c.key], r) : r[c.key]}</td>`).join("") + "</tr>").join("") + "</tbody>";
+  document.getElementById(id).innerHTML = head + body;
+}
+function el(tag, attrs, parent) {
+  const node = document.createElementNS(SVG, tag);
+  for (const [k, v] of Object.entries(attrs)) node.setAttribute(k, v);
+  if (parent) parent.appendChild(node);
+  return node;
+}
+function text(parent, x, y, words, attrs = {}) {
+  const t = el("text", { x, y, ...attrs }, parent);
+  t.textContent = words;
+  return t;
+}
+function showTip(words, x, y) {
+  tooltip.textContent = words;
+  tooltip.hidden = false;
+  tooltip.style.left = Math.min(x + 12, window.innerWidth - tooltip.offsetWidth - 8) + "px";
+  tooltip.style.top = y + 12 + "px";
+}
+const hideTip = () => { tooltip.hidden = true; };
+function hoverable(node, words) {
+  node.addEventListener("pointermove", e => showTip(words, e.clientX, e.clientY));
+  node.addEventListener("pointerleave", hideTip);
+}
+
+const EVENT_NAMES = { "1B": "Sencillo", "2B": "Doble", "3B": "Triple", "HR": "Jonrón", "BB": "Base por bolas", "HBP": "Golpeado", "K": "Ponche", "OUT": "Out en juego" };
+const MODEL_NAMES = { media_liga: "Media de la liga", media_conteo: "Media por conteo", media_tipo_mano: "Media por tipo de pitch y mano", lineal_por_tipo: "Regresión lineal por tipo", persistencia: "Persistencia: su xRV de 2024–2025", persistencia_encogida: "Persistencia encogida" };
+const countValue = (scope, b, s) => T.valor_conteos.find(r => r.scope === scope && r.Balls === b && r.Strikes === s).run_value;
+
+function renderFigures() {
+  const c = T.cobertura, sums = T.chequeos.suma_por_turno;
+  const best = B.por_pitcher.modelos.lineal_por_tipo;
+  const figures = [
+    { value: int.format(c.pitches - c.sin_target), label: `pitches con target (de ${int.format(c.pitches)})` },
+    { value: int.format(T.valor_desenlaces.liga.medias_entradas), label: "medias entradas completas para los pesos" },
+    { value: pct(sums.suman_exacto / sums.turnos), label: "de los turnos suman exacto" },
+    { value: fixed(best.r), label: "r por pitcher del mejor modelo base" },
+  ];
+  document.getElementById("figures").innerHTML = figures.map(f =>
+    `<div class="figure"><b>${f.value}</b><span>${f.label}</span></div>`).join("");
+}
+
+function renderWeights() {
+  const events = Object.keys(EVENT_NAMES);
+  const svg = document.getElementById("weights-chart");
+  const W = 760, rowH = 30, m = { t: 12, r: 24, b: 32, l: 130 };
+  const H = m.t + events.length * rowH + m.b;
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  const xMin = -0.25, xMax = 1.5;
+  const x = v => m.l + (v - xMin) / (xMax - xMin) * (W - m.l - m.r);
+  for (let t = -0.25; t <= 1.5 + 1e-9; t += 0.25) {
+    el("line", { x1: x(t), x2: x(t), y1: m.t, y2: H - m.b, class: Math.abs(t) < 1e-9 ? "axis" : "grid" }, svg);
+    text(svg, x(t), H - m.b + 16, fixed(t), { "text-anchor": "middle" });
+  }
+  events.forEach((ev, i) => {
+    const cy = m.t + i * rowH + rowH / 2;
+    text(svg, m.l - 10, cy + 4, EVENT_NAMES[ev], { "text-anchor": "end", style: "fill:var(--ink)" });
+    const g = el("g", {}, svg);
+    const league = T.valor_desenlaces.liga.pesos_regresion[ev];
+    el("line", { x1: x(league), x2: x(league), y1: cy - 9, y2: cy + 9, stroke: "var(--ink-3)", "stroke-width": 2 }, g);
+    const parts = [];
+    Object.keys(ALT_COLORS).forEach(alt => {
+      const v = T.valor_desenlaces[alt].pesos_regresion[ev];
+      el("circle", { cx: x(v), cy, r: 5, fill: ALT_COLORS[alt], stroke: "var(--surface)", "stroke-width": 2 }, g);
+      parts.push(`${ALT_NAMES[alt]} ${fixed(v, 3)}`);
+    });
+    el("rect", { x: m.l, y: cy - rowH / 2, width: W - m.l - m.r, height: rowH, fill: "transparent" }, g);
+    hoverable(g, `${EVENT_NAMES[ev]}: liga ${fixed(league, 3)} · ${parts.join(" · ")}`);
+  });
+  const v = T.valor_desenlaces;
+  document.getElementById("weights-note").innerHTML =
+    `<b>En altura todo vale más, salvo el jonrón.</b> Una base por bolas cuesta ${fixed(v["Extreme Altitude"].pesos_regresion.BB)} carreras en altitud extrema contra ${fixed(v["No Altitude"].pesos_regresion.BB)} a nivel del mar: con más batazos, un corredor anota más seguido. El jonrón siempre vale lo mismo, ${fixed(v.liga.pesos_regresion.HR)}: las carreras que trae. Se anotan ${fixed(v["Extreme Altitude"].carreras_por_media_entrada)} carreras por media entrada en altitud extrema y ${fixed(v["No Altitude"].carreras_por_media_entrada)} a nivel del mar.`;
+}
+
+function heatmap(id, scope) {
+  const svg = document.getElementById(id);
+  const cell = 64, m = { t: 22, l: 36 };
+  const W = m.l + cell * 3, H = m.t + cell * 4;
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  const max = Math.max(...T.valor_conteos.filter(r => r.scope !== "No Altitude").map(r => r.run_value));
+  for (let s = 0; s < 3; s++) text(svg, m.l + s * cell + cell / 2, 14, `${s} S`, { "text-anchor": "middle" });
+  for (let b = 0; b < 4; b++) {
+    text(svg, m.l - 8, m.t + b * cell + cell / 2 + 4, `${b} B`, { "text-anchor": "end" });
+    for (let s = 0; s < 3; s++) {
+      const v = countValue(scope, b, s), share = Math.round(15 + 70 * v / max);
+      const g = el("g", {}, svg);
+      el("rect", { x: m.l + s * cell + 1, y: m.t + b * cell + 1, width: cell - 2, height: cell - 2, rx: 4, style: `fill:color-mix(in oklab, var(--bar) ${share}%, var(--surface))` }, g);
+      text(g, m.l + s * cell + cell / 2, m.t + b * cell + cell / 2 + 4, fixed(v, 3), { "text-anchor": "middle", style: `fill:${share > 50 ? "var(--surface)" : "var(--ink)"}` });
+      hoverable(g, `${b}-${s}: ${fixed(v, 3)} carreras esperadas para el rival`);
+    }
+  }
+}
+
+function renderCounts() {
+  heatmap("count-league", "liga");
+  heatmap("count-extreme", "Extreme Altitude");
+  const strike = scope => countValue(scope, 0, 0) - countValue(scope, 0, 1);
+  const walk = scope => T.valor_desenlaces[scope].pesos_regresion.BB - countValue(scope, 3, 2);
+  document.getElementById("count-lead").innerHTML =
+    `En altitud extrema un strike en 0-0 le quita <strong>${fixed(strike("Extreme Altitude"), 3)}</strong> carreras al rival (${fixed(strike("No Altitude"), 3)} a nivel del mar), y la cuarta bola en 3-2 le regala <strong>${fixed(walk("Extreme Altitude"))}</strong> (${fixed(walk("No Altitude"))} a nivel del mar).`;
+}
+
+function renderChecks() {
+  const c = T.chequeos, s = c.suma_por_turno;
+  table("checks-table", [
+    { key: "what", label: "Chequeo" },
+    { key: "value", label: "Resultado", num: true },
+  ], [
+    { what: "Fin de turno deducido del pitch igual al registrado (ponche o base por bolas)", value: `${int.format(c.fines_por_ponche_o_base - c.fin_de_turno_distinto_al_registrado)} de ${int.format(c.fines_por_ponche_o_base)}` },
+    { what: "Turnos cuya suma de pitches da exacto desenlace − conteo inicial", value: `${int.format(s.suman_exacto)} de ${int.format(s.turnos)}` },
+    { what: "No suman porque el conteo registrado salta (falta un pitch; el salto no se cobra)", value: int.format(s.no_suman_por_salto_de_conteo) },
+    { what: "No suman sin explicación", value: int.format(s.no_suman_sin_explicacion) },
+  ]);
+}
+
+function renderContact() {
+  const r2 = T.bola_en_juego.r2_2026, ch = T.eleccion_variables_contacto;
+  const names = { ev_angulo: "Velocidad de salida + ángulo", ev_angulo_direccion: "+ dirección", real: "Valor real (sin quitar la suerte)" };
+  table("r2-table", [
+    { key: "name", label: "Variables del contacto" },
+    { key: "neutral", label: "R² 2026 neutral", num: true, format: v => fixed(v, 3) },
+    { key: "local", label: "R² 2026 local", num: true, format: v => fixed(v, 3) },
+  ], Object.entries(r2).map(([k, v]) => ({ name: names[k], neutral: v.neutral_nivel_del_mar, local: v.local })));
+  table("choice-table", [
+    { key: "name", label: "xRV de 2024–2025" },
+    { key: "r", label: "r con valor real 2026", num: true, format: v => fixed(v, 3) },
+    { key: "rel", label: "Confiabilidad entre mitades", num: true, format: v => fixed(v, 3) },
+  ], Object.keys(names).map(k => ({ name: names[k] + (k === ch.elegido ? " (elegido)" : ""), r: ch.r_con_valor_real_2026[k], rel: ch.confiabilidad_mitades[k] })));
+  const diff = ch.r_con_valor_real_2026[ch.elegido] - ch.r_con_valor_real_2026.ev_angulo;
+  document.getElementById("choice-note").innerHTML =
+    `<b>Casi un empate.</b> Por la regla fijada en el plan gana la dirección (+${fixed(diff, 3)} de r, IC 95 % ${fixed(ch.ic95_elegido_menos_otro[0], 3)} a +${fixed(ch.ic95_elegido_menos_otro[1], 3)}), pero la versión sin dirección es el doble de estable entre mitades. Se revisa en la etapa 5 entrenando con ambos targets. Quitar la suerte apunta a ayudar (r ${fixed(ch.r_con_valor_real_2026[ch.elegido], 3)} contra ${fixed(ch.r_con_valor_real_2026.real, 3)} del valor real), aunque con ${ch.pitchers} pitchers el intervalo toca el cero.`;
+}
+
+function renderBaselines() {
+  table("pitch-table", [
+    { key: "name", label: "Modelo base, por pitch" },
+    { key: "mejora_vs_media_pct", label: "Mejora del error contra la media", num: true, format: v => signed(v, 3) + " %" },
+    { key: "ic95_mejora_pct", label: "IC 95 %", num: true, format: (v, r) => r.name === MODEL_NAMES.media_liga ? "—" : `${fixed(v[0], 3)} a ${fixed(v[1], 3)}` },
+  ], Object.entries(B.por_pitch).map(([k, v]) => ({ name: MODEL_NAMES[k], ...v })));
+
+  const p = B.por_pitcher;
+  const rows = Object.entries(p.modelos).filter(([, v]) => v.r !== null && v.r !== undefined).map(([k, v]) => ({ k, ...v }));
+  const unique = rows.filter(r => r.k !== "persistencia_encogida");
+  const svg = document.getElementById("pitcher-chart");
+  const W = 760, rowH = 32, m = { t: 12, r: 24, b: 32, l: 250 };
+  const H = m.t + unique.length * rowH + m.b;
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  const xMin = -0.5, xMax = 0.75;
+  const x = v => m.l + (v - xMin) / (xMax - xMin) * (W - m.l - m.r);
+  for (let t = -0.5; t <= 0.75 + 1e-9; t += 0.25) {
+    el("line", { x1: x(t), x2: x(t), y1: m.t, y2: H - m.b, class: Math.abs(t) < 1e-9 ? "axis" : "grid" }, svg);
+    text(svg, x(t), H - m.b + 16, fixed(t), { "text-anchor": "middle" });
+  }
+  unique.forEach((r, i) => {
+    const cy = m.t + i * rowH + rowH / 2, best = r.k === "lineal_por_tipo";
+    const label = r.k === "persistencia" ? "Persistencia (cruda y encogida)" : MODEL_NAMES[r.k];
+    text(svg, m.l - 10, cy + 4, label, { "text-anchor": "end", style: "fill:var(--ink)" });
+    const g = el("g", {}, svg);
+    el("line", { x1: x(r.ic95_r[0]), x2: x(r.ic95_r[1]), y1: cy, y2: cy, stroke: best ? "var(--accent)" : "var(--bar)", "stroke-width": 2 }, g);
+    el("circle", { cx: x(r.r), cy, r: 6, fill: best ? "var(--accent)" : "var(--bar)", stroke: "var(--surface)", "stroke-width": 2 }, g);
+    el("rect", { x: m.l, y: cy - rowH / 2, width: W - m.l - m.r, height: rowH, fill: "transparent" }, g);
+    hoverable(g, `${label}: r = ${fixed(r.r, 3)} (IC 95 % ${fixed(r.ic95_r[0], 3)} a ${fixed(r.ic95_r[1], 3)})`);
+  });
+  document.getElementById("pitcher-caption").textContent =
+    `Correlación entre lo predicho para los pitches de 2026 de cada pitcher y su xRV real de 2026, con IC 95 %. ${p.pitchers_con_historia} pitchers con al menos 300 pitches en cada periodo; valores sobre el promedio de su temporada. Encoger la persistencia no cambia la correlación, solo el error.`;
+  table("pitcher-table", [
+    { key: "name", label: "Modelo, por pitcher" },
+    { key: "r", label: "r", num: true, format: v => v === null ? "—" : fixed(v, 3) },
+    { key: "ecm_por_100", label: "Error cuadrático por 100 pitches", num: true, format: v => fixed(v, 3) },
+  ], Object.entries(p.modelos).map(([k, v]) => ({ name: MODEL_NAMES[k], ...v })));
+  const l = p.modelos.lineal_por_tipo, s = p.modelos.persistencia_encogida;
+  document.getElementById("bar-note").innerHTML =
+    `<b>La física simple ya le gana a la historia del pitcher</b> en el valor puntual (r ${fixed(l.r)} contra ${fixed(s.r)}; error ${fixed(l.ecm_por_100, 3)} contra ${fixed(s.ecm_por_100, 3)}), aunque los intervalos se enciman. Y sirve donde no hay historia: ${p.pitchers_sin_historia} de ${p.pitchers_2026} pitchers con muestra en 2026 no la tenían. <b>La etapa 4 debe superar a la regresión lineal por tipo</b>, por pitch y por pitcher, con intervalo que no toque cero.`;
+}
+
+renderFigures();
+renderWeights();
+renderCounts();
+renderChecks();
+renderContact();
+renderBaselines();
+</script>
+</body>
+</html>

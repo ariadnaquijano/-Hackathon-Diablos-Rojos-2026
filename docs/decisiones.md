@@ -7,6 +7,30 @@ se agrega una nueva entrada que la reemplaza y se marca la anterior como *Reempl
 
 ---
 
+### D-024 · 2026-10-07 · Las comparaciones por pitcher se centran por temporada
+- **Por qué:** el ambiente de carreras cambia entre años (10.4 carreras por juego en 2024, 12.1 en
+  2025, 11.1 en 2026). Stuff+ se define contra el promedio de su temporada. Sin centrar, la persistencia
+  encogida salía peor que la media porque arrastraba el nivel de 2025.
+- **Efecto en la elección de D-023:** ninguno; con y sin centrar gana la misma versión.
+- **Estado:** Vigente.
+
+### D-023 · 2026-10-07 · El contacto se valúa con velocidad de salida, ángulo y dirección
+- **Por qué:** es lo que pidió la regla fijada en el plan: su xRV de 2024–2025 predice mejor el valor
+  real de 2026 (r 0.263 contra 0.250 sin dirección).
+- **Advertencia:** es casi un empate (IC de la diferencia −0.044 a +0.076) y la versión sin dirección
+  es el doble de estable entre mitades (0.250 contra 0.131). En la etapa 5 se entrena el modelo con
+  ambos targets como prueba de sensibilidad.
+- **Estado:** Vigente, a revisar en la etapa 5.
+
+### D-022 · 2026-10-07 · Target: xRV neutral y local con pesos lineales por regresión
+- **Qué:** valor de cada desenlace por regresión sobre medias entradas completas de 2024–2025; valor
+  del conteo como promedio del desenlace final; valor del pitch como cambio de conteo; bola en juego
+  con valor esperado por predicción cruzada. Error, sacrificio y bola ocupada valen como out.
+- **Por qué:** no hay corredores en base para RE24; la regresión sobre entradas completas no los
+  necesita. Detalle en `03_plan_target.md` y `03_target.md`.
+- **Alternativas descartadas:** carreras esperadas solo por outs; pesos publicados de MLB.
+- **Estado:** Vigente.
+
 ### D-021 · 2026-10-07 · Nueva herramienta: jonrones regalados por el aire
 - **Qué:** probabilidad de jonrón por batazo entrenada a nivel del mar y aplicada en altura; la
   diferencia son los jonrones que regaló el aire, por pitcher y por bateador.

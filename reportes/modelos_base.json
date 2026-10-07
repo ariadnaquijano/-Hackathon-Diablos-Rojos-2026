@@ -1,0 +1,101 @@
+{
+  "target": "xrv_neutral",
+  "descripcion": {
+    "media_liga": "Predecir siempre el promedio de 2024–2025",
+    "media_conteo": "Promedio por conteo de bolas y strikes",
+    "media_tipo_mano": "Promedio por tipo de pitch y mano del pitcher",
+    "lineal_por_tipo": "Regresión lineal por tipo de pitch: velocidad, IVB, HB y extensión"
+  },
+  "pitches_prueba": 134768,
+  "por_pitch": {
+    "media_liga": {
+      "ecm": 0.021873,
+      "mejora_vs_media_pct": 0.0,
+      "ic95_mejora_pct": [
+        0.0,
+        0.0
+      ]
+    },
+    "media_conteo": {
+      "ecm": 0.021869,
+      "mejora_vs_media_pct": 0.018,
+      "ic95_mejora_pct": [
+        0.0048,
+        0.02844
+      ]
+    },
+    "media_tipo_mano": {
+      "ecm": 0.021873,
+      "mejora_vs_media_pct": 0.001,
+      "ic95_mejora_pct": [
+        -0.02328,
+        0.01891
+      ]
+    },
+    "lineal_por_tipo": {
+      "ecm": 0.02185,
+      "mejora_vs_media_pct": 0.1066,
+      "ic95_mejora_pct": [
+        0.0672,
+        0.15083
+      ]
+    }
+  },
+  "por_pitcher": {
+    "pitchers_2026": 178,
+    "pitchers_con_historia": 114,
+    "pitchers_sin_historia": 64,
+    "sd_real_por_100": 0.8772,
+    "persistencia_pendiente_2024_2025": {
+      "pendiente": 0.1854,
+      "pitchers": 146
+    },
+    "modelos": {
+      "media_liga": {
+        "r": null,
+        "ic95_r": null,
+        "ecm_por_100": 0.7698
+      },
+      "media_conteo": {
+        "r": -0.2963,
+        "ic95_r": [
+          -0.4603,
+          -0.1126
+        ],
+        "ecm_por_100": 0.776
+      },
+      "media_tipo_mano": {
+        "r": 0.1442,
+        "ic95_r": [
+          -0.0871,
+          0.3522
+        ],
+        "ecm_por_100": 0.758
+      },
+      "lineal_por_tipo": {
+        "r": 0.4539,
+        "ic95_r": [
+          0.2934,
+          0.5955
+        ],
+        "ecm_por_100": 0.6492
+      },
+      "persistencia": {
+        "r": 0.3825,
+        "ic95_r": [
+          0.221,
+          0.5318
+        ],
+        "ecm_por_100": 0.7615
+      },
+      "persistencia_encogida": {
+        "r": 0.3825,
+        "ic95_r": [
+          0.221,
+          0.5318
+        ],
+        "ecm_por_100": 0.7074
+      }
+    }
+  }
+}

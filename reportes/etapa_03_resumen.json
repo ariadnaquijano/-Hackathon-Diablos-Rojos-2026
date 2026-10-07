@@ -1,0 +1,423 @@
+{
+  "valor_desenlaces": {
+    "liga": {
+      "medias_entradas": 26536,
+      "carreras_por_media_entrada": 0.6572,
+      "pesos_regresion": {
+        "1B": 0.5184,
+        "2B": 0.8307,
+        "3B": 1.1336,
+        "HR": 1.4318,
+        "BB": 0.3892,
+        "HBP": 0.4066,
+        "K": -0.1168,
+        "OUT": -0.1127,
+        "E": 0.5996,
+        "SAC": 0.1935,
+        "FC": -0.1368
+      }
+    },
+    "No Altitude": {
+      "medias_entradas": 12725,
+      "carreras_por_media_entrada": 0.5305,
+      "pesos_regresion": {
+        "1B": 0.4776,
+        "2B": 0.7716,
+        "3B": 1.017,
+        "HR": 1.43,
+        "BB": 0.3426,
+        "HBP": 0.3814,
+        "K": -0.1019,
+        "OUT": -0.0954,
+        "E": 0.5843,
+        "SAC": 0.1922,
+        "FC": -0.1266
+      }
+    },
+    "Medium Altitude": {
+      "medias_entradas": 6610,
+      "carreras_por_media_entrada": 0.7389,
+      "pesos_regresion": {
+        "1B": 0.5366,
+        "2B": 0.839,
+        "3B": 1.1131,
+        "HR": 1.431,
+        "BB": 0.4107,
+        "HBP": 0.4842,
+        "K": -0.1217,
+        "OUT": -0.1208,
+        "E": 0.6324,
+        "SAC": 0.1649,
+        "FC": -0.1635
+      }
+    },
+    "Extreme Altitude": {
+      "medias_entradas": 7159,
+      "carreras_por_media_entrada": 0.8079,
+      "pesos_regresion": {
+        "1B": 0.549,
+        "2B": 0.8846,
+        "3B": 1.2137,
+        "HR": 1.4231,
+        "BB": 0.4484,
+        "HBP": 0.3738,
+        "K": -0.1358,
+        "OUT": -0.1329,
+        "E": 0.6046,
+        "SAC": 0.229,
+        "FC": -0.0679
+      }
+    }
+  },
+  "desenlaces_valuados_como_out": {
+    "E": "OUT",
+    "SAC": "OUT",
+    "FC": "OUT"
+  },
+  "valor_conteos": [
+    {
+      "scope": "Extreme Altitude",
+      "Balls": 0,
+      "Strikes": 0,
+      "run_value": 0.1684
+    },
+    {
+      "scope": "Extreme Altitude",
+      "Balls": 0,
+      "Strikes": 1,
+      "run_value": 0.1256
+    },
+    {
+      "scope": "Extreme Altitude",
+      "Balls": 0,
+      "Strikes": 2,
+      "run_value": 0.067
+    },
+    {
+      "scope": "Extreme Altitude",
+      "Balls": 1,
+      "Strikes": 0,
+      "run_value": 0.204
+    },
+    {
+      "scope": "Extreme Altitude",
+      "Balls": 1,
+      "Strikes": 1,
+      "run_value": 0.1518
+    },
+    {
+      "scope": "Extreme Altitude",
+      "Balls": 1,
+      "Strikes": 2,
+      "run_value": 0.0885
+    },
+    {
+      "scope": "Extreme Altitude",
+      "Balls": 2,
+      "Strikes": 0,
+      "run_value": 0.2647
+    },
+    {
+      "scope": "Extreme Altitude",
+      "Balls": 2,
+      "Strikes": 1,
+      "run_value": 0.2081
+    },
+    {
+      "scope": "Extreme Altitude",
+      "Balls": 2,
+      "Strikes": 2,
+      "run_value": 0.1277
+    },
+    {
+      "scope": "Extreme Altitude",
+      "Balls": 3,
+      "Strikes": 0,
+      "run_value": 0.3514
+    },
+    {
+      "scope": "Extreme Altitude",
+      "Balls": 3,
+      "Strikes": 1,
+      "run_value": 0.2965
+    },
+    {
+      "scope": "Extreme Altitude",
+      "Balls": 3,
+      "Strikes": 2,
+      "run_value": 0.2189
+    },
+    {
+      "scope": "Medium Altitude",
+      "Balls": 0,
+      "Strikes": 0,
+      "run_value": 0.163
+    },
+    {
+      "scope": "Medium Altitude",
+      "Balls": 0,
+      "Strikes": 1,
+      "run_value": 0.121
+    },
+    {
+      "scope": "Medium Altitude",
+      "Balls": 0,
+      "Strikes": 2,
+      "run_value": 0.064
+    },
+    {
+      "scope": "Medium Altitude",
+      "Balls": 1,
+      "Strikes": 0,
+      "run_value": 0.1966
+    },
+    {
+      "scope": "Medium Altitude",
+      "Balls": 1,
+      "Strikes": 1,
+      "run_value": 0.1464
+    },
+    {
+      "scope": "Medium Altitude",
+      "Balls": 1,
+      "Strikes": 2,
+      "run_value": 0.0822
+    },
+    {
+      "scope": "Medium Altitude",
+      "Balls": 2,
+      "Strikes": 0,
+      "run_value": 0.2444
+    },
+    {
+      "scope": "Medium Altitude",
+      "Balls": 2,
+      "Strikes": 1,
+      "run_value": 0.1845
+    },
+    {
+      "scope": "Medium Altitude",
+      "Balls": 2,
+      "Strikes": 2,
+      "run_value": 0.1154
+    },
+    {
+      "scope": "Medium Altitude",
+      "Balls": 3,
+      "Strikes": 0,
+      "run_value": 0.3328
+    },
+    {
+      "scope": "Medium Altitude",
+      "Balls": 3,
+      "Strikes": 1,
+      "run_value": 0.2761
+    },
+    {
+      "scope": "Medium Altitude",
+      "Balls": 3,
+      "Strikes": 2,
+      "run_value": 0.1867
+    },
+    {
+      "scope": "No Altitude",
+      "Balls": 0,
+      "Strikes": 0,
+      "run_value": 0.1214
+    },
+    {
+      "scope": "No Altitude",
+      "Balls": 0,
+      "Strikes": 1,
+      "run_value": 0.0875
+    },
+    {
+      "scope": "No Altitude",
+      "Balls": 0,
+      "Strikes": 2,
+      "run_value": 0.0395
+    },
+    {
+      "scope": "No Altitude",
+      "Balls": 1,
+      "Strikes": 0,
+      "run_value": 0.1526
+    },
+    {
+      "scope": "No Altitude",
+      "Balls": 1,
+      "Strikes": 1,
+      "run_value": 0.1134
+    },
+    {
+      "scope": "No Altitude",
+      "Balls": 1,
+      "Strikes": 2,
+      "run_value": 0.0599
+    },
+    {
+      "scope": "No Altitude",
+      "Balls": 2,
+      "Strikes": 0,
+      "run_value": 0.1924
+    },
+    {
+      "scope": "No Altitude",
+      "Balls": 2,
+      "Strikes": 1,
+      "run_value": 0.148
+    },
+    {
+      "scope": "No Altitude",
+      "Balls": 2,
+      "Strikes": 2,
+      "run_value": 0.09
+    },
+    {
+      "scope": "No Altitude",
+      "Balls": 3,
+      "Strikes": 0,
+      "run_value": 0.2665
+    },
+    {
+      "scope": "No Altitude",
+      "Balls": 3,
+      "Strikes": 1,
+      "run_value": 0.2231
+    },
+    {
+      "scope": "No Altitude",
+      "Balls": 3,
+      "Strikes": 2,
+      "run_value": 0.1637
+    },
+    {
+      "scope": "liga",
+      "Balls": 0,
+      "Strikes": 0,
+      "run_value": 0.1457
+    },
+    {
+      "scope": "liga",
+      "Balls": 0,
+      "Strikes": 1,
+      "run_value": 0.1067
+    },
+    {
+      "scope": "liga",
+      "Balls": 0,
+      "Strikes": 2,
+      "run_value": 0.0527
+    },
+    {
+      "scope": "liga",
+      "Balls": 1,
+      "Strikes": 0,
+      "run_value": 0.1792
+    },
+    {
+      "scope": "liga",
+      "Balls": 1,
+      "Strikes": 1,
+      "run_value": 0.133
+    },
+    {
+      "scope": "liga",
+      "Balls": 1,
+      "Strikes": 2,
+      "run_value": 0.0732
+    },
+    {
+      "scope": "liga",
+      "Balls": 2,
+      "Strikes": 0,
+      "run_value": 0.2268
+    },
+    {
+      "scope": "liga",
+      "Balls": 2,
+      "Strikes": 1,
+      "run_value": 0.1744
+    },
+    {
+      "scope": "liga",
+      "Balls": 2,
+      "Strikes": 2,
+      "run_value": 0.1067
+    },
+    {
+      "scope": "liga",
+      "Balls": 3,
+      "Strikes": 0,
+      "run_value": 0.3074
+    },
+    {
+      "scope": "liga",
+      "Balls": 3,
+      "Strikes": 1,
+      "run_value": 0.2577
+    },
+    {
+      "scope": "liga",
+      "Balls": 3,
+      "Strikes": 2,
+      "run_value": 0.1851
+    }
+  ],
+  "bola_en_juego": {
+    "r2_2026": {
+      "ev_angulo": {
+        "neutral_nivel_del_mar": 0.3466,
+        "local": 0.3801
+      },
+      "ev_angulo_direccion": {
+        "neutral_nivel_del_mar": 0.473,
+        "local": 0.5101
+      }
+    },
+    "sin_velocidad_salida": {
+      "bolas_sin_velocidad": 7765,
+      "valor_neutral_toque": 0.0169,
+      "valor_neutral_resto": -0.0008
+    }
+  },
+  "eleccion_variables_contacto": {
+    "pitchers": 114,
+    "r_con_valor_real_2026": {
+      "ev_angulo": 0.2503,
+      "ev_angulo_direccion": 0.2626,
+      "real": 0.1987
+    },
+    "elegido": "ev_angulo_direccion",
+    "ic95_elegido_menos_otro": [
+      -0.0438,
+      0.0758
+    ],
+    "ic95_elegido_menos_real": [
+      -0.0535,
+      0.1718
+    ],
+    "confiabilidad_mitades": {
+      "ev_angulo": 0.2504,
+      "ev_angulo_direccion": 0.1311,
+      "real": 0.113
+    }
+  },
+  "chequeos": {
+    "fin_de_turno_distinto_al_registrado": 11,
+    "fines_por_ponche_o_base": 46445,
+    "suma_por_turno": {
+      "turnos": 163493,
+      "suman_exacto": 162106,
+      "no_suman_por_salto_de_conteo": 1382,
+      "no_suman_sin_explicacion": 5
+    }
+  },
+  "cobertura": {
+    "pitches": 635002.0,
+    "sin_target": 841.0,
+    "sin_target_local": 2908.0,
+    "media_xrv": -0.00292,
+    "sd_xrv": 0.14522
+  }
+}

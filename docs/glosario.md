@@ -12,7 +12,12 @@ Términos ordenados por tema. Si algo del proyecto no está aquí, agrégalo.
 | **z-score** | Cuántas desviaciones estándar está un valor por encima o debajo del promedio. |
 | **xRunValue (xRV)** | Carreras que se espera que un pitch sume o reste al rival. Se usa el valor *esperado* porque el resultado real tiene mucha suerte. |
 | **Run value** | Cambio en carreras esperadas causado por un pitch (por ejemplo, pasar de 1-1 a 1-2 le quita carreras esperadas al rival). |
-| **Baseline** | Modelo mínimo a superar; en este reto, el xRV promedio por conteo. |
+| **Baseline / modelo base** | Modelo simple que el modelo final debe superar. Usamos cinco, de la media de la liga a una regresión lineal (D-020). |
+| **xRV neutral / local** | Neutral: con valores de la liga y batazos valuados a nivel del mar, para comparar pitchers. Local: con los valores de su altitud, para ver lo que cuesta en ese parque. |
+| **Pesos lineales** | Cuántas carreras vale en promedio cada desenlace (sencillo, base por bolas, ponche). Los estimamos con una regresión sobre medias entradas completas. |
+| **Valor del conteo** | Carreras que se esperan desde un conteo (por ejemplo, 3-0 vale más para el bateador que 0-2). |
+| **Persistencia** | Usar el resultado pasado de un pitcher como predicción de su futuro. *Encogida*: acercada al promedio según cuánto se repite de un año a otro. |
+| **Centrar por temporada** | Restar el promedio de la temporada, porque el ambiente de carreras cambia de un año a otro. |
 
 ## Física del pitch
 
@@ -72,6 +77,8 @@ Términos ordenados por tema. Si algo del proyecto no está aquí, agrégalo.
 | **SHAP** | Método para explicar cuánto aportó cada variable a una predicción. |
 | **Contrafactual** | "¿Qué hubiera pasado si…?" — aquí, el mismo pitch lanzado en otro ambiente. |
 | **Confusor** | Variable que afecta a la vez a la causa y al efecto y crea una relación falsa. |
+| **Predicción cruzada** | Cada fila recibe la predicción de un modelo entrenado sin ella, para que su propio resultado no se filtre. |
+| **Confiabilidad entre mitades** | Correlación entre dos mitades al azar de los pitches de cada pitcher: qué tanto la métrica mide algo estable y no ruido. |
 
 ## Conceptos propios del proyecto
 
