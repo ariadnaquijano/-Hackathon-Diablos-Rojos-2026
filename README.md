@@ -42,6 +42,7 @@ Lee los documentos en este orden; cada uno se apoya en el anterior.
 5. [`docs/01_limpieza.md`](docs/01_limpieza.md) — limpieza de datos (etapa 1).
 6. [`docs/02_features.md`](docs/02_features.md) — variables del modelo (etapa 2).
 7. [`docs/retroalimentacion_experto.md`](docs/retroalimentacion_experto.md) — lo que nos dijo un lanzador y qué cambió.
+8. [`docs/hipotesis_h4.md`](docs/hipotesis_h4.md) — H4: ¿el spin rate basta para predecir un buen pitch? (reporte: `reportes/h4_spin_rate.html`).
 
 ## Estructura
 
@@ -86,6 +87,7 @@ python src/exploracion_etapa_02.py     # evidencia del plan de features
 python src/decisiones_etapa_02.py      # reporte de las tres decisiones de features
 python src/features.py                 # etapa 2: genera data/processed/features.parquet y el resumen
 python src/reporte_features.py         # etapa 2: genera reportes/etapa_02_features.html
+python src/hipotesis_h4.py             # H4: análisis y reporte reportes/h4_spin_rate.html
 ```
 
 ## Datos

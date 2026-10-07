@@ -1,0 +1,319 @@
+{
+  "swings_analizados": 280084,
+  "poder_predictivo": [
+    {
+      "tipo": "Four-Seam",
+      "swings_entrenamiento": 80817,
+      "swings_prueba": 19935,
+      "whiff_base": 0.1994,
+      "spin": {
+        "auc": 0.5464,
+        "mejora_log_loss": 0.0042
+      },
+      "velocidad": {
+        "auc": 0.5507,
+        "mejora_log_loss": 0.0047
+      },
+      "movimiento": {
+        "auc": 0.5686,
+        "mejora_log_loss": 0.0098
+      },
+      "velocidad_movimiento": {
+        "auc": 0.5873,
+        "mejora_log_loss": 0.0161
+      },
+      "velocidad_movimiento_spin": {
+        "auc": 0.5898,
+        "mejora_log_loss": 0.0166
+      },
+      "movimiento_vs_spin": {
+        "diferencia_auc": 0.0222,
+        "ic95": [
+          0.0035,
+          0.0402
+        ]
+      },
+      "spin_agrega_al_movimiento": {
+        "diferencia_auc": 0.0025,
+        "ic95": [
+          -0.001,
+          0.007
+        ]
+      }
+    },
+    {
+      "tipo": "Sinker",
+      "swings_entrenamiento": 39136,
+      "swings_prueba": 11336,
+      "whiff_base": 0.1431,
+      "spin": {
+        "auc": 0.5151,
+        "mejora_log_loss": 0.0007
+      },
+      "velocidad": {
+        "auc": 0.5176,
+        "mejora_log_loss": 0.0016
+      },
+      "movimiento": {
+        "auc": 0.5328,
+        "mejora_log_loss": 0.003
+      },
+      "velocidad_movimiento": {
+        "auc": 0.5428,
+        "mejora_log_loss": 0.0038
+      },
+      "velocidad_movimiento_spin": {
+        "auc": 0.5503,
+        "mejora_log_loss": 0.0056
+      },
+      "movimiento_vs_spin": {
+        "diferencia_auc": 0.0177,
+        "ic95": [
+          -0.0085,
+          0.0379
+        ]
+      },
+      "spin_agrega_al_movimiento": {
+        "diferencia_auc": 0.0075,
+        "ic95": [
+          -0.0015,
+          0.0178
+        ]
+      }
+    },
+    {
+      "tipo": "Slider",
+      "swings_entrenamiento": 52469,
+      "swings_prueba": 14575,
+      "whiff_base": 0.3118,
+      "spin": {
+        "auc": 0.5208,
+        "mejora_log_loss": 0.0007
+      },
+      "velocidad": {
+        "auc": 0.5121,
+        "mejora_log_loss": 0.0004
+      },
+      "movimiento": {
+        "auc": 0.5517,
+        "mejora_log_loss": 0.0044
+      },
+      "velocidad_movimiento": {
+        "auc": 0.559,
+        "mejora_log_loss": 0.0072
+      },
+      "velocidad_movimiento_spin": {
+        "auc": 0.5576,
+        "mejora_log_loss": 0.007
+      },
+      "movimiento_vs_spin": {
+        "diferencia_auc": 0.0309,
+        "ic95": [
+          0.0146,
+          0.0479
+        ]
+      },
+      "spin_agrega_al_movimiento": {
+        "diferencia_auc": -0.0014,
+        "ic95": [
+          -0.0044,
+          0.0016
+        ]
+      }
+    },
+    {
+      "tipo": "Curveball",
+      "swings_entrenamiento": 18456,
+      "swings_prueba": 4880,
+      "whiff_base": 0.3369,
+      "spin": {
+        "auc": 0.5058,
+        "mejora_log_loss": -0.0003
+      },
+      "velocidad": {
+        "auc": 0.5403,
+        "mejora_log_loss": 0.0038
+      },
+      "movimiento": {
+        "auc": 0.5251,
+        "mejora_log_loss": 0.0013
+      },
+      "velocidad_movimiento": {
+        "auc": 0.568,
+        "mejora_log_loss": 0.0094
+      },
+      "velocidad_movimiento_spin": {
+        "auc": 0.5699,
+        "mejora_log_loss": 0.0099
+      },
+      "movimiento_vs_spin": {
+        "diferencia_auc": 0.0193,
+        "ic95": [
+          -0.0065,
+          0.0432
+        ]
+      },
+      "spin_agrega_al_movimiento": {
+        "diferencia_auc": 0.0019,
+        "ic95": [
+          -0.0024,
+          0.0065
+        ]
+      }
+    },
+    {
+      "tipo": "Changeup",
+      "swings_entrenamiento": 30200,
+      "swings_prueba": 8280,
+      "whiff_base": 0.2969,
+      "spin": {
+        "auc": 0.5249,
+        "mejora_log_loss": -0.0
+      },
+      "velocidad": {
+        "auc": 0.5418,
+        "mejora_log_loss": 0.0032
+      },
+      "movimiento": {
+        "auc": 0.5079,
+        "mejora_log_loss": -0.0024
+      },
+      "velocidad_movimiento": {
+        "auc": 0.5504,
+        "mejora_log_loss": 0.0045
+      },
+      "velocidad_movimiento_spin": {
+        "auc": 0.5609,
+        "mejora_log_loss": 0.0063
+      },
+      "movimiento_vs_spin": {
+        "diferencia_auc": -0.017,
+        "ic95": [
+          -0.0441,
+          0.0068
+        ]
+      },
+      "spin_agrega_al_movimiento": {
+        "diferencia_auc": 0.0105,
+        "ic95": [
+          0.0003,
+          0.0191
+        ]
+      }
+    }
+  ],
+  "transferencia_altitud": [
+    {
+      "tipo": "Four-Seam",
+      "swings_altitud": 28274,
+      "whiff_real_altitud": 0.1811,
+      "whiff_real_mar": 0.2143,
+      "whiff_predicho_spin": 0.2124,
+      "whiff_predicho_movimiento": 0.1626
+    },
+    {
+      "tipo": "Sinker",
+      "swings_altitud": 14138,
+      "whiff_real_altitud": 0.1358,
+      "whiff_real_mar": 0.1521,
+      "whiff_predicho_spin": 0.1523,
+      "whiff_predicho_movimiento": 0.1389
+    },
+    {
+      "tipo": "Slider",
+      "swings_altitud": 20616,
+      "whiff_real_altitud": 0.3099,
+      "whiff_real_mar": 0.3257,
+      "whiff_predicho_spin": 0.3266,
+      "whiff_predicho_movimiento": 0.3235
+    },
+    {
+      "tipo": "Curveball",
+      "swings_altitud": 6489,
+      "whiff_real_altitud": 0.3276,
+      "whiff_real_mar": 0.3296,
+      "whiff_predicho_spin": 0.3303,
+      "whiff_predicho_movimiento": 0.3137
+    },
+    {
+      "tipo": "Changeup",
+      "swings_altitud": 9298,
+      "whiff_real_altitud": 0.2788,
+      "whiff_real_mar": 0.2923,
+      "whiff_predicho_spin": 0.2928,
+      "whiff_predicho_movimiento": 0.294
+    }
+  ],
+  "mismo_spin": {
+    "banda_rpm": [
+      2250,
+      2400
+    ],
+    "por_tercil_ivb": [
+      {
+        "tercil": 1,
+        "spin_mediano": 2324.4006,
+        "velocidad_mediana": 92.1556,
+        "ivb_mediano": 12.2824,
+        "whiff_por_swing": 0.1565,
+        "swings": 12940
+      },
+      {
+        "tercil": 2,
+        "spin_mediano": 2328.085,
+        "velocidad_mediana": 92.0596,
+        "ivb_mediano": 15.3495,
+        "whiff_por_swing": 0.1816,
+        "swings": 12940
+      },
+      {
+        "tercil": 3,
+        "spin_mediano": 2326.5327,
+        "velocidad_mediana": 91.577,
+        "ivb_mediano": 18.7765,
+        "whiff_por_swing": 0.2416,
+        "swings": 12939
+      }
+    ],
+    "diferencia_tercil_alto_vs_bajo": {
+      "whiff": 0.0851,
+      "ic95": [
+        0.0732,
+        0.0973
+      ]
+    },
+    "por_altitud": [
+      {
+        "altitude_category": "Extreme Altitude",
+        "spin_mediano": 2325.5271,
+        "velocidad_mediana": 92.2079,
+        "ivb_mediano": 13.2401,
+        "whiff_por_swing": 0.1795,
+        "swings": 10596
+      },
+      {
+        "altitude_category": "Medium Altitude",
+        "spin_mediano": 2327.084,
+        "velocidad_mediana": 91.9377,
+        "ivb_mediano": 14.4409,
+        "whiff_por_swing": 0.1819,
+        "swings": 9702
+      },
+      {
+        "altitude_category": "No Altitude",
+        "spin_mediano": 2326.4393,
+        "velocidad_mediana": 91.7775,
+        "ivb_mediano": 17.4429,
+        "whiff_por_swing": 0.2072,
+        "swings": 18378
+      }
+    ],
+    "diferencia_mar_vs_altitud_extrema": {
+      "whiff": 0.0277,
+      "ic95": [
+        0.016,
+        0.039
+      ]
+    }
+  }
+}
