@@ -37,12 +37,45 @@ por swing sube de 20.3 % a 31.3 % (`docs/02_features.md`, sección 9).
 |---|---|---|
 | Pasaporte de altitud | Caso Isaac Paredes en Houston: hay jugadores que se acoplan mejor a un lugar; cada campo es diferente | Además del pasaporte de pitchers, un **encaje de bateadores con la altura**: qué perfil gana más en el Harp Helú (probablemente quienes jalan y elevan), con dirección, ángulo, distancia y velocidad de salida. Sirve para saber a quién contener. No tenemos el estadio exacto, solo la altitud |
 | Punto de mira | Decir tipo de lanzamiento y velocidad, con heatmap en el rectángulo de bateo y punto de tiro; usar OPS además del promedio, porque un hit no lo es todo y las bases por bolas importan | Pantalla con el mapa de daño del bateador (wOBA por zona), el pitch recomendado, su velocidad y el punto donde apuntar ya corregido por altura |
-| Aire del día | Humedad y presión con una API de clima; impacto en la trayectoria de bateo (ejemplo: jonrones perdidos por clima) | Sin fecha ni estadio no podemos unir clima histórico. Nuestro aire medido por juego es la referencia para calibrar la API cuando se use en vivo. Queda como trabajo futuro |
+| Aire del día | Humedad y presión con una API de clima; impacto en la trayectoria de bateo (ejemplo: jonrones perdidos por clima) | La parte de altitud sí se puede medir con nuestros datos (ver abajo): **jonrones regalados por el aire** por pitcher. El clima del día no: sin fecha ni estadio no podemos unir clima histórico; nuestro aire medido por juego es la referencia para calibrar la API cuando se use en vivo |
+
+## Jonrones regalados por el aire
+
+Después de la conversación vimos una publicación de Ballpark Pal que estima, para cada pitcher de
+MLB, cuántos jonrones le quitaron o le regalaron el estadio y el clima. Es la misma idea del "aire
+del día" aplicada al bateo, y nuestros datos tienen lo necesario: velocidad de salida, ángulo,
+dirección, distancia y si fue jonrón.
+
+**Evidencia preliminar** (`src/evidencia_acarreo.py`, cifras en `reportes/evidencia_acarreo.json`).
+Tomamos una sola ventana de contacto, fijada antes de ver resultados: el jonrón típico, 98–104 mph
+de salida y 24–34° de ángulo.
+
+| Altitud | Batazos | Velocidad de salida mediana | Ángulo mediano | Distancia mediana | % jonrón |
+|---|---|---|---|---|---|
+| Nivel del mar | 1,019 | 100.3 mph | 28.3° | 381 ft | 54.6 % |
+| Altitud media | 571 | 100.3 mph | 28.5° | 406 ft | 61.1 % |
+| Altitud extrema | 661 | 100.2 mph | 28.1° | 415 ft | 69.4 % |
+
+El contacto es el mismo (velocidad y ángulo casi idénticos), pero en altitud extrema la pelota vuela
+**34 ft más** (IC 95 % 31 a 38) y es jonrón **14.9 puntos más seguido** (IC 95 % 10.0 a 19.6). Los
+intervalos remuestrean pitchers completos. Es el espejo de H4: la altura le quita movimiento al pitch
+y le da distancia al batazo.
+
+**Herramienta planeada (etapa 6):** un modelo de probabilidad de jonrón con velocidad de salida,
+ángulo y dirección, entrenado a nivel del mar y aplicado a cada elevado en altura. La diferencia
+entre lo que pasó y lo que habría pasado al nivel del mar son los jonrones que regaló el aire, por
+pitcher y por bateador (sirve también al encaje de bateadores con la altura).
+
+**Límites:**
+- No tenemos estadio ni medidas de las bardas: estimamos acarreo y probabilidad de jonrón, no la
+  distancia exacta a la barda de cada parque.
+- Es una sola ventana de contacto; el modelo completo usará todos los batazos y se validará en 2026
+  contra los modelos base (D-020).
 
 ## Qué cambia en el plan
 
 1. **Nueva familia de variables de secuencia** (hecha en la etapa 2).
 2. **Nuevas herramientas:** mapa de daño por zona con wOBA, asistente de bullpen, encaje de
-   bateadores con la altura.
+   bateadores con la altura, jonrones regalados por el aire.
 3. **Pitching+ con el bateador** (minimizar al bateador), además de Stuff+ sin bateador.
 4. **Aclimatación** pasa de trabajo futuro a posible, si alcanza el tiempo.

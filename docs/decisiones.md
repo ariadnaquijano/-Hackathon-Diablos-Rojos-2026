@@ -7,6 +7,35 @@ se agrega una nueva entrada que la reemplaza y se marca la anterior como *Reempl
 
 ---
 
+### D-021 · 2026-10-07 · Nueva herramienta: jonrones regalados por el aire
+- **Qué:** probabilidad de jonrón por batazo entrenada a nivel del mar y aplicada en altura; la
+  diferencia son los jonrones que regaló el aire, por pitcher y por bateador.
+- **Por qué:** con el mismo contacto (100 mph, 28°), en altitud extrema la pelota vuela 34 ft más
+  (IC 95 % 31–38) y es jonrón 14.9 puntos más seguido (IC 95 % 10.0–19.6)
+  (`src/evidencia_acarreo.py`). Separa al pitcher al que le pegaron fuerte del que castigó el aire.
+- **Límite:** sin estadio ni medidas de bardas, estimamos acarreo, no distancia a la barda.
+- **Estado:** Vigente; se construye en la etapa 6.
+
+### D-020 · 2026-10-07 · Todo modelo se compara contra modelos base, fuera de muestra
+- **Qué:** ningún resultado cuenta si no le gana a un modelo más simple en 2026, con intervalo por
+  pitcher que no toque cero. La escalera de modelos base, de menor a mayor:
+  1. **Media de la liga:** predecir siempre el promedio del entrenamiento ("predecir mejor que la media").
+  2. **Media por conteo:** el valor del pitch depende mucho de bolas y strikes.
+  3. **Media por tipo de pitch y mano:** lo que vale "una slider de derecho" en general.
+  4. **Regresión lineal** con velocidad, movimiento y extensión: el modelo simple que cualquier
+     equipo puede llevar.
+  5. **Alternativa descartada en D-001:** un solo modelo con `altitude_category` como variable.
+     Si nuestro traductor físico no le gana, no se justifica.
+- **A nivel pitcher** (lo que usa el club): el Stuff+ de 2024–2025 debe predecir los resultados de
+  2026 del pitcher mejor que sus propios resultados de 2024–2025 (whiff y valor en carreras) y que la
+  media de la liga. También medimos estabilidad: correlación entre dos mitades de sus pitches.
+- **Reglas:** los hiperparámetros se eligen con validación cruzada dentro de 2024–2025 agrupando por
+  pitcher; 2026 se usa una vez. Se reportan todas las comparaciones planeadas, también las que
+  pierden. Los efectos se dan en unidades de béisbol (puntos de whiff, carreras por 100 pitches).
+- **Por qué:** sin modelos base no se puede saber si el modelo aprende algo o solo repite promedios;
+  es lo primero que preguntará un jurado técnico.
+- **Estado:** Vigente; se implementa con el target en la etapa 3 y los modelos en la etapa 4.
+
 ### D-019 · 2026-10-06 · Retroalimentación del experto: minimizar al bateador
 - **Qué:** Pitching+ y las herramientas se orientan a contener al bateador: mapa de daño por zona con
   wOBA, bateador contra forma del pitch (no la pareja exacta, que tiene mediana de 6 pitches),

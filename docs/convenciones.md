@@ -18,6 +18,20 @@
 - Toda cifra debe salir de un script en `src/` e indicar de cuál.
 - Términos nuevos van al [`glosario.md`](glosario.md); decisiones, a [`decisiones.md`](decisiones.md).
 
+## Rigor estadístico
+
+- **No inventar ni inflar.** Toda cifra sale de un script; si un resultado es débil o pierde contra
+  el modelo base, se reporta igual.
+- **Plan antes que datos.** La pregunta, la métrica y la comparación se escriben antes de correr.
+  Lo que surge después se marca como exploratorio.
+- **Modelos base siempre** (D-020): todo modelo se compara contra la media, la media por conteo, la
+  media por tipo de pitch y una regresión simple.
+- **2026 es intocable** hasta la evaluación final; nada se ajusta mirándolo.
+- **Intervalos de 95 % remuestreando pitchers completos**, porque los pitches de un mismo pitcher no
+  son independientes.
+- **Tamaño del efecto en unidades de béisbol**, no solo si es "significativo".
+- **Límites explícitos** al final de cada documento.
+
 ## Commits y pull requests
 
 - Mensajes en lenguaje natural, en imperativo, explicando qué cambia y por qué.

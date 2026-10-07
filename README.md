@@ -88,6 +88,7 @@ python src/decisiones_etapa_02.py      # reporte de las tres decisiones de featu
 python src/features.py                 # etapa 2: genera data/processed/features.parquet y el resumen
 python src/reporte_features.py         # etapa 2: genera reportes/etapa_02_features.html
 python src/hipotesis_h4.py             # H4: análisis y reporte reportes/h4_spin_rate.html
+python src/evidencia_acarreo.py        # acarreo de batazos en altitud (jonrones regalados por el aire)
 ```
 
 ## Datos
