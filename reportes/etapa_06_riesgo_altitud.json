@@ -1,0 +1,38 @@
+{
+  "nota": "Pares de D-034 agregados por pitcher (D-036). 2026 no se usa.",
+  "pitchers": 299,
+  "riesgo_arsenal": {
+    "r_con_cambio_real": 0.1127,
+    "ic95_r": [
+      0.0001,
+      0.2104
+    ],
+    "ecm": 0.6562,
+    "ecm_constante": 0.6686,
+    "ic95_diferencia_ecm_vs_constante": [
+      -0.0317,
+      0.0076
+    ],
+    "promedio_predicho": 0.3155
+  },
+  "pasaporte": {
+    "r_con_cambio_real": 0.1967,
+    "ic95_r": [
+      0.0838,
+      0.3071
+    ],
+    "ecm": 0.6774,
+    "ecm_constante": 0.6686,
+    "ic95_diferencia_ecm_vs_constante": [
+      -0.0578,
+      0.0683
+    ],
+    "promedio_predicho": 0.4745
+  },
+  "cambio_real_promedio": 0.3097,
+  "rango_riesgo_arsenal_p10_p90": [
+    0.218,
+    0.397
+  ],
+  "veredicto": "ordena, no como cifra"
+}

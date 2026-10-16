@@ -7,6 +7,29 @@ se agrega una nueva entrada que la reemplaza y se marca la anterior como *Reempl
 
 ---
 
+### D-036 · 2026-10-16 · Riesgo de altitud por arsenal para la ficha: regla fijada antes de probar
+- **Qué:** la ficha del pitcher necesita un número de riesgo en el Harp Helú. Como el pasaporte no le
+  ganó a la pérdida promedio por tipo (D-034), el candidato es la versión simple: **riesgo = suma, sobre
+  los pitches del pitcher, de su uso × la pérdida promedio de la liga para ese tipo**.
+- **Prueba:** los mismos pares de D-034 (2024–2025, 50+ pitches por lado), agregados por pitcher y
+  ponderados por los pitches a nivel del mar.
+  - La pérdida por tipo se calcula **sin el pitcher evaluado**, para no darle ventaja.
+  - Cambio real del pitcher: el promedio ponderado del cambio del xRV sin contacto entre altitudes.
+- **Regla:**
+  - Sirve para ordenar si la correlación entre riesgo y cambio real es positiva con intervalo fuera de
+    cero (remuestreo de pitchers).
+  - Sirve como cifra si además su error es menor que dar a todos la pérdida promedio, también sin el
+    pitcher evaluado, con intervalo fuera de cero.
+  - El pasaporte agregado igual se reporta al lado, solo como comparación.
+- **2026:** no se usa.
+- **Resultado (299 pitchers):** **ordena, pero no como cifra.** r 0.11 (0.0001 a 0.21), en el límite.
+  El error queda igual al de la constante (−0.032 a +0.008). El pasaporte agregado da r 0.20 (0.08 a
+  0.31), pero la diferencia contra el riesgo por arsenal toca cero (−0.01 a +0.18, cálculo hecho
+  después) y su nivel exagera (0.47 contra 0.31 real).
+- **Uso:** la ficha muestra el riesgo como nivel (tercio bajo, medio o alto de la liga), no como
+  carreras exactas. La cifra de referencia es la pérdida promedio por tipo, con su intervalo.
+- **Estado:** Vigente.
+
 ### D-035 · 2026-10-14 · Afinado de Stuff+ y Location+ (versión 2): regla fijada antes de probar
 - **Qué se prueba:** se entrena con 2024 y se evalúa en 2025; 2026 no se toca.
   - **Hiperparámetros:** hojas mínimas de 200 o 1,000 pitches y 15 o 31 hojas por árbol. Hoy se usan

@@ -410,5 +410,93 @@
         0.0783
       ]
     }
+  },
+  "escala_100": {
+    "2024": {
+      "pitchers": 320,
+      "percentiles_10_50_90": {
+        "stuff_plus": [
+          89.2,
+          100.5,
+          113.4
+        ],
+        "location_plus": [
+          86.4,
+          100.9,
+          110.8
+        ],
+        "pitching_plus": [
+          86.5,
+          100.6,
+          111.4
+        ]
+      },
+      "r_entre_valores": {
+        "stuff_vs_location": -0.0383,
+        "stuff_vs_pitching": 0.3423,
+        "location_vs_pitching": 0.9258
+      }
+    },
+    "2025": {
+      "pitchers": 320,
+      "percentiles_10_50_90": {
+        "stuff_plus": [
+          88.8,
+          99.7,
+          115.4
+        ],
+        "location_plus": [
+          85.8,
+          101.0,
+          111.7
+        ],
+        "pitching_plus": [
+          87.4,
+          101.0,
+          112.6
+        ]
+      },
+      "r_entre_valores": {
+        "stuff_vs_location": -0.1305,
+        "stuff_vs_pitching": 0.255,
+        "location_vs_pitching": 0.9254
+      }
+    },
+    "2026": {
+      "pitchers": 178,
+      "percentiles_10_50_90": {
+        "stuff_plus": [
+          88.2,
+          99.8,
+          115.4
+        ],
+        "location_plus": [
+          90.8,
+          103.4,
+          115.3
+        ],
+        "pitching_plus": [
+          90.0,
+          102.7,
+          115.3
+        ]
+      },
+      "r_entre_valores": {
+        "stuff_vs_location": -0.0029,
+        "stuff_vs_pitching": 0.4151,
+        "location_vs_pitching": 0.9086
+      }
+    }
+  },
+  "repeticion_2024_a_2025": {
+    "pitchers": 146,
+    "xrv_neutral": 0.1758,
+    "stuff": 0.8309,
+    "location": 0.6701,
+    "pitching": 0.6359,
+    "p_swing": 0.8222,
+    "p_whiff": 0.7751,
+    "p_foul": 0.8594,
+    "p_strike": 0.7957
   }
 }

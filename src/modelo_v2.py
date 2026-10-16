@@ -5,7 +5,8 @@ reentrena Location+ con la configuración elegida, rehace los pesos de Pitching+
 de `src/modelo.py` en 2026. Es la cuarta mirada a 2026 y se reporta junto a la versión 1, sin
 reemplazarla.
 
-Escribe reportes/etapa_04_modelo_v2.json.
+Escribe reportes/etapa_04_modelo_v2.json y la tabla por pitcher en escala 100
+data/processed/valores_pitchers_v2.parquet, que no se sube al repo.
 
 Uso:
     python src/modelo.py      # primero, la versión 1
@@ -22,11 +23,13 @@ from sklearn.model_selection import GroupKFold
 from afinado import LOCATION, SETTINGS, fit, new_model
 from config import HOLDOUT_SEASON, REPORTS_DIR, ROOT
 from exploracion_etapa_04 import CROSS_FIT_FOLDS, altitude_consistency
-from modelo import PREDICTIONS_CACHE, VALUES, add_values, forward, load, pitch_level, same_season
+from modelo import (PREDICTIONS_CACHE, VALUES, add_values, describe_scale, forward, load, pitch_level, plus_scale,
+                    same_season, stability)
 from modelos_base import TARGET
 
 SUMMARY_JSON = REPORTS_DIR / "etapa_04_modelo_v2.json"
 V2_CACHE = ROOT / "data" / "processed" / "predicciones_location_v2.parquet"
+PITCHER_VALUES_V2 = ROOT / "data" / "processed" / "valores_pitchers_v2.parquet"
 SETTING = SETTINGS["hojas1000_31"]
 
 
@@ -58,6 +61,8 @@ def main():
         v2.to_parquet(V2_CACHE, index=False)
     predictions = predictions.drop(columns="location").merge(v2, on="pitch_seq", validate="one_to_one")
     pitches, weights = add_values(pitches, predictions)
+    values = plus_scale(pitches)
+    values.to_parquet(PITCHER_VALUES_V2, index=False)
     evaluated = pitches[pitches.pitcher_anon_id != "sin_id"]
     holdout = evaluated[evaluated.year == HOLDOUT_SEASON].reset_index(drop=True)
     columns = ["lineal_por_tipo", "lineal_nivel_mar", *VALUES]
@@ -69,6 +74,8 @@ def main():
         "por_pitcher_2026": same_season(evaluated, columns),
         "a_futuro_2026": forward(evaluated),
         "altitud_mismo_pitcher": altitude_consistency(evaluated, ["stuff", "pitching"], "stuff"),
+        "escala_100": describe_scale(values),
+        "repeticion_2024_a_2025": stability(values),
     }
     SUMMARY_JSON.write_text(json.dumps(summary, indent=2, ensure_ascii=False))
     print(json.dumps(summary, indent=2, ensure_ascii=False))
