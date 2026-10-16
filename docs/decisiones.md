@@ -7,6 +7,55 @@ se agrega una nueva entrada que la reemplaza y se marca la anterior como *Reempl
 
 ---
 
+### D-038 · 2026-10-16 · Qué arsenal rinde más en el Harp Helú: definición fijada antes de correr
+- **Por qué:** el entregable 1 pregunta qué arsenal produce el Stuff+ más alto en el Harp Helú.
+- **Arquetipos por uso** (pitcher y temporada con 300+ pitches), asignados en este orden:
+  1. **Rompimiento:** slider + curva ≥ 40 % de sus pitches.
+  2. **Recta y sinker:** recta + sinker ≥ 60 %.
+  3. **Cambio o split:** cambio + splitter ≥ 25 %.
+  4. **Mixto:** el resto.
+- **Qué se reporta por arquetipo:**
+  - Stuff+ promedio a nivel del mar y su estimado en el Harp Helú (menos la pérdida promedio de la
+    liga para su mezcla, D-036).
+  - **Prueba real:** en los pitchers que lanzaron 200+ pitches en altitud extrema y 200+ a nivel del
+    mar en la misma temporada, el cambio del xRV sin contacto entre altitudes, con intervalo por
+    pitcher. Se compara Rompimiento contra Recta y sinker.
+- **Datos:** 2024–2025. 2026 no se usa. Es descriptivo: no elige modelo.
+- **Resultado:**
+  - Stuff+ estimado en el Harp Helú: Rompimiento 90.9 (103.1 a nivel del mar), Recta y sinker 86.8
+    (103.7), Mixto 83.6 (98.9), Cambio o split 81.0 (96.8).
+  - Prueba real: Rompimiento pierde 0.07 carreras por 100 en altura (−0.15 a +0.29, 15 pitchers);
+    Recta y sinker, 0.30 (0.11 a 0.50, 24). La diferencia, −0.23, toca cero (−0.54 a +0.09).
+  - Lectura: el arsenal de rompimiento rinde más en el Harp Helú en el estimado y apunta al mismo
+    lado en lo real, sin intervalo fuera de cero por la poca muestra.
+- **Estado:** Vigente.
+
+### D-037 · 2026-10-16 · Validación por estadio (park holdout): regla fijada antes de probar
+- **Por qué:** la convocatoria pide validar con pitchers no vistos, temporadas no vistas y estadios
+  no vistos. Los datos no traen estadio, solo la categoría de altitud. El estadio que importa es el
+  Harp Helú, que cae en altitud extrema.
+- **Qué:** con 2024–2025 y los mismos 5 pliegues por pitcher, cada modelo (los componentes de Stuff+
+  y Location+ v2) se entrena **sin ningún pitch de altitud extrema** y predice los pitches de altitud
+  extrema de los pitchers que no vio. Se usan los mismos árboles que la versión oficial. Pitching+
+  usa los pesos oficiales (0.60 y 1.03).
+- **Bases:** el modelo nulo de la convocatoria (promedio por conteo) y la media de la liga, ambos
+  calculados también sin altitud extrema.
+- **Regla:**
+  - Pasa si Stuff+, Location+ y Pitching+ mejoran por pitch contra el promedio por conteo en altitud
+    extrema, con intervalo fuera de cero (remuestreo de pitchers).
+  - Se reporta cuánto se pierde contra el modelo entrenado con todas las altitudes y la calibración
+    (promedio predicho contra real, y pendiente).
+- **2026:** no se usa.
+- **Resultado (139,277 pitches de altitud extrema, 725 pitchers): pasa.**
+  - Contra el promedio por conteo: Stuff+ +0.13 % (0.08 a 0.18), Location+ +5.11 % (4.81 a 5.41),
+    Pitching+ +5.12 % (4.80 a 5.42).
+  - Entrenar con altitud extrema ayuda poco: entre 0.03 y 0.24 puntos según la pieza.
+  - Calibración: en altitud extrema el modelo sin altitud predice −0.35 a −0.40 carreras por 100
+    (según la pieza) y lo real es −0.06. Es optimista por unas 0.3 carreras por 100, del tamaño de la
+    pérdida por altitud de D-034. Las pendientes son de 0.84 a 0.99.
+  - El promedio por conteo empata con la media de la liga porque el target ya descuenta el conteo.
+- **Estado:** Vigente.
+
 ### D-036 · 2026-10-16 · Riesgo de altitud por arsenal para la ficha: regla fijada antes de probar
 - **Qué:** la ficha del pitcher necesita un número de riesgo en el Harp Helú. Como el pasaporte no le
   ganó a la pérdida promedio por tipo (D-034), el candidato es la versión simple: **riesgo = suma, sobre

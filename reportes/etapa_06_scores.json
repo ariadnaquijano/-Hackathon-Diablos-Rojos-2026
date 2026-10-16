@@ -1,0 +1,111 @@
+{
+  "nota": "Arquetipos de D-038 con 2024–2025; archivos con identificadores en data/entregables/.",
+  "filas": {
+    "por_pitch": 631068,
+    "por_pitcher": 818,
+    "por_arsenal": 2065
+  },
+  "arquetipos": {
+    "Rompimiento": {
+      "pitchers_temporada": 118,
+      "stuff_plus_mar": 103.1,
+      "stuff_plus_harp_estimado": 90.9,
+      "pitching_plus": 104.0,
+      "rolling_pct": 46.2,
+      "pitchers_con_las_dos_altitudes": 15,
+      "cambio_real_sin_contacto_por_100": 0.068,
+      "ic95_cambio_real": [
+        -0.145,
+        0.287
+      ]
+    },
+    "Recta y sinker": {
+      "pitchers_temporada": 203,
+      "stuff_plus_mar": 103.7,
+      "stuff_plus_harp_estimado": 86.8,
+      "pitching_plus": 98.2,
+      "rolling_pct": 45.0,
+      "pitchers_con_las_dos_altitudes": 24,
+      "cambio_real_sin_contacto_por_100": 0.3,
+      "ic95_cambio_real": [
+        0.106,
+        0.5
+      ]
+    },
+    "Cambio o split": {
+      "pitchers_temporada": 76,
+      "stuff_plus_mar": 96.8,
+      "stuff_plus_harp_estimado": 81.0,
+      "pitching_plus": 100.2,
+      "rolling_pct": 43.8,
+      "pitchers_con_las_dos_altitudes": 9
+    },
+    "Mixto": {
+      "pitchers_temporada": 243,
+      "stuff_plus_mar": 98.9,
+      "stuff_plus_harp_estimado": 83.6,
+      "pitching_plus": 99.9,
+      "rolling_pct": 44.8,
+      "pitchers_con_las_dos_altitudes": 48,
+      "cambio_real_sin_contacto_por_100": 0.281,
+      "ic95_cambio_real": [
+        0.182,
+        0.397
+      ]
+    },
+    "rompimiento_menos_recta_y_sinker": {
+      "diferencia": -0.232,
+      "ic95": [
+        -0.536,
+        0.086
+      ]
+    }
+  },
+  "stuff_plus_harp_promedio_por_tipo": {
+    "Changeup": {
+      "pitches_de_pitcher": 191,
+      "perdida_por_100": 0.324,
+      "delta_stuff_plus": -9.7,
+      "ic95_delta": [
+        -17.5,
+        -2.8
+      ]
+    },
+    "Curveball": {
+      "pitches_de_pitcher": 136,
+      "perdida_por_100": 0.02,
+      "delta_stuff_plus": -0.7,
+      "ic95_delta": [
+        -9.5,
+        8.1
+      ]
+    },
+    "Four-Seam": {
+      "pitches_de_pitcher": 567,
+      "perdida_por_100": 0.396,
+      "delta_stuff_plus": -13.0,
+      "ic95_delta": [
+        -17.3,
+        -8.8
+      ]
+    },
+    "Sinker": {
+      "pitches_de_pitcher": 295,
+      "perdida_por_100": 0.316,
+      "delta_stuff_plus": -13.3,
+      "ic95_delta": [
+        -20.5,
+        -6.1
+      ]
+    },
+    "Slider": {
+      "pitches_de_pitcher": 393,
+      "perdida_por_100": 0.182,
+      "delta_stuff_plus": -6.9,
+      "ic95_delta": [
+        -14.8,
+        1.1
+      ]
+    }
+  }
+}

@@ -1,0 +1,177 @@
+{
+  "nota": "Modelo oficial (versión 2). Las mismas predicciones de D-035; solo cambia la métrica.",
+  "pitcher_holdout_2024_2025": {
+    "pitches": 499243,
+    "rmse": {
+      "media_conteo": {
+        "rmse": 0.14448
+      },
+      "stuff": {
+        "rmse": 0.14437,
+        "ic95_diferencia_rmse_vs_nulo": [
+          -0.00013,
+          -9e-05
+        ]
+      },
+      "location": {
+        "rmse": 0.14039,
+        "ic95_diferencia_rmse_vs_nulo": [
+          -0.00422,
+          -0.00395
+        ]
+      },
+      "pitching": {
+        "rmse": 0.14034,
+        "ic95_diferencia_rmse_vs_nulo": [
+          -0.00428,
+          -0.00399
+        ]
+      }
+    },
+    "calibracion_pitching": {
+      "pendiente": 1.0,
+      "deciles": {
+        "predicho": [
+          -5.016,
+          -3.287,
+          -2.585,
+          -2.025,
+          -1.418,
+          -0.591,
+          0.499,
+          1.732,
+          2.998,
+          6.776
+        ],
+        "real": [
+          -5.01,
+          -3.382,
+          -2.542,
+          -2.0,
+          -1.3,
+          -0.581,
+          0.486,
+          1.773,
+          2.997,
+          6.644
+        ]
+      }
+    },
+    "calibracion_stuff": {
+      "pendiente": 0.999,
+      "deciles": {
+        "predicho": [
+          -1.286,
+          -0.89,
+          -0.684,
+          -0.511,
+          -0.346,
+          -0.184,
+          -0.018,
+          0.161,
+          0.374,
+          0.761
+        ],
+        "real": [
+          -1.377,
+          -0.801,
+          -0.694,
+          -0.512,
+          -0.385,
+          -0.321,
+          -0.077,
+          0.149,
+          0.338,
+          0.765
+        ]
+      }
+    }
+  },
+  "season_holdout_2026": {
+    "pitches": 131825,
+    "rmse": {
+      "media_conteo": {
+        "rmse": 0.14807
+      },
+      "stuff": {
+        "rmse": 0.14797,
+        "ic95_diferencia_rmse_vs_nulo": [
+          -0.00014,
+          -7e-05
+        ]
+      },
+      "location": {
+        "rmse": 0.14399,
+        "ic95_diferencia_rmse_vs_nulo": [
+          -0.00431,
+          -0.00388
+        ]
+      },
+      "pitching": {
+        "rmse": 0.14394,
+        "ic95_diferencia_rmse_vs_nulo": [
+          -0.00436,
+          -0.00392
+        ]
+      }
+    },
+    "calibracion_pitching": {
+      "pendiente": 1.016,
+      "deciles": {
+        "predicho": [
+          -5.003,
+          -3.289,
+          -2.586,
+          -2.032,
+          -1.413,
+          -0.562,
+          0.528,
+          1.736,
+          2.972,
+          6.693
+        ],
+        "real": [
+          -5.05,
+          -3.394,
+          -2.4,
+          -1.865,
+          -1.612,
+          -0.49,
+          0.37,
+          1.9,
+          2.888,
+          6.782
+        ]
+      }
+    },
+    "calibracion_stuff": {
+      "pendiente": 0.985,
+      "deciles": {
+        "predicho": [
+          -1.344,
+          -0.937,
+          -0.737,
+          -0.571,
+          -0.412,
+          -0.253,
+          -0.083,
+          0.102,
+          0.315,
+          0.702
+        ],
+        "real": [
+          -1.491,
+          -0.771,
+          -0.765,
+          -0.43,
+          -0.192,
+          -0.212,
+          -0.04,
+          0.05,
+          0.288,
+          0.691
+        ]
+      }
+    }
+  }
+}
