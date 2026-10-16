@@ -62,16 +62,17 @@ def group_mean(train: pd.DataFrame, frame: pd.DataFrame, keys: list[str]) -> np.
     return frame[keys].merge(means, on=keys, how="left").prediction.fillna(train[TARGET].mean()).to_numpy()
 
 
-def linear_by_type(train: pd.DataFrame, frame: pd.DataFrame, fallback: np.ndarray) -> np.ndarray:
+def linear_by_type(train: pd.DataFrame, frame: pd.DataFrame, fallback: np.ndarray,
+                   features: list[str] = LINEAR_FEATURES) -> np.ndarray:
     """Regresión por tipo de pitch; sin física completa o con poca muestra, la media del tipo y mano."""
     prediction = fallback.copy()
-    complete = frame[LINEAR_FEATURES].notna().all(axis=1).to_numpy()
-    for pitch_class, rows in train[train[LINEAR_FEATURES].notna().all(axis=1)].groupby("pitch_class"):
+    complete = frame[features].notna().all(axis=1).to_numpy()
+    for pitch_class, rows in train[train[features].notna().all(axis=1)].groupby("pitch_class"):
         if len(rows) < MIN_PITCHES_FOR_REGRESSION:
             continue
-        model = LinearRegression().fit(rows[LINEAR_FEATURES], rows[TARGET])
+        model = LinearRegression().fit(rows[features], rows[TARGET])
         target_rows = complete & (frame.pitch_class == pitch_class).to_numpy()
-        prediction[target_rows] = model.predict(frame.loc[target_rows, LINEAR_FEATURES])
+        prediction[target_rows] = model.predict(frame.loc[target_rows, features])
     return prediction
 
 

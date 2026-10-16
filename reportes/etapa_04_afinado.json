@@ -1,0 +1,357 @@
+{
+  "nota": "Entrenado con 2024, evaluado en 2025 (D-035). 2026 no se usa.",
+  "arboles": {
+    "stuff_hojas1000_15": {
+      "p_swing": 163,
+      "p_whiff": 170,
+      "p_foul": 44,
+      "p_strike": 334,
+      "valor_batazo": 17
+    },
+    "stuff_hojas200_15": {
+      "p_swing": 167,
+      "p_whiff": 133,
+      "p_foul": 64,
+      "p_strike": 165,
+      "valor_batazo": 40
+    },
+    "stuff_hojas1000_31": {
+      "p_swing": 58,
+      "p_whiff": 142,
+      "p_foul": 46,
+      "p_strike": 329,
+      "valor_batazo": 14
+    },
+    "stuff_hojas200_31": {
+      "p_swing": 102,
+      "p_whiff": 100,
+      "p_foul": 49,
+      "p_strike": 110,
+      "valor_batazo": 10
+    },
+    "stuff_hojas1000_15_fisica": {
+      "p_swing": 464,
+      "p_whiff": 188,
+      "p_foul": 74,
+      "p_strike": 800,
+      "valor_batazo": 19
+    },
+    "stuff_hojas200_15_fisica": {
+      "p_swing": 469,
+      "p_whiff": 206,
+      "p_foul": 72,
+      "p_strike": 571,
+      "valor_batazo": 23
+    },
+    "stuff_hojas1000_31_fisica": {
+      "p_swing": 480,
+      "p_whiff": 115,
+      "p_foul": 63,
+      "p_strike": 532,
+      "valor_batazo": 31
+    },
+    "stuff_hojas200_31_fisica": {
+      "p_swing": 311,
+      "p_whiff": 98,
+      "p_foul": 43,
+      "p_strike": 388,
+      "valor_batazo": 11
+    },
+    "location_hojas1000_15": 297,
+    "location_hojas200_15": 239,
+    "location_hojas1000_31": 129,
+    "location_hojas200_31": 174
+  },
+  "stuff": {
+    "por_pitch_2025": {
+      "stuff_hojas1000_15": {
+        "mejora_vs_media_pct": 0.1362,
+        "ic95_diferencia_vs_stuff_hojas1000_15_pct": [
+          0.0,
+          0.0
+        ]
+      },
+      "stuff_hojas200_15": {
+        "mejora_vs_media_pct": 0.1388,
+        "ic95_diferencia_vs_stuff_hojas1000_15_pct": [
+          -0.00715,
+          0.01296
+        ]
+      },
+      "stuff_hojas1000_31": {
+        "mejora_vs_media_pct": 0.139,
+        "ic95_diferencia_vs_stuff_hojas1000_15_pct": [
+          -0.00718,
+          0.01339
+        ]
+      },
+      "stuff_hojas200_31": {
+        "mejora_vs_media_pct": 0.1455,
+        "ic95_diferencia_vs_stuff_hojas1000_15_pct": [
+          -0.0024,
+          0.02002
+        ]
+      },
+      "stuff_hojas1000_15_fisica": {
+        "mejora_vs_media_pct": 0.23,
+        "ic95_diferencia_vs_stuff_hojas1000_15_pct": [
+          0.07255,
+          0.11471
+        ]
+      },
+      "stuff_hojas200_15_fisica": {
+        "mejora_vs_media_pct": 0.2167,
+        "ic95_diferencia_vs_stuff_hojas1000_15_pct": [
+          0.06202,
+          0.09749
+        ]
+      },
+      "stuff_hojas1000_31_fisica": {
+        "mejora_vs_media_pct": 0.2872,
+        "ic95_diferencia_vs_stuff_hojas1000_15_pct": [
+          0.12329,
+          0.18073
+        ]
+      },
+      "stuff_hojas200_31_fisica": {
+        "mejora_vs_media_pct": 0.2178,
+        "ic95_diferencia_vs_stuff_hojas1000_15_pct": [
+          0.06122,
+          0.10186
+        ]
+      }
+    },
+    "por_pitcher_2025": {
+      "pitchers": 320,
+      "stuff_hojas1000_15": {
+        "r": 0.2803,
+        "ic95_r": [
+          0.1808,
+          0.3798
+        ],
+        "ecm_por_100": 0.4736,
+        "ic95_diferencia_r_vs_stuff_hojas1000_15": [
+          0.0,
+          0.0
+        ],
+        "ic95_diferencia_ecm_vs_stuff_hojas1000_15": [
+          0.0,
+          0.0
+        ]
+      },
+      "stuff_hojas200_15": {
+        "r": 0.2744,
+        "ic95_r": [
+          0.1669,
+          0.3782
+        ],
+        "ecm_por_100": 0.4751,
+        "ic95_diferencia_r_vs_stuff_hojas1000_15": [
+          -0.0296,
+          0.0193
+        ],
+        "ic95_diferencia_ecm_vs_stuff_hojas1000_15": [
+          -0.0048,
+          0.0072
+        ]
+      },
+      "stuff_hojas1000_31": {
+        "r": 0.2948,
+        "ic95_r": [
+          0.1909,
+          0.3995
+        ],
+        "ecm_por_100": 0.4694,
+        "ic95_diferencia_r_vs_stuff_hojas1000_15": [
+          -0.0121,
+          0.0424
+        ],
+        "ic95_diferencia_ecm_vs_stuff_hojas1000_15": [
+          -0.0113,
+          0.0029
+        ]
+      },
+      "stuff_hojas200_31": {
+        "r": 0.2967,
+        "ic95_r": [
+          0.1894,
+          0.4037
+        ],
+        "ecm_por_100": 0.4701,
+        "ic95_diferencia_r_vs_stuff_hojas1000_15": [
+          -0.012,
+          0.0442
+        ],
+        "ic95_diferencia_ecm_vs_stuff_hojas1000_15": [
+          -0.0109,
+          0.0035
+        ]
+      },
+      "stuff_hojas1000_15_fisica": {
+        "r": 0.2164,
+        "ic95_r": [
+          0.109,
+          0.3197
+        ],
+        "ecm_por_100": 0.4918,
+        "ic95_diferencia_r_vs_stuff_hojas1000_15": [
+          -0.1093,
+          -0.0134
+        ],
+        "ic95_diferencia_ecm_vs_stuff_hojas1000_15": [
+          0.0038,
+          0.032
+        ]
+      },
+      "stuff_hojas200_15_fisica": {
+        "r": 0.2278,
+        "ic95_r": [
+          0.1162,
+          0.3353
+        ],
+        "ecm_por_100": 0.488,
+        "ic95_diferencia_r_vs_stuff_hojas1000_15": [
+          -0.103,
+          -0.0081
+        ],
+        "ic95_diferencia_ecm_vs_stuff_hojas1000_15": [
+          0.0009,
+          0.0287
+        ]
+      },
+      "stuff_hojas1000_31_fisica": {
+        "r": 0.2192,
+        "ic95_r": [
+          0.1126,
+          0.3306
+        ],
+        "ecm_por_100": 0.4951,
+        "ic95_diferencia_r_vs_stuff_hojas1000_15": [
+          -0.1085,
+          -0.01
+        ],
+        "ic95_diferencia_ecm_vs_stuff_hojas1000_15": [
+          0.0015,
+          0.0397
+        ]
+      },
+      "stuff_hojas200_31_fisica": {
+        "r": 0.244,
+        "ic95_r": [
+          0.1314,
+          0.3542
+        ],
+        "ecm_por_100": 0.4828,
+        "ic95_diferencia_r_vs_stuff_hojas1000_15": [
+          -0.0858,
+          0.011
+        ],
+        "ic95_diferencia_ecm_vs_stuff_hojas1000_15": [
+          -0.0046,
+          0.023
+        ]
+      }
+    },
+    "elegida": "stuff_hojas1000_15"
+  },
+  "location": {
+    "por_pitch_2025": {
+      "location_hojas1000_15": {
+        "mejora_vs_media_pct": 4.926,
+        "ic95_diferencia_vs_location_hojas1000_15_pct": [
+          0.0,
+          0.0
+        ]
+      },
+      "location_hojas200_15": {
+        "mejora_vs_media_pct": 4.9218,
+        "ic95_diferencia_vs_location_hojas1000_15_pct": [
+          -0.03333,
+          0.02153
+        ]
+      },
+      "location_hojas1000_31": {
+        "mejora_vs_media_pct": 4.9958,
+        "ic95_diferencia_vs_location_hojas1000_15_pct": [
+          0.04675,
+          0.09193
+        ]
+      },
+      "location_hojas200_31": {
+        "mejora_vs_media_pct": 4.9874,
+        "ic95_diferencia_vs_location_hojas1000_15_pct": [
+          0.03046,
+          0.09188
+        ]
+      }
+    },
+    "por_pitcher_2025": {
+      "pitchers": 320,
+      "location_hojas1000_15": {
+        "r": 0.2134,
+        "ic95_r": [
+          0.1065,
+          0.3119
+        ],
+        "ecm_por_100": 0.513,
+        "ic95_diferencia_r_vs_location_hojas1000_15": [
+          0.0,
+          0.0
+        ],
+        "ic95_diferencia_ecm_vs_location_hojas1000_15": [
+          0.0,
+          0.0
+        ]
+      },
+      "location_hojas200_15": {
+        "r": 0.2142,
+        "ic95_r": [
+          0.1001,
+          0.3125
+        ],
+        "ecm_por_100": 0.5109,
+        "ic95_diferencia_r_vs_location_hojas1000_15": [
+          -0.0104,
+          0.0107
+        ],
+        "ic95_diferencia_ecm_vs_location_hojas1000_15": [
+          -0.0067,
+          0.0027
+        ]
+      },
+      "location_hojas1000_31": {
+        "r": 0.2171,
+        "ic95_r": [
+          0.1095,
+          0.3134
+        ],
+        "ecm_por_100": 0.51,
+        "ic95_diferencia_r_vs_location_hojas1000_15": [
+          -0.0063,
+          0.0129
+        ],
+        "ic95_diferencia_ecm_vs_location_hojas1000_15": [
+          -0.0073,
+          0.0013
+        ]
+      },
+      "location_hojas200_31": {
+        "r": 0.2126,
+        "ic95_r": [
+          0.1039,
+          0.3103
+        ],
+        "ecm_por_100": 0.5103,
+        "ic95_diferencia_r_vs_location_hojas1000_15": [
+          -0.0138,
+          0.0112
+        ],
+        "ic95_diferencia_ecm_vs_location_hojas1000_15": [
+          -0.0081,
+          0.0028
+        ]
+      }
+    },
+    "elegida": "location_hojas1000_31"
+  }
+}

@@ -1,0 +1,283 @@
+{
+  "nota": "Solo 2024 y 2025 (D-025). Valores por 100 pitches, centrados por temporada.",
+  "variables_sin_conteo": [
+    "pitch_class",
+    "pitcher_hand",
+    "PlateLocHeight",
+    "PlateLocSide",
+    "batter_side"
+  ],
+  "arboles_sin_conteo": 200,
+  "por_pitch_2025": {
+    "media_conteo": {
+      "mejora_vs_media_pct": 0.0044,
+      "ic95_mejora_pct": [
+        -0.00455,
+        0.01308
+      ],
+      "ic95_diferencia_vs_location_pct": [
+        -5.30932,
+        -4.89739
+      ]
+    },
+    "location_sin_conteo": {
+      "mejora_vs_media_pct": 3.47,
+      "ic95_mejora_pct": [
+        3.30811,
+        3.63222
+      ],
+      "ic95_diferencia_vs_location_pct": [
+        -1.74143,
+        -1.54127
+      ]
+    },
+    "location": {
+      "mejora_vs_media_pct": 5.1127,
+      "ic95_mejora_pct": [
+        4.90037,
+        5.32393
+      ],
+      "ic95_diferencia_vs_location_pct": [
+        0.0,
+        0.0
+      ]
+    }
+  },
+  "por_temporada": {
+    "2024": {
+      "pitchers": 320,
+      "desviacion_entre_pitchers_por_100": {
+        "xrv_neutral": 0.7047,
+        "location": 0.2805,
+        "location_sin_conteo": 0.2435,
+        "media_conteo": 0.011,
+        "stuff_nivel_mar": 0.178,
+        "pitching": 0.3289
+      },
+      "acuerdo_entre_versiones": {
+        "con_vs_sin": {
+          "r": 0.9482,
+          "ic95": [
+            0.935,
+            0.9586
+          ]
+        }
+      },
+      "r_con_xrv_real": {
+        "location": {
+          "r": 0.3027,
+          "ic95": [
+            0.2053,
+            0.3928
+          ]
+        },
+        "location_sin_conteo": {
+          "r": 0.2747,
+          "ic95": [
+            0.1792,
+            0.3654
+          ],
+          "ic95_diferencia_vs_location": [
+            -0.0652,
+            0.0069
+          ]
+        }
+      },
+      "r_con_stuff": {
+        "location": {
+          "r": -0.0709,
+          "ic95": [
+            -0.1887,
+            0.0401
+          ]
+        },
+        "location_sin_conteo": {
+          "r": -0.0697,
+          "ic95": [
+            -0.1804,
+            0.04
+          ],
+          "ic95_diferencia_vs_location": [
+            -0.0336,
+            0.0403
+          ]
+        }
+      },
+      "r2_pitching_con_stuff_y_location": {
+        "location": {
+          "r2": 0.7991,
+          "ic95": [
+            0.7538,
+            0.8389
+          ]
+        },
+        "location_sin_conteo": {
+          "r2": 0.7594,
+          "ic95": [
+            0.7069,
+            0.8067
+          ],
+          "ic95_diferencia_vs_location": [
+            -0.0637,
+            -0.0169
+          ]
+        }
+      },
+      "confiabilidad_mitades": {
+        "location": {
+          "confiabilidad": 0.7726,
+          "ic95": [
+            0.7218,
+            0.8209
+          ]
+        },
+        "location_sin_conteo": {
+          "confiabilidad": 0.7818,
+          "ic95": [
+            0.7343,
+            0.8235
+          ]
+        }
+      }
+    },
+    "2025": {
+      "pitchers": 320,
+      "desviacion_entre_pitchers_por_100": {
+        "xrv_neutral": 0.717,
+        "location": 0.2977,
+        "location_sin_conteo": 0.252,
+        "media_conteo": 0.0105,
+        "stuff_nivel_mar": 0.1844,
+        "pitching": 0.3307
+      },
+      "acuerdo_entre_versiones": {
+        "con_vs_sin": {
+          "r": 0.952,
+          "ic95": [
+            0.9403,
+            0.9613
+          ]
+        }
+      },
+      "r_con_xrv_real": {
+        "location": {
+          "r": 0.2137,
+          "ic95": [
+            0.1094,
+            0.3061
+          ]
+        },
+        "location_sin_conteo": {
+          "r": 0.2008,
+          "ic95": [
+            0.0948,
+            0.2942
+          ],
+          "ic95_diferencia_vs_location": [
+            -0.0466,
+            0.0215
+          ]
+        }
+      },
+      "r_con_stuff": {
+        "location": {
+          "r": -0.1721,
+          "ic95": [
+            -0.2893,
+            -0.0563
+          ]
+        },
+        "location_sin_conteo": {
+          "r": -0.1392,
+          "ic95": [
+            -0.2512,
+            -0.0202
+          ],
+          "ic95_diferencia_vs_location": [
+            -0.0025,
+            0.0694
+          ]
+        }
+      },
+      "r2_pitching_con_stuff_y_location": {
+        "location": {
+          "r2": 0.7977,
+          "ic95": [
+            0.7541,
+            0.8351
+          ]
+        },
+        "location_sin_conteo": {
+          "r2": 0.7415,
+          "ic95": [
+            0.6908,
+            0.787
+          ],
+          "ic95_diferencia_vs_location": [
+            -0.0824,
+            -0.0317
+          ]
+        }
+      },
+      "confiabilidad_mitades": {
+        "location": {
+          "confiabilidad": 0.8162,
+          "ic95": [
+            0.7616,
+            0.8572
+          ]
+        },
+        "location_sin_conteo": {
+          "confiabilidad": 0.8066,
+          "ic95": [
+            0.75,
+            0.8492
+          ]
+        }
+      }
+    }
+  },
+  "entre_temporadas": {
+    "pitchers": 146,
+    "repeticion_2024_a_2025": {
+      "location": {
+        "r": 0.6766,
+        "ic95": [
+          0.5821,
+          0.766
+        ]
+      },
+      "location_sin_conteo": {
+        "r": 0.6649,
+        "ic95": [
+          0.5748,
+          0.7493
+        ],
+        "ic95_diferencia_vs_location": [
+          -0.0588,
+          0.0383
+        ]
+      }
+    },
+    "predice_xrv_2025": {
+      "location": {
+        "r": 0.0389,
+        "ic95": [
+          -0.0996,
+          0.1839
+        ]
+      },
+      "location_sin_conteo": {
+        "r": 0.0263,
+        "ic95": [
+          -0.1098,
+          0.1651
+        ],
+        "ic95_diferencia_vs_location": [
+          -0.0628,
+          0.0333
+        ]
+      }
+    }
+  }
+}

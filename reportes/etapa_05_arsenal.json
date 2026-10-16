@@ -1,0 +1,177 @@
+{
+  "nota": "Evaluación con pares 2024 → 2025 (D-033). 2026 solo entra a la tabla del arsenal.",
+  "minimo_pitches_por_tipo": 100,
+  "descripcion": {
+    "2024": {
+      "pitches_de_pitcher": 794,
+      "por_tipo": {
+        "Changeup": 98,
+        "Curveball": 66,
+        "Cutter": 25,
+        "Four-Seam": 272,
+        "Sinker": 133,
+        "Slider": 195,
+        "Splitter": 5
+      },
+      "r_stuff_plus_con_componentes": {
+        "p_swing": 0.5246,
+        "p_whiff": 0.7186,
+        "p_foul": 0.4242,
+        "p_strike": 0.1126
+      }
+    },
+    "2025": {
+      "pitches_de_pitcher": 854,
+      "por_tipo": {
+        "Changeup": 93,
+        "Curveball": 70,
+        "Cutter": 32,
+        "Four-Seam": 295,
+        "Sinker": 162,
+        "Slider": 198,
+        "Splitter": 4
+      },
+      "r_stuff_plus_con_componentes": {
+        "p_swing": 0.543,
+        "p_whiff": 0.6737,
+        "p_foul": 0.4209,
+        "p_strike": 0.2152
+      }
+    },
+    "2026": {
+      "pitches_de_pitcher": 417,
+      "por_tipo": {
+        "Changeup": 42,
+        "Curveball": 14,
+        "Cutter": 11,
+        "Four-Seam": 163,
+        "Sinker": 87,
+        "Slider": 99,
+        "Splitter": 1
+      },
+      "r_stuff_plus_con_componentes": {
+        "p_swing": 0.5777,
+        "p_whiff": 0.7294,
+        "p_foul": 0.5259,
+        "p_strike": 0.1482
+      }
+    }
+  },
+  "entre_temporadas": {
+    "pares_pitcher_tipo": 334,
+    "pitchers": 174,
+    "repeticion": {
+      "xrv_neutral": {
+        "r": 0.1652,
+        "ic95": [
+          0.0486,
+          0.2773
+        ]
+      },
+      "xrv_sin_contacto": {
+        "r": 0.4395,
+        "ic95": [
+          0.3526,
+          0.5253
+        ]
+      },
+      "stuff": {
+        "r": 0.8459,
+        "ic95": [
+          0.8115,
+          0.875
+        ]
+      },
+      "p_swing": {
+        "r": 0.8352,
+        "ic95": [
+          0.7975,
+          0.8694
+        ]
+      },
+      "p_whiff": {
+        "r": 0.8535,
+        "ic95": [
+          0.8136,
+          0.8864
+        ]
+      },
+      "p_foul": {
+        "r": 0.8497,
+        "ic95": [
+          0.8129,
+          0.8819
+        ]
+      },
+      "p_strike": {
+        "r": 0.856,
+        "ic95": [
+          0.8166,
+          0.8869
+        ]
+      }
+    },
+    "predice_xrv_sin_contacto_2025": {
+      "historia_sin_contacto": {
+        "r": 0.4395,
+        "ic95": [
+          0.3526,
+          0.5253
+        ]
+      },
+      "stuff": {
+        "r": 0.2183,
+        "ic95": [
+          0.0957,
+          0.3276
+        ],
+        "ic95_diferencia_vs_historia": [
+          -0.34,
+          -0.1024
+        ]
+      }
+    },
+    "predice_xrv_total_2025": {
+      "historia_total": {
+        "r": 0.1652,
+        "ic95": [
+          0.0486,
+          0.2773
+        ]
+      },
+      "stuff": {
+        "r": 0.1434,
+        "ic95": [
+          0.0392,
+          0.2421
+        ],
+        "ic95_diferencia_vs_historia": [
+          -0.1688,
+          0.1137
+        ]
+      }
+    },
+    "por_tipo": {
+      "Changeup": {
+        "pares": 33,
+        "r_repeticion_stuff": 0.894,
+        "r_stuff_con_sin_contacto_2025": 0.2636
+      },
+      "Four-Seam": {
+        "pares": 126,
+        "r_repeticion_stuff": 0.8227,
+        "r_stuff_con_sin_contacto_2025": 0.1485
+      },
+      "Sinker": {
+        "pares": 66,
+        "r_repeticion_stuff": 0.887,
+        "r_stuff_con_sin_contacto_2025": 0.1051
+      },
+      "Slider": {
+        "pares": 74,
+        "r_repeticion_stuff": 0.867,
+        "r_stuff_con_sin_contacto_2025": 0.3334
+      }
+    }
+  }
+}

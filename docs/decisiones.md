@@ -7,6 +7,171 @@ se agrega una nueva entrada que la reemplaza y se marca la anterior como *Reempl
 
 ---
 
+### D-035 · 2026-10-14 · Afinado de Stuff+ y Location+ (versión 2): regla fijada antes de probar
+- **Qué se prueba:** se entrena con 2024 y se evalúa en 2025; 2026 no se toca.
+  - **Hiperparámetros:** hojas mínimas de 200 o 1,000 pitches y 15 o 31 hojas por árbol. Hoy se usan
+    1,000 y 15, que nunca se afinaron.
+  - **Variables de Stuff+:** se agregan la dependencia del efecto Magnus, el movimiento total a nivel
+    del mar, el ángulo horizontal relativo de llegada y el tamaño del arsenal. No se agrega nada que
+    cambie con el aire.
+- **Regla para cada pieza (Stuff+ y Location+):**
+  - Gana la versión con menor error por pitch en 2025.
+  - Se adopta solo si le gana a la versión 1 por pitch con intervalo fuera de cero y no empeora el
+    error por pitcher.
+  - Si ninguna cumple, se queda la versión 1.
+- **2026:** si alguna pieza cambia, la versión 2 se congela y se mira en 2026 una vez, reportada como
+  **cuarta mirada** junto a la versión 1, sin reemplazarla.
+- **Resultado:** Stuff+ se queda en la versión 1. Las variables físicas mejoran por pitch, pero
+  empeoran por pitcher con intervalo fuera de cero. Location+ pasa a 31 hojas (+0.05 a +0.09 puntos
+  por pitch). En 2026 la versión 2 sube un poco por pitch y queda igual en lo demás. Detalle en
+  `docs/04_afinado.md`.
+- **Estado:** Vigente. El modelo oficial es la versión 2 y el afinado termina aquí.
+
+### D-034 · 2026-10-14 · Pasaporte de altitud: reglas fijadas antes de probar
+- **Qué:** con los pitches a nivel del mar de un pitcher, predecir cómo cambia cada uno en altitud
+  extrema. Se hace en dos pasos:
+  - **Forma:** movimiento × aire^k, con la mediana del aire en altitud extrema y el k de su tipo de
+    pitch (D-016).
+  - **Valor:** un Stuff+ local, con los mismos componentes que D-027 pero con el movimiento observado,
+    evalúa el pitch traducido y el original. El costo es la diferencia.
+- **Prueba:**
+  - Pitchers con el mismo tipo de pitch en altitud extrema y a nivel del mar en 2024–2025, con 50+
+    pitches en cada lado.
+  - Los modelos no vieron al pitcher (5 pliegues por pitcher).
+  - Intervalos por bootstrap de pitchers.
+- **Reglas:**
+  - **Forma:** el pasaporte gana si su error contra el movimiento real en altura es menor que (a)
+    suponer que no cambia y (b) aplicar a todos la pérdida promedio de la liga, con intervalo fuera de
+    cero.
+  - **Valor:** el costo predicho cuenta si su correlación con el cambio real del xRV sin contacto
+    (D-032) es positiva con intervalo fuera de cero. Además, su error debe ser menor que el de dar a
+    todos el mismo costo promedio.
+- **Estado:** Vigente.
+
+### D-033 · 2026-10-14 · Stuff+ por tipo de pitch (arsenal)
+- **Qué:** el Stuff+ de D-027 promediado por pitcher y tipo de pitch (100+ pitches), en escala 100
+  dentro de cada tipo: una slider se compara contra las sliders de la liga.
+- **Prueba (pares 2024 → 2025):**
+  - cuánto se repite;
+  - si predice el xRV sin contacto del año siguiente de ese pitch con intervalo fuera de cero;
+  - si lo predice mejor que la historia de ese pitch.
+- **Estado:** Vigente.
+
+### D-032 · 2026-10-14 · Candidatos sin contacto para la proyección, agregados después de D-031
+- **Contexto:** en D-031 ningún candidato le ganó a la persistencia.
+- **Hallazgo (pares 2024 → 2025, 146 pitchers):** al separar el xRV de cada pitcher, la parte del
+  contacto no se repite (r −0.03) y la parte sin contacto sí (r 0.50).
+  - La parte del contacto es lo que valió cada bola en juego menos lo que vale un batazo promedio en
+    ese conteo.
+  - La parte sin contacto (bolas, strikes, whiffs y fouls) tiene confiabilidad entre mitades de 0.53
+    a 0.58, contra 0.26 a 0.35 del total.
+  - Es la idea de DIPS (McCracken): el pitcher controla sobre todo lo que pasa antes del contacto.
+- **Candidatos nuevos:**
+  - persistencia del xRV sin contacto;
+  - xRV sin contacto con las tasas, Stuff+ y Location+.
+- **Prueba:** la misma regla y la misma validación de D-031.
+- **Confirmación con más datos:** se agregó después de ver que el error quedó cerca del cero. Dentro de
+  cada temporada de 2024 y 2025, la primera mitad de los pitches de cada pitcher predice el xRV total de
+  la segunda mitad.
+  - Muestra: pitchers con 300+ pitches en la temporada, validación cruzada por pitcher e intervalos
+    remuestreando pitchers.
+  - El xRV sin contacto se adopta como base de la proyección solo si le gana al xRV total en error, con
+    intervalo fuera de cero.
+- **Advertencia:** se agregaron después de ver que D-031 no ganó. Si el ganador se mira en 2026, se
+  reporta como segunda mirada del modelo de proyección (la primera fue D-030).
+- **Estado:** Vigente.
+
+### D-031 · 2026-10-14 · Proyección a futuro con tasas observadas: regla fijada antes de probar
+- **Por qué:** el modelo congelado (D-030) no predice el año siguiente mejor que la historia del
+  pitcher. Las tasas observadas (whiff, persecución, strike cantado, contacto) se estabilizan más
+  rápido que el resultado en carreras y podrían predecir mejor.
+- **Candidatos:**
+  - persistencia encogida (base);
+  - ridge con xRV, Stuff+ y Location+;
+  - ridge con xRV y las tasas observadas;
+  - ridge con todo lo anterior más los componentes predichos de Stuff+.
+- **Prueba:**
+  - Pares 2024 → 2025 con 300+ pitches en cada año.
+  - Validación cruzada de 10 pliegues por pitcher, repetida 20 veces.
+  - Intervalo por bootstrap de pitchers sobre las predicciones fuera de pliegue.
+- **Regla:** gana el de menor error. Se adopta solo si le gana a la persistencia con intervalo fuera de
+  cero; si no, la persistencia se queda.
+- **2026:** el ganador se mira una vez en 2026 y se reporta como **segunda mirada**, junto al resultado
+  de D-030, sin reemplazarlo.
+- **Estado:** Vigente.
+
+### D-030 · 2026-10-14 · Modelo de la etapa 4 congelado; 2026 se evalúa una sola vez
+- **Qué:** con D-026 a D-029 queda fijo el modelo final (`src/modelo.py`). Se entrena con 2024–2025 y
+  se evalúa en 2026 una sola vez. Se reporta lo que salga, gane o pierda.
+- **Pruebas fijadas antes de correr:**
+  - por pitch;
+  - por pitcher, contra la lineal observada y contra la lineal a nivel del mar;
+  - a futuro, contra la persistencia encogida;
+  - consistencia entre altitudes.
+- **Proyección a futuro (camino 3 del plan):**
+  - Fórmula: xRV del año siguiente = a + b × xRV histórico + c × Pitching+.
+  - Los pesos se ajustan solo con los pares de pitchers 2024 → 2025, usando predicciones de modelos que
+    no vieron a cada pitcher.
+- **Estado:** Vigente.
+
+### D-029 · 2026-10-14 · Pitching+ es la suma pesada de Stuff+ y Location+
+- **Por qué:**
+  - Por pitch en 2025, la suma predice igual que un modelo único de Pitching+ (diferencia −0.11 a
+    +0.01 puntos).
+  - La suma explica el 80 % del Pitching+ de cada pitcher.
+  - Siempre se puede desglosar, por ejemplo "108 = Stuff+ 115 y Location+ 101".
+  - Evidencia: `docs/04_relacion_componentes.md`.
+- **Pesos:** regresión del xRV de cada pitch sobre las dos predicciones. Se ajusta con 2024–2025 y
+  predicciones de modelos que no vieron al pitcher.
+- **Alternativas descartadas:** un tercer modelo con forma, ubicación, conteo y secuencia. No aporta
+  nada medible y no se puede desglosar.
+- **Estado:** Vigente.
+
+### D-028 · 2026-10-14 · Location+ usa ubicación y conteo
+- **Por qué:**
+  - El conteo solo no le da crédito a ningún pitcher: varía 0.011 carreras por 100 entre pitchers,
+    contra 0.28 de Location+.
+  - Como contexto sí ayuda: la mejora por pitch sube de +3.47 % a +5.11 %, una diferencia de +1.5 a
+    +1.7 puntos.
+  - Por pitcher, las dos versiones ordenan casi igual (r 0.95).
+  - Evidencia: `docs/04_relacion_componentes.md`, sección 7.
+- **Alternativas descartadas:** Location+ sin conteo.
+- **Estado:** Vigente.
+
+### D-027 · 2026-10-14 · Stuff+ por componentes
+- **Qué:** P(swing), P(whiff | swing), P(foul | contacto), P(strike cantado | toma) y valor del
+  batazo. Se predicen solo con la forma a nivel del mar y se combinan con el valor promedio de cada
+  desenlace.
+- **Datos (entrenado en 2024, evaluado en 2025):**
+  - Contra la lineal a nivel del mar (D-026): gana por pitch (+0.06 a +0.11 puntos) y empata por
+    pitcher (error −0.026 a +0.022).
+  - Contra el Stuff+ directo: empata por pitch (−0.01 a +0.03) y por pitcher.
+- **Por qué componentes y no directo, si empatan:**
+  - Da al cuerpo técnico el porqué de cada pitch: genera whiff, roba strikes o saca contacto débil.
+    Eso es la integración del arsenal que pide el reto.
+  - El whiff es el componente con más señal (−4.8 % de log loss contra la tasa base).
+- **Alternativas descartadas:**
+  - **Stuff+ directo:** empata y no explica el porqué.
+  - **Lineal a nivel del mar:** pierde por pitch.
+- **Estado:** Vigente. Evidencia: `docs/04_stuff_componentes.md`.
+
+### D-026 · 2026-10-14 · La base justa de Stuff+ es la lineal con forma a nivel del mar
+- **Por qué:**
+  - La lineal base de D-020 usa el movimiento observado, que trae el efecto del aire.
+  - En 2025 le gana a la misma lineal a nivel del mar por pitcher (error 0.455 contra 0.476,
+    diferencia +0.006 a +0.036). Su ventaja viene de "saber" el estadio, justo lo que D-001 quita.
+  - Comparar contra ella castiga a cualquier Stuff+ que cumpla D-001.
+- **Advertencia:** la decisión se tomó después de ver el resultado de 2025. Por eso no reemplaza la
+  regla vieja: se reportan las dos bases, la lineal observada y la lineal a nivel del mar.
+- **Estado:** Vigente.
+
+### D-025 · 2026-10-11 · Desde la exploración de la etapa 4, 2026 no se usa para elegir nada
+- **Por qué:** la exploración ya mostró los resultados de 2026. Ajustar el modelo hasta ganar ahí
+  inflaría el resultado. Toda elección se hace entrenando con 2024 y evaluando en 2025; 2026 se usa
+  una sola vez con el modelo congelado y se reporta lo que salga.
+- **Alternativas descartadas:** seguir afinando contra 2026.
+- **Estado:** Vigente desde 2026-10-14; se aplicó en D-026 a D-030.
+
 ### D-024 · 2026-10-07 · Las comparaciones por pitcher se centran por temporada
 - **Por qué:** el ambiente de carreras cambia entre años (10.4 carreras por juego en 2024, 12.1 en
   2025, 11.1 en 2026). Stuff+ se define contra el promedio de su temporada. Sin centrar, la persistencia

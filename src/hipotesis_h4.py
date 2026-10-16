@@ -17,6 +17,7 @@ Uso:
 """
 
 import json
+from decimal import ROUND_HALF_UP, Decimal
 from pathlib import Path
 
 import duckdb
@@ -24,7 +25,7 @@ import numpy as np
 from sklearn.ensemble import HistGradientBoostingClassifier
 from sklearn.metrics import log_loss, roc_auc_score
 
-from config import RAW_PARQUET, REPORTS_DIR
+from config import RAW_PARQUET, REPORTS_DIR, ROOT
 
 SUMMARY_JSON = REPORTS_DIR / "h4_resumen.json"
 TEMPLATE = Path(__file__).parent / "plantillas" / "hipotesis_h4.html"
@@ -177,9 +178,47 @@ def same_spin_different_movement(con) -> dict:
     }
 
 
+def pct(rate: float) -> str:
+    """Tasa como porcentaje con un decimal, redondeando .5 hacia arriba como el reporte HTML."""
+    return str((Decimal(str(rate)) * 100).quantize(Decimal("0.1"), rounding=ROUND_HALF_UP))
+
+
+def print_predictive_power(rows: list[dict]):
+    print("\n1. ¿Qué predice mejor el swing fallido? AUC en 2026 (0.5 = azar)")
+    print(f"   {'Pitch':<11}{'spin':>7}{'velo':>7}{'mov':>7}{'velo+mov':>10}{'+spin':>7}   movimiento − spin [IC 95 %]")
+    for r in rows:
+        diff = r["movimiento_vs_spin"]
+        print(f"   {r['tipo']:<11}" + "".join(f"{r[m]['auc']:>{w}.3f}" for m, w in
+              zip(MODELS, (7, 7, 7, 10, 7))) + f"   {diff['diferencia_auc']:+.3f} {diff['ic95']}")
+
+
+def print_same_spin(result: dict):
+    low, high = result["banda_rpm"]
+    print(f"\n2. Rectas con el mismo spin ({low}–{high} rpm), por tercio de IVB")
+    for r in result["por_tercil_ivb"]:
+        print(f"   Tercio {r['tercil']}: IVB {r['ivb_mediano']:.1f} in, spin {r['spin_mediano']:.0f} rpm, "
+              f"whiff {pct(r['whiff_por_swing'])} %")
+    diff = result["diferencia_tercil_alto_vs_bajo"]
+    print(f"   Diferencia alto − bajo: {100 * diff['whiff']:+.1f} puntos [IC 95 % {pct(diff['ic95'][0])} a {pct(diff['ic95'][1])}]")
+    print("\n3. Las mismas rectas por altitud")
+    for r in result["por_altitud"]:
+        print(f"   {r['altitude_category']:<17} IVB {r['ivb_mediano']:.1f} in, spin {r['spin_mediano']:.0f} rpm, "
+              f"whiff {pct(r['whiff_por_swing'])} %")
+    diff = result["diferencia_mar_vs_altitud_extrema"]
+    print(f"   Nivel del mar − altitud extrema: {100 * diff['whiff']:+.1f} puntos [IC 95 % {pct(diff['ic95'][0])} a {pct(diff['ic95'][1])}]")
+
+
+def print_altitude_transfer(rows: list[dict]):
+    print("\n4. Entrenado a nivel del mar, predicho en altitud extrema (whiff por swing)")
+    for r in rows:
+        print(f"   {r['tipo']:<11} real {pct(r['whiff_real_altitud'])} %  ·  solo spin "
+              f"{pct(r['whiff_predicho_spin'])} %  ·  solo movimiento {pct(r['whiff_predicho_movimiento'])} %")
+
+
 def main():
     con = duckdb.connect()
     swings = load_swings(con)
+    print(f"H4 · {len(swings):,} swings con spin, velocidad y movimiento medidos")
     summary = {
         "swings_analizados": len(swings),
         "poder_predictivo": predictive_power(swings),
@@ -188,7 +227,10 @@ def main():
     }
     SUMMARY_JSON.write_text(json.dumps(summary, indent=2, ensure_ascii=False))
     OUTPUT_HTML.write_text(TEMPLATE.read_text().replace("__DATA__", json.dumps(summary, ensure_ascii=False)))
-    print(f"Resumen en {SUMMARY_JSON} y reporte en {OUTPUT_HTML}")
+    print_predictive_power(summary["poder_predictivo"])
+    print_same_spin(summary["mismo_spin"])
+    print_altitude_transfer(summary["transferencia_altitud"])
+    print(f"\nResumen en {SUMMARY_JSON.relative_to(ROOT)} y reporte en {OUTPUT_HTML.relative_to(ROOT)}")
 
 
 if __name__ == "__main__":

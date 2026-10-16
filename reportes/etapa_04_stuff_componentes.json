@@ -1,0 +1,245 @@
+{
+  "nota": "Entrenado con 2024, evaluado en 2025 (D-025). 2026 no se usa.",
+  "componentes": {
+    "p_swing": {
+      "arboles": 163,
+      "pitches_evaluados": 256144,
+      "mejora_log_loss_vs_tasa_base_pct": 0.588
+    },
+    "p_whiff": {
+      "arboles": 170,
+      "pitches_evaluados": 118905,
+      "mejora_log_loss_vs_tasa_base_pct": 4.815
+    },
+    "p_foul": {
+      "arboles": 44,
+      "pitches_evaluados": 90465,
+      "mejora_log_loss_vs_tasa_base_pct": 1.179
+    },
+    "p_strike": {
+      "arboles": 334,
+      "pitches_evaluados": 137239,
+      "mejora_log_loss_vs_tasa_base_pct": 1.878
+    },
+    "valor_batazo": {
+      "arboles": 17,
+      "pitches_evaluados": 46792,
+      "mejora_ecm_vs_media_pct": 0.116
+    },
+    "stuff_directo_arboles": 52
+  },
+  "por_pitch_2025": {
+    "media_tipo_mano": {
+      "mejora_vs_media_pct": 0.0134,
+      "ic95_mejora_pct": [
+        -0.00429,
+        0.02981
+      ],
+      "ic95_diferencia_vs_lineal_por_tipo_pct": [
+        -0.09735,
+        -0.0501
+      ]
+    },
+    "lineal_por_tipo": {
+      "mejora_vs_media_pct": 0.0874,
+      "ic95_mejora_pct": [
+        0.05679,
+        0.11753
+      ],
+      "ic95_diferencia_vs_lineal_por_tipo_pct": [
+        0.0,
+        0.0
+      ]
+    },
+    "stuff_directo": {
+      "mejora_vs_media_pct": 0.125,
+      "ic95_mejora_pct": [
+        0.09885,
+        0.15192
+      ],
+      "ic95_diferencia_vs_lineal_por_tipo_pct": [
+        0.01462,
+        0.06176
+      ]
+    },
+    "stuff_componentes": {
+      "mejora_vs_media_pct": 0.1362,
+      "ic95_mejora_pct": [
+        0.10482,
+        0.16731
+      ],
+      "ic95_diferencia_vs_lineal_por_tipo_pct": [
+        0.02034,
+        0.07745
+      ]
+    }
+  },
+  "por_pitcher_2025": {
+    "pitchers": 320,
+    "media_tipo_mano": {
+      "r": 0.0449,
+      "ic95_r": [
+        -0.0805,
+        0.1621
+      ],
+      "ecm_por_100": 0.5173,
+      "ic95_diferencia_r_vs_lineal_por_tipo": [
+        -0.4126,
+        -0.1747
+      ],
+      "ic95_diferencia_ecm_vs_lineal_por_tipo": [
+        0.0318,
+        0.0937
+      ]
+    },
+    "lineal_por_tipo": {
+      "r": 0.3401,
+      "ic95_r": [
+        0.2434,
+        0.4464
+      ],
+      "ecm_por_100": 0.4553,
+      "ic95_diferencia_r_vs_lineal_por_tipo": [
+        0.0,
+        0.0
+      ],
+      "ic95_diferencia_ecm_vs_lineal_por_tipo": [
+        0.0,
+        0.0
+      ]
+    },
+    "stuff_directo": {
+      "r": 0.3111,
+      "ic95_r": [
+        0.207,
+        0.4188
+      ],
+      "ecm_por_100": 0.4689,
+      "ic95_diferencia_r_vs_lineal_por_tipo": [
+        -0.0987,
+        0.0506
+      ],
+      "ic95_diferencia_ecm_vs_lineal_por_tipo": [
+        -0.007,
+        0.0335
+      ]
+    },
+    "stuff_componentes": {
+      "r": 0.2803,
+      "ic95_r": [
+        0.1808,
+        0.3798
+      ],
+      "ecm_por_100": 0.4736,
+      "ic95_diferencia_r_vs_lineal_por_tipo": [
+        -0.1526,
+        0.0306
+      ],
+      "ic95_diferencia_ecm_vs_lineal_por_tipo": [
+        -0.0064,
+        0.0456
+      ]
+    }
+  },
+  "chequeo_posterior_misma_informacion": {
+    "por_pitch_2025": {
+      "lineal_nivel_mar": {
+        "mejora_vs_media_pct": 0.0531,
+        "ic95_mejora_pct": [
+          0.02476,
+          0.07891
+        ],
+        "ic95_diferencia_vs_lineal_nivel_mar_pct": [
+          0.0,
+          0.0
+        ]
+      },
+      "stuff_directo": {
+        "mejora_vs_media_pct": 0.125,
+        "ic95_mejora_pct": [
+          0.09885,
+          0.15192
+        ],
+        "ic95_diferencia_vs_lineal_nivel_mar_pct": [
+          0.05115,
+          0.09306
+        ]
+      },
+      "stuff_componentes": {
+        "mejora_vs_media_pct": 0.1362,
+        "ic95_mejora_pct": [
+          0.10482,
+          0.16731
+        ],
+        "ic95_diferencia_vs_lineal_nivel_mar_pct": [
+          0.05763,
+          0.10959
+        ]
+      }
+    },
+    "por_pitch_2025_contra_directo": {
+      "stuff_componentes": {
+        "mejora_vs_media_pct": 0.1362,
+        "ic95_mejora_pct": [
+          0.10482,
+          0.16731
+        ],
+        "ic95_diferencia_vs_stuff_directo_pct": [
+          -0.0094,
+          0.03248
+        ]
+      }
+    },
+    "por_pitcher_2025": {
+      "pitchers": 320,
+      "lineal_nivel_mar": {
+        "r": 0.2688,
+        "ic95_r": [
+          0.1661,
+          0.3794
+        ],
+        "ecm_por_100": 0.4762,
+        "ic95_diferencia_r_vs_lineal_nivel_mar": [
+          0.0,
+          0.0
+        ],
+        "ic95_diferencia_ecm_vs_lineal_nivel_mar": [
+          0.0,
+          0.0
+        ]
+      },
+      "stuff_directo": {
+        "r": 0.3111,
+        "ic95_r": [
+          0.207,
+          0.4188
+        ],
+        "ecm_por_100": 0.4689,
+        "ic95_diferencia_r_vs_lineal_nivel_mar": [
+          -0.0235,
+          0.1043
+        ],
+        "ic95_diferencia_ecm_vs_lineal_nivel_mar": [
+          -0.0245,
+          0.0097
+        ]
+      },
+      "stuff_componentes": {
+        "r": 0.2803,
+        "ic95_r": [
+          0.1808,
+          0.3798
+        ],
+        "ecm_por_100": 0.4736,
+        "ic95_diferencia_r_vs_lineal_nivel_mar": [
+          -0.0815,
+          0.0987
+        ],
+        "ic95_diferencia_ecm_vs_lineal_nivel_mar": [
+          -0.0256,
+          0.0222
+        ]
+      }
+    }
+  }
+}
