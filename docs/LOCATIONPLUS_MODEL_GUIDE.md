@@ -482,13 +482,13 @@ Top 5 de Location+ en 2026:
 
 | Pitcher | Pitches | CSW+ | RV+ | Location+ |
 |---|---:|---:|---:|---:|
-| pitcher_00875 | 349 | 124.5 | 125.9 | 126.6 |
-| pitcher_00456 | 220 | 125.2 | 124.5 | 126.2 |
-| pitcher_00465 | 357 | 122.1 | 123.7 | 124.1 |
-| pitcher_00469 | 284 | 121.3 | 120.8 | 122.2 |
-| pitcher_00355 | 333 | 113.9 | 127.6 | 121.9 |
+| Pitcher A | 349 | 124.5 | 125.9 | 126.6 |
+| Pitcher B | 220 | 125.2 | 124.5 | 126.2 |
+| Pitcher C | 357 | 122.1 | 123.7 | 124.1 |
+| Pitcher D | 284 | 121.3 | 120.8 | 122.2 |
+| Pitcher E | 333 | 113.9 | 127.6 | 121.9 |
 
-pitcher_00355 es un buen ejemplo de por qué conviene combinar las métricas: su ubicación
+Pitcher E es un buen ejemplo de por qué conviene combinar las métricas: su ubicación
 saca strikes un poco arriba del promedio (CSW+ 114), pero es de las que menos daño
 permite de la liga (RV+ 128).
 

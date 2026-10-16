@@ -255,7 +255,7 @@ function renderCard() {
   const risk = p.riesgo_tercio;
   const riskText = risk ? `Tercio ${risk} de la liga en pérdida por altura. Cubre ${fmt(p.cobertura_pct)} % de sus pitches.`
     : `Sin nivel: solo ${fmt(p.cobertura_pct)} % de sus pitches tiene pérdida medida.`;
-  const scores = [["stuff_plus", "Stuff+", "Calidad física del pitch"], ["location_plus", "Location+", "Ubicación y conteo"], ["pitching_plus", "Pitching+", "Los dos juntos"]];
+  const scores = [["stuff_plus", "Stuff+", "Calidad física del pitch"], ["location_plus", "Location+", "Ubicación, ajustada por cuenta"], ["pitching_plus", "Pitching+", "Los dos juntos"]];
   el("ficha").innerHTML = `
     <section class="card" aria-label="Resumen">
       <div class="head">

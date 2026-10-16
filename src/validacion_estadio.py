@@ -7,8 +7,11 @@ convocatoria (promedio por conteo) y contra el modelo entrenado con todas las al
 
 Escribe reportes/etapa_06_validacion_estadio.json, sin identificadores.
 
+La versión 3 (D-040) se evalúa igual: Stuff+ de la misma prueba, el Location+ de Ben entrenado sin
+altitud extrema (`python src/location_ben.py --estadio`) y los pesos oficiales de Pitching+ v3.
+
 Uso:
-    python src/validacion_estadio.py   # requiere src/modelo.py y src/modelo_v2.py
+    python src/validacion_estadio.py   # requiere modelo_v2, modelo_v3 y location_ben --estadio
 """
 
 import json
@@ -18,27 +21,20 @@ import pandas as pd
 from sklearn.model_selection import GroupKFold
 
 from afinado import new_model as tuned_model
-from config import HOLDOUT_SEASON, REPORTS_DIR
+from config import HOLDOUT_SEASON, REPORTS_DIR, ROOT
 from exploracion_etapa_04 import CROSS_FIT_FOLDS, EXTREME
-from modelo import PREDICTIONS_CACHE, SPECS, add_values, load, predict
-from modelo_v2 import SETTING, V2_CACHE
+from location_ben import PARK_CACHE
+from modelo import SPECS, load, predict
+from modelo_v2 import SETTING, official_predictions
+from modelo_v3 import SUMMARY_JSON as V3_JSON
+from modelo_v3 import official_pitches
 from modelos_base import TARGET, group_mean, pitcher_bootstrap
 from stuff_componentes import combine, new_model, outcome_values
 
 SUMMARY_JSON = REPORTS_DIR / "etapa_06_validacion_estadio.json"
+HOLDOUT_CACHE = ROOT / "data" / "processed" / "predicciones_estadio.parquet"
 VALUES = ["stuff", "location", "pitching"]
 COUNT = ["Balls", "Strikes"]
-
-
-def official_predictions(pitches: pd.DataFrame) -> tuple[pd.DataFrame, dict, dict]:
-    """Predicciones fuera de pliegue de la versión 2, entrenada con todas las altitudes."""
-    predictions = pd.read_parquet(PREDICTIONS_CACHE)
-    iterations = json.loads(predictions.attrs["arboles"])
-    v2 = pd.read_parquet(V2_CACHE)
-    iterations["location"] = int(v2.attrs["arboles"])
-    predictions = predictions.drop(columns="location").merge(v2, on="pitch_seq", validate="one_to_one")
-    official, weights = add_values(pitches, predictions)
-    return official, weights, iterations
 
 
 def model_for(name: str, iterations: int):
@@ -99,11 +95,30 @@ def calibration(test: pd.DataFrame) -> dict:
     return result
 
 
+def version_3(holdout: pd.DataFrame, pitches: pd.DataFrame) -> dict:
+    """Stuff+ sin altitud extrema, Location+ de Ben sin altitud extrema y los pesos oficiales de la versión 3."""
+    weights = json.loads(V3_JSON.read_text())["pesos_pitching"]
+    ben = pd.read_parquet(PARK_CACHE)[["pitch_seq", "xRV_neutral"]].rename(columns={"xRV_neutral": "location"})
+    test = holdout.drop(columns=["location", "pitching"]).merge(ben, on="pitch_seq", validate="one_to_one")
+    test["pitching"] = weights["intercepto"] + weights["stuff"] * test.stuff + weights["location"] * test.location
+    official, _ = official_pitches(pitches)
+    full = test[["pitch_seq"]].merge(official[["pitch_seq", *VALUES]], on="pitch_seq", validate="one_to_one")
+    result = {"pitches": len(test), "sin_altitud_extrema": gains(test, VALUES, versus=full),
+              "con_todas_las_altitudes": gains(test.drop(columns=VALUES).join(full[VALUES]), VALUES),
+              "calibracion": calibration(test)}
+    result["pasa"] = all(result["sin_altitud_extrema"][v]["ic95_pct"][0] > 0 for v in VALUES)
+    return result
+
+
 def main():
     pitches = load()
     official, weights, iterations = official_predictions(pitches)
     history = pitches[(pitches.year < HOLDOUT_SEASON) & (pitches.pitcher_anon_id != "sin_id")].reset_index(drop=True)
-    holdout = park_holdout(history, iterations, weights)
+    if HOLDOUT_CACHE.exists():
+        holdout = pd.read_parquet(HOLDOUT_CACHE)
+    else:
+        holdout = park_holdout(history, iterations, weights)
+        holdout.to_parquet(HOLDOUT_CACHE, index=False)
     full = holdout[["pitch_seq"]].merge(official[["pitch_seq", *VALUES]], on="pitch_seq", validate="one_to_one")
     summary = {
         "nota": "2024–2025; modelos sin el pitcher y sin altitud extrema, evaluados en altitud extrema (D-037).",
@@ -114,6 +129,7 @@ def main():
         "calibracion": calibration(holdout),
     }
     summary["pasa"] = all(summary["sin_altitud_extrema"][v]["ic95_pct"][0] > 0 for v in VALUES)
+    summary["version_3"] = version_3(holdout, pitches)
     SUMMARY_JSON.write_text(json.dumps(summary, indent=2, ensure_ascii=False))
     print(json.dumps(summary, indent=2, ensure_ascii=False))
 

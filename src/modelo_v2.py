@@ -33,6 +33,17 @@ PITCHER_VALUES_V2 = ROOT / "data" / "processed" / "valores_pitchers_v2.parquet"
 SETTING = SETTINGS["hojas1000_31"]
 
 
+def official_predictions(pitches: pd.DataFrame) -> tuple[pd.DataFrame, dict, dict]:
+    """Predicciones fuera de pliegue de la versión 2, entrenada con todas las altitudes, y sus árboles."""
+    predictions = pd.read_parquet(PREDICTIONS_CACHE)
+    iterations = json.loads(predictions.attrs["arboles"])
+    v2 = pd.read_parquet(V2_CACHE)
+    iterations["location"] = int(v2.attrs["arboles"])
+    predictions = predictions.drop(columns="location").merge(v2, on="pitch_seq", validate="one_to_one")
+    official, weights = add_values(pitches, predictions)
+    return official, weights, iterations
+
+
 def location_v2(pitches: pd.DataFrame) -> tuple[np.ndarray, int]:
     """2026 con un modelo de 2024–2025; 2024–2025 con modelos que no vieron al pitcher."""
     history = pitches[pitches.year < HOLDOUT_SEASON]

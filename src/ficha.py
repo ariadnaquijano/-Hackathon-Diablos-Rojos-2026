@@ -2,7 +2,7 @@
 
 Junta en una página local, por pitcher y temporada (300+ pitches):
 
-- Stuff+, Location+ y Pitching+ de la versión 2 (D-035), con su percentil en la liga;
+- Stuff+, Location+ y Pitching+ de la versión 3 (D-040), con su percentil en la liga;
 - el arsenal: Stuff+ de cada pitch dentro de su tipo, su uso y sus componentes (D-033);
 - el riesgo en el Harp Helú: uso × pérdida promedio de la liga por tipo (D-036), mostrado como
   tercio de la liga porque ordena pero no sirve como cifra exacta, y solo si cubre 60 %+ de sus pitches;
@@ -12,7 +12,7 @@ La página trae identificadores y datos por pitcher, así que se escribe en data
 al repo.
 
 Uso:
-    python src/modelo_v2.py
+    python src/modelo_v3.py
     python src/arsenal.py
     python src/pasaporte_altitud.py
     python src/ficha.py
@@ -25,7 +25,7 @@ import pandas as pd
 
 from arsenal import ARSENAL_PARQUET
 from config import REPORTS_DIR, ROOT
-from modelo_v2 import PITCHER_VALUES_V2
+from modelo_v3 import PITCHER_VALUES_V3
 
 TEMPLATE = Path(__file__).parent / "plantillas" / "ficha_pitcher.html"
 OUTPUT_HTML = ROOT / "data" / "fichas" / "fichas_pitchers.html"
@@ -67,7 +67,7 @@ def altitude_risk(arsenal: pd.DataFrame) -> pd.DataFrame:
 
 
 def pitcher_table(risk: pd.DataFrame) -> pd.DataFrame:
-    values = pd.read_parquet(PITCHER_VALUES_V2)
+    values = pd.read_parquet(PITCHER_VALUES_V3)
     for plus in PLUS:
         values[f"{plus}_pct"] = 100 * values.groupby("year")[plus].rank(pct=True)
     values = values.merge(risk, on=["pitcher_anon_id", "year"], how="left")
@@ -89,7 +89,7 @@ def main():
         pitchers.set_index(["pitcher_anon_id", "year"]).index)]
     data = {
         "perdidas_por_tipo": losses,
-        "repeticion": json.loads((REPORTS_DIR / "etapa_04_modelo_v2.json").read_text())["repeticion_2024_a_2025"],
+        "repeticion": json.loads((REPORTS_DIR / "etapa_06_modelo_v3.json").read_text())["repeticion_2024_a_2025"],
         "pitchers": records(pitchers, ["pitcher_anon_id", "year", "pitches", *PLUS, *[f"{p}_pct" for p in PLUS],
                                        "riesgo_altura", "riesgo_tercio", "cobertura_pct"]),
         "arsenal": records(arsenal, ["pitcher_anon_id", "year", "pitch_class", "pitches", "uso_pct", "stuff_plus",

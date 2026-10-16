@@ -1,17 +1,17 @@
-"""Métricas del documento técnico: RMSE y calibración del modelo oficial (versión 2, D-035).
+"""Métricas del documento técnico: RMSE y calibración del modelo oficial (versión 3, D-040).
 
 La convocatoria pide RMSE y calibración en holdout contra el modelo nulo (promedio de xRunValue por
 conteo). Aquí se reportan con las mismas predicciones congeladas, sin elegir nada:
 
 - pitcher holdout: 2024–2025, cada pitch predicho por un modelo que no vio a su pitcher;
-- season holdout: 2026, con modelos entrenados en 2024–2025 (la misma mirada de D-035, otra métrica).
+- season holdout: 2026, con modelos entrenados en 2024–2025 (la misma mirada de D-040, otra métrica).
 
 El park holdout está en src/validacion_estadio.py.
 
 Escribe reportes/etapa_06_metricas_documento.json.
 
 Uso:
-    python src/metricas_documento.py   # requiere src/modelo_v2.py
+    python src/metricas_documento.py   # requiere src/modelo_v3.py
 """
 
 import json
@@ -22,7 +22,7 @@ import pandas as pd
 from config import HOLDOUT_SEASON, REPORTS_DIR
 from modelo import load
 from modelos_base import PREDICTIONS_PARQUET, TARGET, pitcher_bootstrap
-from validacion_estadio import official_predictions
+from modelo_v3 import official_pitches
 
 SUMMARY_JSON = REPORTS_DIR / "etapa_06_metricas_documento.json"
 COLUMNS = ["media_conteo", "stuff", "location", "pitching"]
@@ -53,11 +53,11 @@ def calibration(test: pd.DataFrame, column: str = "pitching") -> dict:
 
 def main():
     pitches = load()
-    official, _, _ = official_predictions(pitches)
+    official, _ = official_pitches(pitches)
     null = pd.read_parquet(PREDICTIONS_PARQUET, columns=["pitch_seq", "media_conteo"])
     official = official.merge(null, on="pitch_seq", validate="one_to_one")
     official = official[official.pitcher_anon_id != "sin_id"]
-    summary = {"nota": "Modelo oficial (versión 2). Las mismas predicciones de D-035; solo cambia la métrica."}
+    summary = {"nota": "Modelo oficial (versión 3). Las mismas predicciones de D-040; solo cambia la métrica."}
     for name, rows in (("pitcher_holdout_2024_2025", official.year < HOLDOUT_SEASON),
                        ("season_holdout_2026", official.year == HOLDOUT_SEASON)):
         test = official[rows].reset_index(drop=True)
