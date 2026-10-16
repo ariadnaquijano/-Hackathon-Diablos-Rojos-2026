@@ -55,7 +55,7 @@ h1, h2, h3 { margin: 0; }
 .meta { margin-left: auto; font: 500 0.75rem/1 var(--mono); color: var(--ink-3); white-space: nowrap; }
 @media (max-width: 40rem) { .brand span, .meta, .tabs .long { display: none; } .appbar-inner { gap: 12px; } }
 
-.page { max-width: 84rem; margin-inline: auto; padding: 24px 16px 64px; display: grid; grid-template-columns: 21rem minmax(0, 1fr); gap: 24px; align-items: start; }
+.page { max-width: 84rem; margin-inline: auto; padding: 24px 16px 64px; display: grid; grid-template-columns: 24rem minmax(0, 1fr); gap: 24px; align-items: start; }
 @media (max-width: 64rem) { .page { grid-template-columns: 1fr; } .list { order: 2; } }
 .card { background: var(--surface); border: 1px solid var(--rule); border-radius: var(--radius); box-shadow: var(--shadow); }
 .label { font: 600 0.6875rem/1 var(--mono); text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-3); }
@@ -69,7 +69,11 @@ h1, h2, h3 { margin: 0; }
 .controls input, .controls select { font: 500 0.9375rem var(--body); color: var(--ink); background: var(--surface-2); border: 1px solid var(--rule-strong); border-radius: var(--radius-sm); height: 40px; padding: 0 10px; min-width: 0; }
 .controls input:focus, .controls select:focus { outline: 2px solid color-mix(in srgb, var(--accent) 25%, transparent); border-color: var(--accent); }
 .count { font-size: 0.8125rem; color: var(--ink-3); }
-.list-body { overflow: auto; }
+.list-body { overflow: auto; scrollbar-gutter: stable; }
+.league { table-layout: fixed; }
+.league th, .league td { padding: 9px 8px; }
+.league th:first-child, .league td:first-child { padding-left: 16px; width: 4.5rem; }
+.league th:last-child, .league td:last-child { width: 5.25rem; padding-right: 12px; }
 table { border-collapse: collapse; width: 100%; font-size: 0.875rem; }
 th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--rule); vertical-align: middle; }
 th { font: 600 0.6875rem/1.2 var(--mono); text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-3); white-space: nowrap; background: var(--surface); position: sticky; top: 0; z-index: 1; }
@@ -82,7 +86,11 @@ th button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px;
 .league tbody tr[aria-selected="true"] { background: var(--accent-soft); }
 .league tbody tr[aria-selected="true"] td:first-child { box-shadow: inset 3px 0 0 var(--accent); }
 .league td:first-child { font-family: var(--mono); font-size: 0.8125rem; }
-.risk-dot { display: inline-flex; align-items: center; gap: 6px; font-family: var(--body); font-size: 0.8125rem; color: var(--ink-2); }
+.risk-tag { display: inline-flex; align-items: center; justify-content: flex-end; gap: 4px; font: 600 0.75rem/1 var(--body); color: var(--ink-2); white-space: nowrap; }
+.risk-tag svg { width: 12px; height: 12px; flex: none; }
+.risk-tag.alto { color: var(--accent); }
+.risk-tag.bajo { color: var(--best); }
+.risk-tag.none { color: var(--ink-3); font-weight: 400; }
 
 /* Ficha */
 .detail { display: grid; gap: 16px; min-width: 0; }
@@ -311,6 +319,11 @@ function trust() {
 const COLUMNS = [["pitcher_anon_id", "Pitcher", false], ["stuff_plus", "Stuff+", true], ["location_plus", "Loc+", true],
                  ["pitching_plus", "Pitch+", true], ["riesgo_altura", "Altura", true]];
 
+function riskTag(risk) {
+  if (!risk) return `<span class="risk-tag none" title="Sin nivel: cubre menos del 60 % de sus pitches">—</span>`;
+  return `<span class="risk-tag ${risk}" title="Riesgo ${risk} en el Harp Helú">${ICONS[risk]}${risk}</span>`;
+}
+
 function renderLeague() {
   const { key, desc } = state.sort;
   const rows = pitchersOf(state.year)
@@ -326,7 +339,7 @@ function renderLeague() {
     <tbody>${rows.map(p => `<tr data-id="${p.pitcher_anon_id}" tabindex="0" aria-selected="${p.pitcher_anon_id === state.pitcher}">
       <td>${p.pitcher_anon_id.replace("pitcher_", "")}</td><td class="num">${fmt(p.stuff_plus)}</td>
       <td class="num">${fmt(p.location_plus)}</td><td class="num"><b>${fmt(p.pitching_plus)}</b></td>
-      <td class="num"><span class="risk-dot">${p.riesgo_tercio ?? "—"}</span></td></tr>`).join("")}</tbody>`;
+      <td class="num">${riskTag(p.riesgo_tercio)}</td></tr>`).join("")}</tbody>`;
 }
 
 function select(id, year) {
