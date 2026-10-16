@@ -1,0 +1,109 @@
+{
+  "nota": "2024–2025; modelos sin el pitcher y sin altitud extrema, evaluados en altitud extrema (D-037).",
+  "pitches": 139277,
+  "pitchers": 725,
+  "sin_altitud_extrema": {
+    "stuff": {
+      "mejora_vs_media_conteo_pct": 0.1274,
+      "ic95_pct": [
+        0.07779,
+        0.17671
+      ],
+      "ic95_diferencia_vs_todas_las_altitudes_pct": [
+        -0.07161,
+        -0.03267
+      ]
+    },
+    "location": {
+      "mejora_vs_media_conteo_pct": 5.1126,
+      "ic95_pct": [
+        4.81053,
+        5.41496
+      ],
+      "ic95_diferencia_vs_todas_las_altitudes_pct": [
+        -0.20906,
+        -0.11503
+      ]
+    },
+    "pitching": {
+      "mejora_vs_media_conteo_pct": 5.119,
+      "ic95_pct": [
+        4.80309,
+        5.41844
+      ],
+      "ic95_diferencia_vs_todas_las_altitudes_pct": [
+        -0.24074,
+        -0.14111
+      ]
+    }
+  },
+  "con_todas_las_altitudes": {
+    "stuff": {
+      "mejora_vs_media_conteo_pct": 0.1798,
+      "ic95_pct": [
+        0.1283,
+        0.22766
+      ]
+    },
+    "location": {
+      "mejora_vs_media_conteo_pct": 5.2748,
+      "ic95_pct": [
+        4.97421,
+        5.56311
+      ]
+    },
+    "pitching": {
+      "mejora_vs_media_conteo_pct": 5.3099,
+      "ic95_pct": [
+        5.00101,
+        5.59988
+      ]
+    }
+  },
+  "contra_media_liga": {
+    "stuff": {
+      "mejora_vs_media_liga_pct": 0.1175,
+      "ic95_pct": [
+        0.07381,
+        0.16098
+      ]
+    },
+    "location": {
+      "mejora_vs_media_liga_pct": 5.1032,
+      "ic95_pct": [
+        4.80146,
+        5.40336
+      ]
+    },
+    "pitching": {
+      "mejora_vs_media_liga_pct": 5.1096,
+      "ic95_pct": [
+        4.79072,
+        5.41011
+      ]
+    },
+    "media_conteo": {
+      "mejora_vs_media_liga_pct": -0.01,
+      "ic95_pct": [
+        -0.02719,
+        0.0078
+      ]
+    }
+  },
+  "calibracion": {
+    "real_por_100": -0.0599,
+    "stuff": {
+      "predicho_por_100": -0.353,
+      "pendiente": 0.838
+    },
+    "location": {
+      "predicho_por_100": -0.3391,
+      "pendiente": 0.994
+    },
+    "pitching": {
+      "predicho_por_100": -0.3971,
+      "pendiente": 0.958
+    }
+  },
+  "pasa": true
+}

@@ -1,0 +1,432 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Hallazgos y rumbo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: documento de lectura en un carril. Cada hallazgo = número grande, qué es, por qué importa para ganar. */
+:root {
+  --bg: #f6f7f9;
+  --surface: #ffffff;
+  --ink: #16191f;
+  --ink-2: #4a5160;
+  --ink-3: #7a8191;
+  --rule: #dde1e7;
+  --accent: #b3122a;
+  --accent-soft: #f6e3e6;
+  --bar: #2f4a6d;
+  --sea: #2b6cb0;
+  --alt: #c21f3a;
+  --good: #2f7d4f;
+  --warn: #9a6a12;
+  --display: "Barlow Condensed", "Arial Narrow", "Helvetica Neue", sans-serif;
+  --body: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --step--1: 0.8125rem;
+  --step-0: 1rem;
+  --step-1: 1.25rem;
+  --step-2: 1.75rem;
+  --step-3: 2.75rem;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #111418; --surface: #1a1e24; --ink: #e8eaee; --ink-2: #b3b9c4; --ink-3: #858c99;
+    --rule: #2c323b; --accent: #ff5a6e; --accent-soft: #3a1c22; --bar: #7fa3d1;
+    --sea: #4f8ad6; --alt: #e0405a; --good: #5fbf86; --warn: #d9a441; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #111418; --surface: #1a1e24; --ink: #e8eaee; --ink-2: #b3b9c4; --ink-3: #858c99;
+  --rule: #2c323b; --accent: #ff5a6e; --accent-soft: #3a1c22; --bar: #7fa3d1;
+  --sea: #4f8ad6; --alt: #e0405a; --good: #5fbf86; --warn: #d9a441; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { overflow-x: clip; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 400 var(--step-0)/1.6 var(--body); padding-inline: 16px; padding-block: 40px 64px; }
+main { max-width: 60rem; margin-inline: auto; display: grid; gap: 64px; }
+h1, h2 { font-family: var(--display); font-weight: 700; line-height: 1.05; text-wrap: balance; margin: 0; }
+h1 { font-size: var(--step-3); }
+h2 { font-size: var(--step-2); }
+h3 { font: 600 var(--step-1)/1.3 var(--body); margin: 0; text-wrap: balance; }
+p { margin: 0; }
+ul { margin: 0; padding-left: 1.2rem; display: grid; gap: 6px; }
+.eyebrow { font: 600 var(--step--1)/1 var(--mono); text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent); }
+header { display: grid; gap: 14px; }
+header p { color: var(--ink-2); font-size: var(--step-1); max-width: 44rem; }
+section { display: grid; gap: 20px; }
+.lead { color: var(--ink-2); max-width: 46rem; }
+.lead strong { color: var(--ink); }
+nav { display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: var(--step--1); border-block: 1px solid var(--rule); padding-block: 12px; }
+nav a { color: var(--ink-2); text-decoration: none; }
+nav a:hover { color: var(--accent); }
+.criteria { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(13rem, 100%), 1fr)); gap: 1px; background: var(--rule); border: 1px solid var(--rule); }
+.criteria div { background: var(--surface); padding: 16px; display: grid; gap: 6px; align-content: start; }
+.criteria b { font: 700 var(--step-2)/1 var(--display); color: var(--accent); }
+.criteria span { font-size: var(--step--1); color: var(--ink-2); }
+.dates { display: flex; flex-wrap: wrap; gap: 10px; }
+.dates span { background: var(--surface); border: 1px solid var(--rule); border-radius: 6px; padding: 6px 10px; font-size: var(--step--1); color: var(--ink-2); }
+.dates span b { color: var(--ink); font-family: var(--mono); font-weight: 600; margin-right: 6px; }
+.dates span.key { border-color: var(--accent); }
+.findings { display: grid; gap: 16px; counter-reset: finding; }
+.finding { background: var(--surface); border: 1px solid var(--rule); border-radius: 8px; padding: 20px 22px; display: grid; grid-template-columns: minmax(8rem, 11rem) 1fr; gap: 6px 24px; }
+.finding > :not(.stat) { grid-column: 2; }
+.finding .stat { grid-row: 1 / span 6; display: grid; align-content: start; gap: 4px; }
+.finding .stat b { font: 700 2.4rem/1 var(--display); font-variant-numeric: tabular-nums; color: var(--ink); }
+.finding .stat span { font-size: var(--step--1); color: var(--ink-2); }
+.finding h3 { counter-increment: finding; }
+.finding h3::before { content: counter(finding) ". "; color: var(--accent); font-family: var(--mono); font-size: 0.85em; }
+.finding p { color: var(--ink-2); }
+.finding .why { color: var(--ink); }
+.finding .why::before { content: "Para ganar: "; font-weight: 600; color: var(--accent); }
+.finding .src { font: 400 0.75rem/1.4 var(--mono); color: var(--ink-3); }
+.tag { display: inline-block; font: 600 0.7rem/1 var(--mono); text-transform: uppercase; letter-spacing: 0.06em; padding: 4px 6px; border-radius: 4px; vertical-align: middle; margin-left: 6px; }
+.tag.solid { background: color-mix(in oklab, var(--good) 15%, var(--surface)); color: var(--good); }
+.tag.prelim { background: color-mix(in oklab, var(--warn) 18%, var(--surface)); color: var(--warn); }
+.bars { display: grid; gap: 6px; margin-top: 4px; }
+.bars div { display: grid; grid-template-columns: 7.5rem 1fr 3.5rem; gap: 10px; align-items: center; font-size: var(--step--1); color: var(--ink-2); }
+.bars i { height: 10px; border-radius: 0 4px 4px 0; background: var(--bar); display: block; }
+.bars i.alt { background: var(--alt); }
+.bars i.sea { background: var(--sea); }
+.bars em { font-style: normal; font-family: var(--mono); text-align: right; color: var(--ink); }
+.scroll { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: var(--step--1); background: var(--surface); }
+th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+th { font: 600 0.72rem/1.2 var(--mono); text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-3); }
+td:first-child { color: var(--ink); font-weight: 600; min-width: 9rem; }
+td { color: var(--ink-2); }
+.verdict { font: 600 0.72rem/1 var(--mono); text-transform: uppercase; white-space: nowrap; }
+.verdict.yes { color: var(--good); }
+.verdict.adapt { color: var(--warn); }
+.verdict.later { color: var(--ink-3); }
+.note { border-left: 3px solid var(--accent); background: var(--surface); padding: 14px 18px; max-width: 46rem; color: var(--ink-2); }
+.note b { color: var(--ink); }
+.plan { display: grid; gap: 0; border-left: 2px solid var(--rule); margin-left: 6px; }
+.step { position: relative; padding: 0 0 22px 22px; display: grid; gap: 4px; }
+.step::before { content: ""; position: absolute; left: -7px; top: 6px; width: 12px; height: 12px; border-radius: 50%; background: var(--surface); border: 2px solid var(--ink-3); }
+.step.done::before { background: var(--good); border-color: var(--good); }
+.step.next::before { background: var(--accent); border-color: var(--accent); }
+.step b { font-weight: 600; }
+.step span { font: 400 var(--step--1)/1.4 var(--mono); color: var(--ink-3); }
+.step p { color: var(--ink-2); font-size: 0.95rem; }
+dl { display: grid; grid-template-columns: minmax(9rem, 13rem) 1fr; gap: 10px 20px; margin: 0; background: var(--surface); border: 1px solid var(--rule); border-radius: 8px; padding: 20px; }
+dt { font-weight: 600; }
+dd { margin: 0; color: var(--ink-2); }
+footer { color: var(--ink-3); font-size: var(--step--1); border-top: 1px solid var(--rule); padding-top: 16px; display: grid; gap: 4px; }
+code { font-family: var(--mono); font-size: 0.88em; }
+@media (max-width: 40rem) {
+  .finding { grid-template-columns: 1fr; }
+  .finding > :not(.stat) { grid-column: 1; }
+  .finding .stat { grid-row: auto; }
+  dl { grid-template-columns: 1fr; gap: 2px; }
+  dd { margin-bottom: 10px; }
+}
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <span class="eyebrow">Equipo Diablos · ISAC Hackathon 2026 · Estado al 7 de octubre</span>
+    <h1>Lo que ya sabemos y cómo vamos a ganar</h1>
+    <p>Todo lo interesante que encontramos en los datos de la LMB, explicado sin tecnicismos, y el plan para convertirlo en el proyecto ganador. Cada cifra sale de un script del repositorio; abajo de cada hallazgo dice de cuál.</p>
+  </header>
+
+  <nav aria-label="Contenido">
+    <a href="#reto">1 · El reto</a>
+    <a href="#reunion">Para la reunión</a>
+    <a href="#hallazgos">2 · Hallazgos</a>
+    <a href="#pistas">3 · Pistas por confirmar</a>
+    <a href="#experto">4 · Lo que dijo el experto</a>
+    <a href="#rumbo">5 · Cómo vamos a ganar</a>
+    <a href="#calendario">6 · Calendario</a>
+    <a href="#riesgos">7 · Riesgos</a>
+    <a href="#diccionario">8 · Diccionario</a>
+  </nav>
+
+  <section id="reto">
+    <h2>1 · Qué nos piden y cómo nos califican</h2>
+    <p class="lead">Construir un <strong>Stuff+</strong> (una calificación de qué tan bueno es un pitch solo por su física, donde 100 es el promedio de la liga) ajustado a la altura del Estadio Alfredo Harp Helú, a 2,240 m. También <strong>Location+</strong> (qué tan bien ubicado está) y <strong>Pitching+</strong> (todo junto). Hay que entregar los scores, el perfil físico ideal de un pitcher para la CDMX, recomendaciones, un dashboard simulador y un documento técnico de 6 a 10 páginas.</p>
+    <div class="criteria">
+      <div><b>25 %</b><strong>Calidad del modelo</strong><span>Que los scores separen pitches buenos de malos.</span></div>
+      <div><b>25 %</b><strong>Robustez fuera de muestra</strong><span>Que funcione con pitchers, temporadas y parques que el modelo no vio.</span></div>
+      <div><b>25 %</b><strong>Arsenal + altitud</strong><span>Que entienda cómo se combinan los pitches y cuánto les quita la altura.</span></div>
+      <div><b>25 %</b><strong>Aplicabilidad</strong><span>Que un coach o un director deportivo tome mejores decisiones con esto.</span></div>
+    </div>
+    <div class="dates">
+      <span><b>12 oct</b>cierre de registro</span>
+      <span class="key"><b>22 oct</b>entrega del proyecto</span>
+      <span><b>2 nov</b>finalistas</span>
+      <span><b>11 nov</b>final: entrevista de 10 minutos</span>
+    </div>
+  </section>
+
+  <section id="reunion">
+    <h2>Para la reunión: lo que hice, en orden</h2>
+    <p class="lead">Recorrido de todo el trabajo, en el orden en que se hizo, con lo que hay que saber decir de cada paso. Cada etapa tiene su documento en <code>docs/</code> y su reporte visual en <code>reportes/</code>.</p>
+    <div class="plan">
+      <div class="step done"><b>Etapa 0 · Entender el reto y validar el enfoque</b><span>docs/00_contexto_y_approach.md</span><p>Antes de programar, exploramos si la altura cambia los pitches. Sí: el mismo pitcher pierde 22–30 % de movimiento. De ahí sale la idea central: <strong>primero traducir el pitch al aire de cada parque, luego valuarlo</strong>.</p></div>
+      <div class="step done"><b>Etapa 1 · Limpieza</b><span>docs/01_limpieza.md · reportes/etapa_01_limpieza.html</span><p>Regla: "ni inventar ni borrar". Solo es error lo imposible; un valor malo se anula sin tirar el pitch; cada problema queda marcado en una columna <code>flag_*</code>. Resultado: 99.69 % de los pitches sirven.</p></div>
+      <div class="step done"><b>Etapa 2 · Variables del modelo</b><span>docs/02_features.md · reportes/etapa_02_features.html</span><p>Aire medido por juego con el frenado de las rectas; conversión de cada pitch a su forma a nivel del mar; 1,342 pitches mal etiquetados reclasificados; cada pitch comparado contra la recta de su pitcher; y, al descubrir que las filas vienen en orden, turnos al bat, tunneling y vuelta al orden.</p></div>
+      <div class="step done"><b>Retroalimentación del experto</b><span>docs/retroalimentacion_experto.md</span><p>Revisamos cada idea de Héctor contra los datos y decidimos qué entra, qué se adapta y qué queda para después (sección 4 de esta página).</p></div>
+      <div class="step done"><b>Mi hipótesis, H4 · El spin solo no basta</b><span>docs/hipotesis_h4.md · reportes/h4_spin_rate.html</span><p>Tres pruebas: el spin solo casi no predice el whiff; con el mismo spin, la recta que más sube saca 8.5 puntos más; en altura, el mismo spin da menos movimiento y menos whiff. Se sostiene, salvo en el cambio, donde manda la velocidad.</p></div>
+      <div class="step done"><b>Acarreo de batazos y reglas de rigor</b><span>src/evidencia_acarreo.py · docs/convenciones.md · D-020, D-021</span><p>El mismo batazo vuela 34 pies más en altura. Y fijamos la regla de que todo modelo debe ganarle a modelos simples en 2026, con intervalo de confianza.</p></div>
+      <div class="step done"><b>Etapa 3 · Cuántas carreras vale cada pitch</b><span>docs/03_target.md · reportes/etapa_03_target.html</span><p>Valor de cada desenlace por regresión sobre entradas completas (no hay corredores en el dataset), valor de cada conteo, valor esperado de cada batazo, y la escalera de modelos base. Versión neutral (comparar pitchers) y local (lo que cuesta en su altura).</p></div>
+    </div>
+
+    <h3>Cinco frases para abrir la reunión</h3>
+    <ul>
+      <li>La altura no le quita velocidad a los pitches; les quita <strong>movimiento</strong>, y medimos cuánto, juego por juego.</li>
+      <li>Ya podemos convertir cualquier pitch de la CDMX a su equivalente a nivel del mar, y al revés.</li>
+      <li>El spin no sirve solo: lo que vale es cuánto se mueve el pitch (H4 confirmada, con la excepción del cambio).</li>
+      <li>En el Harp Helú cada error del pitcher cuesta más carreras, y los batazos vuelan 34 pies más.</li>
+      <li>Ya sabemos qué tan alta está la barra: el modelo final tiene que ganarle a una regresión simple que ya predice mejor que la historia del pitcher.</li>
+    </ul>
+
+    <h3>Preguntas que probablemente te harán</h3>
+    <div class="scroll"><table>
+      <thead><tr><th>Pregunta</th><th>Respuesta corta</th></tr></thead>
+      <tbody>
+        <tr><td>¿Por qué no simplemente agregar "altitud" como variable al modelo?</td><td>Porque el modelo vería un pitch con el movimiento de nivel del mar jugando en la CDMX, un pitch que no existe. Además, solo hay tres categorías de altitud; nuestro aire medido es continuo. Igual lo vamos a probar como modelo base: si no le ganamos, lo decimos.</td></tr>
+        <tr><td>¿Cómo sabes que el "aire medido" no es un error de calibración del radar?</td><td>Porque al convertir con él, el mismo pitcher queda con casi la misma forma en casa y de visita (la recta pasa de −3.83 a +0.11 pulgadas de diferencia). Si fuera ruido del radar, la conversión no cuadraría tan bien.</td></tr>
+        <tr><td>¿Por qué 2026 como prueba y no una muestra al azar?</td><td>Porque así se usaría en la vida real: entrenas con el pasado y predices la temporada siguiente. Una muestra al azar mezclaría pitches del mismo juego en entrenamiento y prueba, y el modelo parecería mejor de lo que es.</td></tr>
+        <tr><td>¿Por qué no borraron las filas con datos faltantes?</td><td>Porque los faltantes no son al azar: las bolas en juego sin velocidad de salida son contacto débil. Borrarlas castigaría a los pitchers que provocan contacto débil.</td></tr>
+        <tr><td>¿Qué es eso de "remuestrear pitchers"?</td><td>Para el intervalo de confianza repetimos el cálculo mil veces sorteando pitchers completos. Si sorteáramos pitches sueltos, contaríamos 300 pitches de un mismo pitcher como si fueran 300 opiniones independientes, y el intervalo saldría falsamente estrecho.</td></tr>
+        <tr><td>¿Por qué el valor de carreras y no solo el whiff?</td><td>Porque un pitch bueno es el que le quita carreras al rival, no solo el que provoca swings fallidos. Un strike cantado o un rodado débil también valen. El whiff solo lo usamos en H4 porque es lo más ligado a la física del pitch.</td></tr>
+        <tr><td>¿Las ideas del experto son obligatorias?</td><td>No. Las tomamos como hipótesis: entran las que los datos respaldan y suman puntos en los criterios de calificación. Varias se confirmaron (secuencia, sliders aplanadas); otras se adaptaron por falta de datos.</td></tr>
+        <tr><td>¿Qué sigue?</td><td>La etapa 4: entrenar los modelos de Stuff+, Location+ y Pitching+ y demostrar que le ganan a los modelos base. Luego la validación, las herramientas, el dashboard y el documento.</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section id="hallazgos">
+    <h2>2 · Los hallazgos que nos dan ventaja</h2>
+    <p class="lead">Datos: 635,002 pitches con Trackman (el radar que mide cada lanzamiento), 1,134 pitchers, temporadas 2024 a 2026. Entrenamos con 2024–2025 y guardamos 2026 para probar, como si fuera el futuro. <span class="tag solid">Sólido</span> = medido con intervalo de confianza y controles. <span class="tag prelim">Preliminar</span> = pista fuerte que falta confirmar.</p>
+
+    <div class="findings">
+      <article class="finding">
+        <div class="stat"><b>−22 a −30 %</b><span>del movimiento se pierde en altitud extrema</span></div>
+        <h3>La altura le roba movimiento a todos los pitches, no velocidad <span class="tag solid">Sólido</span></h3>
+        <p>Comparamos al <em>mismo pitcher con el mismo pitch</em> en altura y a nivel del mar, para que no influya quién lanza en cada parque. La recta sube 3.7 pulgadas menos; el cambio pierde 4.2 pulgadas de movimiento lateral. La velocidad no cambia ni una décima. Es física pura: la pelota se mueve gracias al <strong>efecto Magnus</strong> (el giro empuja el aire hacia un lado y la pelota se va al otro), y en la CDMX hay ~16 % menos aire.</p>
+        <p class="why">es la base de todo el proyecto. Un Stuff+ que no ajusta la forma del pitch evalúa en la CDMX un lanzamiento que ahí no existe.</p>
+        <p class="src">Fuente: docs/00_contexto_y_approach.md §5.1 · src/exploracion_preliminar.py</p>
+      </article>
+
+      <article class="finding">
+        <div class="stat"><b>0.84</b><span>del aire de nivel del mar, en la mediana de los juegos de altitud extrema</span></div>
+        <h3>Medimos el aire de cada juego con las mismas rectas <span class="tag solid">Sólido</span></h3>
+        <p>El dataset no trae estadio ni clima, solo tres categorías de altitud. Pero Trackman registra cuánto frena cada recta en el camino, y ese frenado es proporcional a la densidad del aire. Con eso le dimos a <strong>2,122 de 2,125 juegos</strong> su propia medida de aire. No es una caja de "altura sí o no": es un número continuo que varía de juego a juego (en altitud extrema, la mayoría de los juegos cae entre 0.79 y 0.90).</p>
+        <p class="why">ningún otro equipo va a tener una medida física del aire por juego. Es nuestro diferenciador técnico más fuerte y responde directo al criterio de "arsenal + altitud".</p>
+        <p class="src">Fuente: docs/02_features.md §1 · src/features.py</p>
+      </article>
+
+      <article class="finding">
+        <div class="stat"><b>+0.11 in</b><span>de diferencia que queda en la recta del mismo pitcher después de convertir (antes −3.83)</span></div>
+        <h3>Sabemos traducir un pitch de la CDMX a nivel del mar <span class="tag solid">Sólido</span></h3>
+        <p>Estimamos cuánto cae el movimiento cuando baja el aire: cae <strong>más rápido que el aire</strong> (exponente 1.58), porque hay menos fuerza de Magnus <em>y</em> la pelota llega antes, con menos tiempo para moverse. La primera estimación salía baja (1.37) por un sesgo estadístico conocido: cuando una variable se mide con ruido, el efecto parece más chico de lo que es. Lo corregimos con una <strong>variable instrumental</strong> (usar solo la parte del aire que se mide sin ruido). Al convertir, el mismo pitcher queda con casi la misma forma en casa y de visita.</p>
+        <p class="why">permite el contrafactual que pide el reto: "¿cuánto valdría este pitch en el Harp Helú?". Y la corrección del sesgo es el tipo de detalle que un jurado técnico premia.</p>
+        <p class="src">Fuente: docs/02_features.md §2 · decisión D-016</p>
+      </article>
+
+      <article class="finding">
+        <div class="stat"><b>+8.5</b><span>puntos más de whiff para la recta que más sube, con el mismo spin</span></div>
+        <h3>El spin solo no sirve: importa cuánto se mueve el pitch (hipótesis H4) <span class="tag solid">Sólido</span></h3>
+        <p>Rectas con el mismo spin (~2,325 rpm): la que más sube saca 24.2 % de swings fallidos y la que menos, 15.7 %. En altura, el mismo spin da 4.2 pulgadas menos de subida y <strong>2.8 puntos menos de whiff</strong>. Un modelo que solo ve el spin no se da cuenta y sobreestima a los pitchers en altura en los cinco tipos de pitch. La excepción es el cambio, donde manda la velocidad.</p>
+        <p class="why">desmiente la idea común de "pitcher con mucho spin = bueno". Para el club: en la CDMX hay que fichar movimiento, no spin.</p>
+        <p class="src">Fuente: docs/hipotesis_h4.md · src/hipotesis_h4.py</p>
+      </article>
+
+      <article class="finding">
+        <div class="stat"><b>26.8 → 19.9 %</b><span>whiff de las rectas con más "ride", de nivel del mar a altura</span></div>
+        <h3>La altura castiga a los pitches que dependen del giro <span class="tag prelim">Preliminar</span></h3>
+        <p>Las rectas que más dependen del Magnus pierden 7 puntos de whiff en altura; las que dependen poco, nada (16.9 → 17.2 %). Igual con las sliders: las "barredoras" (sweepy) pierden; las de giro tipo bala (gyro) no se inmutan (33.9 → 33.0 %).</p>
+        <div class="bars" aria-label="Whiff por swing de rectas con mucho ride">
+          <div>Nivel del mar<i class="sea" style="width:100%"></i><em>26.8 %</em></div>
+          <div>Altitud extrema<i class="alt" style="width:74%"></i><em>19.9 %</em></div>
+        </div>
+        <p class="why">es el <strong>índice de dependencia del Magnus</strong>: dice qué tan frágil es un arsenal en altura antes de firmar al pitcher. Falta repetirlo comparando exactamente los mismos pitches.</p>
+        <p class="src">Fuente: docs/00_contexto_y_approach.md §5.4</p>
+      </article>
+
+      <article class="finding">
+        <div class="stat"><b>12.6 → 3.1 %</b><span>de las sliders son sweepers a nivel del mar contra altitud extrema</span></div>
+        <h3>Las sweepers casi desaparecen en la CDMX <span class="tag solid">Sólido</span></h3>
+        <p>La <strong>sweeper</strong> es una slider que barre mucho de lado. En altura pierde tanto movimiento que deja de parecer sweeper. Al convertir a nivel del mar, el 7.3 % lo vuelve a ser: la conversión explica casi la mitad de la diferencia. La otra mitad sugiere que los pitches que más se mueven pierden más que el promedio. Además, en la LMB no hay un corte natural entre sweeper y slider: es un continuo.</p>
+        <p class="why">coincide con lo que nos dijo el experto ("las sliders se aplanan en altura") y da una recomendación concreta de arsenal para el perfil ideal.</p>
+        <p class="src">Fuente: docs/02_features.md §4 · decisión D-017</p>
+      </article>
+
+      <article class="finding">
+        <div class="stat"><b>+34 ft</b><span>vuela el mismo batazo en altitud extrema</span></div>
+        <h3>La otra cara de la altura: los batazos vuelan <span class="tag solid">Sólido</span></h3>
+        <p>Batazos de 98–104 mph y 24–34° (el contacto típico de jonrón): misma velocidad y ángulo en todas las altitudes, pero en altura la pelota llega <strong>34 pies más lejos</strong> y es jonrón <strong>14.9 puntos más seguido</strong> (69.4 % contra 54.6 %). Es la idea que vimos en Ballpark Pal ("jonrones que te quitó o te regaló el clima").</p>
+        <div class="bars" aria-label="Porcentaje de jonrón con el mismo contacto">
+          <div>Nivel del mar<i class="sea" style="width:79%"></i><em>54.6 %</em></div>
+          <div>Altitud extrema<i class="alt" style="width:100%"></i><em>69.4 %</em></div>
+        </div>
+        <p class="why">la herramienta "jonrones regalados por el aire" separa al pitcher al que le pegaron fuerte del que castigó la altura. Responde directo al entregable de "riesgo de jonrón".</p>
+        <p class="src">Fuente: docs/retroalimentacion_experto.md · src/evidencia_acarreo.py</p>
+      </article>
+
+      <article class="finding">
+        <div class="stat"><b>20.3 → 31.3 %</b><span>whiff por swing cuando el pitch se separa más del anterior al final</span></div>
+        <h3>La secuencia importa, y el dataset sí la trae escondida <span class="tag solid">Sólido</span></h3>
+        <p>Creíamos que no había orden de pitches. Revisando, encontramos que las filas vienen en orden cronológico. Con eso reconstruimos <strong>165,649 turnos al bat</strong> y medimos el <strong>tunneling</strong>: dos pitches que se ven iguales hasta que el bateador decide (175 milisegundos antes del plato) y luego se separan. Cuando más se separan después de ese punto, el whiff sube de 20.3 % a 31.3 %. También la <strong>vuelta al orden</strong>: la tercera vez que un pitcher enfrenta al mismo bateador en el juego, el whiff baja de 25.0 % a 21.8 %.</p>
+        <p class="why">la mayoría de los equipos tratará cada pitch como aislado. Nosotros podemos hablar de secuencias, de cuándo sacar al abridor y de relevos.</p>
+        <p class="src">Fuente: docs/02_features.md §9 · decisión D-015</p>
+      </article>
+
+      <article class="finding">
+        <div class="stat"><b>0.45 vs 0.34</b><span>carreras que cuesta una base por bolas en altura contra nivel del mar</span></div>
+        <h3>En la CDMX cada error del pitcher cuesta más <span class="tag solid">Sólido</span></h3>
+        <p>Calculamos cuántas carreras vale cada desenlace. Como el dataset no dice qué corredores había en base, usamos un método clásico que no los necesita: una regresión sobre las entradas completas. En altura se anotan <strong>0.81 carreras por media entrada contra 0.53</strong> a nivel del mar, y todo vale más salvo el jonrón (siempre 1.43). Un strike en 0-0 le quita al rival 0.043 carreras en la CDMX contra 0.034 a nivel del mar.</p>
+        <p class="why">mensaje simple para el cuerpo técnico: <strong>en casa, ponerse adelante en el conteo vale más</strong>. Y nos deja medir cada pitch en carreras reales del Harp Helú.</p>
+        <p class="src">Fuente: docs/03_target.md §1–2 · src/target.py</p>
+      </article>
+
+      <article class="finding">
+        <div class="stat"><b>r 0.45</b><span>con la que la física simple predice a los pitchers de 2026 (su historia: 0.38)</span></div>
+        <h3>Ya sabemos qué tan alta es la barra, y la física va adelante <span class="tag prelim">Preliminar</span></h3>
+        <p>Probamos modelos sencillos para tener contra qué compararnos. Una regresión lineal con velocidad, movimiento y extensión predice el valor de cada pitcher en 2026 mejor que sus propios resultados de 2024–2025 (correlación 0.45 contra 0.38). Los intervalos se enciman, así que todavía no es una diferencia probada. Además, <strong>64 de 178 pitchers</strong> de 2026 no tenían historia suficiente: para ellos solo existe el modelo físico.</p>
+        <p class="why">el modelo final tiene que ganarle a esta regresión con margen claro. Si lo logra, tenemos el argumento central para "calidad del modelo" y "robustez fuera de muestra".</p>
+        <p class="src">Fuente: docs/03_target.md §6 · src/modelos_base.py</p>
+      </article>
+
+      <article class="finding">
+        <div class="stat"><b>99.69 %</b><span>de los pitches sirven para Stuff+, sin borrar ni inventar nada</span></div>
+        <h3>Datos limpios sin hacer trampa <span class="tag solid">Sólido</span></h3>
+        <p>Solo marcamos como error lo físicamente imposible (una extensión de 14 pies), no lo raro (una recta de 105 mph). No borramos filas ni rellenamos con promedios, porque eso sesgaría justo la comparación de altitud: por ejemplo, las bolas en juego que el radar no siguió valen casi cero carreras (contacto débil), y borrarlas habría castigado a los pitchers que inducen contacto débil.</p>
+        <p class="why">el jurado va a preguntar "¿qué hicieron con los datos malos?". Tenemos una respuesta defendible para cada caso.</p>
+        <p class="src">Fuente: docs/01_limpieza.md · src/limpieza.py</p>
+      </article>
+    </div>
+  </section>
+
+  <section id="pistas">
+    <h2>3 · Pistas que vale la pena confirmar</h2>
+    <p class="lead">Señales que vimos en la exploración pero que todavía pueden tener otra explicación. Si se confirman, son material de oro para la entrevista.</p>
+    <div class="scroll"><table>
+      <thead><tr><th>Pista</th><th>Lo que vimos</th><th>Por qué hay que confirmarla</th></tr></thead>
+      <tbody>
+        <tr><td>Las curvas se "cuelgan"</td><td>Dentro del mismo pitcher, la curva cruza el plato ~0.9 pulgadas más alta en altura.</td><td>Puede ser intención (apuntar distinto). Si se confirma, es la herramienta del <strong>punto de mira</strong>: "apunta tu curva X pulgadas más abajo en casa".</td></tr>
+        <tr><td>Aclimatación</td><td>Pitchers que lanzan la mayoría de sus juegos en altura permiten 2.9 % de jonrón por bola en juego ahí, contra 4.3 % de los visitantes.</td><td>Mezcla aclimatación con calidad. Las series de 3 juegos (el siguiente juego es en la misma altitud el 74 % de las veces) permitirían separar ambas cosas.</td></tr>
+        <tr><td>Sweepers pierden más que el promedio</td><td>La conversión cierra solo la mitad de la diferencia de sweepers entre altitudes.</td><td>Probaríamos que la pérdida dependa del tamaño del movimiento. Mejora el perfil ideal de arsenal.</td></tr>
+        <tr><td>Quitar la suerte ayuda</td><td>El valor esperado de un pitcher predice su futuro mejor que su valor real (0.26 contra 0.20).</td><td>Con 114 pitchers el intervalo toca el cero. Se vuelve a medir con el modelo final.</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section id="experto">
+    <h2>4 · Lo que dijo el experto, filtrado por lo que suma puntos</h2>
+    <p class="lead">Héctor, lanzador, nos dio su visión. Es experiencia valiosa, <strong>no una guía definitiva</strong>: cada idea la pasamos por dos filtros. ¿Los datos la respaldan? ¿Nos ayuda a ganar en alguno de los cuatro criterios? Lo que pasa ambos entra; lo que no, se queda como trabajo futuro.</p>
+    <div class="scroll"><table>
+      <thead><tr><th>Idea</th><th>Qué encontramos</th><th>Decisión</th></tr></thead>
+      <tbody>
+        <tr><td>La secuencia y el tunneling importan</td><td>Confirmado: whiff de 20.3 % a 31.3 % según cómo se separan los pitches.</td><td><span class="verdict yes">Entra</span> Variables de secuencia en Pitching+. Suma en arsenal y aplicabilidad.</td></tr>
+        <tr><td>Minimizar al bateador, no maximizar al pitcher</td><td>Es el enfoque natural de Pitching+.</td><td><span class="verdict adapt">Adaptada</span> Stuff+ se queda sin bateador porque así lo define la convocatoria; Pitching+ y las herramientas sí lo usan.</td></tr>
+        <tr><td>Zonas de poder del bateador con OPS, no promedio</td><td>Tenemos ubicación y resultado de cada pitch para 864 bateadores.</td><td><span class="verdict yes">Entra</span> Mapa de daño por zona con <strong>wOBA</strong> (como OPS pero bien ponderado). Muy aplicable para el coach.</td></tr>
+        <tr><td>La pareja exacta bateador-pitcher</td><td>La mediana de una pareja es de 6 pitches: casi no hay datos.</td><td><span class="verdict adapt">Adaptada</span> Bateador contra <em>tipo de pitch</em> (por ejemplo, contra sweepers rápidas), que sí tiene muestra.</td></tr>
+        <tr><td>No homologar zurdos y derechos; el platoon importa</td><td>Solo usamos "lado del brazo" para comparar formas.</td><td><span class="verdict yes">Entra</span> La mano del pitcher y del bateador siguen como variables y se mide el efecto platoon.</td></tr>
+        <tr><td>Las sliders se aplanan en altura</td><td>Confirmado: las sweepers caen de 12.6 % a 3.1 %.</td><td><span class="verdict yes">Entra</span> Parte del perfil ideal y del índice Magnus.</td></tr>
+        <tr><td>Abridor contra relevo de la 5ta a la 8va</td><td>Reconstruimos 4,303 aperturas; los relevistas entran en la 7ma de mediana.</td><td><span class="verdict adapt">Adaptada</span> Asistente de bullpen durante el juego, si alcanza el tiempo (aplicabilidad).</td></tr>
+        <tr><td>Efecto de la serie de 3 juegos</td><td>Se nota en los datos, pero falta reconstruir los equipos.</td><td><span class="verdict later">Después</span> Solo si sobra tiempo; alimenta la aclimatación.</td></tr>
+        <tr><td>Caso Isaac Paredes: hay bateadores que encajan con un parque</td><td>Tenemos dirección, ángulo y distancia de cada batazo.</td><td><span class="verdict yes">Entra</span> Encaje de bateadores con la altura, junto con "jonrones regalados por el aire".</td></tr>
+        <tr><td>Aire del día con una API de clima</td><td>Sin fecha ni estadio no podemos unir clima histórico.</td><td><span class="verdict later">Después</span> Nuestro aire medido por juego sirve para calibrarla en vivo. Lo presentamos como siguiente paso.</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section id="rumbo">
+    <h2>5 · Cómo vamos a ganar</h2>
+    <p class="lead">Lo más probable es que otros equipos hagan un modelo con la altitud como una variable más ("¿se jugó en altura? sí/no"). Nosotros vamos a <strong>explicar con física</strong> qué le pasa a cada pitch y a <strong>probar</strong> que funciona con datos que el modelo no vio. Así se ve cada criterio:</p>
+    <div class="scroll"><table>
+      <thead><tr><th>Criterio</th><th>Qué vamos a presentar</th><th>Prueba que lo respalda</th></tr></thead>
+      <tbody>
+        <tr><td>Calidad del modelo</td><td>Un modelo en dos pasos: primero traduce el pitch al aire de cada parque (física) y luego predice cuántas carreras vale (estadística). Stuff+, Location+ y Pitching+ salen del mismo valor en carreras.</td><td>Ganarle a los cinco modelos base en 2026, con intervalo que no toque cero.</td></tr>
+        <tr><td>Robustez fuera de muestra</td><td>Entrenado con 2024–2025 y evaluado en 2026. <strong>Pasaporte de altitud</strong>: predecir cómo rinde un pitcher en la CDMX usando solo lo que lanzó a nivel del mar.</td><td>~400 pitchers lanzan en ambos ambientes: comparamos la predicción con lo que de verdad pasó.</td></tr>
+        <tr><td>Arsenal + altitud</td><td>Cada pitch comparado contra la recta del pitcher; forma a nivel del mar; aire medido por juego; índice de dependencia del Magnus; valor en carreras local.</td><td>Hallazgos 1 a 6 de esta página, cada uno con intervalo de confianza.</td></tr>
+        <tr><td>Aplicabilidad</td><td>Herramientas que contestan preguntas reales: ¿fichamos a este pitcher? ¿qué pitch le funciona en casa? ¿dónde apuntar la curva? ¿a quién no lanzarle adentro?</td><td>Dashboard simulador: metes un pitch y ves su Stuff+ en la CDMX contra nivel del mar.</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>Las herramientas, por prioridad</h3>
+    <div class="scroll"><table>
+      <thead><tr><th>Herramienta</th><th>Pregunta que responde</th><th>Para quién</th><th>Prioridad</th></tr></thead>
+      <tbody>
+        <tr><td>Pasaporte de altitud</td><td>"Si fichamos a este pitcher de nivel del mar, ¿cuánto vale en el Harp Helú?"</td><td>Director deportivo</td><td><span class="verdict yes">Indispensable</span></td></tr>
+        <tr><td>Índice de dependencia del Magnus</td><td>"¿Qué tan frágil es este arsenal en altura?"</td><td>Scouting</td><td><span class="verdict yes">Indispensable</span></td></tr>
+        <tr><td>Jonrones regalados por el aire</td><td>"¿Le pegaron fuerte o lo castigó la altura?"</td><td>Director deportivo, prensa</td><td><span class="verdict yes">Indispensable</span></td></tr>
+        <tr><td>Punto de mira</td><td>"¿Cuánto más abajo apunto mi curva en casa?"</td><td>Pitching coach</td><td><span class="verdict adapt">Si se confirma</span></td></tr>
+        <tr><td>Mapa de daño por zona (wOBA)</td><td>"¿Dónde no lanzarle a este bateador?"</td><td>Pitching coach, catcher</td><td><span class="verdict adapt">Deseable</span></td></tr>
+        <tr><td>Encaje de bateadores con la altura</td><td>"¿Qué bateadores rivales se crecen en nuestro parque?"</td><td>Cuerpo técnico</td><td><span class="verdict adapt">Deseable</span></td></tr>
+        <tr><td>Asistente de bullpen</td><td>"¿Qué relevista conviene contra los próximos tres bateadores?"</td><td>Manager</td><td><span class="verdict later">Si sobra tiempo</span></td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="note"><b>Regla del equipo:</b> nada inventado ni inflado. Si un resultado es débil o pierde contra el modelo base, se reporta igual. En una entrevista de 10 minutos con jurado técnico, decir "esto no funcionó y por qué" da más credibilidad que un número demasiado bonito.</div>
+  </section>
+
+  <section id="calendario">
+    <h2>6 · Calendario propuesto</h2>
+    <p class="lead">Quedan 15 días para la entrega. Propuesta para discutir en equipo:</p>
+    <div class="plan">
+      <div class="step done"><b>Etapas 0 a 3 · Exploración, limpieza, variables y target</b><span>hecho · 29 sep – 7 oct</span><p>Todo lo de esta página.</p></div>
+      <div class="step next"><b>Etapa 4 · Modelos de Stuff+, Location+ y Pitching+</b><span>8 – 11 oct</span><p>El traductor físico más el modelo de carreras. Tiene que ganarle a la regresión lineal.</p></div>
+      <div class="step"><b>Etapa 5 · Validación</b><span>12 – 14 oct</span><p>2026 completo, pasaporte con los ~400 pitchers que lanzan en ambos ambientes, pruebas de sensibilidad.</p></div>
+      <div class="step"><b>Etapa 6 · Herramientas</b><span>13 – 17 oct</span><p>Pasaporte, índice Magnus, jonrones regalados por el aire; luego las deseables.</p></div>
+      <div class="step"><b>Etapa 7 · Dashboard simulador</b><span>16 – 19 oct</span><p>Meter un pitch y ver su Stuff+ en la CDMX contra nivel del mar, con mapa de movimiento.</p></div>
+      <div class="step"><b>Etapa 8 · Documento técnico y ensayo de la entrevista</b><span>18 – 21 oct</span><p>6 a 10 páginas; cada integrante debe poder explicar cualquier parte.</p></div>
+      <div class="step"><b>Entrega</b><span>22 oct</span><p>Con un día de margen para imprevistos.</p></div>
+    </div>
+  </section>
+
+  <section id="riesgos">
+    <h2>7 · Riesgos y cómo los manejamos</h2>
+    <div class="scroll"><table>
+      <thead><tr><th>Riesgo</th><th>Qué hacemos</th></tr></thead>
+      <tbody>
+        <tr><td>"Altitud extrema" mezcla varios parques, no solo el Harp Helú</td><td>Lo decimos de frente. Nuestro aire medido por juego es más fino que las tres categorías y ayuda a separar parques.</td></tr>
+        <tr><td>No hay corredores en base</td><td>Valores de carreras por regresión sobre entradas completas: el método estándar cuando no hay corredores.</td></tr>
+        <tr><td>2026 es una temporada parcial (114 pitchers comparables)</td><td>Intervalos de confianza en todo; no presentamos como probado lo que se encima.</td></tr>
+        <tr><td>Que el modelo final no le gane a la regresión lineal</td><td>Sería un hallazgo en sí (la física simple basta). Lo reportamos y nos apoyamos en el pasaporte y las herramientas.</td></tr>
+        <tr><td>Tiempo</td><td>Prioridades claras: lo indispensable primero, lo deseable después.</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section id="diccionario">
+    <h2>8 · Diccionario rápido</h2>
+    <dl>
+      <dt>Stuff+ / Location+ / Pitching+</dt><dd>Calificaciones donde 100 es el promedio de la liga y cada 10 puntos es una desviación estándar. Stuff+ mira solo la física del pitch; Location+, dónde lo puso; Pitching+, todo junto.</dd>
+      <dt>Efecto Magnus</dt><dd>El giro de la pelota empuja el aire hacia un lado y la pelota se va al otro. Con menos aire, menos efecto: por eso los pitches se mueven menos en altura.</dd>
+      <dt>IVB y HB</dt><dd>Movimiento vertical inducido (cuánto "sube" la recta respecto a una pelota sin giro) y movimiento horizontal, en pulgadas.</dd>
+      <dt>Ride</dt><dd>La sensación de que la recta "sube": en realidad cae menos de lo que el bateador espera.</dd>
+      <dt>Sweeper / gyro slider</dt><dd>Dos estilos de slider: la sweeper barre mucho de lado; la gyro gira como bala y casi no depende del aire para moverse.</dd>
+      <dt>Whiff</dt><dd>Swing fallido. "Whiff por swing" = de cada 100 veces que el bateador abanica, cuántas falla.</dd>
+      <dt>Tunneling</dt><dd>Lanzar dos pitches que se ven iguales hasta que el bateador tiene que decidir y luego se separan.</dd>
+      <dt>Vuelta al orden</dt><dd>Cuántas veces ha enfrentado el pitcher al mismo bateador en el juego. Cada vuelta el bateador lo ve mejor.</dd>
+      <dt>Platoon</dt><dd>La ventaja del bateador que batea del lado contrario a la mano del pitcher.</dd>
+      <dt>xRV (valor en carreras esperado)</dt><dd>Cuántas carreras le suma o le quita un pitch al rival, sin la suerte de dónde cayó la pelota. Es lo que predicen nuestros modelos.</dd>
+      <dt>wOBA</dt><dd>Mide la producción de un bateador dándole a cada desenlace su peso real en carreras: un doble vale más que un sencillo y una base por bolas también cuenta. Mejor que el promedio de bateo.</dd>
+      <dt>Holdout / fuera de muestra</dt><dd>Datos que el modelo nunca vio al entrenar (para nosotros, 2026). Es la prueba honesta de que funciona.</dd>
+      <dt>Intervalo de confianza (IC 95 %)</dt><dd>El rango donde probablemente está el valor real. Si el intervalo de una diferencia incluye el cero, no podemos decir que la diferencia exista.</dd>
+      <dt>Remuestreo por pitcher (bootstrap)</dt><dd>Repetir el cálculo mil veces sorteando pitchers con reemplazo, para ver qué tanto cambia el resultado. Se sortean pitchers completos porque sus pitches no son independientes entre sí.</dd>
+      <dt>Correlación (r)</dt><dd>De −1 a 1: qué tanto dos cosas se mueven juntas. 0 = nada. Para predecir a un pitcher de una temporada a otra, donde hay mucho azar, 0.45 es una relación moderada.</dd>
+      <dt>AUC</dt><dd>Qué tan bien un modelo separa dos casos (whiff o no). 0.5 = adivinar al azar; 1 = perfecto.</dd>
+      <dt>Variable instrumental</dt><dd>Técnica para corregir el sesgo de una variable medida con ruido: usamos solo la parte de esa variable que se conoce con precisión.</dd>
+      <dt>Gradient boosting</dt><dd>Un modelo que suma cientos de árboles de decisión pequeños, cada uno corrigiendo los errores del anterior. Captura relaciones no lineales sin que se las digamos.</dd>
+      <dt>Predicción cruzada</dt><dd>Cada dato recibe la predicción de un modelo que no lo vio al entrenar, para que su propio resultado no se cuele en la respuesta.</dd>
+      <dt>Modelo base</dt><dd>Un modelo simple (el promedio, una regresión) que el modelo final debe superar. Sin él no sabemos si el modelo aprende algo.</dd>
+    </dl>
+  </section>
+
+  <footer>
+    <span>Documentos completos en <code>docs/</code> (empieza por el README). Decisiones con su porqué: <code>docs/decisiones.md</code>, D-001 a D-024.</span>
+    <span>Reportes por etapa en <code>reportes/</code>. Los datos nunca se suben al repositorio.</span>
+  </footer>
+</main>
+</body>
+</html>

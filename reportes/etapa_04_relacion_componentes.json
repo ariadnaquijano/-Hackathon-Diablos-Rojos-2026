@@ -1,0 +1,342 @@
+{
+  "nota": "Solo 2024 y 2025 (D-025). Valores por 100 pitches, centrados por temporada.",
+  "estructura": {
+    "2024": {
+      "pitchers": 320,
+      "r_stuff_location": {
+        "r": -0.0709,
+        "ic95": [
+          -0.1887,
+          0.0401
+        ]
+      },
+      "r_pitching_stuff": {
+        "r": 0.5702,
+        "ic95": [
+          0.4853,
+          0.6459
+        ]
+      },
+      "r_pitching_location": {
+        "r": 0.6462,
+        "ic95": [
+          0.5757,
+          0.7043
+        ]
+      },
+      "peso_stuff": {
+        "beta": 0.6192,
+        "ic95": [
+          0.566,
+          0.6751
+        ]
+      },
+      "peso_location": {
+        "beta": 0.6902,
+        "ic95": [
+          0.6394,
+          0.7352
+        ]
+      },
+      "r2_pitching_con_ambos": {
+        "r2": 0.7991,
+        "ic95": [
+          0.7538,
+          0.8389
+        ]
+      },
+      "r_con_xrv_real": {
+        "stuff_nivel_mar": {
+          "r": 0.2539,
+          "ic95": [
+            0.1341,
+            0.3612
+          ]
+        },
+        "location": {
+          "r": 0.3027,
+          "ic95": [
+            0.2053,
+            0.3928
+          ]
+        },
+        "pitching": {
+          "r": 0.4828,
+          "ic95": [
+            0.3942,
+            0.5617
+          ]
+        }
+      },
+      "desviacion_entre_pitchers_por_100": {
+        "xrv_neutral": 0.7047,
+        "stuff_nivel_mar": 0.178,
+        "location": 0.2805,
+        "pitching": 0.3289
+      }
+    },
+    "2025": {
+      "pitchers": 320,
+      "r_stuff_location": {
+        "r": -0.1721,
+        "ic95": [
+          -0.2893,
+          -0.0563
+        ]
+      },
+      "r_pitching_stuff": {
+        "r": 0.4722,
+        "ic95": [
+          0.3708,
+          0.5663
+        ]
+      },
+      "r_pitching_location": {
+        "r": 0.6655,
+        "ic95": [
+          0.6054,
+          0.7171
+        ]
+      },
+      "peso_stuff": {
+        "beta": 0.6047,
+        "ic95": [
+          0.5577,
+          0.6554
+        ]
+      },
+      "peso_location": {
+        "beta": 0.7696,
+        "ic95": [
+          0.717,
+          0.8234
+        ]
+      },
+      "r2_pitching_con_ambos": {
+        "r2": 0.7977,
+        "ic95": [
+          0.7541,
+          0.8351
+        ]
+      },
+      "r_con_xrv_real": {
+        "stuff_nivel_mar": {
+          "r": 0.352,
+          "ic95": [
+            0.239,
+            0.4604
+          ]
+        },
+        "location": {
+          "r": 0.2137,
+          "ic95": [
+            0.1094,
+            0.3061
+          ]
+        },
+        "pitching": {
+          "r": 0.4954,
+          "ic95": [
+            0.4035,
+            0.5796
+          ]
+        }
+      },
+      "desviacion_entre_pitchers_por_100": {
+        "xrv_neutral": 0.717,
+        "stuff_nivel_mar": 0.1844,
+        "location": 0.2977,
+        "pitching": 0.3307
+      }
+    }
+  },
+  "por_pitch_2025": {
+    "pesos_suma_2024": {
+      "stuff": 0.7305,
+      "location": 1.0864
+    },
+    "stuff_nivel_mar": {
+      "mejora_vs_media_pct": 0.152,
+      "ic95_mejora_pct": [
+        0.12353,
+        0.17843
+      ],
+      "ic95_diferencia_vs_suma_pct": [
+        -5.24428,
+        -4.80555
+      ]
+    },
+    "location": {
+      "mejora_vs_media_pct": 5.1127,
+      "ic95_mejora_pct": [
+        4.90037,
+        5.32393
+      ],
+      "ic95_diferencia_vs_suma_pct": [
+        -0.09192,
+        -0.0474
+      ]
+    },
+    "suma": {
+      "mejora_vs_media_pct": 5.1828,
+      "ic95_mejora_pct": [
+        4.95469,
+        5.39507
+      ],
+      "ic95_diferencia_vs_suma_pct": [
+        0.0,
+        0.0
+      ]
+    },
+    "pitching": {
+      "mejora_vs_media_pct": 5.1372,
+      "ic95_mejora_pct": [
+        4.92989,
+        5.33842
+      ],
+      "ic95_diferencia_vs_suma_pct": [
+        -0.10681,
+        0.01256
+      ]
+    }
+  },
+  "confiabilidad_mitades": {
+    "2024": {
+      "pitchers": 320,
+      "xrv_neutral": {
+        "confiabilidad": 0.354,
+        "ic95": [
+          0.196,
+          0.4796
+        ]
+      },
+      "stuff_nivel_mar": {
+        "confiabilidad": 0.9918,
+        "ic95": [
+          0.9897,
+          0.9936
+        ]
+      },
+      "location": {
+        "confiabilidad": 0.7726,
+        "ic95": [
+          0.7218,
+          0.8209
+        ]
+      },
+      "pitching": {
+        "confiabilidad": 0.8465,
+        "ic95": [
+          0.8082,
+          0.8777
+        ]
+      }
+    },
+    "2025": {
+      "pitchers": 320,
+      "xrv_neutral": {
+        "confiabilidad": 0.2574,
+        "ic95": [
+          0.0428,
+          0.4207
+        ]
+      },
+      "stuff_nivel_mar": {
+        "confiabilidad": 0.992,
+        "ic95": [
+          0.9899,
+          0.9937
+        ]
+      },
+      "location": {
+        "confiabilidad": 0.8162,
+        "ic95": [
+          0.7616,
+          0.8572
+        ]
+      },
+      "pitching": {
+        "confiabilidad": 0.8673,
+        "ic95": [
+          0.8291,
+          0.897
+        ]
+      }
+    }
+  },
+  "entre_temporadas": {
+    "pitchers": 146,
+    "repeticion_2024_a_2025": {
+      "xrv_neutral": {
+        "r": 0.1758,
+        "ic95": [
+          -0.0068,
+          0.3452
+        ]
+      },
+      "stuff_nivel_mar": {
+        "r": 0.847,
+        "ic95": [
+          0.7923,
+          0.8898
+        ]
+      },
+      "location": {
+        "r": 0.6766,
+        "ic95": [
+          0.5821,
+          0.766
+        ]
+      },
+      "pitching": {
+        "r": 0.6474,
+        "ic95": [
+          0.5517,
+          0.7318
+        ]
+      }
+    },
+    "predice_xrv_2025": {
+      "stuff_nivel_mar": {
+        "r": 0.1361,
+        "ic95": [
+          -0.029,
+          0.3069
+        ],
+        "ic95_diferencia_vs_xrv_2024": [
+          -0.296,
+          0.2061
+        ]
+      },
+      "location": {
+        "r": 0.0389,
+        "ic95": [
+          -0.0996,
+          0.1839
+        ],
+        "ic95_diferencia_vs_xrv_2024": [
+          -0.3028,
+          0.0257
+        ]
+      },
+      "pitching": {
+        "r": 0.2188,
+        "ic95": [
+          0.0469,
+          0.3834
+        ],
+        "ic95_diferencia_vs_xrv_2024": [
+          -0.1497,
+          0.2375
+        ]
+      },
+      "xrv_real_2024": {
+        "r": 0.1758,
+        "ic95": [
+          -0.0068,
+          0.3452
+        ]
+      }
+    }
+  }
+}

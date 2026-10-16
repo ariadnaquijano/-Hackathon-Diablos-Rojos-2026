@@ -1,0 +1,170 @@
+{
+  "pesos_lineales": {
+    "medias_entradas": 37023,
+    "completas": 33805,
+    "pct_completas": 0.9131,
+    "liga": {
+      "medias_entradas": 26536,
+      "carreras_por_media_entrada": 0.657,
+      "pesos": {
+        "1B": 0.5184,
+        "2B": 0.8307,
+        "3B": 1.1336,
+        "HR": 1.4318,
+        "BB": 0.3892,
+        "HBP": 0.4066,
+        "K": -0.1168,
+        "OUT": -0.1127,
+        "E": 0.5996,
+        "SAC": 0.1935,
+        "FC": -0.1368
+      }
+    },
+    "por_altitud": {
+      "No Altitude": {
+        "medias_entradas": 12725,
+        "carreras_por_media_entrada": 0.531,
+        "pesos": {
+          "1B": 0.4776,
+          "2B": 0.7716,
+          "3B": 1.017,
+          "HR": 1.43,
+          "BB": 0.3426,
+          "HBP": 0.3814,
+          "K": -0.1019,
+          "OUT": -0.0954,
+          "E": 0.5843,
+          "SAC": 0.1922,
+          "FC": -0.1266
+        }
+      },
+      "Medium Altitude": {
+        "medias_entradas": 6610,
+        "carreras_por_media_entrada": 0.739,
+        "pesos": {
+          "1B": 0.5366,
+          "2B": 0.839,
+          "3B": 1.1131,
+          "HR": 1.431,
+          "BB": 0.4107,
+          "HBP": 0.4842,
+          "K": -0.1217,
+          "OUT": -0.1208,
+          "E": 0.6324,
+          "SAC": 0.1649,
+          "FC": -0.1635
+        }
+      },
+      "Extreme Altitude": {
+        "medias_entradas": 7159,
+        "carreras_por_media_entrada": 0.808,
+        "pesos": {
+          "1B": 0.549,
+          "2B": 0.8846,
+          "3B": 1.2137,
+          "HR": 1.4231,
+          "BB": 0.4484,
+          "HBP": 0.3738,
+          "K": -0.1358,
+          "OUT": -0.1329,
+          "E": 0.6046,
+          "SAC": 0.229,
+          "FC": -0.0679
+        }
+      }
+    }
+  },
+  "valor_por_conteo": {
+    "turnos_entrenamiento": 130852,
+    "turnos_con_desenlace": 129601,
+    "por_conteo": [
+      {
+        "Balls": 0,
+        "Strikes": 0,
+        "run_value": 0.1457,
+        "pitches": 128199
+      },
+      {
+        "Balls": 0,
+        "Strikes": 1,
+        "run_value": 0.1067,
+        "pitches": 60401
+      },
+      {
+        "Balls": 0,
+        "Strikes": 2,
+        "run_value": 0.0527,
+        "pitches": 29369
+      },
+      {
+        "Balls": 1,
+        "Strikes": 0,
+        "run_value": 0.1792,
+        "pitches": 53802
+      },
+      {
+        "Balls": 1,
+        "Strikes": 1,
+        "run_value": 0.133,
+        "pitches": 50119
+      },
+      {
+        "Balls": 1,
+        "Strikes": 2,
+        "run_value": 0.0732,
+        "pitches": 43863
+      },
+      {
+        "Balls": 2,
+        "Strikes": 0,
+        "run_value": 0.2268,
+        "pitches": 19384
+      },
+      {
+        "Balls": 2,
+        "Strikes": 1,
+        "run_value": 0.1744,
+        "pitches": 27673
+      },
+      {
+        "Balls": 2,
+        "Strikes": 2,
+        "run_value": 0.1067,
+        "pitches": 38626
+      },
+      {
+        "Balls": 3,
+        "Strikes": 0,
+        "run_value": 0.3074,
+        "pitches": 6645
+      },
+      {
+        "Balls": 3,
+        "Strikes": 1,
+        "run_value": 0.2577,
+        "pitches": 12522
+      },
+      {
+        "Balls": 3,
+        "Strikes": 2,
+        "run_value": 0.1851,
+        "pitches": 25151
+      }
+    ]
+  },
+  "consistencia_conteo": {
+    "transiciones": 464599,
+    "inconsistentes": 1381,
+    "pct_inconsistentes": 0.003
+  },
+  "bolas_en_juego": {
+    "bolas_en_juego": 115946,
+    "sin_velocidad_salida": 7764,
+    "valor_medio_con_ev": 0.187,
+    "valor_medio_sin_ev": 0.017,
+    "r2_2026": {
+      "ev_angulo": 0.3765,
+      "ev_angulo_direccion": 0.5078
+    }
+  }
+}

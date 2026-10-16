@@ -1,0 +1,516 @@
+<!doctype html>
+<html lang="es-MX">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Simulador Stuff+</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<style>
+/* Herramienta de trabajo: entradas en una columna fija a la izquierda, veredicto y mapa a la derecha.
+   En teléfono se apilan: primero el pitch, luego el resultado. */
+:root {
+  --bg: #f4f5f7; --surface: #ffffff; --surface-2: #f8f9fb; --ink: #14171c; --ink-2: #454c59; --ink-3: #6b7280;
+  --rule: #e1e4e9; --rule-strong: #c9ced6; --accent: #b3122a; --accent-ink: #ffffff; --accent-soft: #fbe9ec;
+  --sea: #1f63b5; --harp: #b3122a; --best: #0d9488; --worst: #c2410c; --dot: #c3c8d1; --warn: #9a5b00; --warn-soft: #fff4e0;
+  --display: "Barlow Condensed", "Arial Narrow", "Helvetica Neue", sans-serif;
+  --body: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --radius: 10px; --radius-sm: 6px;
+  --shadow: 0 1px 2px rgb(16 24 40 / 0.04), 0 1px 3px rgb(16 24 40 / 0.06);
+  --ease: cubic-bezier(0.2, 0, 0, 1);
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f1216; --surface: #171b21; --surface-2: #1c2128; --ink: #eceef2; --ink-2: #b8bfca; --ink-3: #8d95a3;
+    --rule: #2a3039; --rule-strong: #3a414c; --accent: #ff5a6e; --accent-ink: #1a0b0e; --accent-soft: #3a1b22;
+    --sea: #4f8ad6; --harp: #ec4459; --best: #14a394; --worst: #d9692a; --dot: #3c434e; --warn: #f2b45a; --warn-soft: #2e2413;
+    --shadow: none; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0f1216; --surface: #171b21; --surface-2: #1c2128; --ink: #eceef2; --ink-2: #b8bfca; --ink-3: #8d95a3;
+  --rule: #2a3039; --rule-strong: #3a414c; --accent: #ff5a6e; --accent-ink: #1a0b0e; --accent-soft: #3a1b22;
+  --sea: #4f8ad6; --harp: #ec4459; --best: #14a394; --worst: #d9692a; --dot: #3c434e; --warn: #f2b45a; --warn-soft: #2e2413;
+  --shadow: none; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 400 1rem/1.5 var(--body); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+p { margin: 0; }
+.skip { position: absolute; left: -999px; top: 8px; background: var(--surface); padding: 8px 12px; border-radius: var(--radius-sm); }
+.skip:focus { left: 16px; z-index: 30; }
+
+/* Barra superior */
+.appbar { position: sticky; top: 0; z-index: 20; background: var(--surface); border-bottom: 1px solid var(--rule); }
+.appbar-inner { max-width: 84rem; margin-inline: auto; padding: 0 16px; height: 56px; display: flex; align-items: center; gap: 24px; }
+.brand { display: flex; align-items: baseline; gap: 10px; white-space: nowrap; }
+.brand b { font: 700 1.25rem/1 var(--display); letter-spacing: 0.02em; text-transform: uppercase; color: var(--accent); }
+.brand span { font: 500 0.8125rem/1 var(--body); color: var(--ink-3); }
+.tabs { display: flex; gap: 4px; height: 100%; }
+.tabs a { white-space: nowrap; display: flex; align-items: center; padding: 0 12px; color: var(--ink-2); text-decoration: none; font-weight: 600; font-size: 0.9375rem; border-bottom: 2px solid transparent; }
+.tabs a:hover { color: var(--ink); }
+.tabs a[aria-current="page"] { color: var(--ink); border-bottom-color: var(--accent); }
+.meta { margin-left: auto; font: 500 0.75rem/1 var(--mono); color: var(--ink-3); white-space: nowrap; }
+@media (max-width: 40rem) { .brand span, .meta, .tabs .long { display: none; } .appbar-inner { gap: 12px; } }
+
+/* Página */
+.page { max-width: 84rem; margin-inline: auto; padding: 24px 16px 64px; display: grid; grid-template-columns: 22.5rem minmax(0, 1fr); gap: 24px; align-items: start; }
+@media (max-width: 64rem) { .page { grid-template-columns: 1fr; } }
+.card { background: var(--surface); border: 1px solid var(--rule); border-radius: var(--radius); box-shadow: var(--shadow); }
+
+/* Entradas */
+.inputs { padding: 20px; display: grid; gap: 20px; position: sticky; top: 72px; }
+@media (max-width: 64rem) { .inputs { position: static; } }
+.inputs h1 { font: 700 1.75rem/1.05 var(--display); margin: 0; }
+.inputs .lede { color: var(--ink-2); font-size: 0.9375rem; margin-top: 6px; }
+.group { display: grid; gap: 10px; border: 0; padding: 0; margin: 0; min-width: 0; }
+.group > legend, .label { font: 600 0.6875rem/1 var(--mono); text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-3); padding: 0; margin-bottom: 2px; }
+.segmented { display: flex; flex-wrap: wrap; gap: 6px; }
+.segmented label { position: relative; }
+.segmented input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+.segmented span { display: inline-flex; align-items: center; min-height: 36px; padding: 0 12px; border: 1px solid var(--rule-strong); border-radius: 999px; font-size: 0.875rem; font-weight: 600; color: var(--ink-2); background: var(--surface); transition: background 150ms var(--ease), color 150ms var(--ease), border-color 150ms var(--ease); cursor: pointer; user-select: none; }
+.segmented input:hover + span { border-color: var(--ink-3); color: var(--ink); }
+.segmented input:checked + span { background: var(--ink); border-color: var(--ink); color: var(--surface); }
+.segmented input:focus-visible + span { outline: 2px solid var(--accent); outline-offset: 2px; }
+.segmented.split { display: grid; grid-template-columns: 1fr 1fr; }
+.segmented.split span { justify-content: center; width: 100%; }
+.fields { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.field { display: grid; gap: 4px; min-width: 0; }
+.field label { font-size: 0.8125rem; font-weight: 600; color: var(--ink-2); }
+.input-wrap { display: flex; min-width: 0; align-items: center; border: 1px solid var(--rule-strong); border-radius: var(--radius-sm); background: var(--surface-2); transition: border-color 150ms var(--ease); }
+.input-wrap:focus-within { border-color: var(--accent); outline: 2px solid color-mix(in srgb, var(--accent) 25%, transparent); }
+.input-wrap input { flex: 1 1 0; width: 0; min-width: 0; height: 40px; border: 0; background: transparent; padding: 0 0 0 10px; font: 500 0.9375rem var(--mono); color: var(--ink); font-variant-numeric: tabular-nums; }
+.input-wrap input:focus { outline: none; }
+.input-wrap .unit { padding: 0 10px 0 6px; font: 500 0.75rem var(--mono); color: var(--ink-3); }
+.hint { font: 400 0.6875rem/1.3 var(--mono); color: var(--ink-3); }
+.field.out .input-wrap { border-color: var(--warn); background: var(--warn-soft); }
+.field.out .hint { color: var(--warn); }
+.field.bad .input-wrap { border-color: var(--accent); }
+.field.bad .hint { color: var(--accent); }
+details.reference { border-top: 1px solid var(--rule); padding-top: 16px; }
+details.reference summary { cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; font: 600 0.6875rem/1 var(--mono); text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-3); }
+details.reference summary::-webkit-details-marker { display: none; }
+details.reference summary::after { content: "+"; font: 600 1rem var(--mono); color: var(--ink-3); }
+details.reference[open] summary::after { content: "−"; }
+details.reference .note-inline { font-size: 0.8125rem; color: var(--ink-2); margin: 10px 0 12px; }
+.fb-self { font-size: 0.8125rem; color: var(--ink-2); border-top: 1px solid var(--rule); padding-top: 16px; }
+.actions { display: flex; gap: 8px; }
+button { font: 600 0.875rem var(--body); min-height: 40px; padding: 0 14px; border-radius: var(--radius-sm); cursor: pointer; border: 1px solid var(--rule-strong); background: var(--surface); color: var(--ink); transition: background 150ms var(--ease); }
+button:hover { background: var(--surface-2); }
+
+/* Resultados */
+.results { display: grid; gap: 16px; min-width: 0; transition: opacity 150ms var(--ease); }
+.results.is-loading { opacity: 0.55; }
+.verdict { display: grid; grid-template-columns: 1fr auto 1fr; align-items: stretch; }
+.verdict .side { padding: 20px 24px; display: grid; gap: 10px; align-content: start; }
+.verdict .side + .side { border-left: 1px solid var(--rule); }
+.place { font: 600 0.6875rem/1 var(--mono); text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-3); display: flex; align-items: center; gap: 8px; }
+.place i { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+.place i.diamond { border-radius: 1px; transform: rotate(45deg); width: 9px; height: 9px; }
+.score { display: flex; align-items: baseline; gap: 10px; }
+.score b { font: 700 4.5rem/0.9 var(--display); font-variant-numeric: tabular-nums; letter-spacing: -0.01em; }
+.score small { font: 600 0.875rem var(--body); color: var(--ink-3); }
+.verdict .context { font-size: 0.875rem; color: var(--ink-2); }
+.verdict .context b { color: var(--ink); }
+.delta { display: grid; place-items: center; padding: 0 4px; position: relative; }
+.delta::before { content: ""; position: absolute; top: 20px; bottom: 20px; left: 50%; border-left: 1px solid var(--rule); }
+.delta span { position: relative; font: 700 1.125rem/1 var(--display); padding: 8px 10px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.delta span.flat { background: var(--surface-2); color: var(--ink-2); }
+.pbar { display: grid; gap: 6px; }
+.pbar-track { position: relative; height: 8px; border-radius: 999px; background: linear-gradient(90deg, color-mix(in srgb, var(--ink-3) 18%, transparent), color-mix(in srgb, var(--ink-3) 18%, transparent)); }
+.pbar-track .tick { position: absolute; top: -3px; bottom: -3px; width: 1px; background: var(--rule-strong); }
+.pbar-track .fill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 999px; background: var(--sea); transition: width 250ms var(--ease); }
+.pbar-track .marker { position: absolute; top: 50%; width: 16px; height: 16px; border-radius: 50%; background: var(--sea); border: 3px solid var(--surface); transform: translate(-50%, -50%); box-shadow: 0 0 0 1px var(--sea); transition: left 250ms var(--ease); }
+.pbar-scale { display: flex; justify-content: space-between; font: 400 0.6875rem var(--mono); color: var(--ink-3); }
+@media (max-width: 40rem) {
+  .verdict { grid-template-columns: 1fr; }
+  .verdict .side + .side { border-left: 0; border-top: 1px solid var(--rule); }
+  .delta { padding: 10px 0 0; } .delta::before { display: none; }
+  .score b { font-size: 3.75rem; }
+}
+.tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.tile { padding: 16px 20px; display: grid; gap: 6px; align-content: start; }
+.tile + .tile { border-left: 1px solid var(--rule); }
+.tile .label { margin: 0; }
+.tile .big { font: 700 1.75rem/1 var(--display); font-variant-numeric: tabular-nums; }
+.tile .big .arrow { color: var(--ink-3); font-weight: 500; margin: 0 4px; }
+.tile p { font-size: 0.8125rem; color: var(--ink-2); }
+.tile p b { color: var(--ink); }
+@media (max-width: 52rem) { .tiles { grid-template-columns: 1fr; } .tile + .tile { border-left: 0; border-top: 1px solid var(--rule); } }
+.reading { padding: 16px 20px; border-left: 3px solid var(--accent); font-size: 0.9375rem; color: var(--ink-2); }
+.reading b { color: var(--ink); }
+.map-card { padding: 20px; display: grid; gap: 12px; }
+.map-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 16px; align-items: baseline; }
+.map-head h2 { font: 700 1.375rem/1.1 var(--display); margin: 0; }
+.map-head p { font-size: 0.8125rem; color: var(--ink-3); }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 0.8125rem; color: var(--ink-2); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend i { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+.legend i.diamond { border-radius: 1px; transform: rotate(45deg); width: 9px; height: 9px; }
+.chart { width: 100%; height: auto; display: block; touch-action: manipulation; }
+.chart text { fill: var(--ink-3); font: 400 11px var(--mono); }
+.chart .axis-title { fill: var(--ink-2); font: 600 11px var(--body); }
+.chart .grid { stroke: var(--rule); stroke-width: 1; }
+.chart .zero { stroke: var(--rule-strong); stroke-width: 1; }
+.chart .pt { cursor: pointer; transition: r 150ms var(--ease); }
+.chart .pt:hover { stroke: var(--ink); stroke-width: 1.5; }
+.map-foot { font-size: 0.8125rem; color: var(--ink-3); }
+.method { padding: 4px 20px; }
+.method summary { cursor: pointer; padding: 12px 0; font-weight: 600; color: var(--ink-2); }
+.method ul { margin: 0 0 16px; padding-left: 18px; color: var(--ink-2); font-size: 0.875rem; display: grid; gap: 6px; }
+.method b { color: var(--ink); }
+.tooltip { position: fixed; z-index: 40; pointer-events: none; background: var(--ink); color: var(--surface); padding: 8px 10px; border-radius: var(--radius-sm); font: 400 0.8125rem/1.35 var(--body); max-width: 16rem; opacity: 0; transition: opacity 120ms var(--ease); }
+.tooltip.on { opacity: 1; }
+.tooltip b { font-family: var(--mono); }
+.error { color: var(--accent); font-size: 0.875rem; padding: 12px 20px; }
+.error:empty { display: none; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; } }
+</style>
+</head>
+<body>
+<a class="skip" href="#resultado">Saltar al resultado</a>
+<header class="appbar">
+  <div class="appbar-inner">
+    <div class="brand"><b>Diablos Rojos</b><span>Laboratorio de pitcheo</span></div>
+    <nav class="tabs" aria-label="Secciones">
+      <a href="/" aria-current="page">Simulador</a>
+      <a href="/fichas">Fichas<span class="long">&nbsp;de pitchers</span></a>
+    </nav>
+    <span class="meta">Modelo v2 · LMB 2024–2025</span>
+  </div>
+</header>
+
+<div class="page">
+  <form class="card inputs" id="form" novalidate aria-label="Datos del pitch">
+    <div>
+      <h1>Simulador Stuff+</h1>
+      <p class="lede">Escribe un pitch como lo da TrackMan. El resultado se actualiza solo.</p>
+    </div>
+    <fieldset class="group">
+      <legend>Tipo de pitch</legend>
+      <div class="segmented" id="types"></div>
+    </fieldset>
+    <fieldset class="group">
+      <legend>Mano</legend>
+      <div class="segmented split">
+        <label><input type="radio" name="pitcher_hand" value="Right" checked><span>Derecho</span></label>
+        <label><input type="radio" name="pitcher_hand" value="Left"><span>Zurdo</span></label>
+      </div>
+    </fieldset>
+    <fieldset class="group">
+      <legend>Dónde se midió</legend>
+      <div class="segmented split" id="air"></div>
+    </fieldset>
+    <fieldset class="group">
+      <legend>Física del pitch</legend>
+      <div class="fields" id="pitch-fields"></div>
+    </fieldset>
+    <div id="reference"></div>
+    <div class="actions"><button type="button" id="reset">Cargar un pitch mediano de la LMB</button></div>
+  </form>
+
+  <main class="results" id="resultado" aria-live="polite" aria-busy="false">
+    <section class="card verdict" aria-label="Stuff+ en los dos estadios">
+      <div class="side">
+        <span class="place"><i style="background:var(--sea)"></i>Estadio a nivel del mar</span>
+        <div class="score"><b id="score-sea">—</b><small>Stuff+</small></div>
+        <div class="pbar" id="pbar" aria-hidden="true">
+          <div class="pbar-track"><span class="tick" style="left:50%"></span><span class="fill"></span><span class="marker"></span></div>
+          <div class="pbar-scale"><span>peor</span><span>mediana</span><span>mejor</span></div>
+        </div>
+        <p class="context" id="context-sea"></p>
+      </div>
+      <div class="delta"><span id="delta">—</span></div>
+      <div class="side">
+        <span class="place"><i class="diamond" style="background:var(--harp)"></i>Harp Helú · CDMX</span>
+        <div class="score"><b id="score-harp">—</b><small>Stuff+</small></div>
+        <p class="context" id="context-harp"></p>
+      </div>
+    </section>
+
+    <section class="card tiles" aria-label="Detalle del cambio en altura">
+      <div class="tile">
+        <span class="label">Movimiento en el Harp Helú</span>
+        <span class="big" id="move-ivb">—</span>
+        <span class="big" id="move-hb">—</span>
+        <p>Pulgadas de quiebre vertical inducido (IVB) y hacia el brazo (HB), del mar a la CDMX.</p>
+      </div>
+      <div class="tile">
+        <span class="label">Pérdida por su forma</span>
+        <span class="big" id="shape">—</span>
+        <p id="shape-text"></p>
+      </div>
+      <div class="tile">
+        <span class="label">Pérdida real de su tipo</span>
+        <span class="big" id="league">—</span>
+        <p>Carreras por 100 pitches que pierde su tipo en altitud extrema, en pitchers que lanzaron en los dos lugares.</p>
+      </div>
+    </section>
+
+    <p class="card reading" id="reading">Calculando…</p>
+    <p class="error" id="error" role="alert"></p>
+
+    <section class="card map-card" aria-labelledby="map-title">
+      <div class="map-head">
+        <h2 id="map-title">Mapa de movimiento</h2>
+        <p>Haz clic en un punto para probar esa forma.</p>
+      </div>
+      <div class="legend">
+        <span><i style="background:var(--best)"></i>10 % mejores de su tipo</span>
+        <span><i style="background:var(--worst)"></i>10 % peores</span>
+        <span><i style="background:var(--dot)"></i>resto de la liga</span>
+        <span><i style="background:var(--sea)"></i>tu pitch, nivel del mar</span>
+        <span><i class="diamond" style="background:var(--harp)"></i>tu pitch, Harp Helú</span>
+      </div>
+      <svg class="chart" id="map" viewBox="0 0 640 440" role="img" aria-labelledby="map-title map-desc"><desc id="map-desc"></desc></svg>
+      <p class="map-foot">Cada punto es el promedio de un pitcher en una temporada (2024–2025, 100+ pitches de ese tipo), con el movimiento llevado a nivel del mar para compararlos en igualdad. El rombo muestra cuánto se mueve tu pitch con el aire de la CDMX; no lo compares con los puntos uno a uno, porque en el Harp Helú todos los pitches de la liga también pierden movimiento.</p>
+    </section>
+
+    <details class="card method">
+      <summary>Cómo se calcula</summary>
+      <ul>
+        <li><b>Stuff+ a nivel del mar:</b> el pitch se lleva al aire del mar con aire^k por tipo y lo evalúan cinco modelos (swing, whiff, foul, strike cantado y valor del batazo) que solo ven su física. 100 es el promedio de su tipo en la LMB y 10 puntos es una desviación entre pitchers.</li>
+        <li><b>Stuff+ en el Harp Helú:</b> resta la pérdida real promedio de su tipo en altitud extrema, medida con el mismo pitcher en los dos lugares. Es la cifra calibrada.</li>
+        <li><b>Pérdida por su forma:</b> el pasaporte de altitud lanza el mismo pitch con el aire de la CDMX y estima cuánto pierde. Ordena bien a los pitches, pero exagera la cifra de las rectas, así que solo se usa como percentil.</li>
+        <li><b>Rangos:</b> si un valor sale del 1 % al 99 % de la liga para su tipo, el campo se marca: el modelo casi no vio pitches así.</li>
+      </ul>
+    </details>
+  </main>
+</div>
+<div class="tooltip" id="tooltip" role="tooltip"></div>
+
+<script>
+const CONFIG = __CONFIG__;
+const NAMES = { "Four-Seam": "Recta", Sinker: "Sinker", Cutter: "Cutter", Slider: "Slider", Curveball: "Curva", Changeup: "Cambio", Splitter: "Splitter" };
+const PLURALS = { "Four-Seam": "rectas", Sinker: "sinkers", Cutter: "cutters", Slider: "sliders", Curveball: "curvas", Changeup: "cambios", Splitter: "splitters" };
+const FIELDS = [
+  ["RelSpeed", "Velocidad", "mph", 0.1], ["SpinRate", "Spin", "rpm", 10], ["SpinAxis", "Eje de giro", "°", 1],
+  ["InducedVertBreak", "IVB", "pulg", 0.1], ["HorzBreak", "HB", "pulg", 0.1], ["RelHeight", "Altura de salida", "pies", 0.1],
+  ["RelSide", "Salida lateral", "pies", 0.1], ["Extension", "Extensión", "pies", 0.1],
+];
+const FB_FIELDS = FIELDS.filter(([key]) => key !== "SpinRate");
+const DIGITS = { RelSpeed: 1, SpinRate: 0, SpinAxis: 0, InducedVertBreak: 1, HorzBreak: 1, RelHeight: 1, RelSide: 1, Extension: 1 };
+const MIRRORED = new Set(["HorzBreak", "RelSide"]);
+const el = id => document.getElementById(id);
+const number = (v, digits = 1) => v == null || Number.isNaN(v) ? "—" : Number(v).toLocaleString("es-MX", { minimumFractionDigits: digits, maximumFractionDigits: digits, useGrouping: false });
+const signed = (v, digits = 1) => (v > 0 ? "+" : v < 0 ? "−" : "") + number(Math.abs(v), digits);
+const state = { type: "Four-Seam", hand: "Right", air: CONFIG.aire.mar, result: null, timer: null, request: 0 };
+
+el("types").innerHTML = CONFIG.tipos.map(t =>
+  `<label><input type="radio" name="pitch_class" value="${t}" ${t === state.type ? "checked" : ""}><span>${NAMES[t]}</span></label>`).join("");
+el("air").innerHTML = [[CONFIG.aire.mar, "Nivel del mar"], [CONFIG.aire.harp, "Harp Helú"]].map(([v, l], i) =>
+  `<label><input type="radio" name="aire_medido" value="${v}" ${i === 0 ? "checked" : ""}><span>${l}</span></label>`).join("");
+
+function fieldHtml([key, label, unit, step], prefix = "") {
+  const id = prefix + key;
+  return `<div class="field" data-key="${key}" data-prefix="${prefix}">
+    <label for="${id}">${label}</label>
+    <div class="input-wrap"><input id="${id}" name="${id}" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" aria-describedby="${id}-hint"><span class="unit">${unit}</span></div>
+    <span class="hint" id="${id}-hint"></span></div>`;
+}
+el("pitch-fields").innerHTML = FIELDS.map(f => fieldHtml(f)).join("");
+
+// Los rangos y valores típicos vienen como diestro (lado del brazo); para un zurdo se espejan.
+function forHand(key, value) {
+  if (state.hand !== "Left") return value;
+  if (MIRRORED.has(key)) return -value;
+  if (key === "SpinAxis") return Math.round((360 - value) * 10) / 10;
+  return value;
+}
+function rangeFor(type, key) {
+  const [low, high] = CONFIG.rangos[type][key].map(v => forHand(key, v));
+  return [Math.min(low, high), Math.max(low, high)];
+}
+
+function renderReference() {
+  if (state.type === "Four-Seam") {
+    el("reference").innerHTML = `<p class="fb-self">Es la recta: es su propia referencia para las diferencias de velocidad y movimiento.</p>`;
+    return;
+  }
+  el("reference").innerHTML = `<details class="reference" open><summary>Recta de referencia del pitcher</summary>
+    <p class="note-inline">Los secundarios se juzgan contra la recta: diferencia de velocidad, de movimiento y de punto de salida.</p>
+    <div class="fields">${FB_FIELDS.map(f => fieldHtml(f, "fb_")).join("")}</div></details>`;
+}
+
+function setTypical() {
+  const own = CONFIG.valores_tipicos[state.type];
+  for (const [key] of FIELDS) el(key).value = forHand(key, own[key]);
+  if (state.type !== "Four-Seam") for (const [key] of FB_FIELDS) el("fb_" + key).value = forHand(key, own["fb_" + key]);
+  validate();
+}
+
+// Cambiar de mano espeja lo que ya se escribió, en vez de borrarlo.
+function mirrorInputs() {
+  for (const prefix of ["", "fb_"]) for (const key of ["HorzBreak", "RelSide", "SpinAxis"]) {
+    const input = el(prefix + key);
+    if (!input || input.value === "") continue;
+    const value = Number(input.value);
+    input.value = key === "SpinAxis" ? Math.round((360 - value) * 10) / 10 : -value;
+  }
+  validate();
+}
+
+// Acepta coma o punto decimal; el resto de la página escribe con punto.
+function read(input) {
+  const text = input.value.trim().replace(",", ".");
+  return text === "" || !/^-?\d*\.?\d+$/.test(text) ? NaN : Number(text);
+}
+
+function validate() {
+  let ok = true;
+  document.querySelectorAll(".field").forEach(field => {
+    const { key, prefix } = field.dataset, input = el(prefix + key), hint = el(prefix + key + "-hint");
+    const value = read(input);
+    const [low, high] = rangeFor(prefix ? "Four-Seam" : state.type, key);
+    field.classList.remove("out", "bad");
+    if (Number.isNaN(value)) {
+      field.classList.add("bad"); hint.textContent = input.value.trim() === "" ? "Falta un número" : "Escribe solo un número, por ejemplo 92.5"; ok = false;
+    } else if (value < low || value > high) {
+      field.classList.add("out"); hint.textContent = `Fuera de la LMB (${number(low, DIGITS[key])} a ${number(high, DIGITS[key])})`;
+    } else {
+      hint.textContent = `LMB: ${number(low, DIGITS[key])} a ${number(high, DIGITS[key])}`;
+    }
+  });
+  return ok;
+}
+
+function profile() {
+  const data = { pitch_class: state.type, pitcher_hand: state.hand, aire_medido: state.air, vaa_rel: CONFIG.valores_tipicos[state.type].vaa_rel };
+  for (const [key] of FIELDS) data[key] = read(el(key));
+  if (state.type !== "Four-Seam") for (const [key] of FB_FIELDS) data["fb_" + key] = read(el("fb_" + key));
+  return data;
+}
+
+function percentileOf(type, value) {
+  const values = CONFIG.mapa[type].plus;
+  return Math.round(100 * values.filter(v => v < value).length / values.length);
+}
+
+function renderResult(r) {
+  const type = state.type, plural = PLURALS[type];
+  const pct = percentileOf(type, r.stuff_plus);
+  el("score-sea").textContent = number(r.stuff_plus, 0);
+  document.querySelector("#pbar .fill").style.width = `${pct}%`;
+  document.querySelector("#pbar .marker").style.left = `${pct}%`;
+  el("context-sea").innerHTML = pct >= 99.5 ? `<b>Top 1 %</b> de las ${plural} de la LMB.` : `Mejor que el <b>${pct} %</b> de las ${plural} de la LMB.`;
+  const delta = r.stuff_plus_harp == null ? null : r.stuff_plus_harp - r.stuff_plus;
+  el("score-harp").textContent = r.stuff_plus_harp == null ? "—" : number(r.stuff_plus_harp, 0);
+  el("delta").textContent = delta == null ? "sin dato" : signed(delta);
+  el("delta").className = delta == null || Math.abs(delta) < 1 ? "flat" : "";
+  el("context-harp").innerHTML = delta == null
+    ? `No hay pérdida medida en altura para ${plural}: no se da su cifra en la CDMX.`
+    : `Baja <b>${number(-delta)} puntos</b>, lo que pierden en promedio las ${plural} en altitud extrema.`;
+  el("move-ivb").innerHTML = `IVB ${number(r.mar.ivb)}<span class="arrow">→</span>${number(r.harp.ivb)}`;
+  el("move-hb").innerHTML = `HB ${number(r.mar.hb)}<span class="arrow">→</span>${number(r.harp.hb)}`;
+  const shape = r.percentil_costo_forma;
+  const shapeWord = shape == null ? "Sin dato" : shape >= 67 ? "Pierde más" : shape <= 33 ? "Pierde menos" : "Pierde igual";
+  el("shape").textContent = shapeWord;
+  el("shape-text").innerHTML = shape == null ? "No hay estimación del pasaporte para este tipo."
+    : `Por su forma, en altura pierde más que el <b>${shape} %</b> de las ${plural} de la liga. Sirve para ordenar, no como cifra.`;
+  el("league").textContent = r.perdida_liga_por_100 == null ? "—" : number(r.perdida_liga_por_100, 2);
+  const outOfRange = document.querySelectorAll(".field.out").length;
+  const caution = outOfRange ? ` <b>Ojo:</b> ${outOfRange === 1 ? "un valor está" : `${outOfRange} valores están`} fuera de lo que se ve en la LMB; el modelo extrapola.` : "";
+  const harpLine = delta == null ? "" : ` En el Harp Helú quedaría en <b>${number(r.stuff_plus_harp, 0)}</b>${shape != null && shape >= 67 ? ", y por su forma la baja real puede ser mayor" : shape != null && shape <= 33 ? ", y por su forma la baja real puede ser menor" : ""}.`;
+  const rankText = pct >= 99.5 ? `en el 1 % más alto de las ${plural} de la liga` : `mejor que el ${pct} % de las ${plural} de la liga`;
+  el("reading").innerHTML = `${NAMES[type]} de <b>${number(r.stuff_plus, 0)}</b> de Stuff+: ${rankText}.${harpLine}${caution}`;
+}
+
+function renderMap() {
+  const type = state.type, data = CONFIG.mapa[type], r = state.result;
+  const W = 640, H = 440, left = 52, right = 16, top = 16, bottom = 48;
+  const xs = [...data.hb, ...(r ? [r.mar.hb, r.harp.hb] : [])], ys = [...data.ivb, ...(r ? [r.mar.ivb, r.harp.ivb] : [])];
+  const pad = v => Math.max(1, v * 0.06);
+  let [x0, x1] = [Math.min(...xs), Math.max(...xs)], [y0, y1] = [Math.min(...ys), Math.max(...ys)];
+  [x0, x1] = [Math.floor(x0 - pad(x1 - x0)), Math.ceil(x1 + pad(x1 - x0))];
+  [y0, y1] = [Math.floor(y0 - pad(y1 - y0)), Math.ceil(y1 + pad(y1 - y0))];
+  const sx = v => left + (v - x0) / (x1 - x0) * (W - left - right);
+  const sy = v => H - bottom - (v - y0) / (y1 - y0) * (H - top - bottom);
+  const ticks = (a, b) => { const span = b - a, step = span > 30 ? 10 : span > 14 ? 5 : span > 6 ? 2 : 1; const out = []; for (let v = Math.ceil(a / step) * step; v <= b; v += step) out.push(v); return out; };
+  let svg = `<desc id="map-desc">Quiebre vertical contra horizontal de las ${PLURALS[type]} de la LMB, con el pitch ingresado a nivel del mar y en el Harp Helú.</desc>`;
+  for (const v of ticks(x0, x1)) svg += `<line class="${v === 0 ? "zero" : "grid"}" x1="${sx(v)}" x2="${sx(v)}" y1="${top}" y2="${H - bottom}"/><text x="${sx(v)}" y="${H - bottom + 16}" text-anchor="middle">${v}</text>`;
+  for (const v of ticks(y0, y1)) svg += `<line class="${v === 0 ? "zero" : "grid"}" x1="${left}" x2="${W - right}" y1="${sy(v)}" y2="${sy(v)}"/><text x="${left - 8}" y="${sy(v) + 4}" text-anchor="end">${v}</text>`;
+  svg += `<text class="axis-title" x="${(left + W - right) / 2}" y="${H - 10}" text-anchor="middle">HB hacia el brazo (pulg) →</text>`;
+  svg += `<text class="axis-title" x="14" y="${(top + H - bottom) / 2}" transform="rotate(-90 14 ${(top + H - bottom) / 2})" text-anchor="middle">IVB (pulg) →</text>`;
+  const style = { resto: ["var(--dot)", 3.5], peores: ["var(--worst)", 5], mejores: ["var(--best)", 5] };
+  for (const group of ["resto", "peores", "mejores"]) data.grupo.forEach((g, i) => {
+    if (g !== group) return;
+    const [fill, radius] = style[g];
+    svg += `<circle class="pt" data-i="${i}" cx="${sx(data.hb[i]).toFixed(1)}" cy="${sy(data.ivb[i]).toFixed(1)}" r="${radius}" fill="${fill}" stroke="var(--surface)" stroke-width="1"/>`;
+  });
+  if (r) {
+    const [ax, ay, bx, by] = [sx(r.mar.hb), sy(r.mar.ivb), sx(r.harp.hb), sy(r.harp.ivb)];
+    svg += `<defs><marker id="head" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink-2)"/></marker></defs>`;
+    if (Math.hypot(bx - ax, by - ay) > 14) svg += `<line x1="${ax}" y1="${ay}" x2="${bx}" y2="${by}" stroke="var(--ink-2)" stroke-width="2" marker-end="url(#head)" stroke-dasharray="5 4"/>`;
+    svg += `<circle cx="${ax}" cy="${ay}" r="9" fill="var(--sea)" stroke="var(--surface)" stroke-width="2.5"/>`;
+    svg += `<rect x="${bx - 7.5}" y="${by - 7.5}" width="15" height="15" fill="var(--harp)" stroke="var(--surface)" stroke-width="2.5" transform="rotate(45 ${bx} ${by})"/>`;
+  }
+  el("map").innerHTML = svg;
+  el("map-title").textContent = `Mapa de movimiento · ${PLURALS[type]}`;
+}
+
+const tooltip = el("tooltip");
+el("map").addEventListener("pointermove", event => {
+  const point = event.target.closest(".pt");
+  if (!point) { tooltip.classList.remove("on"); return; }
+  const d = CONFIG.mapa[state.type], i = Number(point.dataset.i);
+  const tag = { mejores: "10 % mejores", peores: "10 % peores", resto: "" }[d.grupo[i]];
+  tooltip.innerHTML = `Stuff+ <b>${number(d.plus[i], 0)}</b>${tag ? ` · ${tag}` : ""}<br>${number(d.velo[i])} mph · IVB ${number(d.ivb[i])} · HB ${number(d.hb[i])}<br><span style="opacity:.75">Clic para probar esta forma</span>`;
+  tooltip.style.left = `${Math.min(event.clientX + 14, innerWidth - 270)}px`;
+  tooltip.style.top = `${event.clientY + 14}px`;
+  tooltip.classList.add("on");
+});
+el("map").addEventListener("pointerleave", () => tooltip.classList.remove("on"));
+el("map").addEventListener("click", event => {
+  const point = event.target.closest(".pt");
+  if (!point) return;
+  const d = CONFIG.mapa[state.type], i = Number(point.dataset.i), k = CONFIG.k[state.type];
+  // El mapa está a nivel del mar y del lado del brazo; se convierte al aire y la mano elegidos.
+  el("InducedVertBreak").value = (d.ivb[i] * state.air ** k.ivb).toFixed(1);
+  el("HorzBreak").value = forHand("HorzBreak", d.hb[i] * state.air ** k.hb).toFixed(1);
+  el("RelSpeed").value = d.velo[i].toFixed(1);
+  schedule(0);
+});
+
+async function calculate() {
+  if (!validate()) { el("reading").textContent = "Completa los campos marcados para calcular."; return; }
+  const id = ++state.request;
+  el("resultado").classList.add("is-loading");
+  el("resultado").setAttribute("aria-busy", "true");
+  el("error").textContent = "";
+  try {
+    const response = await fetch("/score", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(profile()) });
+    const result = await response.json();
+    if (!response.ok) throw new Error(result.error || "el servidor no pudo calcular");
+    if (id !== state.request) return;
+    state.result = result;
+    renderResult(result);
+    renderMap();
+  } catch (error) {
+    el("error").textContent = `No se pudo calcular: ${error.message}. Revisa que el servidor siga corriendo (python src/simulador.py).`;
+  } finally {
+    if (id === state.request) { el("resultado").classList.remove("is-loading"); el("resultado").setAttribute("aria-busy", "false"); }
+  }
+}
+function schedule(delay = 250) { clearTimeout(state.timer); state.timer = setTimeout(calculate, delay); }
+
+el("form").addEventListener("input", event => {
+  if (event.target.name === "pitch_class") { state.type = event.target.value; renderReference(); setTypical(); state.result = null; renderMap(); }
+  else if (event.target.name === "pitcher_hand") { state.hand = event.target.value; mirrorInputs(); }
+  else if (event.target.name === "aire_medido") { state.air = Number(event.target.value); }
+  else validate();
+  schedule(event.target.type === "radio" ? 0 : 250);
+});
+el("form").addEventListener("submit", event => { event.preventDefault(); schedule(0); });
+el("reset").addEventListener("click", () => { setTypical(); schedule(0); });
+
+renderReference();
+setTypical();
+renderMap();
+calculate();
+</script>
+</body>
+</html>

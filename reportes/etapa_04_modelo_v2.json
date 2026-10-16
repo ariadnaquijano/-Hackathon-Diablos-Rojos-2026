@@ -1,0 +1,502 @@
+{
+  "nota": "Versión 2 (D-035): Location+ con 31 hojas. Cuarta mirada a 2026, junto a la versión 1.",
+  "arboles_location": 218,
+  "pesos_pitching": {
+    "intercepto": 0.00164,
+    "stuff": 0.6017,
+    "location": 1.0281
+  },
+  "por_pitch_2026": {
+    "lineal_por_tipo": {
+      "mejora_vs_media_pct": 0.1071,
+      "ic95_mejora_pct": [
+        0.0672,
+        0.15083
+      ],
+      "ic95_diferencia_vs_lineal_nivel_mar_pct": [
+        0.00808,
+        0.04878
+      ]
+    },
+    "lineal_nivel_mar": {
+      "mejora_vs_media_pct": 0.0787,
+      "ic95_mejora_pct": [
+        0.04351,
+        0.1154
+      ],
+      "ic95_diferencia_vs_lineal_por_tipo_pct": [
+        -0.04878,
+        -0.00808
+      ]
+    },
+    "stuff": {
+      "mejora_vs_media_pct": 0.1544,
+      "ic95_mejora_pct": [
+        0.11002,
+        0.2017
+      ],
+      "ic95_diferencia_vs_lineal_por_tipo_pct": [
+        0.0057,
+        0.08988
+      ],
+      "ic95_diferencia_vs_lineal_nivel_mar_pct": [
+        0.0396,
+        0.11284
+      ]
+    },
+    "location": {
+      "mejora_vs_media_pct": 5.4458,
+      "ic95_mejora_pct": [
+        5.12454,
+        5.80753
+      ],
+      "ic95_diferencia_vs_lineal_por_tipo_pct": [
+        5.00859,
+        5.69808
+      ],
+      "ic95_diferencia_vs_lineal_nivel_mar_pct": [
+        5.04331,
+        5.73087
+      ]
+    },
+    "pitching": {
+      "mejora_vs_media_pct": 5.5097,
+      "ic95_mejora_pct": [
+        5.17936,
+        5.88245
+      ],
+      "ic95_diferencia_vs_lineal_por_tipo_pct": [
+        5.06647,
+        5.76824
+      ],
+      "ic95_diferencia_vs_lineal_nivel_mar_pct": [
+        5.10003,
+        5.7949
+      ]
+    }
+  },
+  "por_pitcher_2026": {
+    "pitchers": 178,
+    "contra_lineal_observada": {
+      "lineal_por_tipo": {
+        "r": 0.4471,
+        "ic95_r": [
+          0.3262,
+          0.5621
+        ],
+        "ecm_por_100": 0.7226,
+        "ic95_diferencia_r_vs_lineal_por_tipo": [
+          0.0,
+          0.0
+        ],
+        "ic95_diferencia_ecm_vs_lineal_por_tipo": [
+          0.0,
+          0.0
+        ]
+      },
+      "lineal_nivel_mar": {
+        "r": 0.4126,
+        "ic95_r": [
+          0.2703,
+          0.5411
+        ],
+        "ecm_por_100": 0.7502,
+        "ic95_diferencia_r_vs_lineal_por_tipo": [
+          -0.0964,
+          0.0286
+        ],
+        "ic95_diferencia_ecm_vs_lineal_por_tipo": [
+          0.0008,
+          0.0546
+        ]
+      },
+      "stuff": {
+        "r": 0.4222,
+        "ic95_r": [
+          0.2888,
+          0.557
+        ],
+        "ecm_por_100": 0.7377,
+        "ic95_diferencia_r_vs_lineal_por_tipo": [
+          -0.1455,
+          0.1127
+        ],
+        "ic95_diferencia_ecm_vs_lineal_por_tipo": [
+          -0.0418,
+          0.0664
+        ]
+      },
+      "location": {
+        "r": 0.2866,
+        "ic95_r": [
+          0.1593,
+          0.4073
+        ],
+        "ecm_por_100": 0.7788,
+        "ic95_diferencia_r_vs_lineal_por_tipo": [
+          -0.3226,
+          0.0104
+        ],
+        "ic95_diferencia_ecm_vs_lineal_por_tipo": [
+          -0.022,
+          0.133
+        ]
+      },
+      "pitching": {
+        "r": 0.4371,
+        "ic95_r": [
+          0.3154,
+          0.5465
+        ],
+        "ecm_por_100": 0.6946,
+        "ic95_diferencia_r_vs_lineal_por_tipo": [
+          -0.1464,
+          0.1523
+        ],
+        "ic95_diferencia_ecm_vs_lineal_por_tipo": [
+          -0.1053,
+          0.0446
+        ]
+      }
+    },
+    "contra_lineal_nivel_mar": {
+      "lineal_por_tipo": {
+        "r": 0.4471,
+        "ic95_r": [
+          0.3262,
+          0.5621
+        ],
+        "ecm_por_100": 0.7226,
+        "ic95_diferencia_r_vs_lineal_nivel_mar": [
+          -0.0286,
+          0.0964
+        ],
+        "ic95_diferencia_ecm_vs_lineal_nivel_mar": [
+          -0.0546,
+          -0.0008
+        ]
+      },
+      "lineal_nivel_mar": {
+        "r": 0.4126,
+        "ic95_r": [
+          0.2703,
+          0.5411
+        ],
+        "ecm_por_100": 0.7502,
+        "ic95_diferencia_r_vs_lineal_nivel_mar": [
+          0.0,
+          0.0
+        ],
+        "ic95_diferencia_ecm_vs_lineal_nivel_mar": [
+          0.0,
+          0.0
+        ]
+      },
+      "stuff": {
+        "r": 0.4222,
+        "ic95_r": [
+          0.2888,
+          0.557
+        ],
+        "ecm_por_100": 0.7377,
+        "ic95_diferencia_r_vs_lineal_nivel_mar": [
+          -0.1237,
+          0.1498
+        ],
+        "ic95_diferencia_ecm_vs_lineal_nivel_mar": [
+          -0.067,
+          0.041
+        ]
+      },
+      "location": {
+        "r": 0.2866,
+        "ic95_r": [
+          0.1593,
+          0.4073
+        ],
+        "ecm_por_100": 0.7788,
+        "ic95_diferencia_r_vs_lineal_nivel_mar": [
+          -0.2931,
+          0.0507
+        ],
+        "ic95_diferencia_ecm_vs_lineal_nivel_mar": [
+          -0.0445,
+          0.1041
+        ]
+      },
+      "pitching": {
+        "r": 0.4371,
+        "ic95_r": [
+          0.3154,
+          0.5465
+        ],
+        "ecm_por_100": 0.6946,
+        "ic95_diferencia_r_vs_lineal_nivel_mar": [
+          -0.1232,
+          0.1899
+        ],
+        "ic95_diferencia_ecm_vs_lineal_nivel_mar": [
+          -0.1305,
+          0.0175
+        ]
+      }
+    }
+  },
+  "a_futuro_2026": {
+    "pitchers": 114,
+    "pares_para_pesos": 146,
+    "pendiente_persistencia": 0.1854,
+    "pesos_proyeccion": {
+      "historia": 0.1624,
+      "pitching": 0.16
+    },
+    "stuff": {
+      "r": 0.2064,
+      "ic95_r": [
+        0.0259,
+        0.3787
+      ],
+      "ecm_por_100": 0.7385,
+      "ic95_diferencia_r_vs_persistencia_encogida": [
+        -0.3502,
+        -0.0102
+      ],
+      "ic95_diferencia_ecm_vs_persistencia_encogida": [
+        -0.0157,
+        0.0814
+      ]
+    },
+    "location": {
+      "r": -0.0702,
+      "ic95_r": [
+        -0.269,
+        0.1466
+      ],
+      "ecm_por_100": 0.8542,
+      "ic95_diferencia_r_vs_persistencia_encogida": [
+        -0.6827,
+        -0.1774
+      ],
+      "ic95_diferencia_ecm_vs_persistencia_encogida": [
+        0.0434,
+        0.2537
+      ]
+    },
+    "pitching": {
+      "r": 0.0214,
+      "ic95_r": [
+        -0.1872,
+        0.2488
+      ],
+      "ecm_por_100": 0.8288,
+      "ic95_diferencia_r_vs_persistencia_encogida": [
+        -0.5857,
+        -0.1087
+      ],
+      "ic95_diferencia_ecm_vs_persistencia_encogida": [
+        0.0154,
+        0.2418
+      ]
+    },
+    "lineal_nivel_mar": {
+      "r": 0.294,
+      "ic95_r": [
+        0.088,
+        0.4651
+      ],
+      "ecm_por_100": 0.7146,
+      "ic95_diferencia_r_vs_persistencia_encogida": [
+        -0.2923,
+        0.1001
+      ],
+      "ic95_diferencia_ecm_vs_persistencia_encogida": [
+        -0.0415,
+        0.0576
+      ]
+    },
+    "lineal_por_tipo": {
+      "r": 0.2735,
+      "ic95_r": [
+        0.0626,
+        0.4465
+      ],
+      "ecm_por_100": 0.7161,
+      "ic95_diferencia_r_vs_persistencia_encogida": [
+        -0.3118,
+        0.075
+      ],
+      "ic95_diferencia_ecm_vs_persistencia_encogida": [
+        -0.05,
+        0.0682
+      ]
+    },
+    "proyeccion": {
+      "r": 0.3334,
+      "ic95_r": [
+        0.1533,
+        0.4943
+      ],
+      "ecm_por_100": 0.7168,
+      "ic95_diferencia_r_vs_persistencia_encogida": [
+        -0.1297,
+        0.0194
+      ],
+      "ic95_diferencia_ecm_vs_persistencia_encogida": [
+        -0.0052,
+        0.025
+      ]
+    },
+    "persistencia_encogida": {
+      "r": 0.3825,
+      "ic95_r": [
+        0.221,
+        0.5318
+      ],
+      "ecm_por_100": 0.7081,
+      "ic95_diferencia_r_vs_persistencia_encogida": [
+        0.0,
+        0.0
+      ],
+      "ic95_diferencia_ecm_vs_persistencia_encogida": [
+        0.0,
+        0.0
+      ]
+    }
+  },
+  "altitud_mismo_pitcher": {
+    "pitcher_tipo": 710,
+    "pitchers": 368,
+    "xrv_neutral": {
+      "extrema_menos_mar_por_100": 0.572,
+      "ic95_extrema_menos_mar": [
+        0.4307,
+        0.7295
+      ],
+      "r_entre_altitudes": 0.1508,
+      "ic95_r": [
+        0.0738,
+        0.219
+      ]
+    },
+    "stuff": {
+      "extrema_menos_mar_por_100": 0.0482,
+      "ic95_extrema_menos_mar": [
+        0.0362,
+        0.0593
+      ],
+      "r_entre_altitudes": 0.9211,
+      "ic95_r": [
+        0.9092,
+        0.9321
+      ]
+    },
+    "pitching": {
+      "extrema_menos_mar_por_100": 0.0905,
+      "ic95_extrema_menos_mar": [
+        0.0572,
+        0.1281
+      ],
+      "r_entre_altitudes": 0.7033,
+      "ic95_r": [
+        0.666,
+        0.7335
+      ],
+      "ic95_diferencia_r_vs_stuff": [
+        -0.253,
+        -0.1878
+      ],
+      "ic95_diferencia_brecha_absoluta_vs_stuff": [
+        0.009,
+        0.0783
+      ]
+    }
+  },
+  "escala_100": {
+    "2024": {
+      "pitchers": 320,
+      "percentiles_10_50_90": {
+        "stuff_plus": [
+          89.2,
+          100.5,
+          113.4
+        ],
+        "location_plus": [
+          86.4,
+          100.9,
+          110.8
+        ],
+        "pitching_plus": [
+          86.5,
+          100.6,
+          111.4
+        ]
+      },
+      "r_entre_valores": {
+        "stuff_vs_location": -0.0383,
+        "stuff_vs_pitching": 0.3423,
+        "location_vs_pitching": 0.9258
+      }
+    },
+    "2025": {
+      "pitchers": 320,
+      "percentiles_10_50_90": {
+        "stuff_plus": [
+          88.8,
+          99.7,
+          115.4
+        ],
+        "location_plus": [
+          85.8,
+          101.0,
+          111.7
+        ],
+        "pitching_plus": [
+          87.4,
+          101.0,
+          112.6
+        ]
+      },
+      "r_entre_valores": {
+        "stuff_vs_location": -0.1305,
+        "stuff_vs_pitching": 0.255,
+        "location_vs_pitching": 0.9254
+      }
+    },
+    "2026": {
+      "pitchers": 178,
+      "percentiles_10_50_90": {
+        "stuff_plus": [
+          88.2,
+          99.8,
+          115.4
+        ],
+        "location_plus": [
+          90.8,
+          103.4,
+          115.3
+        ],
+        "pitching_plus": [
+          90.0,
+          102.7,
+          115.3
+        ]
+      },
+      "r_entre_valores": {
+        "stuff_vs_location": -0.0029,
+        "stuff_vs_pitching": 0.4151,
+        "location_vs_pitching": 0.9086
+      }
+    }
+  },
+  "repeticion_2024_a_2025": {
+    "pitchers": 146,
+    "xrv_neutral": 0.1758,
+    "stuff": 0.8309,
+    "location": 0.6701,
+    "pitching": 0.6359,
+    "p_swing": 0.8222,
+    "p_whiff": 0.7751,
+    "p_foul": 0.8594,
+    "p_strike": 0.7957
+  }
+}

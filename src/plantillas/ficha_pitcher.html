@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="es-MX">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Fichas de pitchers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<style>
+/* Lista y detalle: la liga a la izquierda (filtrar, ordenar, elegir), la ficha a la derecha.
+   En teléfono la ficha va primero y la lista debajo. Mismos tokens que el simulador. */
+:root {
+  --bg: #f4f5f7; --surface: #ffffff; --surface-2: #f8f9fb; --ink: #14171c; --ink-2: #454c59; --ink-3: #6b7280;
+  --rule: #e1e4e9; --rule-strong: #c9ced6; --accent: #b3122a; --accent-soft: #fbe9ec;
+  --sea: #1f63b5; --best: #0d9488; --worst: #c2410c; --track: #e7eaee; --warn: #9a5b00; --warn-soft: #fff4e0;
+  --display: "Barlow Condensed", "Arial Narrow", "Helvetica Neue", sans-serif;
+  --body: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --radius: 10px; --radius-sm: 6px;
+  --shadow: 0 1px 2px rgb(16 24 40 / 0.04), 0 1px 3px rgb(16 24 40 / 0.06);
+  --ease: cubic-bezier(0.2, 0, 0, 1);
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f1216; --surface: #171b21; --surface-2: #1c2128; --ink: #eceef2; --ink-2: #b8bfca; --ink-3: #8d95a3;
+    --rule: #2a3039; --rule-strong: #3a414c; --accent: #ff5a6e; --accent-soft: #3a1b22;
+    --sea: #4f8ad6; --best: #14a394; --worst: #d9692a; --track: #262c35; --warn: #f2b45a; --warn-soft: #2e2413;
+    --shadow: none; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0f1216; --surface: #171b21; --surface-2: #1c2128; --ink: #eceef2; --ink-2: #b8bfca; --ink-3: #8d95a3;
+  --rule: #2a3039; --rule-strong: #3a414c; --accent: #ff5a6e; --accent-soft: #3a1b22;
+  --sea: #4f8ad6; --best: #14a394; --worst: #d9692a; --track: #262c35; --warn: #f2b45a; --warn-soft: #2e2413;
+  --shadow: none; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 400 1rem/1.5 var(--body); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+p { margin: 0; }
+h1, h2, h3 { margin: 0; }
+.skip { position: absolute; left: -999px; top: 8px; background: var(--surface); padding: 8px 12px; border-radius: var(--radius-sm); }
+.skip:focus { left: 16px; z-index: 30; }
+.appbar { position: sticky; top: 0; z-index: 20; background: var(--surface); border-bottom: 1px solid var(--rule); }
+.appbar-inner { max-width: 84rem; margin-inline: auto; padding: 0 16px; height: 56px; display: flex; align-items: center; gap: 24px; }
+.brand { display: flex; align-items: baseline; gap: 10px; white-space: nowrap; }
+.brand b { font: 700 1.25rem/1 var(--display); letter-spacing: 0.02em; text-transform: uppercase; color: var(--accent); }
+.brand span { font: 500 0.8125rem/1 var(--body); color: var(--ink-3); }
+.tabs { display: flex; gap: 4px; height: 100%; }
+.tabs a { white-space: nowrap; display: flex; align-items: center; padding: 0 12px; color: var(--ink-2); text-decoration: none; font-weight: 600; font-size: 0.9375rem; border-bottom: 2px solid transparent; }
+.tabs a:hover { color: var(--ink); }
+.tabs a[aria-current="page"] { color: var(--ink); border-bottom-color: var(--accent); }
+.meta { margin-left: auto; font: 500 0.75rem/1 var(--mono); color: var(--ink-3); white-space: nowrap; }
+@media (max-width: 40rem) { .brand span, .meta, .tabs .long { display: none; } .appbar-inner { gap: 12px; } }
+
+.page { max-width: 84rem; margin-inline: auto; padding: 24px 16px 64px; display: grid; grid-template-columns: 21rem minmax(0, 1fr); gap: 24px; align-items: start; }
+@media (max-width: 64rem) { .page { grid-template-columns: 1fr; } .list { order: 2; } }
+.card { background: var(--surface); border: 1px solid var(--rule); border-radius: var(--radius); box-shadow: var(--shadow); }
+.label { font: 600 0.6875rem/1 var(--mono); text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-3); }
+
+/* Lista de la liga */
+.list { position: sticky; top: 72px; display: grid; grid-template-rows: auto minmax(0, 1fr); max-height: calc(100dvh - 96px); overflow: hidden; }
+@media (max-width: 64rem) { .list { position: static; max-height: none; } }
+.list-head { padding: 16px; display: grid; gap: 12px; border-bottom: 1px solid var(--rule); }
+.list-head h1 { font: 700 1.5rem/1 var(--display); }
+.controls { display: grid; grid-template-columns: 1fr auto; gap: 8px; }
+.controls input, .controls select { font: 500 0.9375rem var(--body); color: var(--ink); background: var(--surface-2); border: 1px solid var(--rule-strong); border-radius: var(--radius-sm); height: 40px; padding: 0 10px; min-width: 0; }
+.controls input:focus, .controls select:focus { outline: 2px solid color-mix(in srgb, var(--accent) 25%, transparent); border-color: var(--accent); }
+.count { font-size: 0.8125rem; color: var(--ink-3); }
+.list-body { overflow: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 0.875rem; }
+th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--rule); vertical-align: middle; }
+th { font: 600 0.6875rem/1.2 var(--mono); text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-3); white-space: nowrap; background: var(--surface); position: sticky; top: 0; z-index: 1; }
+td.num, th.num { text-align: right; font-family: var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+th button { all: unset; cursor: pointer; display: inline-flex; gap: 4px; align-items: center; }
+th button:hover { color: var(--ink); }
+th button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.league tbody tr { cursor: pointer; transition: background 120ms var(--ease); }
+.league tbody tr:hover { background: var(--surface-2); }
+.league tbody tr[aria-selected="true"] { background: var(--accent-soft); }
+.league tbody tr[aria-selected="true"] td:first-child { box-shadow: inset 3px 0 0 var(--accent); }
+.league td:first-child { font-family: var(--mono); font-size: 0.8125rem; }
+.risk-dot { display: inline-flex; align-items: center; gap: 6px; font-family: var(--body); font-size: 0.8125rem; color: var(--ink-2); }
+
+/* Ficha */
+.detail { display: grid; gap: 16px; min-width: 0; }
+.head { padding: 20px 24px; display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 16px; }
+.head h2 { font: 700 2.25rem/1 var(--display); font-variant-numeric: tabular-nums; }
+.head .sub { color: var(--ink-3); font-size: 0.9375rem; }
+.chip { display: inline-flex; align-items: center; gap: 6px; font: 600 0.75rem/1 var(--body); padding: 5px 9px; border-radius: 999px; background: var(--surface-2); color: var(--ink-2); border: 1px solid var(--rule); }
+.chip.warn { background: var(--warn-soft); color: var(--warn); border-color: transparent; }
+.head .chip { margin-left: auto; }
+.scores { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 1px solid var(--rule); }
+.score { padding: 18px 24px 20px; display: grid; gap: 8px; align-content: start; }
+.score + .score { border-left: 1px solid var(--rule); }
+.score b { font: 700 3rem/0.95 var(--display); font-variant-numeric: tabular-nums; }
+.score p { font-size: 0.8125rem; color: var(--ink-2); }
+.meter { position: relative; height: 6px; border-radius: 999px; background: var(--track); }
+.meter span { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 999px; background: var(--ink-2); }
+.meter i { position: absolute; top: -3px; bottom: -3px; left: 50%; width: 1px; background: var(--rule-strong); }
+.risk { font: 700 2rem/1 var(--display); text-transform: uppercase; display: inline-flex; align-items: center; gap: 8px; }
+.risk svg { width: 22px; height: 22px; }
+.risk.alto { color: var(--accent); }
+.risk.bajo { color: var(--best); }
+@media (max-width: 64rem) { .scores { grid-template-columns: repeat(2, minmax(0, 1fr)); } .score:nth-child(3) { border-left: 0; } .score:nth-child(n+3) { border-top: 1px solid var(--rule); } }
+@media (max-width: 30rem) { .scores { grid-template-columns: 1fr; } .score + .score { border-left: 0; border-top: 1px solid var(--rule); } .score b { font-size: 2.5rem; } }
+.reading { padding: 20px 24px; display: grid; gap: 10px; }
+.reading ul { margin: 0; padding-left: 18px; display: grid; gap: 6px; color: var(--ink-2); }
+.reading b { color: var(--ink); }
+.arsenal { padding: 20px 24px; display: grid; gap: 12px; }
+.arsenal-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 16px; align-items: baseline; }
+.arsenal-head h3 { font: 700 1.375rem/1.1 var(--display); }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 0.8125rem; color: var(--ink-2); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend i { width: 14px; height: 6px; border-radius: 3px; display: inline-block; }
+.scroll { overflow-x: auto; }
+.arsenal table th, .arsenal table td { padding: 10px 8px; }
+.arsenal table th:first-child, .arsenal table td:first-child { padding-left: 0; }
+.pitch-name { font-weight: 700; white-space: nowrap; }
+.use { display: grid; gap: 4px; min-width: 4.5rem; }
+.use .meter span { background: var(--ink-3); }
+.diverge { position: relative; height: 10px; min-width: 6rem; }
+.diverge i { position: absolute; top: -4px; bottom: -4px; left: 50%; width: 1px; background: var(--ink-3); }
+.diverge span { position: absolute; top: 1px; height: 8px; border-radius: 4px; }
+.pct { display: inline-grid; place-items: center; min-width: 2.25rem; height: 24px; border-radius: 4px; font: 600 0.8125rem var(--mono); }
+.pct.hi { background: color-mix(in srgb, var(--best) 18%, transparent); color: var(--ink); }
+.pct.lo { background: color-mix(in srgb, var(--worst) 16%, transparent); color: var(--ink); }
+.roles { min-width: 8.5rem; }
+.tag { display: inline-block; font: 600 0.6875rem/1 var(--body); padding: 4px 7px; border-radius: 4px; background: var(--surface-2); border: 1px solid var(--rule); color: var(--ink-2); margin: 2px 4px 2px 0; white-space: nowrap; }
+.tag.warn { background: var(--warn-soft); color: var(--warn); border-color: transparent; }
+.foot { font-size: 0.8125rem; color: var(--ink-3); }
+.foot b { color: var(--ink-2); }
+.trust { padding: 16px 24px; display: grid; gap: 6px; font-size: 0.8125rem; color: var(--ink-3); }
+.trust b { color: var(--ink-2); }
+.empty { padding: 24px; color: var(--ink-3); }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; } }
+</style>
+</head>
+<body>
+<a class="skip" href="#ficha">Saltar a la ficha</a>
+<header class="appbar">
+  <div class="appbar-inner">
+    <div class="brand"><b>Diablos Rojos</b><span>Laboratorio de pitcheo</span></div>
+    <nav class="tabs" aria-label="Secciones">
+      <a href="/">Simulador</a>
+      <a href="/fichas" aria-current="page">Fichas<span class="long">&nbsp;de pitchers</span></a>
+    </nav>
+    <span class="meta">Modelo v2 · LMB 2024–2026</span>
+  </div>
+</header>
+
+<div class="page">
+  <aside class="card list" aria-label="Pitchers de la liga">
+    <div class="list-head">
+      <h1>Fichas de pitchers</h1>
+      <div class="controls">
+        <input id="filter" type="search" placeholder="Buscar ID" aria-label="Buscar pitcher por ID" autocomplete="off">
+        <select id="season" aria-label="Temporada"></select>
+      </div>
+      <span class="count" id="count"></span>
+    </div>
+    <div class="list-body"><table class="league" id="league"></table></div>
+  </aside>
+
+  <main class="detail" id="ficha" aria-live="polite"></main>
+</div>
+
+<script>
+const DATA = __DATA__;
+const NAMES = { "Four-Seam": "Recta", Sinker: "Sinker", Slider: "Slider", Changeup: "Cambio", Curveball: "Curva", Cutter: "Cutter", Splitter: "Splitter" };
+const ARTICLES = { "Four-Seam": "la recta", Sinker: "el sinker", Slider: "la slider", Changeup: "el cambio", Curveball: "la curva", Cutter: "el cutter", Splitter: "el splitter" };
+const COMPONENTS = [["p_swing", "Swing"], ["p_whiff", "Whiff"], ["p_foul", "Foul"], ["p_strike", "Strike cantado"]];
+const TOP = 66.7, BOTTOM = 33.3, SHORT_SAMPLE = 450;
+const ICONS = {
+  alto: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>',
+  medio: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"/></svg>',
+  bajo: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12l7 7 7-7"/></svg>',
+};
+const el = id => document.getElementById(id);
+const fmt = (v, d = 0) => v == null || Number.isNaN(v) ? "—" : Number(v).toLocaleString("es-MX", { minimumFractionDigits: d, maximumFractionDigits: d, useGrouping: false });
+
+const seasons = [...new Set(DATA.pitchers.map(p => p.year))].sort((a, b) => b - a);
+// Abre en la temporada más reciente cuya mediana de pitches ya es de temporada completa.
+const median = values => { const s = [...values].sort((a, b) => a - b); return s[Math.floor(s.length / 2)]; };
+const fullSeason = seasons.find(y => median(DATA.pitchers.filter(p => p.year === y).map(p => p.pitches)) >= SHORT_SAMPLE) ?? seasons[0];
+const state = { year: fullSeason, pitcher: null, filter: "", sort: { key: "pitching_plus", desc: true } };
+
+function pitchersOf(year) { return DATA.pitchers.filter(p => p.year === year); }
+function arsenalOf(id, year) {
+  return DATA.arsenal.filter(a => a.pitcher_anon_id === id && a.year === year).sort((a, b) => b.uso_pct - a.uso_pct);
+}
+
+function tags(pitch) {
+  const out = [];
+  if (pitch.p_whiff_pct >= TOP) out.push(["Para ponchar", ""]);
+  if (pitch.p_strike_pct >= TOP) out.push(["Roba strikes", ""]);
+  if (pitch.p_swing_pct >= TOP) out.push(["Provoca swing", ""]);
+  if (pitch.p_foul_pct >= TOP) out.push(["Saca fouls", ""]);
+  if (pitch.p_whiff_pct <= BOTTOM && pitch.stuff_plus < 95) out.push(["Pitch débil", "warn"]);
+  return out.map(([t, c]) => `<span class="tag ${c}">${t}</span>`).join("") || `<span class="tag">Sin rasgo marcado</span>`;
+}
+
+function profile(p) {
+  const gap = p.stuff_plus - p.location_plus;
+  if (gap >= 10) return "Gana con la <b>calidad</b> de sus pitches más que con dónde los pone.";
+  if (gap <= -10) return "Gana con <b>dónde pone</b> sus pitches más que con su calidad.";
+  return "Calidad y ubicación pesan parecido en su valor.";
+}
+
+function readings(p, arsenal) {
+  const out = [profile(p)];
+  if (arsenal.length) {
+    const best = arsenal.reduce((a, b) => (b.stuff_plus > a.stuff_plus ? b : a));
+    out.push(`Su mejor pitch por Stuff+ es <b>${ARTICLES[best.pitch_class]}</b>: ${fmt(best.stuff_plus)} contra su tipo, ${fmt(best.uso_pct)} % de uso.`);
+    const weak = arsenal.filter(a => a.p_whiff_pct <= BOTTOM && a.stuff_plus < 95);
+    if (weak.length) out.push(`A vigilar: <b>${weak.map(a => ARTICLES[a.pitch_class]).join(", ")}</b>, con pocos fallos y Stuff+ bajo su tipo.`);
+    const resistant = arsenal.filter(a => a.perdida_altura != null && a.perdida_altura < 0.2 && a.stuff_plus >= 100);
+    if (p.riesgo_tercio === "alto" && resistant.length) {
+      out.push(`En el Harp Helú su mezcla pierde más que la mayoría. Tiene pitches buenos de los tipos que casi no pierden en altura: <b>${resistant.map(a => `${ARTICLES[a.pitch_class]} (${fmt(a.stuff_plus)})`).join(", ")}</b>. Opción a considerar en casa; no está probado que usarlos más mejore su resultado.`);
+    } else if (p.riesgo_tercio === "alto") {
+      out.push("En el Harp Helú su mezcla pierde más que la mayoría y no tiene un rompimiento bueno que la compense.");
+    } else if (p.riesgo_tercio === "bajo") {
+      out.push("Su mezcla es de las que menos pierden en la altura de la CDMX.");
+    } else if (!p.riesgo_tercio) {
+      out.push(`Sin nivel de riesgo: solo ${fmt(p.cobertura_pct)} % de sus pitches son de tipos con pérdida medida en altura.`);
+    }
+  }
+  return out;
+}
+
+// Un percentil de 99.5 o más se redondearía a "mejor que el 100 %", que no existe.
+function rank(pct) { return pct >= 99.5 ? "Top 1 % de la liga" : `Mejor que el ${fmt(pct)} % de la liga`; }
+
+function meter(pct) { return `<div class="meter" aria-hidden="true"><i></i><span style="width:${Math.max(2, pct)}%"></span></div>`; }
+
+function diverge(value) {
+  const clipped = Math.max(70, Math.min(130, value)), width = Math.abs(clipped - 100) / 60 * 100;
+  const color = value >= 100 ? "var(--best)" : "var(--worst)";
+  const left = value >= 100 ? 50 : 50 - width;
+  return `<div class="diverge" aria-hidden="true"><i></i><span style="left:${left}%;width:${Math.max(width, 1)}%;background:${color}"></span></div>`;
+}
+
+function pct(value) {
+  const cls = value >= TOP ? "hi" : value <= BOTTOM ? "lo" : "";
+  return `<span class="pct ${cls}">${fmt(value)}</span>`;
+}
+
+function renderCard() {
+  const list = pitchersOf(state.year);
+  const p = list.find(x => x.pitcher_anon_id === state.pitcher) || list[0];
+  state.pitcher = p.pitcher_anon_id;
+  const arsenal = arsenalOf(p.pitcher_anon_id, p.year);
+  const risk = p.riesgo_tercio;
+  const riskText = risk ? `Tercio ${risk} de la liga en pérdida por altura. Cubre ${fmt(p.cobertura_pct)} % de sus pitches.`
+    : `Sin nivel: solo ${fmt(p.cobertura_pct)} % de sus pitches tiene pérdida medida.`;
+  const scores = [["stuff_plus", "Stuff+", "Calidad física del pitch"], ["location_plus", "Location+", "Ubicación y conteo"], ["pitching_plus", "Pitching+", "Los dos juntos"]];
+  el("ficha").innerHTML = `
+    <section class="card" aria-label="Resumen">
+      <div class="head">
+        <h2>${p.pitcher_anon_id}</h2>
+        <span class="sub">Temporada ${p.year} · ${fmt(p.pitches)} pitches</span>
+        ${p.pitches < SHORT_SAMPLE ? `<span class="chip warn">Muestra corta</span>` : `<span class="chip">Muestra suficiente</span>`}
+      </div>
+      <div class="scores">
+        ${scores.map(([key, name, hint]) => `<div class="score">
+          <span class="label">${name}</span><b>${fmt(p[key])}</b>${meter(p[key + "_pct"])}
+          <p>${rank(p[key + "_pct"])} · ${hint}</p></div>`).join("")}
+        <div class="score">
+          <span class="label">Riesgo en el Harp Helú</span>
+          <span class="risk ${risk ?? ""}">${risk ? ICONS[risk] + risk : "—"}</span>
+          <p>${riskText}</p>
+        </div>
+      </div>
+    </section>
+    <section class="card reading" aria-label="Lectura">
+      <span class="label">Lectura</span>
+      <ul>${readings(p, arsenal).map(r => `<li>${r}</li>`).join("")}</ul>
+    </section>
+    <section class="card arsenal" aria-labelledby="arsenal-title">
+      <div class="arsenal-head">
+        <h3 id="arsenal-title">Arsenal</h3>
+        <div class="legend"><span><i style="background:var(--best)"></i>sobre 100 de su tipo</span><span><i style="background:var(--worst)"></i>bajo 100</span></div>
+      </div>
+      ${arsenal.length ? `<div class="scroll"><table>
+        <thead><tr><th>Pitch</th><th>Uso</th><th class="num">Stuff+</th><th>70 · 100 · 130</th>
+          ${COMPONENTS.map(([, l]) => `<th class="num">${l}</th>`).join("")}<th>Rol</th><th class="num">Pérdida altura</th></tr></thead>
+        <tbody>${arsenal.map(a => `<tr>
+          <td class="pitch-name">${NAMES[a.pitch_class]}</td>
+          <td><div class="use"><span class="num">${fmt(a.uso_pct)} %</span>${meter(a.uso_pct)}</div></td>
+          <td class="num"><b>${fmt(a.stuff_plus)}</b></td>
+          <td>${diverge(a.stuff_plus)}</td>
+          ${COMPONENTS.map(([c]) => `<td class="num" title="${fmt(a[c], 1)} puntos porcentuales contra su tipo">${pct(a[c + "_pct"])}</td>`).join("")}
+          <td class="roles">${tags(a)}</td>
+          <td class="num">${a.perdida_altura == null ? "sin dato" : fmt(a.perdida_altura, 2)}</td></tr>`).join("")}</tbody>
+      </table></div>
+      <p class="foot">Stuff+ y componentes se comparan contra el mismo tipo de pitch en la liga. Los componentes son percentiles: 90 = mejor que el 90 % de ese tipo; verde es el tercio alto y naranja el bajo. <b>Pérdida en altura:</b> carreras por 100 pitches que pierde ese tipo en altitud extrema, promedio de la liga. Solo pitches con 100+ en la temporada.</p>`
+      : `<p class="empty">Ningún pitch llegó a 100 en la temporada: no hay arsenal que mostrar.</p>`}
+    </section>
+    <section class="card trust" aria-label="Qué tanto creerle">${trust()}</section>`;
+}
+
+function trust() {
+  const r = DATA.repeticion;
+  return `<p><b>Qué tanto creerle.</b> Correlación del mismo pitcher de 2024 a 2025 (${r.pitchers} pitchers): Stuff+ ${fmt(r.stuff, 2)}, Location+ ${fmt(r.location, 2)}, Pitching+ ${fmt(r.pitching, 2)}. Sus carreras reales solo ${fmt(r.xrv_neutral, 2)}.</p>
+    <p><b>Riesgo en altura:</b> uso × pérdida promedio de la liga por tipo (D-036). Ordena a los pitchers mejor que el azar, pero no predice carreras exactas; por eso va en tercios y solo si cubre 60 %+ de sus pitches.</p>
+    <p>Datos de la liga con identificadores anónimos. Uso interno.</p>`;
+}
+
+const COLUMNS = [["pitcher_anon_id", "Pitcher", false], ["stuff_plus", "Stuff+", true], ["location_plus", "Loc+", true],
+                 ["pitching_plus", "Pitch+", true], ["riesgo_altura", "Altura", true]];
+
+function renderLeague() {
+  const { key, desc } = state.sort;
+  const rows = pitchersOf(state.year)
+    .filter(p => p.pitcher_anon_id.includes(state.filter))
+    .sort((a, b) => {
+      const x = a[key], y = b[key];
+      if (x == null) return 1; if (y == null) return -1;
+      return (x > y ? 1 : x < y ? -1 : 0) * (desc ? -1 : 1);
+    });
+  el("count").textContent = `${rows.length} pitchers con 300+ pitches en ${state.year}. Altura “—”: sin nivel, cubre menos del 60 % de sus pitches.`;
+  el("league").innerHTML = `<thead><tr>${COLUMNS.map(([k, label, num]) =>
+      `<th class="${num ? "num" : ""}" aria-sort="${k === key ? (desc ? "descending" : "ascending") : "none"}"><button data-key="${k}">${label}${k === key ? (desc ? " ↓" : " ↑") : ""}</button></th>`).join("")}</tr></thead>
+    <tbody>${rows.map(p => `<tr data-id="${p.pitcher_anon_id}" tabindex="0" aria-selected="${p.pitcher_anon_id === state.pitcher}">
+      <td>${p.pitcher_anon_id.replace("pitcher_", "")}</td><td class="num">${fmt(p.stuff_plus)}</td>
+      <td class="num">${fmt(p.location_plus)}</td><td class="num"><b>${fmt(p.pitching_plus)}</b></td>
+      <td class="num"><span class="risk-dot">${p.riesgo_tercio ?? "—"}</span></td></tr>`).join("")}</tbody>`;
+}
+
+function select(id, year) {
+  if (year != null) state.year = year;
+  if (id != null) state.pitcher = id;
+  el("season").value = state.year;
+  renderCard(); renderLeague();
+}
+
+el("season").innerHTML = seasons.map(y => `<option value="${y}">${y}</option>`).join("");
+el("season").addEventListener("change", e => select(null, Number(e.target.value)));
+el("filter").addEventListener("input", e => { state.filter = e.target.value.trim().replace(/^pitcher_/, ""); renderLeague(); });
+el("league").addEventListener("click", e => {
+  const header = e.target.closest("button[data-key]");
+  if (header) {
+    const key = header.dataset.key;
+    state.sort = { key, desc: state.sort.key === key ? !state.sort.desc : key !== "riesgo_altura" && key !== "pitcher_anon_id" };
+    renderLeague(); return;
+  }
+  const row = e.target.closest("tr[data-id]");
+  if (row) { select(row.dataset.id); if (innerWidth <= 1024) el("ficha").scrollIntoView({ behavior: "smooth" }); }
+});
+el("league").addEventListener("keydown", e => {
+  const row = e.target.closest("tr[data-id]");
+  if (row && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); select(row.dataset.id); }
+});
+const best = [...pitchersOf(state.year)].sort((a, b) => b.pitching_plus - a.pitching_plus)[0];
+select(best.pitcher_anon_id);
+</script>
+</body>
+</html>

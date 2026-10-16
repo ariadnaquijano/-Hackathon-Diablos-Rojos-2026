@@ -1,0 +1,54 @@
+{
+  "ventana_contacto": {
+    "velocidad_salida_mph": [
+      98,
+      104
+    ],
+    "angulo_grados": [
+      24,
+      34
+    ]
+  },
+  "por_altitud": [
+    {
+      "altitude_category": "Extreme Altitude",
+      "batazos": 661,
+      "velocidad_salida_mediana": 100.1862,
+      "angulo_mediano": 28.0976,
+      "distancia_mediana": 415.1495,
+      "pct_jonron": 0.6944
+    },
+    {
+      "altitude_category": "Medium Altitude",
+      "batazos": 571,
+      "velocidad_salida_mediana": 100.329,
+      "angulo_mediano": 28.474,
+      "distancia_mediana": 405.7591,
+      "pct_jonron": 0.6112
+    },
+    {
+      "altitude_category": "No Altitude",
+      "batazos": 1019,
+      "velocidad_salida_mediana": 100.2638,
+      "angulo_mediano": 28.2634,
+      "distancia_mediana": 381.4127,
+      "pct_jonron": 0.5456
+    }
+  ],
+  "extrema_menos_mar": {
+    "pct_jonron": {
+      "diferencia": 0.1488,
+      "ic95": [
+        0.0999,
+        0.1961
+      ]
+    },
+    "distancia_pies": {
+      "diferencia": 33.7,
+      "ic95": [
+        30.8,
+        37.7
+      ]
+    }
+  }
+}

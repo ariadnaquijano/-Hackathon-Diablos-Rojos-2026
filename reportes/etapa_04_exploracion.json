@@ -1,0 +1,389 @@
+{
+  "target": "xrv_neutral",
+  "descripcion": {
+    "stuff_nivel_mar": "Stuff+: forma a nivel del mar (D-001)",
+    "stuff_observado": "Stuff+ con el movimiento observado, sin ajuste de altitud",
+    "stuff_con_altitud": "Stuff+ con altitude_category como variable (alternativa de D-001)",
+    "location": "Location+: solo dónde y en qué conteo",
+    "pitching": "Pitching+: forma, ubicación, conteo y secuencia"
+  },
+  "arboles": {
+    "stuff_nivel_mar": 75,
+    "stuff_observado": 64,
+    "stuff_con_altitud": 82,
+    "location": 274,
+    "pitching": 427
+  },
+  "por_pitch_2026": {
+    "media_liga": {
+      "mejora_vs_media_pct": 0.0,
+      "ic95_mejora_pct": [
+        0.0,
+        0.0
+      ],
+      "ic95_diferencia_vs_lineal_pct": [
+        -0.14749,
+        -0.06769
+      ]
+    },
+    "media_conteo": {
+      "mejora_vs_media_pct": 0.018,
+      "ic95_mejora_pct": [
+        0.00544,
+        0.03068
+      ],
+      "ic95_diferencia_vs_lineal_pct": [
+        -0.13211,
+        -0.04908
+      ]
+    },
+    "media_tipo_mano": {
+      "mejora_vs_media_pct": 0.001,
+      "ic95_mejora_pct": [
+        -0.01941,
+        0.02335
+      ],
+      "ic95_diferencia_vs_lineal_pct": [
+        -0.14227,
+        -0.07114
+      ]
+    },
+    "lineal_por_tipo": {
+      "mejora_vs_media_pct": 0.1066,
+      "ic95_mejora_pct": [
+        0.06769,
+        0.14749
+      ],
+      "ic95_diferencia_vs_lineal_pct": [
+        0.0,
+        0.0
+      ]
+    },
+    "stuff_nivel_mar": {
+      "mejora_vs_media_pct": 0.1243,
+      "ic95_mejora_pct": [
+        0.09038,
+        0.15986
+      ],
+      "ic95_diferencia_vs_lineal_pct": [
+        -0.01754,
+        0.05301
+      ]
+    },
+    "stuff_observado": {
+      "mejora_vs_media_pct": 0.1458,
+      "ic95_mejora_pct": [
+        0.11087,
+        0.18189
+      ],
+      "ic95_diferencia_vs_lineal_pct": [
+        0.00887,
+        0.06941
+      ]
+    },
+    "stuff_con_altitud": {
+      "mejora_vs_media_pct": 0.1483,
+      "ic95_mejora_pct": [
+        0.1123,
+        0.18739
+      ],
+      "ic95_diferencia_vs_lineal_pct": [
+        0.01175,
+        0.07369
+      ]
+    },
+    "location": {
+      "mejora_vs_media_pct": 5.3419,
+      "ic95_mejora_pct": [
+        4.99436,
+        5.66748
+      ],
+      "ic95_diferencia_vs_lineal_pct": [
+        4.89527,
+        5.56299
+      ]
+    },
+    "pitching": {
+      "mejora_vs_media_pct": 5.2456,
+      "ic95_mejora_pct": [
+        4.9144,
+        5.55417
+      ],
+      "ic95_diferencia_vs_lineal_pct": [
+        4.82099,
+        5.44449
+      ]
+    }
+  },
+  "por_pitcher_misma_temporada": {
+    "pitchers": 114,
+    "media_liga": {
+      "r": null,
+      "ecm_por_100": 0.7698
+    },
+    "media_conteo": {
+      "r": -0.2963,
+      "ic95_r": [
+        -0.4603,
+        -0.1126
+      ],
+      "ecm_por_100": 0.776,
+      "ic95_diferencia_r_vs_lineal_por_tipo": [
+        -0.9557,
+        -0.5051
+      ],
+      "ic95_diferencia_ecm_vs_lineal_por_tipo": [
+        0.0576,
+        0.1977
+      ]
+    },
+    "media_tipo_mano": {
+      "r": 0.1442,
+      "ic95_r": [
+        -0.0871,
+        0.3522
+      ],
+      "ecm_por_100": 0.758,
+      "ic95_diferencia_r_vs_lineal_por_tipo": [
+        -0.602,
+        -0.0367
+      ],
+      "ic95_diferencia_ecm_vs_lineal_por_tipo": [
+        0.0406,
+        0.1863
+      ]
+    },
+    "lineal_por_tipo": {
+      "r": 0.4539,
+      "ic95_r": [
+        0.2934,
+        0.5955
+      ],
+      "ecm_por_100": 0.6492,
+      "ic95_diferencia_r_vs_lineal_por_tipo": [
+        0.0,
+        0.0
+      ],
+      "ic95_diferencia_ecm_vs_lineal_por_tipo": [
+        0.0,
+        0.0
+      ]
+    },
+    "stuff_nivel_mar": {
+      "r": 0.347,
+      "ic95_r": [
+        0.1835,
+        0.4957
+      ],
+      "ecm_por_100": 0.6968,
+      "ic95_diferencia_r_vs_lineal_por_tipo": [
+        -0.2306,
+        0.0173
+      ],
+      "ic95_diferencia_ecm_vs_lineal_por_tipo": [
+        0.0032,
+        0.0924
+      ]
+    },
+    "stuff_observado": {
+      "r": 0.3588,
+      "ic95_r": [
+        0.2055,
+        0.5058
+      ],
+      "ecm_por_100": 0.6852,
+      "ic95_diferencia_r_vs_lineal_por_tipo": [
+        -0.2057,
+        0.0177
+      ],
+      "ic95_diferencia_ecm_vs_lineal_por_tipo": [
+        -0.0063,
+        0.0789
+      ]
+    },
+    "stuff_con_altitud": {
+      "r": 0.3599,
+      "ic95_r": [
+        0.206,
+        0.5073
+      ],
+      "ecm_por_100": 0.6797,
+      "ic95_diferencia_r_vs_lineal_por_tipo": [
+        -0.2112,
+        0.0279
+      ],
+      "ic95_diferencia_ecm_vs_lineal_por_tipo": [
+        -0.0154,
+        0.0741
+      ]
+    },
+    "location": {
+      "r": 0.2695,
+      "ic95_r": [
+        0.1114,
+        0.4091
+      ],
+      "ecm_por_100": 0.7194,
+      "ic95_diferencia_r_vs_lineal_por_tipo": [
+        -0.364,
+        0.0116
+      ],
+      "ic95_diferencia_ecm_vs_lineal_por_tipo": [
+        -0.0173,
+        0.1503
+      ]
+    },
+    "pitching": {
+      "r": 0.4725,
+      "ic95_r": [
+        0.3228,
+        0.5979
+      ],
+      "ecm_por_100": 0.6087,
+      "ic95_diferencia_r_vs_lineal_por_tipo": [
+        -0.1147,
+        0.1632
+      ],
+      "ic95_diferencia_ecm_vs_lineal_por_tipo": [
+        -0.119,
+        0.0306
+      ]
+    }
+  },
+  "por_pitcher_a_futuro": {
+    "pitchers": 114,
+    "pendiente_persistencia": 0.1854,
+    "stuff_nivel_mar": {
+      "r": 0.1552,
+      "ic95_r": [
+        -0.0489,
+        0.345
+      ],
+      "ecm_por_100": 0.7527,
+      "ic95_diferencia_r_vs_persistencia_encogida": [
+        -0.4237,
+        -0.0285
+      ],
+      "ic95_diferencia_ecm_vs_persistencia_encogida": [
+        -0.0037,
+        0.1009
+      ]
+    },
+    "pitching": {
+      "r": 0.1648,
+      "ic95_r": [
+        -0.06,
+        0.379
+      ],
+      "ecm_por_100": 0.7702,
+      "ic95_diferencia_r_vs_persistencia_encogida": [
+        -0.4387,
+        0.0008
+      ],
+      "ic95_diferencia_ecm_vs_persistencia_encogida": [
+        -0.0363,
+        0.1726
+      ]
+    },
+    "lineal_por_tipo": {
+      "r": 0.2735,
+      "ic95_r": [
+        0.0626,
+        0.4464
+      ],
+      "ecm_por_100": 0.7157,
+      "ic95_diferencia_r_vs_persistencia_encogida": [
+        -0.3118,
+        0.075
+      ],
+      "ic95_diferencia_ecm_vs_persistencia_encogida": [
+        -0.0495,
+        0.068
+      ]
+    },
+    "persistencia_encogida": {
+      "r": 0.3825,
+      "ic95_r": [
+        0.221,
+        0.5318
+      ],
+      "ecm_por_100": 0.7074,
+      "ic95_diferencia_r_vs_persistencia_encogida": [
+        0.0,
+        0.0
+      ],
+      "ic95_diferencia_ecm_vs_persistencia_encogida": [
+        0.0,
+        0.0
+      ]
+    }
+  },
+  "altitud_mismo_pitcher": {
+    "pitcher_tipo": 710,
+    "pitchers": 368,
+    "xrv_neutral": {
+      "extrema_menos_mar_por_100": 0.572,
+      "ic95_extrema_menos_mar": [
+        0.4307,
+        0.7295
+      ],
+      "r_entre_altitudes": 0.1508,
+      "ic95_r": [
+        0.0738,
+        0.219
+      ]
+    },
+    "stuff_nivel_mar": {
+      "extrema_menos_mar_por_100": 0.0738,
+      "ic95_extrema_menos_mar": [
+        0.0644,
+        0.085
+      ],
+      "r_entre_altitudes": 0.9228,
+      "ic95_r": [
+        0.91,
+        0.9339
+      ],
+      "ic95_diferencia_r_vs_stuff_observado": [
+        0.1541,
+        0.2174
+      ],
+      "ic95_diferencia_brecha_absoluta_vs_stuff_observado": [
+        -0.245,
+        -0.2162
+      ]
+    },
+    "stuff_observado": {
+      "extrema_menos_mar_por_100": 0.3038,
+      "ic95_extrema_menos_mar": [
+        0.288,
+        0.3204
+      ],
+      "r_entre_altitudes": 0.74,
+      "ic95_r": [
+        0.7009,
+        0.7729
+      ]
+    },
+    "stuff_con_altitud": {
+      "extrema_menos_mar_por_100": 0.4521,
+      "ic95_extrema_menos_mar": [
+        0.4327,
+        0.4716
+      ],
+      "r_entre_altitudes": 0.6949,
+      "ic95_r": [
+        0.6519,
+        0.7321
+      ],
+      "ic95_diferencia_r_vs_stuff_observado": [
+        -0.0626,
+        -0.0282
+      ],
+      "ic95_diferencia_brecha_absoluta_vs_stuff_observado": [
+        0.1402,
+        0.1567
+      ]
+    }
+  }
+}

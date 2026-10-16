@@ -1,3 +1,20 @@
+# ─── Datos del hackathon ───────────────────────────────────────────────
+# El reglamento prohíbe compartir los datos: nunca se suben al repositorio.
+data/**
+!data/*/
+!data/*/.gitkeep
+*.parquet
+*.pkl
+*.rds
+*.csv
+*.feather
+*.xlsx
+
+# Entornos y archivos del sistema
+.venv/
+.DS_Store
+
+# ─── Plantilla estándar de Python (del repositorio original) ───────────
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]

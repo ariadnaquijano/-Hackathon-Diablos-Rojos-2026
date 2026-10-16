@@ -1,0 +1,375 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Arsenal y altitud</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: reporte de etapa en un carril; cada sección = hallazgo en una frase, luego su gráfica o tabla. */
+:root {
+  --bg: #f6f7f9;
+  --surface: #ffffff;
+  --ink: #16191f;
+  --ink-2: #4a5160;
+  --ink-3: #7a8191;
+  --rule: #dde1e7;
+  --accent: #b3122a;
+  --accent-soft: #f6e3e6;
+  --bar: #2f4a6d;
+  --sea: #2b6cb0;
+  --mid: #b7791f;
+  --alt: #c21f3a;
+  --display: "Barlow Condensed", "Arial Narrow", "Helvetica Neue", sans-serif;
+  --body: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --step--1: 0.8125rem;
+  --step-0: 1rem;
+  --step-1: 1.25rem;
+  --step-2: 1.75rem;
+  --step-3: 2.75rem;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #111418; --surface: #1a1e24; --ink: #e8eaee; --ink-2: #b3b9c4; --ink-3: #858c99;
+    --rule: #2c323b; --accent: #ff5a6e; --accent-soft: #3a1c22; --bar: #7fa3d1;
+    --sea: #4f8ad6; --mid: #c08a1e; --alt: #e0405a; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #111418; --surface: #1a1e24; --ink: #e8eaee; --ink-2: #b3b9c4; --ink-3: #858c99;
+  --rule: #2c323b; --accent: #ff5a6e; --accent-soft: #3a1c22; --bar: #7fa3d1;
+  --sea: #4f8ad6; --mid: #c08a1e; --alt: #e0405a; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 400 var(--step-0)/1.55 var(--body); padding-inline: 16px; padding-block: 40px 64px; }
+main { max-width: 64rem; margin-inline: auto; display: grid; gap: 56px; }
+h1, h2 { font-family: var(--display); font-weight: 700; line-height: 1.05; text-wrap: balance; margin: 0; }
+h1 { font-size: var(--step-3); }
+h2 { font-size: var(--step-2); }
+h3 { font: 600 var(--step-1)/1.25 var(--body); margin: 0; }
+p { margin: 0; }
+.eyebrow { font: 600 var(--step--1)/1 var(--mono); text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent); }
+header { display: grid; gap: 12px; }
+header p { color: var(--ink-2); font-size: var(--step-1); max-width: 42rem; }
+section { display: grid; gap: 16px; }
+section > p, .lead { color: var(--ink-2); max-width: 46rem; }
+.lead strong, section > p strong { color: var(--ink); font-weight: 600; }
+.figures { display: grid; grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr)); border-block: 1px solid var(--rule); }
+.figure { padding: 20px 20px 20px 0; display: grid; gap: 4px; }
+.figure + .figure { padding-left: 20px; border-left: 1px solid var(--rule); }
+.figure b { font: 700 var(--step-3)/1 var(--display); font-variant-numeric: tabular-nums; }
+.figure span { color: var(--ink-2); font-size: var(--step--1); }
+.scroll { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: var(--step--1); background: var(--surface); }
+th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+th { font: 600 0.75rem/1.2 var(--mono); text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-3); }
+td.num, th.num { text-align: right; font-family: var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+code { font-family: var(--mono); font-size: 0.9em; }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr)); gap: 32px; }
+.grid2 > * { min-width: 0; }
+figure { margin: 0; display: grid; gap: 10px; align-content: start; min-width: 0; }
+figcaption { font-size: var(--step--1); color: var(--ink-3); }
+.chart { width: 100%; height: auto; display: block; overflow: visible; }
+.chart text { fill: var(--ink-2); font: 400 11px var(--mono); }
+.chart .grid { stroke: var(--rule); stroke-width: 1; }
+.chart .axis { stroke: var(--ink-3); stroke-width: 1; }
+.legend { display: flex; flex-wrap: wrap; gap: 16px; font-size: var(--step--1); color: var(--ink-2); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend i { width: 14px; height: 3px; border-radius: 2px; display: inline-block; }
+.legend i.dot { width: 10px; height: 10px; border-radius: 50%; }
+.legend i.hollow { width: 10px; height: 10px; border-radius: 50%; border: 2px solid var(--ink-3); background: transparent; }
+.note { border-left: 3px solid var(--accent); background: var(--surface); padding: 14px 18px; max-width: 46rem; color: var(--ink-2); }
+.note b { color: var(--ink); }
+.tooltip { position: fixed; pointer-events: none; z-index: 10; max-width: 18rem; padding: 8px 10px; background: var(--ink); color: var(--bg); border-radius: 6px; font-size: var(--step--1); line-height: 1.4; }
+footer { color: var(--ink-3); font-size: var(--step--1); border-top: 1px solid var(--rule); padding-top: 16px; display: grid; gap: 4px; }
+@media (max-width: 40rem) { .figure, .figure + .figure { padding: 16px 0; border-left: 0; } .figure + .figure { border-top: 1px solid var(--rule); } }
+.chip { display: inline-block; font: 600 0.72rem/1 var(--mono); text-transform: uppercase; letter-spacing: 0.06em; padding: 4px 8px; border-radius: 4px; }
+.chip.win { background: var(--accent-soft); color: var(--accent); }
+.chip.tie { background: var(--rule); color: var(--ink-2); }
+.chip.lose { border: 1px solid var(--rule); color: var(--ink-3); }
+.verdicts { display: grid; gap: 12px; }
+.verdict { display: grid; grid-template-columns: 6.5rem 1fr; gap: 12px; align-items: baseline; background: var(--surface); padding: 14px 18px; border-left: 3px solid var(--rule); }
+.verdict.win { border-left-color: var(--accent); }
+.verdict p { color: var(--ink-2); }
+.verdict p b { color: var(--ink); }
+@media (max-width: 40rem) { .verdict { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <span class="eyebrow">Etapa 5 · Arsenal y altitud · ISAC Hackathon 2026</span>
+    <h1>Qué pitch pierde en la CDMX y qué se repite</h1>
+    <p>Stuff+ por tipo de pitch, el pasaporte de altitud para pitchers que solo hemos visto a nivel del mar, y por qué el resultado de un pitcher engaña. Todo elegido y probado solo con 2024–2025.</p>
+  </header>
+
+  <div class="figures" id="figures"></div>
+
+  <section>
+    <h2>El veredicto, en una lista</h2>
+    <div class="verdicts" id="verdicts"></div>
+  </section>
+
+  <section>
+    <h2>En altura pierden las rectas, no las sliders</h2>
+    <p class="lead" id="type-lead"></p>
+    <figure>
+      <div class="legend"><span><i class="dot" style="background:var(--bar)"></i>Cambio real del xRV sin contacto, con IC 95 %</span><span><i class="dot" style="background:var(--accent)"></i>Costo predicho por el pasaporte</span></div>
+      <svg class="chart" id="type-chart" role="img" aria-label="Costo predicho y cambio real por tipo de pitch en altitud extrema"></svg>
+      <figcaption>Carreras por 100 pitches que pierde cada tipo de pitch en altitud extrema contra nivel del mar, mismo pitcher. Chequeo descriptivo, agregado después de la prueba.</figcaption>
+    </figure>
+    <div class="scroll"><table id="type-table"></table></div>
+  </section>
+
+  <section>
+    <h2>El pasaporte de altitud</h2>
+    <p class="lead" id="passport-lead"></p>
+    <h3>Forma: cuánto se mueve el pitch en altura</h3>
+    <div class="scroll"><table id="shape-table"></table></div>
+    <h3>Valor: cuánto pierde cada pitch</h3>
+    <div class="scroll"><table id="value-table"></table></div>
+    <div class="note" id="passport-note"></div>
+  </section>
+
+  <section>
+    <h2>El Stuff+ de cada pitch se repite; su resultado no</h2>
+    <p class="lead" id="arsenal-lead"></p>
+    <figure>
+      <div class="legend"><span><i class="dot" style="background:var(--accent)"></i>Lo que da el modelo</span><span><i class="dot" style="background:var(--bar)"></i>Resultado observado</span></div>
+      <svg class="chart" id="repeat-chart" role="img" aria-label="Repetición de 2024 a 2025 del mismo pitch"></svg>
+      <figcaption>Correlación del mismo pitcher y tipo de pitch entre 2024 y 2025, con IC 95 %.</figcaption>
+    </figure>
+    <div class="scroll"><table id="predict-table"></table></div>
+    <div class="scroll"><table id="components-table"></table></div>
+  </section>
+
+  <section>
+    <h2>Por qué el resultado engaña: el contacto es ruido</h2>
+    <p class="lead">El xRV de cada pitcher se partió en dos. Sin contacto: bolas, strikes, whiffs y fouls, con cada bola en juego valuada como un batazo promedio. Contacto: lo que valió cada bola en juego por encima o por debajo de ese promedio. El contacto no se repite de un año a otro.</p>
+    <div class="scroll"><table id="noise-table"></table></div>
+    <div class="scroll"><table id="halves-table"></table></div>
+    <div class="note" id="projection-note"></div>
+  </section>
+
+  <section>
+    <h2>Qué significa para el club</h2>
+    <div class="verdicts">
+      <div class="verdict win"><span class="chip win">Firmar</span><p><b>Antes de traer a un pitcher de la costa, mira su arsenal.</b> Uno de rectas y sinkers arriesga más en la CDMX que uno de sliders y curvas: unas 0.3 a 0.4 carreras por cada 100 pitches rápidos.</p></div>
+      <div class="verdict"><span class="chip tie">Evaluar</span><p><b>Con poca muestra, no juzgues por las bolas en juego.</b> Lo que se repite es lo que pasa antes del contacto y el Stuff+ de cada pitch.</p></div>
+      <div class="verdict"><span class="chip tie">Desarrollar</span><p><b>Los componentes dicen qué hacer con cada pitch.</b> Un pitch con whiff alto termina turnos; uno que roba strikes sirve para ponerse adelante.</p></div>
+    </div>
+  </section>
+
+  <footer>
+    <span>Fuente: <code>src/arsenal.py</code>, <code>src/pasaporte_altitud.py</code> y <code>src/proyeccion.py</code>. Decisiones D-031 a D-034 en <code>docs/decisiones.md</code>.</span>
+    <span>Intervalos de 95 % remuestreando pitchers completos (1,000 repeticiones, semilla 2026). Solo 2024–2025, salvo la segunda mirada a 2026 de la proyección, reportada como tal.</span>
+  </footer>
+</main>
+<div class="tooltip" id="tooltip" hidden></div>
+<script>
+const D = {"arsenal": {"nota": "Evaluación con pares 2024 → 2025 (D-033). 2026 solo entra a la tabla del arsenal.", "minimo_pitches_por_tipo": 100, "descripcion": {"2024": {"pitches_de_pitcher": 794, "por_tipo": {"Changeup": 98, "Curveball": 66, "Cutter": 25, "Four-Seam": 272, "Sinker": 133, "Slider": 195, "Splitter": 5}, "r_stuff_plus_con_componentes": {"p_swing": 0.5246, "p_whiff": 0.7186, "p_foul": 0.4242, "p_strike": 0.1126}}, "2025": {"pitches_de_pitcher": 854, "por_tipo": {"Changeup": 93, "Curveball": 70, "Cutter": 32, "Four-Seam": 295, "Sinker": 162, "Slider": 198, "Splitter": 4}, "r_stuff_plus_con_componentes": {"p_swing": 0.543, "p_whiff": 0.6737, "p_foul": 0.4209, "p_strike": 0.2152}}, "2026": {"pitches_de_pitcher": 417, "por_tipo": {"Changeup": 42, "Curveball": 14, "Cutter": 11, "Four-Seam": 163, "Sinker": 87, "Slider": 99, "Splitter": 1}, "r_stuff_plus_con_componentes": {"p_swing": 0.5777, "p_whiff": 0.7294, "p_foul": 0.5259, "p_strike": 0.1482}}}, "entre_temporadas": {"pares_pitcher_tipo": 334, "pitchers": 174, "repeticion": {"xrv_neutral": {"r": 0.1652, "ic95": [0.0486, 0.2773]}, "xrv_sin_contacto": {"r": 0.4395, "ic95": [0.3526, 0.5253]}, "stuff": {"r": 0.8459, "ic95": [0.8115, 0.875]}, "p_swing": {"r": 0.8352, "ic95": [0.7975, 0.8694]}, "p_whiff": {"r": 0.8535, "ic95": [0.8136, 0.8864]}, "p_foul": {"r": 0.8497, "ic95": [0.8129, 0.8819]}, "p_strike": {"r": 0.856, "ic95": [0.8166, 0.8869]}}, "predice_xrv_sin_contacto_2025": {"historia_sin_contacto": {"r": 0.4395, "ic95": [0.3526, 0.5253]}, "stuff": {"r": 0.2183, "ic95": [0.0957, 0.3276], "ic95_diferencia_vs_historia": [-0.34, -0.1024]}}, "predice_xrv_total_2025": {"historia_total": {"r": 0.1652, "ic95": [0.0486, 0.2773]}, "stuff": {"r": 0.1434, "ic95": [0.0392, 0.2421], "ic95_diferencia_vs_historia": [-0.1688, 0.1137]}}, "por_tipo": {"Changeup": {"pares": 33, "r_repeticion_stuff": 0.894, "r_stuff_con_sin_contacto_2025": 0.2636}, "Four-Seam": {"pares": 126, "r_repeticion_stuff": 0.8227, "r_stuff_con_sin_contacto_2025": 0.1485}, "Sinker": {"pares": 66, "r_repeticion_stuff": 0.887, "r_stuff_con_sin_contacto_2025": 0.1051}, "Slider": {"pares": 74, "r_repeticion_stuff": 0.867, "r_stuff_con_sin_contacto_2025": 0.3334}}}}, "pasaporte": {"nota": "Solo 2024–2025 (D-034). Pares con 50+ pitches por lado; modelos de valor sin ver al pitcher.", "aire_extremo_mediana": {"2024": 0.8506, "2025": 0.8384, "2026": 0.8355}, "pares_pitcher_tipo": 535, "pitchers": 299, "forma": {"ivb": {"pasaporte": {"ecm_pulgadas2": 1.3222}, "sin_cambio": {"ecm_pulgadas2": 9.4903, "ic95_diferencia_pasaporte_menos_base": [-8.8476, -7.4473]}, "perdida_promedio": {"ecm_pulgadas2": 1.1044, "ic95_diferencia_pasaporte_menos_base": [0.1138, 0.3185]}, "cambio_real_promedio_pulgadas": -2.193}, "hb": {"pasaporte": {"ecm_pulgadas2": 1.5099}, "sin_cambio": {"ecm_pulgadas2": 11.4032, "ic95_diferencia_pasaporte_menos_base": [-10.8084, -8.9265]}, "perdida_promedio": {"ecm_pulgadas2": 1.649, "ic95_diferencia_pasaporte_menos_base": [-0.4672, 0.1257]}, "cambio_real_promedio_pulgadas": -1.762}}, "valor_sin_contacto": {"r": 0.133, "ic95_r": [0.0549, 0.2203], "costo_predicho_promedio_por_100": 0.3893, "cambio_real_promedio_por_100": 0.2839, "ecm_calibrado": 0.9513, "ecm_costo_constante": 0.9672, "ic95_diferencia_ecm_vs_costo_constante": [-0.0381, 0.0041]}, "valor_total_referencia": {"r": 0.0926, "ic95_r": [0.0147, 0.1673], "costo_predicho_promedio_por_100": 0.3893, "cambio_real_promedio_por_100": 0.5233, "ecm_calibrado": 3.6542, "ecm_costo_constante": 3.6798, "ic95_diferencia_ecm_vs_costo_constante": [-0.0801, 0.0279]}, "chequeo_por_tipo": {"Changeup": {"pares": 51, "costo_predicho_por_100": 0.382, "cambio_real_sin_contacto_por_100": 0.324, "ic95_cambio_real": [0.0925, 0.5835]}, "Curveball": {"pares": 35, "costo_predicho_por_100": -0.071, "cambio_real_sin_contacto_por_100": 0.02, "ic95_cambio_real": [-0.2375, 0.2759]}, "Four-Seam": {"pares": 210, "costo_predicho_por_100": 0.686, "cambio_real_sin_contacto_por_100": 0.396, "ic95_cambio_real": [0.2683, 0.5279]}, "Sinker": {"pares": 97, "costo_predicho_por_100": 0.417, "cambio_real_sin_contacto_por_100": 0.316, "ic95_cambio_real": [0.1447, 0.4889]}, "Slider": {"pares": 129, "costo_predicho_por_100": 0.043, "cambio_real_sin_contacto_por_100": 0.182, "ic95_cambio_real": [-0.0279, 0.3874]}}, "costo_por_tipo_por_100": {"Changeup": {"count": 97.0, "mean": 0.375, "25%": 0.269, "75%": 0.46}, "Curveball": {"count": 49.0, "mean": -0.065, "25%": -0.17, "75%": 0.009}, "Cutter": {"count": 13.0, "mean": 0.146, "25%": 0.068, "75%": 0.193}, "Four-Seam": {"count": 257.0, "mean": 0.674, "25%": 0.508, "75%": 0.843}, "Sinker": {"count": 126.0, "mean": 0.404, "25%": 0.291, "75%": 0.521}, "Slider": {"count": 131.0, "mean": 0.043, "25%": 0.011, "75%": 0.075}, "Splitter": {"count": 4.0, "mean": 0.093, "25%": 0.067, "75%": 0.122}}}, "proyeccion": {"nota": "Elección con pares 2024 → 2025 (D-031) y mitades de 2024–2025 (D-032). La mirada a 2026 es la segunda, después de D-030.", "pares": 146, "repeticion_2024_a_2025": {"xrv_neutral": 0.1758, "xrv_sin_contacto": 0.4963, "swing": 0.4981, "whiff": 0.5901, "persecucion": 0.504, "zona": 0.4553, "strike_cantado": 0.4093, "foul": 0.4647, "contacto": -0.0571, "stuff": 0.8309, "location": 0.6766, "p_swing": 0.8222, "p_whiff": 0.7751, "p_foul": 0.8594, "p_strike": 0.7957}, "validacion_cruzada_2024_a_2025": {"persistencia": {"r": 0.0853, "ic95_r": [-0.0815, 0.2475], "ecm_por_100": 0.5096, "ic95_diferencia_r_vs_persistencia": [0.0, 0.0], "ic95_diferencia_ecm_vs_persistencia": [0.0, 0.0]}, "valores": {"r": 0.0691, "ic95_r": [-0.0697, 0.1997], "ecm_por_100": 0.5094, "ic95_diferencia_r_vs_persistencia": [-0.13, 0.0981], "ic95_diferencia_ecm_vs_persistencia": [-0.0209, 0.0206]}, "tasas": {"r": 0.1066, "ic95_r": [-0.0366, 0.2474], "ecm_por_100": 0.5082, "ic95_diferencia_r_vs_persistencia": [-0.1387, 0.1714], "ic95_diferencia_ecm_vs_persistencia": [-0.0303, 0.0306]}, "todo": {"r": 0.1011, "ic95_r": [-0.0412, 0.2285], "ecm_por_100": 0.5091, "ic95_diferencia_r_vs_persistencia": [-0.1328, 0.1635], "ic95_diferencia_ecm_vs_persistencia": [-0.0293, 0.0285]}, "sin_contacto": {"r": 0.2531, "ic95_r": [0.1005, 0.3912], "ecm_por_100": 0.4772, "ic95_diferencia_r_vs_persistencia": [0.0226, 0.3198], "ic95_diferencia_ecm_vs_persistencia": [-0.0736, 0.0065]}, "sin_contacto_y_valores": {"r": 0.139, "ic95_r": [0.0023, 0.2664], "ecm_por_100": 0.5, "ic95_diferencia_r_vs_persistencia": [-0.1059, 0.226], "ic95_diferencia_ecm_vs_persistencia": [-0.0406, 0.0193]}}, "confirmacion_mitades_2024_2025": {"temporadas_de_pitcher": 640, "pitchers": 494, "persistencia": {"r": 0.0816, "ic95_r": [0.0005, 0.1589], "ecm_por_100": 0.9632}, "sin_contacto": {"r": 0.1917, "ic95_r": [0.1154, 0.2658], "ecm_por_100": 0.933, "ic95_diferencia_r_vs_persistencia": [0.0392, 0.1819], "ic95_diferencia_ecm_vs_persistencia": [-0.0542, -0.004]}}, "ganador": "sin_contacto", "segunda_mirada_2026": {"pitchers": 114, "persistencia": {"r": 0.3825, "ic95_r": [0.221, 0.5318], "ecm_por_100": 0.7081, "ic95_diferencia_r_vs_persistencia": [0.0, 0.0], "ic95_diferencia_ecm_vs_persistencia": [0.0, 0.0]}, "sin_contacto": {"r": 0.3066, "ic95_r": [0.1243, 0.451], "ecm_por_100": 0.7086, "ic95_diferencia_r_vs_persistencia": [-0.21, 0.0411], "ic95_diferencia_ecm_vs_persistencia": [-0.0352, 0.0411]}}}};
+const A = D.arsenal, P = D.pasaporte, R = D.proyeccion;
+const fixed = (x, d = 2) => Number(x).toFixed(d);
+const signed = (x, d = 2) => (x > 0 ? "+" : "") + Number(x).toFixed(d);
+const range = (v, d = 2) => `${signed(v[0], d)} a ${signed(v[1], d)}`;
+const SVG = "http://www.w3.org/2000/svg";
+const tooltip = document.getElementById("tooltip");
+const TYPES = { "Four-Seam": "Recta", "Sinker": "Sinker", "Changeup": "Cambio", "Slider": "Slider", "Curveball": "Curva", "Cutter": "Cutter", "Splitter": "Splitter" };
+const NAMES = { xrv_neutral: "xRV total", xrv_sin_contacto: "xRV sin contacto", stuff: "Stuff+", p_swing: "P(swing)", p_whiff: "P(whiff | swing)", p_foul: "P(foul | contacto)", p_strike: "P(strike cantado | toma)" };
+function table(id, columns, rows) {
+  const head = "<thead><tr>" + columns.map(c => `<th class="${c.num ? "num" : ""}">${c.label}</th>`).join("") + "</tr></thead>";
+  const body = "<tbody>" + rows.map(r => "<tr>" + columns.map(c =>
+    `<td class="${c.num ? "num" : ""}">${c.format ? c.format(r[c.key], r) : r[c.key]}</td>`).join("") + "</tr>").join("") + "</tbody>";
+  document.getElementById(id).innerHTML = head + body;
+}
+function el(tag, attrs, parent) {
+  const node = document.createElementNS(SVG, tag);
+  for (const [k, v] of Object.entries(attrs)) node.setAttribute(k, v);
+  if (parent) parent.appendChild(node);
+  return node;
+}
+function text(parent, x, y, words, attrs = {}) {
+  const t = el("text", { x, y, ...attrs }, parent);
+  t.textContent = words;
+  return t;
+}
+function hoverable(node, words) {
+  node.addEventListener("pointermove", e => {
+    tooltip.textContent = words;
+    tooltip.hidden = false;
+    tooltip.style.left = Math.min(e.clientX + 12, window.innerWidth - tooltip.offsetWidth - 8) + "px";
+    tooltip.style.top = e.clientY + 12 + "px";
+  });
+  node.addEventListener("pointerleave", () => { tooltip.hidden = true; });
+}
+const verdictOf = (interval, better = "positive") => {
+  const [lo, hi] = interval;
+  if (better === "positive" ? lo > 0 : hi < 0) return "win";
+  if (better === "positive" ? hi < 0 : lo > 0) return "lose";
+  return "tie";
+};
+const CHIP = { win: "Gana", tie: "Empata", lose: "Pierde" };
+
+/* Puntos con intervalo, uno por fila; la escala se ajusta a los datos e incluye el cero. */
+function intervalChart(id, rows, unit) {
+  const svg = document.getElementById(id);
+  const W = 760, rowH = 34, m = { t: 12, r: 24, b: 32, l: 230 };
+  const H = m.t + rows.length * rowH + m.b;
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  const lo = Math.min(0, ...rows.map(r => r.lo)), hi = Math.max(0, ...rows.map(r => r.hi));
+  const step = (hi - lo) > 0.6 ? 0.2 : 0.1;
+  const xMin = Math.floor(lo / step) * step, xMax = Math.ceil(hi / step) * step;
+  const x = v => m.l + (v - xMin) / (xMax - xMin) * (W - m.l - m.r);
+  for (let t = xMin; t <= xMax + 1e-9; t += step) {
+    el("line", { x1: x(t), x2: x(t), y1: m.t, y2: H - m.b, class: Math.abs(t) < 1e-9 ? "axis" : "grid" }, svg);
+    text(svg, x(t), H - m.b + 16, fixed(t, 1), { "text-anchor": "middle" });
+  }
+  rows.forEach((r, i) => {
+    const cy = m.t + i * rowH + rowH / 2, color = r.ours ? "var(--accent)" : "var(--bar)";
+    text(svg, m.l - 10, cy + 4, r.label, { "text-anchor": "end", style: "fill:var(--ink)" });
+    const g = el("g", {}, svg);
+    el("line", { x1: x(r.lo), x2: x(r.hi), y1: cy, y2: cy, stroke: color, "stroke-width": 2, "stroke-linecap": "round" }, g);
+    el("circle", { cx: x(r.value), cy, r: 6, fill: color, stroke: "var(--surface)", "stroke-width": 2 }, g);
+    el("rect", { x: m.l, y: cy - rowH / 2, width: W - m.l - m.r, height: rowH, fill: "transparent" }, g);
+    hoverable(g, `${r.label}: ${fixed(r.value, 3)} ${unit} (IC 95 % ${fixed(r.lo, 3)} a ${fixed(r.hi, 3)})`);
+  });
+}
+
+
+function renderFigures() {
+  const t = P.chequeo_por_tipo, rep = A.entre_temporadas.repeticion;
+  const figures = [
+    { value: fixed(t["Four-Seam"].cambio_real_sin_contacto_por_100, 2), label: `carreras por 100 pierde la recta en altitud extrema (slider: ${fixed(t.Slider.cambio_real_sin_contacto_por_100, 2)})` },
+    { value: fixed(rep.stuff.r, 2), label: `repetición del Stuff+ de cada pitch de 2024 a 2025 (su resultado: ${fixed(rep.xrv_neutral.r, 2)})` },
+    { value: fixed(R.repeticion_2024_a_2025.xrv_sin_contacto, 2), label: `repetición del xRV sin contacto de un pitcher (con contacto: ${fixed(R.repeticion_2024_a_2025.xrv_neutral, 2)})` },
+    { value: `${Math.round(P.forma.ivb.sin_cambio.ecm_pulgadas2 / P.forma.ivb.pasaporte.ecm_pulgadas2)}×`, label: "menos error en el IVB en altura que suponer que el pitch no cambia" },
+  ];
+  document.getElementById("figures").innerHTML = figures.map(f =>
+    `<div class="figure"><b>${f.value}</b><span>${f.label}</span></div>`).join("");
+}
+
+function renderVerdicts() {
+  const s = P.forma, v = P.valor_sin_contacto, e = A.entre_temporadas.predice_xrv_sin_contacto_2025, h = R.confirmacion_mitades_2024_2025.sin_contacto, second = R.segunda_mirada_2026.sin_contacto;
+  const items = [
+    { v: "win", text: `<b>La física del aire predice la forma.</b> El IVB en altura con el pasaporte tiene error ${fixed(s.ivb.pasaporte.ecm_pulgadas2)} in², contra ${fixed(s.ivb.sin_cambio.ecm_pulgadas2)} in² al suponer que no cambia.` },
+    { v: verdictOf(s.ivb.perdida_promedio.ic95_diferencia_pasaporte_menos_base, "negative"), text: `<b>Contra la pérdida promedio de su tipo de pitch, el pasaporte no gana.</b> IVB: ${range(s.ivb.perdida_promedio.ic95_diferencia_pasaporte_menos_base)} in². HB: ${range(s.hb.perdida_promedio.ic95_diferencia_pasaporte_menos_base)} in².` },
+    { v: verdictOf(v.ic95_r), text: `<b>El costo predicho ordena a los pitches.</b> Correlación con el cambio real ${fixed(v.ic95_r[0])} a ${fixed(v.ic95_r[1])}. Su error no baja con claridad: ${range(v.ic95_diferencia_ecm_vs_costo_constante, 3)}.` },
+    { v: verdictOf(h.ic95_diferencia_ecm_vs_persistencia, "negative"), text: `<b>Sin contacto se proyecta mejor, dentro de 2024–2025.</b> La primera mitad de la temporada predice la segunda con menos error (${range(h.ic95_diferencia_ecm_vs_persistencia, 3)}).` },
+    { v: verdictOf(second.ic95_diferencia_ecm_vs_persistencia, "negative"), text: `<b>En 2026 empata.</b> En la segunda mirada, el xRV sin contacto empata con el xRV total para predecir 2026 (${range(second.ic95_diferencia_ecm_vs_persistencia, 3)}).` },
+    { v: verdictOf(e.stuff.ic95), text: `<b>El Stuff+ de cada pitch predice su año siguiente</b> (r ${fixed(e.stuff.r)}), pero menos que la historia de ese pitch (${range(e.stuff.ic95_diferencia_vs_historia)}).` },
+  ];
+  document.getElementById("verdicts").innerHTML = items.map(i =>
+    `<div class="verdict ${i.v}"><span class="chip ${i.v}">${CHIP[i.v]}</span><p>${i.text}</p></div>`).join("");
+}
+
+function renderTypes() {
+  const t = P.chequeo_por_tipo, keys = ["Four-Seam", "Sinker", "Changeup", "Slider", "Curveball"].filter(k => t[k]);
+  document.getElementById("type-lead").innerHTML =
+    `Mismo pitcher, mismo tipo de pitch, en altitud extrema y a nivel del mar (${P.pares_pitcher_tipo} pares de ${P.pitchers} pitchers, 2024–2025). <b>Las rectas, sinkers y cambios pierden valor en altura; las sliders y curvas casi no.</b> El pasaporte acierta el orden y exagera la pérdida de la recta.`;
+  const svg = document.getElementById("type-chart");
+  const W = 760, rowH = 40, m = { t: 12, r: 24, b: 32, l: 120 };
+  const H = m.t + keys.length * rowH + m.b;
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  const xMin = -0.4, xMax = 0.8;
+  const x = v => m.l + (v - xMin) / (xMax - xMin) * (W - m.l - m.r);
+  for (let v = xMin; v <= xMax + 1e-9; v += 0.2) {
+    el("line", { x1: x(v), x2: x(v), y1: m.t, y2: H - m.b, class: Math.abs(v) < 1e-9 ? "axis" : "grid" }, svg);
+    text(svg, x(v), H - m.b + 16, fixed(v, 1), { "text-anchor": "middle" });
+  }
+  keys.forEach((k, i) => {
+    const r = t[k], cy = m.t + i * rowH + rowH / 2;
+    text(svg, m.l - 10, cy + 4, TYPES[k], { "text-anchor": "end", style: "fill:var(--ink)" });
+    const g = el("g", {}, svg);
+    el("line", { x1: x(r.ic95_cambio_real[0]), x2: x(r.ic95_cambio_real[1]), y1: cy - 5, y2: cy - 5, stroke: "var(--bar)", "stroke-width": 2, "stroke-linecap": "round" }, g);
+    el("circle", { cx: x(r.cambio_real_sin_contacto_por_100), cy: cy - 5, r: 6, fill: "var(--bar)", stroke: "var(--surface)", "stroke-width": 2 }, g);
+    el("rect", { x: x(r.costo_predicho_por_100) - 5, y: cy + 3, width: 10, height: 10, rx: 2, fill: "var(--accent)", stroke: "var(--surface)", "stroke-width": 2 }, g);
+    el("rect", { x: m.l, y: cy - rowH / 2, width: W - m.l - m.r, height: rowH, fill: "transparent" }, g);
+    hoverable(g, `${TYPES[k]}: real ${fixed(r.cambio_real_sin_contacto_por_100, 2)} (IC ${fixed(r.ic95_cambio_real[0], 2)} a ${fixed(r.ic95_cambio_real[1], 2)}); predicho ${fixed(r.costo_predicho_por_100, 2)} carreras por 100 · ${r.pares} pares`);
+  });
+  table("type-table", [
+    { key: "name", label: "Tipo de pitch" },
+    { key: "pares", label: "Pares", num: true },
+    { key: "costo_predicho_por_100", label: "Costo predicho por 100", num: true, format: v => signed(v, 2) },
+    { key: "cambio_real_sin_contacto_por_100", label: "Cambio real por 100", num: true, format: v => signed(v, 2) },
+    { key: "ic95_cambio_real", label: "IC 95 % del real", num: true, format: v => range(v, 2) },
+  ], keys.map(k => ({ name: TYPES[k], ...t[k] })));
+}
+
+function renderPassport() {
+  const s = P.forma, v = P.valor_sin_contacto, total = P.valor_total_referencia;
+  document.getElementById("passport-lead").innerHTML =
+    `Un pitch a nivel del mar se traduce al aire de la altitud extrema (mediana ${fixed(P.aire_extremo_mediana["2025"], 2)} en 2025) con movimiento × aire<sup>k</sup>, con el k de su tipo de pitch. Después, un Stuff+ local con el movimiento observado evalúa el pitch original y el traducido. Los modelos de valor no vieron al pitcher.`;
+  const vs = v => `<span class="chip ${verdictOf(v, "negative")}">${CHIP[verdictOf(v, "negative")]}</span> ${range(v, 2)}`;
+  table("shape-table", [
+    { key: "name", label: "Movimiento en altura" },
+    { key: "real", label: "Cambio real promedio", num: true, format: v => signed(v, 1) + " in" },
+    { key: "pasaporte", label: "Error del pasaporte", num: true, format: v => fixed(v, 2) + " in²" },
+    { key: "sin", label: "Contra suponer que no cambia", num: true, format: vs },
+    { key: "liga", label: "Contra la pérdida promedio por tipo", num: true, format: vs },
+  ], ["ivb", "hb"].map(c => ({ name: c.toUpperCase(), real: s[c].cambio_real_promedio_pulgadas, pasaporte: s[c].pasaporte.ecm_pulgadas2,
+    sin: s[c].sin_cambio.ic95_diferencia_pasaporte_menos_base, liga: s[c].perdida_promedio.ic95_diferencia_pasaporte_menos_base })));
+  table("value-table", [
+    { key: "name", label: "Cambio real que se predice" },
+    { key: "r", label: "r con el costo predicho", num: true, format: (x, r) => `${fixed(x, 2)} (${fixed(r.ic95_r[0], 2)} a ${fixed(r.ic95_r[1], 2)})` },
+    { key: "costo_predicho_promedio_por_100", label: "Costo predicho promedio", num: true, format: x => fixed(x, 2) },
+    { key: "cambio_real_promedio_por_100", label: "Cambio real promedio", num: true, format: x => fixed(x, 2) },
+    { key: "ic95_diferencia_ecm_vs_costo_constante", label: "Error contra dar a todos el mismo costo", num: true, format: vs },
+  ], [{ name: "xRV sin contacto (regla)", ...v }, { name: "xRV total (referencia)", ...total }]);
+  document.getElementById("passport-note").innerHTML =
+    `<b>Lectura honesta:</b> la física del aire funciona y el costo apunta a los pitchers correctos más que al azar. Pero, para un pitcher específico, todavía no le gana con claridad a "aplica la pérdida promedio de su tipo de pitch". El cambio real de cada pitcher es muy ruidoso: su xRV entre altitudes solo se correlaciona 0.15.`;
+}
+
+function renderArsenal() {
+  const e = A.entre_temporadas, rep = e.repeticion;
+  document.getElementById("arsenal-lead").innerHTML =
+    `Cada pitch de cada pitcher con ${A.minimo_pitches_por_tipo}+ pitches recibe su Stuff+ dentro de su tipo: una slider contra las sliders de la liga. ${e.pares_pitcher_tipo} pares pitcher–pitch de ${e.pitchers} pitchers en 2024 y 2025.`;
+  const keys = ["xrv_neutral", "xrv_sin_contacto", "stuff", "p_whiff", "p_strike"];
+  intervalChart("repeat-chart", keys.map(k => ({ label: NAMES[k], value: rep[k].r, lo: rep[k].ic95[0], hi: rep[k].ic95[1], ours: !k.startsWith("xrv") })), "de r");
+  const p = e.predice_xrv_sin_contacto_2025, pt = e.predice_xrv_total_2025;
+  table("predict-table", [
+    { key: "name", label: "Predictor de 2024, mismo pitch" },
+    { key: "a", label: "r con el xRV sin contacto de 2025", num: true },
+    { key: "b", label: "r con el xRV total de 2025", num: true },
+  ], [
+    { name: "Su historia (el mismo valor en 2024)", a: `${fixed(p.historia_sin_contacto.r)} (${range(p.historia_sin_contacto.ic95)})`, b: `${fixed(pt.historia_total.r)} (${range(pt.historia_total.ic95)})` },
+    { name: "Stuff+ del pitch", a: `${fixed(p.stuff.r)} (${range(p.stuff.ic95)})`, b: `${fixed(pt.stuff.r)} (${range(pt.stuff.ic95)})` },
+    { name: "Diferencia Stuff+ − historia", a: range(p.stuff.ic95_diferencia_vs_historia), b: range(pt.stuff.ic95_diferencia_vs_historia) },
+  ]);
+  const years = Object.keys(A.descripcion);
+  table("components-table", [
+    { key: "name", label: "Qué mueve el Stuff+ de un pitch (r)" },
+    ...years.map(y => ({ key: y, label: y, num: true, format: v => fixed(v, 2) })),
+  ], ["p_whiff", "p_swing", "p_foul", "p_strike"].map(c => ({ name: NAMES[c], ...Object.fromEntries(years.map(y => [y, A.descripcion[y].r_stuff_plus_con_componentes[c]])) })));
+}
+
+function renderNoise() {
+  const r = R.repeticion_2024_a_2025;
+  table("noise-table", [
+    { key: "name", label: `Valor de un pitcher (${R.pares} pitchers)` },
+    { key: "r", label: "r de 2024 a 2025", num: true, format: v => fixed(v, 2) },
+  ], [["xrv_neutral", "xRV total"], ["xrv_sin_contacto", "xRV sin contacto"], ["contacto", "Calidad del contacto"], ["whiff", "Tasa de whiff observada"], ["persecucion", "Tasa de persecución observada"], ["stuff", "Stuff+"]]
+    .map(([k, name]) => ({ name, r: r[k] })));
+  const h = R.confirmacion_mitades_2024_2025;
+  table("halves-table", [
+    { key: "name", label: `Primera mitad → xRV total de la segunda (${h.temporadas_de_pitcher} temporadas de pitcher)` },
+    { key: "r", label: "r", num: true, format: (v, row) => `${fixed(v, 2)} (${range(row.ic95_r)})` },
+    { key: "ecm_por_100", label: "Error por 100", num: true, format: v => fixed(v, 3) },
+  ], [{ name: "xRV total", ...h.persistencia }, { name: "xRV sin contacto", ...h.sin_contacto }]);
+  const s = R.segunda_mirada_2026;
+  document.getElementById("projection-note").innerHTML =
+    `<b>Con la regla fijada, el xRV sin contacto proyecta mejor dentro de 2024–2025</b> (error ${range(h.sin_contacto.ic95_diferencia_ecm_vs_persistencia, 3)}). En la segunda mirada a 2026 empata con la historia total (r ${fixed(s.sin_contacto.r)} contra ${fixed(s.persistencia.r)}; error ${range(s.sin_contacto.ic95_diferencia_ecm_vs_persistencia, 3)}). No se exploró más en 2026.`;
+}
+
+renderFigures();
+renderVerdicts();
+renderTypes();
+renderPassport();
+renderArsenal();
+renderNoise();
+</script>
+</body>
+</html>

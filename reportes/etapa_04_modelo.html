@@ -1,0 +1,376 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Stuff+ con altitud</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: reporte de etapa en un carril; cada sección = hallazgo en una frase, luego su gráfica o tabla. */
+:root {
+  --bg: #f6f7f9;
+  --surface: #ffffff;
+  --ink: #16191f;
+  --ink-2: #4a5160;
+  --ink-3: #7a8191;
+  --rule: #dde1e7;
+  --accent: #b3122a;
+  --accent-soft: #f6e3e6;
+  --bar: #2f4a6d;
+  --sea: #2b6cb0;
+  --mid: #b7791f;
+  --alt: #c21f3a;
+  --display: "Barlow Condensed", "Arial Narrow", "Helvetica Neue", sans-serif;
+  --body: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --step--1: 0.8125rem;
+  --step-0: 1rem;
+  --step-1: 1.25rem;
+  --step-2: 1.75rem;
+  --step-3: 2.75rem;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #111418; --surface: #1a1e24; --ink: #e8eaee; --ink-2: #b3b9c4; --ink-3: #858c99;
+    --rule: #2c323b; --accent: #ff5a6e; --accent-soft: #3a1c22; --bar: #7fa3d1;
+    --sea: #4f8ad6; --mid: #c08a1e; --alt: #e0405a; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #111418; --surface: #1a1e24; --ink: #e8eaee; --ink-2: #b3b9c4; --ink-3: #858c99;
+  --rule: #2c323b; --accent: #ff5a6e; --accent-soft: #3a1c22; --bar: #7fa3d1;
+  --sea: #4f8ad6; --mid: #c08a1e; --alt: #e0405a; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 400 var(--step-0)/1.55 var(--body); padding-inline: 16px; padding-block: 40px 64px; }
+main { max-width: 64rem; margin-inline: auto; display: grid; gap: 56px; }
+h1, h2 { font-family: var(--display); font-weight: 700; line-height: 1.05; text-wrap: balance; margin: 0; }
+h1 { font-size: var(--step-3); }
+h2 { font-size: var(--step-2); }
+h3 { font: 600 var(--step-1)/1.25 var(--body); margin: 0; }
+p { margin: 0; }
+.eyebrow { font: 600 var(--step--1)/1 var(--mono); text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent); }
+header { display: grid; gap: 12px; }
+header p { color: var(--ink-2); font-size: var(--step-1); max-width: 42rem; }
+section { display: grid; gap: 16px; }
+section > p, .lead { color: var(--ink-2); max-width: 46rem; }
+.lead strong, section > p strong { color: var(--ink); font-weight: 600; }
+.figures { display: grid; grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr)); border-block: 1px solid var(--rule); }
+.figure { padding: 20px 20px 20px 0; display: grid; gap: 4px; }
+.figure + .figure { padding-left: 20px; border-left: 1px solid var(--rule); }
+.figure b { font: 700 var(--step-3)/1 var(--display); font-variant-numeric: tabular-nums; }
+.figure span { color: var(--ink-2); font-size: var(--step--1); }
+.scroll { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: var(--step--1); background: var(--surface); }
+th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+th { font: 600 0.75rem/1.2 var(--mono); text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-3); }
+td.num, th.num { text-align: right; font-family: var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+code { font-family: var(--mono); font-size: 0.9em; }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr)); gap: 32px; }
+.grid2 > * { min-width: 0; }
+figure { margin: 0; display: grid; gap: 10px; align-content: start; min-width: 0; }
+figcaption { font-size: var(--step--1); color: var(--ink-3); }
+.chart { width: 100%; height: auto; display: block; overflow: visible; }
+.chart text { fill: var(--ink-2); font: 400 11px var(--mono); }
+.chart .grid { stroke: var(--rule); stroke-width: 1; }
+.chart .axis { stroke: var(--ink-3); stroke-width: 1; }
+.legend { display: flex; flex-wrap: wrap; gap: 16px; font-size: var(--step--1); color: var(--ink-2); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend i { width: 14px; height: 3px; border-radius: 2px; display: inline-block; }
+.legend i.dot { width: 10px; height: 10px; border-radius: 50%; }
+.legend i.hollow { width: 10px; height: 10px; border-radius: 50%; border: 2px solid var(--ink-3); background: transparent; }
+.note { border-left: 3px solid var(--accent); background: var(--surface); padding: 14px 18px; max-width: 46rem; color: var(--ink-2); }
+.note b { color: var(--ink); }
+.tooltip { position: fixed; pointer-events: none; z-index: 10; max-width: 18rem; padding: 8px 10px; background: var(--ink); color: var(--bg); border-radius: 6px; font-size: var(--step--1); line-height: 1.4; }
+footer { color: var(--ink-3); font-size: var(--step--1); border-top: 1px solid var(--rule); padding-top: 16px; display: grid; gap: 4px; }
+@media (max-width: 40rem) { .figure, .figure + .figure { padding: 16px 0; border-left: 0; } .figure + .figure { border-top: 1px solid var(--rule); } }
+.chip { display: inline-block; font: 600 0.72rem/1 var(--mono); text-transform: uppercase; letter-spacing: 0.06em; padding: 4px 8px; border-radius: 4px; }
+.chip.win { background: var(--accent-soft); color: var(--accent); }
+.chip.tie { background: var(--rule); color: var(--ink-2); }
+.chip.lose { border: 1px solid var(--rule); color: var(--ink-3); }
+.verdicts { display: grid; gap: 12px; }
+.verdict { display: grid; grid-template-columns: 6.5rem 1fr; gap: 12px; align-items: baseline; background: var(--surface); padding: 14px 18px; border-left: 3px solid var(--rule); }
+.verdict.win { border-left-color: var(--accent); }
+.verdict p { color: var(--ink-2); }
+.verdict p b { color: var(--ink); }
+@media (max-width: 40rem) { .verdict { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <span class="eyebrow">Etapa 4 · Modelo final · ISAC Hackathon 2026</span>
+    <h1>Stuff+, Location+ y Pitching+ ajustados por altitud</h1>
+    <p>Un modelo congelado, entrenado con 2024–2025 y evaluado una sola vez en 2026. Aquí está lo que ganó, lo que empató y lo que no logramos, sin ajustar nada después de ver el resultado.</p>
+  </header>
+
+  <div class="figures" id="figures"></div>
+
+  <section>
+    <h2>El veredicto, en una lista</h2>
+    <div class="verdicts" id="verdicts"></div>
+  </section>
+
+  <section>
+    <h2>El Stuff+ no castiga al pitcher por el estadio</h2>
+    <p class="lead" id="altitude-lead"></p>
+    <figure>
+      <svg class="chart" id="altitude-chart" role="img" aria-label="Diferencia entre altitud extrema y nivel del mar, por valor"></svg>
+      <figcaption id="altitude-caption"></figcaption>
+    </figure>
+    <div class="scroll"><table id="altitude-table"></table></div>
+    <div class="note"><b>Cuidado al presentarlo:</b> parte de la consistencia viene de construcción, porque las variables a nivel del mar ya no cambian con el aire. Lo que demuestra es que el Stuff+ deja de castigar al pitcher por su estadio. No demuestra que rinda igual: su resultado real sí empeora en altura, y ese costo lo medirá la versión local.</div>
+  </section>
+
+  <section>
+    <h2>Por pitch, los tres le ganan a las bases</h2>
+    <p class="lead">Mejora del error cuadrático contra predecir siempre la media, en los pitches de 2026. Se compara contra dos bases: la lineal con el movimiento observado, que trae el efecto del aire, y la misma lineal con la forma a nivel del mar, que tiene la misma información que el Stuff+ (D-026).</p>
+    <div class="scroll"><table id="pitch-table"></table></div>
+  </section>
+
+  <section>
+    <h2>Por pitcher, Pitching+ queda arriba pero empata</h2>
+    <p class="lead" id="pitcher-lead"></p>
+    <figure>
+      <div class="legend"><span><i class="dot" style="background:var(--accent)"></i>Nuestro modelo</span><span><i class="dot" style="background:var(--bar)"></i>Base</span></div>
+      <svg class="chart" id="pitcher-chart" role="img" aria-label="Correlación por pitcher con el xRV real de 2026"></svg>
+      <figcaption id="pitcher-caption"></figcaption>
+    </figure>
+    <div class="scroll"><table id="pitcher-table"></table></div>
+  </section>
+
+  <section>
+    <h2>A futuro, la historia del pitcher sigue ganando</h2>
+    <p class="lead" id="forward-lead"></p>
+    <figure>
+      <div class="legend"><span><i class="dot" style="background:var(--accent)"></i>Nuestro modelo</span><span><i class="dot" style="background:var(--bar)"></i>Base</span></div>
+      <svg class="chart" id="forward-chart" role="img" aria-label="Correlación entre el valor de 2024–2025 y el xRV real de 2026"></svg>
+      <figcaption id="forward-caption"></figcaption>
+    </figure>
+    <div class="scroll"><table id="forward-table"></table></div>
+  </section>
+
+  <section>
+    <h2>Lo que se repite y lo que no</h2>
+    <p class="lead">El resultado real de un pitcher casi no se repite de un año a otro; sus componentes sí. Por eso conviene evaluar con Stuff+ y no con el resultado.</p>
+    <div class="scroll"><table id="stability-table"></table></div>
+    <h3>La escala 100</h3>
+    <p class="lead">100 − 10 × (valor − media de la temporada) ÷ desviación entre pitchers. Más alto es mejor; cada 10 puntos es una desviación.</p>
+    <div class="scroll"><table id="scale-table"></table></div>
+    <div class="note" id="scale-note"></div>
+  </section>
+
+  <section>
+    <h2>Qué significa para el club</h2>
+    <div class="verdicts">
+      <div class="verdict win"><span class="chip win">Comparar</span><p><b>Para evaluar pitchers entre estadios, Stuff+.</b> Es estable, no depende del parque y es el que más se acerca a anticipar el futuro.</p></div>
+      <div class="verdict"><span class="chip tie">Explicar</span><p><b>Para entender una temporada, Pitching+ desglosado en Stuff+ y Location+.</b> Cada punto se atribuye a la forma del pitch o a dónde lo puso.</p></div>
+      <div class="verdict"><span class="chip lose">Proyectar</span><p><b>Para el año siguiente, la historia del pitcher encogida hacia la media.</b> Para quien no tiene historia en la liga, Stuff+ es lo único disponible y predice algo.</p></div>
+    </div>
+  </section>
+
+  <footer>
+    <span>Fuente: <code>src/modelo.py</code> → <code>reportes/etapa_04_modelo.json</code>. Decisiones D-025 a D-030 en <code>docs/decisiones.md</code>.</span>
+    <span>Intervalos de 95 % remuestreando pitchers completos (1,000 repeticiones, semilla 2026). Valores por 100 pitches sobre el promedio de su temporada.</span>
+  </footer>
+</main>
+<div class="tooltip" id="tooltip" hidden></div>
+<script>
+const D = {"nota": "Modelo congelado (D-030). Entrenado con 2024–2025; 2026 evaluado una sola vez.", "arboles": {"p_swing": 502, "p_whiff": 418, "p_foul": 98, "p_strike": 401, "valor_batazo": 22, "location": 274}, "pesos_pitching": {"intercepto": 0.00172, "stuff": 0.6022, "location": 1.055}, "por_pitch_2026": {"lineal_por_tipo": {"mejora_vs_media_pct": 0.1071, "ic95_mejora_pct": [0.0672, 0.15083], "ic95_diferencia_vs_lineal_nivel_mar_pct": [0.00808, 0.04878]}, "lineal_nivel_mar": {"mejora_vs_media_pct": 0.0787, "ic95_mejora_pct": [0.04351, 0.1154], "ic95_diferencia_vs_lineal_por_tipo_pct": [-0.04878, -0.00808]}, "stuff": {"mejora_vs_media_pct": 0.1544, "ic95_mejora_pct": [0.11002, 0.2017], "ic95_diferencia_vs_lineal_por_tipo_pct": [0.0057, 0.08988], "ic95_diferencia_vs_lineal_nivel_mar_pct": [0.0396, 0.11284]}, "location": {"mejora_vs_media_pct": 5.2919, "ic95_mejora_pct": [4.96965, 5.65318], "ic95_diferencia_vs_lineal_por_tipo_pct": [4.86284, 5.53906], "ic95_diferencia_vs_lineal_nivel_mar_pct": [4.89264, 5.56659]}, "pitching": {"mejora_vs_media_pct": 5.3723, "ic95_mejora_pct": [5.03143, 5.75151], "ic95_diferencia_vs_lineal_por_tipo_pct": [4.93483, 5.63573], "ic95_diferencia_vs_lineal_nivel_mar_pct": [4.95785, 5.65956]}}, "por_pitcher_2026": {"pitchers": 178, "contra_lineal_observada": {"lineal_por_tipo": {"r": 0.4471, "ic95_r": [0.3262, 0.5621], "ecm_por_100": 0.7226, "ic95_diferencia_r_vs_lineal_por_tipo": [0.0, 0.0], "ic95_diferencia_ecm_vs_lineal_por_tipo": [0.0, 0.0]}, "lineal_nivel_mar": {"r": 0.4126, "ic95_r": [0.2703, 0.5411], "ecm_por_100": 0.7502, "ic95_diferencia_r_vs_lineal_por_tipo": [-0.0964, 0.0286], "ic95_diferencia_ecm_vs_lineal_por_tipo": [0.0008, 0.0546]}, "stuff": {"r": 0.4222, "ic95_r": [0.2888, 0.557], "ecm_por_100": 0.7377, "ic95_diferencia_r_vs_lineal_por_tipo": [-0.1455, 0.1127], "ic95_diferencia_ecm_vs_lineal_por_tipo": [-0.0418, 0.0664]}, "location": {"r": 0.2996, "ic95_r": [0.1724, 0.4149], "ecm_por_100": 0.7724, "ic95_diferencia_r_vs_lineal_por_tipo": [-0.3048, 0.0218], "ic95_diferencia_ecm_vs_lineal_por_tipo": [-0.0261, 0.1241]}, "pitching": {"r": 0.4468, "ic95_r": [0.3224, 0.5554], "ecm_por_100": 0.6888, "ic95_diferencia_r_vs_lineal_por_tipo": [-0.1379, 0.1576], "ic95_diferencia_ecm_vs_lineal_por_tipo": [-0.1126, 0.0381]}}, "contra_lineal_nivel_mar": {"lineal_por_tipo": {"r": 0.4471, "ic95_r": [0.3262, 0.5621], "ecm_por_100": 0.7226, "ic95_diferencia_r_vs_lineal_nivel_mar": [-0.0286, 0.0964], "ic95_diferencia_ecm_vs_lineal_nivel_mar": [-0.0546, -0.0008]}, "lineal_nivel_mar": {"r": 0.4126, "ic95_r": [0.2703, 0.5411], "ecm_por_100": 0.7502, "ic95_diferencia_r_vs_lineal_nivel_mar": [0.0, 0.0], "ic95_diferencia_ecm_vs_lineal_nivel_mar": [0.0, 0.0]}, "stuff": {"r": 0.4222, "ic95_r": [0.2888, 0.557], "ecm_por_100": 0.7377, "ic95_diferencia_r_vs_lineal_nivel_mar": [-0.1237, 0.1498], "ic95_diferencia_ecm_vs_lineal_nivel_mar": [-0.067, 0.041]}, "location": {"r": 0.2996, "ic95_r": [0.1724, 0.4149], "ecm_por_100": 0.7724, "ic95_diferencia_r_vs_lineal_nivel_mar": [-0.2744, 0.062], "ic95_diferencia_ecm_vs_lineal_nivel_mar": [-0.0499, 0.093]}, "pitching": {"r": 0.4468, "ic95_r": [0.3224, 0.5554], "ecm_por_100": 0.6888, "ic95_diferencia_r_vs_lineal_nivel_mar": [-0.1095, 0.194], "ic95_diferencia_ecm_vs_lineal_nivel_mar": [-0.138, 0.0103]}}}, "a_futuro_2026": {"pitchers": 114, "pares_para_pesos": 146, "pendiente_persistencia": 0.1854, "pesos_proyeccion": {"historia": 0.1665, "pitching": 0.1326}, "stuff": {"r": 0.2064, "ic95_r": [0.0259, 0.3787], "ecm_por_100": 0.7385, "ic95_diferencia_r_vs_persistencia_encogida": [-0.3502, -0.0102], "ic95_diferencia_ecm_vs_persistencia_encogida": [-0.0157, 0.0814]}, "location": {"r": -0.0775, "ic95_r": [-0.2815, 0.137], "ecm_por_100": 0.8544, "ic95_diferencia_r_vs_persistencia_encogida": [-0.6948, -0.1747], "ic95_diferencia_ecm_vs_persistencia_encogida": [0.0463, 0.2576]}, "pitching": {"r": 0.0144, "ic95_r": [-0.193, 0.2359], "ecm_por_100": 0.8331, "ic95_diferencia_r_vs_persistencia_encogida": [-0.5946, -0.1168], "ic95_diferencia_ecm_vs_persistencia_encogida": [0.0177, 0.2462]}, "lineal_nivel_mar": {"r": 0.294, "ic95_r": [0.088, 0.4651], "ecm_por_100": 0.7146, "ic95_diferencia_r_vs_persistencia_encogida": [-0.2923, 0.1001], "ic95_diferencia_ecm_vs_persistencia_encogida": [-0.0415, 0.0576]}, "lineal_por_tipo": {"r": 0.2735, "ic95_r": [0.0626, 0.4465], "ecm_por_100": 0.7161, "ic95_diferencia_r_vs_persistencia_encogida": [-0.3118, 0.075], "ic95_diferencia_ecm_vs_persistencia_encogida": [-0.05, 0.0682]}, "proyeccion": {"r": 0.3434, "ic95_r": [0.1708, 0.5026], "ecm_por_100": 0.7153, "ic95_diferencia_r_vs_persistencia_encogida": [-0.1052, 0.0177], "ic95_diferencia_ecm_vs_persistencia_encogida": [-0.0044, 0.0211]}, "persistencia_encogida": {"r": 0.3825, "ic95_r": [0.221, 0.5318], "ecm_por_100": 0.7081, "ic95_diferencia_r_vs_persistencia_encogida": [0.0, 0.0], "ic95_diferencia_ecm_vs_persistencia_encogida": [0.0, 0.0]}}, "altitud_mismo_pitcher": {"pitcher_tipo": 710, "pitchers": 368, "xrv_neutral": {"extrema_menos_mar_por_100": 0.572, "ic95_extrema_menos_mar": [0.4307, 0.7295], "r_entre_altitudes": 0.1508, "ic95_r": [0.0738, 0.219]}, "stuff": {"extrema_menos_mar_por_100": 0.0482, "ic95_extrema_menos_mar": [0.0362, 0.0593], "r_entre_altitudes": 0.9211, "ic95_r": [0.9092, 0.9321]}, "pitching": {"extrema_menos_mar_por_100": 0.0885, "ic95_extrema_menos_mar": [0.0551, 0.1269], "r_entre_altitudes": 0.7091, "ic95_r": [0.6713, 0.7391], "ic95_diferencia_r_vs_stuff": [-0.247, -0.1821], "ic95_diferencia_brecha_absoluta_vs_stuff": [0.0076, 0.0775]}}, "escala_100": {"2024": {"pitchers": 320, "percentiles_10_50_90": {"stuff_plus": [89.2, 100.5, 113.4], "location_plus": [86.1, 101.1, 110.7], "pitching_plus": [86.4, 100.6, 111.5]}, "r_entre_valores": {"stuff_vs_location": -0.0417, "stuff_vs_pitching": 0.3379, "location_vs_pitching": 0.9263}}, "2025": {"pitchers": 320, "percentiles_10_50_90": {"stuff_plus": [88.8, 99.7, 115.4], "location_plus": [85.7, 101.1, 111.3], "pitching_plus": [86.9, 101.3, 112.3]}, "r_entre_valores": {"stuff_vs_location": -0.1413, "stuff_vs_pitching": 0.2427, "location_vs_pitching": 0.9261}}, "2026": {"pitchers": 178, "percentiles_10_50_90": {"stuff_plus": [88.2, 99.8, 115.4], "location_plus": [91.2, 103.4, 116.0], "pitching_plus": [89.9, 102.8, 115.3]}, "r_entre_valores": {"stuff_vs_location": 0.0104, "stuff_vs_pitching": 0.4252, "location_vs_pitching": 0.9095}}}, "repeticion_2024_a_2025": {"pitchers": 146, "xrv_neutral": 0.1758, "stuff": 0.8309, "location": 0.6766, "pitching": 0.6443, "p_swing": 0.8222, "p_whiff": 0.7751, "p_foul": 0.8594, "p_strike": 0.7957}};
+const fixed = (x, d = 2) => Number(x).toFixed(d);
+const signed = (x, d = 2) => (x > 0 ? "+" : "") + Number(x).toFixed(d);
+const range = (v, d = 2) => `${signed(v[0], d)} a ${signed(v[1], d)}`;
+const SVG = "http://www.w3.org/2000/svg";
+const tooltip = document.getElementById("tooltip");
+const NAMES = {
+  stuff: "Stuff+", location: "Location+", pitching: "Pitching+", xrv_neutral: "xRV real",
+  lineal_por_tipo: "Lineal observada", lineal_nivel_mar: "Lineal a nivel del mar",
+  persistencia_encogida: "Persistencia encogida", proyeccion: "Proyección: historia + Pitching+",
+  p_swing: "P(swing)", p_whiff: "P(whiff | swing)", p_foul: "P(foul | contacto)", p_strike: "P(strike cantado | toma)",
+};
+const OURS = new Set(["stuff", "location", "pitching", "proyeccion"]);
+
+function table(id, columns, rows) {
+  const head = "<thead><tr>" + columns.map(c => `<th class="${c.num ? "num" : ""}">${c.label}</th>`).join("") + "</tr></thead>";
+  const body = "<tbody>" + rows.map(r => "<tr>" + columns.map(c =>
+    `<td class="${c.num ? "num" : ""}">${c.format ? c.format(r[c.key], r) : r[c.key]}</td>`).join("") + "</tr>").join("") + "</tbody>";
+  document.getElementById(id).innerHTML = head + body;
+}
+function el(tag, attrs, parent) {
+  const node = document.createElementNS(SVG, tag);
+  for (const [k, v] of Object.entries(attrs)) node.setAttribute(k, v);
+  if (parent) parent.appendChild(node);
+  return node;
+}
+function text(parent, x, y, words, attrs = {}) {
+  const t = el("text", { x, y, ...attrs }, parent);
+  t.textContent = words;
+  return t;
+}
+function hoverable(node, words) {
+  node.addEventListener("pointermove", e => {
+    tooltip.textContent = words;
+    tooltip.hidden = false;
+    tooltip.style.left = Math.min(e.clientX + 12, window.innerWidth - tooltip.offsetWidth - 8) + "px";
+    tooltip.style.top = e.clientY + 12 + "px";
+  });
+  node.addEventListener("pointerleave", () => { tooltip.hidden = true; });
+}
+const verdictOf = (interval, better = "positive") => {
+  const [lo, hi] = interval;
+  if (better === "positive" ? lo > 0 : hi < 0) return "win";
+  if (better === "positive" ? hi < 0 : lo > 0) return "lose";
+  return "tie";
+};
+const CHIP = { win: "Gana", tie: "Empata", lose: "Pierde" };
+
+/* Puntos con intervalo, uno por fila; la escala se ajusta a los datos e incluye el cero. */
+function intervalChart(id, rows, unit) {
+  const svg = document.getElementById(id);
+  const W = 760, rowH = 34, m = { t: 12, r: 24, b: 32, l: 230 };
+  const H = m.t + rows.length * rowH + m.b;
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  const lo = Math.min(0, ...rows.map(r => r.lo)), hi = Math.max(0, ...rows.map(r => r.hi));
+  const step = (hi - lo) > 0.6 ? 0.2 : 0.1;
+  const xMin = Math.floor(lo / step) * step, xMax = Math.ceil(hi / step) * step;
+  const x = v => m.l + (v - xMin) / (xMax - xMin) * (W - m.l - m.r);
+  for (let t = xMin; t <= xMax + 1e-9; t += step) {
+    el("line", { x1: x(t), x2: x(t), y1: m.t, y2: H - m.b, class: Math.abs(t) < 1e-9 ? "axis" : "grid" }, svg);
+    text(svg, x(t), H - m.b + 16, fixed(t, 1), { "text-anchor": "middle" });
+  }
+  rows.forEach((r, i) => {
+    const cy = m.t + i * rowH + rowH / 2, color = r.ours ? "var(--accent)" : "var(--bar)";
+    text(svg, m.l - 10, cy + 4, r.label, { "text-anchor": "end", style: "fill:var(--ink)" });
+    const g = el("g", {}, svg);
+    el("line", { x1: x(r.lo), x2: x(r.hi), y1: cy, y2: cy, stroke: color, "stroke-width": 2, "stroke-linecap": "round" }, g);
+    el("circle", { cx: x(r.value), cy, r: 6, fill: color, stroke: "var(--surface)", "stroke-width": 2 }, g);
+    el("rect", { x: m.l, y: cy - rowH / 2, width: W - m.l - m.r, height: rowH, fill: "transparent" }, g);
+    hoverable(g, `${r.label}: ${fixed(r.value, 3)} ${unit} (IC 95 % ${fixed(r.lo, 3)} a ${fixed(r.hi, 3)})`);
+  });
+}
+
+function renderFigures() {
+  const a = D.altitud_mismo_pitcher, p = D.por_pitch_2026;
+  const figures = [
+    { value: fixed(a.stuff.extrema_menos_mar_por_100, 2), label: `carreras por 100 cambia el Stuff+ del mismo pitcher entre altitudes (su resultado real: ${fixed(a.xrv_neutral.extrema_menos_mar_por_100, 2)})` },
+    { value: fixed(a.stuff.r_entre_altitudes, 2), label: "correlación del Stuff+ del mismo pitcher entre altitud extrema y nivel del mar" },
+    { value: signed(p.pitching.mejora_vs_media_pct, 1) + " %", label: `mejora por pitch de Pitching+ contra la media (mejor base: ${signed(p.lineal_por_tipo.mejora_vs_media_pct, 2)} %)` },
+    { value: fixed(D.repeticion_2024_a_2025.stuff, 2), label: `repetición del Stuff+ de 2024 a 2025 (resultado real: ${fixed(D.repeticion_2024_a_2025.xrv_neutral, 2)})` },
+  ];
+  document.getElementById("figures").innerHTML = figures.map(f =>
+    `<div class="figure"><b>${f.value}</b><span>${f.label}</span></div>`).join("");
+}
+
+function renderVerdicts() {
+  const p = D.por_pitch_2026, pp = D.por_pitcher_2026, f = D.a_futuro_2026, a = D.altitud_mismo_pitcher;
+  const stuffSea = p.stuff.ic95_diferencia_vs_lineal_nivel_mar_pct, stuffObs = p.stuff.ic95_diferencia_vs_lineal_por_tipo_pct;
+  const pitcherDiff = pp.contra_lineal_observada.pitching.ic95_diferencia_ecm_vs_lineal_por_tipo;
+  const forwardDiff = f.proyeccion.ic95_diferencia_ecm_vs_persistencia_encogida;
+  const items = [
+    { v: "win", text: `<b>Ajuste por altitud.</b> El Stuff+ del mismo pitcher con el mismo pitch cambia ${fixed(a.stuff.extrema_menos_mar_por_100, 3)} carreras por 100 entre altitud extrema y nivel del mar (IC ${fixed(a.stuff.ic95_extrema_menos_mar[0], 3)} a ${fixed(a.stuff.ic95_extrema_menos_mar[1], 3)}); su resultado real cambia ${fixed(a.xrv_neutral.extrema_menos_mar_por_100, 2)}.` },
+    { v: verdictOf(stuffSea), text: `<b>Stuff+ por pitch.</b> Le gana a la lineal a nivel del mar (${range(stuffSea, 3)} puntos) y a la lineal observada (${range(stuffObs, 3)}), sin usar la altitud.` },
+    { v: verdictOf(p.pitching.ic95_diferencia_vs_lineal_por_tipo_pct), text: `<b>Location+ y Pitching+ por pitch.</b> Mejoran ${fixed(p.location.mejora_vs_media_pct, 2)} % y ${fixed(p.pitching.mejora_vs_media_pct, 2)} % contra la media; la mejor base, ${fixed(p.lineal_por_tipo.mejora_vs_media_pct, 2)} %.` },
+    { v: verdictOf(pitcherDiff, "negative"), text: `<b>Por pitcher, misma temporada.</b> Pitching+ tiene el menor error (${fixed(pp.contra_lineal_observada.pitching.ecm_por_100, 3)} contra ${fixed(pp.contra_lineal_observada.lineal_por_tipo.ecm_por_100, 3)}), pero la diferencia (${range(pitcherDiff, 3)}) toca cero.` },
+    { v: verdictOf(forwardDiff, "negative"), text: `<b>A futuro.</b> La proyección con historia y Pitching+ empata con la historia sola (error ${range(forwardDiff, 3)}) y queda abajo en el punto (r ${fixed(f.proyeccion.r)} contra ${fixed(f.persistencia_encogida.r)}). Ningún modelo predice el año siguiente mejor que la historia.` },
+  ];
+  document.getElementById("verdicts").innerHTML = items.map(i =>
+    `<div class="verdict ${i.v}"><span class="chip ${i.v}">${CHIP[i.v]}</span><p>${i.text}</p></div>`).join("");
+}
+
+function renderAltitude() {
+  const a = D.altitud_mismo_pitcher;
+  const keys = ["xrv_neutral", "pitching", "stuff"];
+  document.getElementById("altitude-lead").innerHTML =
+    `El mismo pitcher con el mismo tipo de pitch, en altitud extrema y a nivel del mar: ${a.pitchers} pitchers y ${a.pitcher_tipo} pares con al menos 50 pitches en cada lado. <b>Su resultado real empeora ${fixed(a.xrv_neutral.extrema_menos_mar_por_100, 2)} carreras por 100 en altura; su Stuff+ solo ${fixed(a.stuff.extrema_menos_mar_por_100, 2)}.</b>`;
+  intervalChart("altitude-chart", keys.map(k => ({ label: NAMES[k], value: a[k].extrema_menos_mar_por_100,
+    lo: a[k].ic95_extrema_menos_mar[0], hi: a[k].ic95_extrema_menos_mar[1], ours: OURS.has(k) })), "carreras por 100");
+  document.getElementById("altitude-caption").textContent = "Altitud extrema menos nivel del mar, en carreras por 100 pitches, con IC 95 %. Cero sería no cambiar nada con el aire.";
+  table("altitude-table", [
+    { key: "name", label: "Valor" },
+    { key: "extrema_menos_mar_por_100", label: "Extrema − mar", num: true, format: v => fixed(v, 3) },
+    { key: "ic95_extrema_menos_mar", label: "IC 95 %", num: true, format: v => `${fixed(v[0], 3)} a ${fixed(v[1], 3)}` },
+    { key: "r_entre_altitudes", label: "r entre altitudes", num: true, format: v => fixed(v, 2) },
+    { key: "ic95_r", label: "IC 95 %", num: true, format: v => `${fixed(v[0], 2)} a ${fixed(v[1], 2)}` },
+  ], keys.map(k => ({ name: NAMES[k], ...a[k] })));
+}
+
+function renderPitch() {
+  const p = D.por_pitch_2026;
+  const vs = (v, r) => v ? `<span class="chip ${verdictOf(v)}">${CHIP[verdictOf(v)]}</span> ${range(v, 3)}` : "—";
+  table("pitch-table", [
+    { key: "name", label: "Modelo" },
+    { key: "mejora_vs_media_pct", label: "Mejora contra la media", num: true, format: v => signed(v, 3) + " %" },
+    { key: "ic95_mejora_pct", label: "IC 95 %", num: true, format: v => `${fixed(v[0], 3)} a ${fixed(v[1], 3)}` },
+    { key: "ic95_diferencia_vs_lineal_por_tipo_pct", label: "Contra la lineal observada", num: true, format: vs },
+    { key: "ic95_diferencia_vs_lineal_nivel_mar_pct", label: "Contra la lineal a nivel del mar", num: true, format: vs },
+  ], ["lineal_nivel_mar", "lineal_por_tipo", "stuff", "location", "pitching"].map(k => ({ name: NAMES[k], ...p[k] })));
+}
+
+function renderPitchers() {
+  const pp = D.por_pitcher_2026, obs = pp.contra_lineal_observada, sea = pp.contra_lineal_nivel_mar;
+  const keys = ["pitching", "lineal_por_tipo", "stuff", "lineal_nivel_mar", "location"];
+  document.getElementById("pitcher-lead").textContent =
+    `Lo predicho para los pitches de 2026 de cada pitcher contra su xRV real de 2026 (${pp.pitchers} pitchers con al menos 300 pitches). Pitching+ tiene el menor error, pero ninguna diferencia contra las bases sale del cero.`;
+  intervalChart("pitcher-chart", keys.map(k => ({ label: NAMES[k], value: obs[k].r, lo: obs[k].ic95_r[0], hi: obs[k].ic95_r[1], ours: OURS.has(k) })), "de r");
+  document.getElementById("pitcher-caption").textContent = "Correlación por pitcher con su xRV real de 2026, con IC 95 %. Valores sobre el promedio de la temporada.";
+  const vs = v => v ? `<span class="chip ${verdictOf(v, "negative")}">${CHIP[verdictOf(v, "negative")]}</span> ${range(v, 3)}` : "—";
+  table("pitcher-table", [
+    { key: "name", label: "Modelo" },
+    { key: "r", label: "r", num: true, format: v => fixed(v, 2) },
+    { key: "ecm_por_100", label: "Error por 100", num: true, format: v => fixed(v, 3) },
+    { key: "obs", label: "Error contra la lineal observada", num: true, format: vs },
+    { key: "sea", label: "Error contra la lineal a nivel del mar", num: true, format: vs },
+  ], keys.map(k => ({ name: NAMES[k], ...obs[k], obs: k === "lineal_por_tipo" ? null : obs[k].ic95_diferencia_ecm_vs_lineal_por_tipo,
+    sea: k === "lineal_nivel_mar" ? null : sea[k].ic95_diferencia_ecm_vs_lineal_nivel_mar })));
+}
+
+function renderForward() {
+  const f = D.a_futuro_2026;
+  const keys = ["persistencia_encogida", "proyeccion", "lineal_nivel_mar", "lineal_por_tipo", "stuff", "pitching", "location"];
+  document.getElementById("forward-lead").innerHTML =
+    `Lo que el club tendría en noviembre: el valor de 2024–2025 de cada pitcher, de modelos que no lo vieron, para predecir su xRV real de 2026 (${f.pitchers} pitchers). La proyección usa pesos de los pares 2024 → 2025: ${fixed(f.pesos_proyeccion.historia, 2)} × historia + ${fixed(f.pesos_proyeccion.pitching, 2)} × Pitching+. <b>Ningún modelo le gana a la historia del pitcher.</b> Entre los componentes, Stuff+ es el único con intervalo fuera de cero.`;
+  intervalChart("forward-chart", keys.map(k => ({ label: NAMES[k], value: f[k].r, lo: f[k].ic95_r[0], hi: f[k].ic95_r[1], ours: OURS.has(k) })), "de r");
+  document.getElementById("forward-caption").textContent = "Correlación entre el valor de 2024–2025 y el xRV real de 2026, con IC 95 %.";
+  const vs = v => v && v[1] !== 0 ? `<span class="chip ${verdictOf(v, "negative")}">${CHIP[verdictOf(v, "negative")]}</span> ${range(v, 3)}` : "—";
+  table("forward-table", [
+    { key: "name", label: "Predictor de 2024–2025" },
+    { key: "r", label: "r", num: true, format: v => fixed(v, 2) },
+    { key: "ecm_por_100", label: "Error por 100", num: true, format: v => fixed(v, 3) },
+    { key: "ic95_diferencia_ecm_vs_persistencia_encogida", label: "Error contra la persistencia", num: true, format: vs },
+  ], keys.map(k => ({ name: NAMES[k], ...f[k] })));
+}
+
+function renderStability() {
+  const s = D.repeticion_2024_a_2025;
+  const keys = ["xrv_neutral", "stuff", "location", "pitching", "p_swing", "p_whiff", "p_foul", "p_strike"];
+  table("stability-table", [
+    { key: "name", label: `Valor (mismo pitcher, ${s.pitchers} pitchers)` },
+    { key: "r", label: "r de 2024 a 2025", num: true, format: v => fixed(v, 2) },
+  ], keys.map(k => ({ name: NAMES[k], r: s[k] })));
+  const e = D.escala_100;
+  const p = v => v.map(x => fixed(x, 0)).join(" / ");
+  table("scale-table", [
+    { key: "year", label: "Temporada" },
+    { key: "pitchers", label: "Pitchers", num: true },
+    { key: "stuff", label: "Stuff+ p10 / p50 / p90", num: true, format: (_, r) => p(r.percentiles_10_50_90.stuff_plus) },
+    { key: "location", label: "Location+", num: true, format: (_, r) => p(r.percentiles_10_50_90.location_plus) },
+    { key: "pitching", label: "Pitching+", num: true, format: (_, r) => p(r.percentiles_10_50_90.pitching_plus) },
+  ], Object.entries(e).map(([year, v]) => ({ year, ...v })));
+  const r = Object.values(e).map(v => v.r_entre_valores);
+  document.getElementById("scale-note").innerHTML =
+    `<b>Por pitcher, Pitching+ queda casi igual a Location+</b> (r ${fixed(Math.min(...r.map(x => x.location_vs_pitching)), 2)}–${fixed(Math.max(...r.map(x => x.location_vs_pitching)), 2)}; con Stuff+, ${fixed(Math.min(...r.map(x => x.stuff_vs_pitching)), 2)}–${fixed(Math.max(...r.map(x => x.stuff_vs_pitching)), 2)}). Los pesos de Pitching+ (${fixed(D.pesos_pitching.stuff, 2)} × Stuff + ${fixed(D.pesos_pitching.location, 2)} × Location) se ajustaron por pitch, donde la ubicación y el conteo mueven mucho más el valor.`;
+}
+
+renderFigures();
+renderVerdicts();
+renderAltitude();
+renderPitch();
+renderPitchers();
+renderForward();
+renderStability();
+</script>
+</body>
+</html>

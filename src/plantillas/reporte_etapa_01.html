@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Limpieza del dataset LMB</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: una columna de lectura (~68ch) tipo reporte de scouting; tablas y gráfica dentro del mismo carril. */
+:root {
+  --bg: #f6f7f9;
+  --surface: #ffffff;
+  --ink: #16191f;
+  --ink-2: #4a5160;
+  --ink-3: #7a8191;
+  --rule: #dde1e7;
+  --accent: #b3122a;
+  --accent-soft: #f6e3e6;
+  --bar: #2f4a6d;
+  --display: "Barlow Condensed", "Arial Narrow", "Helvetica Neue", sans-serif;
+  --body: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --step--1: 0.8125rem;
+  --step-0: 1rem;
+  --step-1: 1.25rem;
+  --step-2: 1.75rem;
+  --step-3: 2.75rem;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #111418; --surface: #1a1e24; --ink: #e8eaee; --ink-2: #b3b9c4; --ink-3: #858c99;
+    --rule: #2c323b; --accent: #ff5a6e; --accent-soft: #3a1c22; --bar: #7fa3d1; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #111418; --surface: #1a1e24; --ink: #e8eaee; --ink-2: #b3b9c4; --ink-3: #858c99;
+  --rule: #2c323b; --accent: #ff5a6e; --accent-soft: #3a1c22; --bar: #7fa3d1; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font: 400 var(--step-0)/1.55 var(--body);
+  padding-inline: 16px; padding-block: 40px 64px;
+}
+main { max-width: 68rem; margin-inline: auto; display: grid; gap: 48px; }
+.lane { max-width: 44rem; }
+h1, h2 { font-family: var(--display); font-weight: 700; line-height: 1.05; text-wrap: balance; margin: 0; }
+h1 { font-size: var(--step-3); letter-spacing: 0.005em; }
+h2 { font-size: var(--step-2); }
+p { margin: 0; }
+.eyebrow {
+  font: 600 var(--step--1)/1 var(--mono); text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--accent);
+}
+header { display: grid; gap: 12px; }
+header p { color: var(--ink-2); font-size: var(--step-1); max-width: 40rem; }
+section { display: grid; gap: 16px; }
+section > p { color: var(--ink-2); max-width: 44rem; }
+.figures {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); gap: 0;
+  border-block: 1px solid var(--rule);
+}
+.figure { padding: 20px 20px 20px 0; display: grid; gap: 4px; }
+.figure + .figure { padding-left: 20px; border-left: 1px solid var(--rule); }
+.figure b { font: 700 var(--step-3)/1 var(--display); font-variant-numeric: tabular-nums; }
+.figure span { color: var(--ink-2); font-size: var(--step--1); }
+.figure.key b { color: var(--accent); }
+ol.principles { margin: 0; padding-left: 1.25rem; display: grid; gap: 8px; max-width: 44rem; }
+ol.principles strong { font-weight: 600; }
+.scroll { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: var(--step--1); background: var(--surface); }
+th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+th { font: 600 0.75rem/1.2 var(--mono); text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-3); }
+td.num, th.num { text-align: right; font-family: var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+code { font-family: var(--mono); font-size: 0.92em; }
+.chip {
+  display: inline-block; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--rule);
+  font: 600 0.72rem/1.4 var(--mono); color: var(--ink-2); white-space: nowrap;
+}
+.chip.out { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
+.flags { display: grid; gap: 2px; background: var(--surface); border: 1px solid var(--rule); border-radius: 6px; padding: 8px 0; }
+.flag-row {
+  display: grid; grid-template-columns: minmax(0, 15rem) minmax(0, 1fr) 7.5rem; gap: 12px;
+  align-items: center; padding: 8px 16px; position: relative;
+}
+.flag-row:hover, .flag-row:focus-visible { background: var(--bg); outline: none; }
+.flag-row:focus-visible { box-shadow: inset 0 0 0 2px var(--bar); }
+.flag-name { display: grid; gap: 4px; min-width: 0; justify-items: start; }
+.flag-name code { font-size: 0.78rem; color: var(--ink); overflow-wrap: anywhere; }
+.track { height: 14px; position: relative; }
+.track .bar { position: absolute; left: 0; top: 0; bottom: 0; background: var(--bar); border-radius: 0 4px 4px 0; min-width: 2px; }
+.flag-value { text-align: right; font: 400 var(--step--1)/1.3 var(--mono); font-variant-numeric: tabular-nums; }
+.flag-value small { display: block; color: var(--ink-3); }
+.axis-note { color: var(--ink-3); font-size: var(--step--1); padding: 4px 16px 0; }
+.tooltip {
+  position: fixed; pointer-events: none; z-index: 10; max-width: 18rem; padding: 8px 10px;
+  background: var(--ink); color: var(--bg); border-radius: 6px; font-size: var(--step--1); line-height: 1.4;
+}
+.compare { display: grid; grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr)); gap: 32px; }
+.compare > div { display: grid; gap: 12px; min-width: 0; }
+h3 { font: 600 var(--step-1)/1.2 var(--body); margin: 0; }
+footer { color: var(--ink-3); font-size: var(--step--1); border-top: 1px solid var(--rule); padding-top: 16px; display: grid; gap: 4px; }
+@media (max-width: 40rem) {
+  .flag-row { grid-template-columns: minmax(0, 1fr) 6.5rem; }
+  .flag-row .track { grid-column: 1 / -1; grid-row: 2; }
+  .figure, .figure + .figure { padding: 16px 0; border-left: 0; }
+  .figure + .figure { border-top: 1px solid var(--rule); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .track .bar { transition: width 400ms ease-out; }
+}
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <span class="eyebrow">Etapa 1 · Limpieza de datos · ISAC Hackathon 2026</span>
+    <h1>Limpieza del dataset LMB</h1>
+    <p>Qué corregimos en los 635 mil pitches de Trackman antes de modelar, cuántos afectó cada regla y por qué no borramos ninguna fila.</p>
+  </header>
+
+  <div class="figures" id="figures"></div>
+
+  <section class="lane">
+    <h2>Los cuatro principios</h2>
+    <ol class="principles">
+      <li><strong>Los datos crudos no se tocan.</strong> Toda la limpieza vive en <code>src/limpieza.py</code> y se repite en segundos.</li>
+      <li><strong>Ni inventar ni borrar.</strong> Un problema se marca con una bandera; un valor mal medido se anula sin tocar el resto del pitch.</li>
+      <li><strong>Solo es error lo imposible.</strong> Un 105 mph es posible y se queda; una extensión de 14 pies no.</li>
+      <li><strong>La limpieza nunca mira el resultado del pitch</strong> para decidir qué conservar.</li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>Cuántos pitches tocó cada regla</h2>
+    <p>Porcentaje del total de pitches. Un pitch puede tener varias banderas. Solo las marcadas <span class="chip out">Fuera de Stuff+</span> sacan al pitch del modelo.</p>
+    <div class="flags" id="flags" role="list"></div>
+  </section>
+
+  <section class="lane">
+    <h2>Por qué no borramos los batazos sin velocidad de salida</h2>
+    <p>Trackman no midió la velocidad de salida en 1.2 % de los pitches. No faltan al azar: son sobre todo contactos débiles. Borrarlos haría ver peor a los pitchers, más a nivel del mar que en altitud. Rellenarlos con el promedio le daría a un toque débil la velocidad de un batazo normal. Conservamos la fila y usamos el resultado registrado.</p>
+    <div class="scroll"><table id="exit-speed"></table></div>
+  </section>
+
+  <section>
+    <h2>Un valor malo en un pitch bueno</h2>
+    <p>Comparamos cada pitch con el resto de pitches del mismo tipo de ese pitcher. Cuando solo el spin o el release se salen de lo normal, falló la medición: anulamos ese valor y conservamos el pitch. Cuando se salen la velocidad o el movimiento, el pitch está bien medido pero probablemente mal etiquetado; se conserva y se reclasifica por forma en la etapa 2.</p>
+    <div class="compare">
+      <div>
+        <h3>Valores anulados por variable</h3>
+        <div class="scroll"><table id="nulled"></table></div>
+      </div>
+      <div>
+        <h3>Resultados corregidos desde la decisión del umpire</h3>
+        <div class="scroll"><table id="outcomes"></table></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Zurdos y derechos en el mismo sistema</h2>
+    <p>En zurdos el movimiento horizontal y el eje de spin salen en espejo. Las columnas nuevas miden todo hacia el lado del brazo del pitcher, así una recta de zurdo y una de derecho se leen igual. Mediana de las rectas de cuatro costuras:</p>
+    <div class="scroll"><table id="arm-side"></table></div>
+    <h3>Mano del pitcher inferida</h3>
+    <div class="scroll lane"><table id="hand"></table></div>
+  </section>
+
+  <section>
+    <h2>Con qué entrenamos y con qué validamos</h2>
+    <p>Entrenamos con 2024 y 2025 y apartamos 2026 para validar predicciones, igual que el club usaría el modelo en una temporada futura. La limpieza no desbalancea las altitudes.</p>
+    <div class="compare">
+      <div><div class="scroll"><table id="split"></table></div></div>
+      <div><div class="scroll"><table id="altitude"></table></div></div>
+    </div>
+    <div class="scroll"><table id="groups"></table></div>
+  </section>
+
+  <footer>
+    <span>Fuente de todas las cifras: <code>reportes/etapa_01_resumen.json</code>, generado por <code>src/limpieza.py</code>.</span>
+    <span>Documento completo con cada regla y su justificación: <code>docs/01_limpieza.md</code>.</span>
+  </footer>
+</main>
+<div class="tooltip" id="tooltip" hidden></div>
+
+<script>
+const DATA = __DATA__;
+const ACTIONS = __ACTIONS__;
+const ACTION_LABELS = { out: "Fuera de Stuff+", nulled: "Valor anulado", fixed: "Corregido", kept: "Solo se marca" };
+
+const int = new Intl.NumberFormat("es-MX");
+const pct = (x, digits = 2) => (x * 100).toFixed(digits) + " %";
+
+function table(id, columns, rows) {
+  const head = "<thead><tr>" + columns.map(c => `<th class="${c.num ? "num" : ""}">${c.label}</th>`).join("") + "</tr></thead>";
+  const body = "<tbody>" + rows.map(r => "<tr>" + columns.map(c =>
+    `<td class="${c.num ? "num" : ""}">${c.format ? c.format(r[c.key], r) : r[c.key]}</td>`).join("") + "</tr>").join("") + "</tbody>";
+  document.getElementById(id).innerHTML = head + body;
+}
+
+function renderFigures() {
+  const removed = DATA.total_pitches - DATA.usable_stuff;
+  const figures = [
+    { value: int.format(DATA.total_pitches), label: "pitches en el dataset original" },
+    { value: "0", label: "filas borradas", key: true },
+    { value: pct(DATA.usable_stuff / DATA.total_pitches), label: "sirven para Stuff+" },
+    { value: int.format(removed), label: `quedan fuera de Stuff+ (${pct(removed / DATA.total_pitches)})` },
+  ];
+  document.getElementById("figures").innerHTML = figures.map(f =>
+    `<div class="figure${f.key ? " key" : ""}"><b>${f.value}</b><span>${f.label}</span></div>`).join("");
+}
+
+function renderFlags() {
+  const tooltip = document.getElementById("tooltip");
+  const flags = [...DATA.banderas].sort((a, b) => b.pct - a.pct);
+  const max = Math.max(...flags.map(f => f.pct));
+  const container = document.getElementById("flags");
+  container.innerHTML = flags.map(f => {
+    const action = ACTIONS[f.flag];
+    return `<div class="flag-row" role="listitem" tabindex="0" data-flag="${f.flag}">
+      <div class="flag-name"><code>${f.flag}</code><span class="chip ${action === "out" ? "out" : ""}">${ACTION_LABELS[action]}</span></div>
+      <div class="track"><div class="bar" style="width:${(f.pct / max) * 100}%"></div></div>
+      <div class="flag-value">${pct(f.pct)}<small>${int.format(f.pitches)} pitches</small></div>
+    </div>`;
+  }).join("") + `<div class="axis-note">Barras a escala; la más larga es ${pct(max)} del total.</div>`;
+
+  const byFlag = Object.fromEntries(flags.map(f => [f.flag, f]));
+  const show = (row, x, y) => {
+    const f = byFlag[row.dataset.flag];
+    tooltip.textContent = `${f.descripcion}. ${int.format(f.pitches)} pitches (${pct(f.pct)}).`;
+    tooltip.hidden = false;
+    tooltip.style.left = Math.min(x + 12, window.innerWidth - tooltip.offsetWidth - 8) + "px";
+    tooltip.style.top = y + 12 + "px";
+  };
+  container.querySelectorAll(".flag-row").forEach(row => {
+    row.addEventListener("pointermove", e => show(row, e.clientX, e.clientY));
+    row.addEventListener("pointerleave", () => { tooltip.hidden = true; });
+    row.addEventListener("focus", () => { const r = row.getBoundingClientRect(); show(row, r.left + 16, r.bottom - 8); });
+    row.addEventListener("blur", () => { tooltip.hidden = true; });
+  });
+}
+
+function renderTables() {
+  table("exit-speed", [
+    { key: "sin_exit_speed", label: "Bola en juego", format: v => v ? "Sin velocidad de salida" : "Con velocidad de salida" },
+    { key: "bolas_en_juego", label: "Casos", num: true, format: v => int.format(v) },
+    { key: "hit_rate", label: "Hit rate", num: true, format: v => pct(v, 1) },
+    { key: "hr_rate", label: "HR rate", num: true, format: v => pct(v, 1) },
+  ], DATA.batazos_con_y_sin_exit_speed);
+
+  table("nulled", [
+    { key: "variable", label: "Variable", format: v => `<code>${v}</code>` },
+    { key: "valores_anulados", label: "Valores anulados", num: true, format: v => int.format(v) },
+  ], DATA.valores_anulados_por_variable);
+
+  table("outcomes", [
+    { key: "PitchCall", label: "Decisión", format: v => `<code>${v}</code>` },
+    { key: "pitches", label: "Pitches", num: true, format: v => int.format(v) },
+    { key: "swing_quitado", label: "Swing quitado", num: true, format: v => int.format(v) },
+    { key: "contacto_quitado", label: "Contacto quitado", num: true, format: v => int.format(v) },
+  ], DATA.correcciones_resultado);
+
+  const inches = v => (v > 0 ? "+" : "") + v.toFixed(1) + " in";
+  const degrees = v => Math.round(v) + "°";
+  table("arm-side", [
+    { key: "pitcher_hand", label: "Mano", format: v => v === "Left" ? "Zurdos" : "Derechos" },
+    { key: "hb_original", label: "HB original", num: true, format: inches },
+    { key: "hb_lado_brazo", label: "HB lado brazo", num: true, format: inches },
+    { key: "eje_original", label: "Eje original", num: true, format: degrees },
+    { key: "eje_lado_brazo", label: "Eje lado brazo", num: true, format: degrees },
+  ], DATA.recta_por_mano_antes_despues);
+
+  table("hand", [
+    { key: "original", label: "Dato original", format: v => `<code>${v}</code>` },
+    { key: "resuelta", label: "Mano asignada", format: v => v === "Left" ? "Zurda" : "Derecha" },
+    { key: "pitches", label: "Pitches", num: true, format: v => int.format(v) },
+  ], DATA.resolucion_mano);
+
+  const usable = (v, r) => `${int.format(v)} <span style="color:var(--ink-3)">(${pct(v / r.pitches, 1)})</span>`;
+  table("split", [
+    { key: "split", label: "Uso", format: v => v === "train" ? "Entrenamiento · 2024–2025" : "Validación · 2026" },
+    { key: "pitches", label: "Pitches", num: true, format: v => int.format(v) },
+    { key: "usable_stuff", label: "Usables Stuff+", num: true, format: usable },
+  ], DATA.por_split);
+
+  table("altitude", [
+    { key: "altitud", label: "Altitud" },
+    { key: "pitches", label: "Pitches", num: true, format: v => int.format(v) },
+    { key: "usable_stuff", label: "Usables Stuff+", num: true, format: usable },
+  ], DATA.por_altitud);
+
+  table("groups", [
+    { key: "pitch_group", label: "Grupo de pitch" },
+    { key: "pitches", label: "Pitches", num: true, format: v => int.format(v) },
+    { key: "usable_stuff", label: "Usables Stuff+", num: true, format: usable },
+  ], DATA.por_grupo_pitch);
+}
+
+renderFigures();
+renderFlags();
+renderTables();
+</script>
+</body>
+</html>
