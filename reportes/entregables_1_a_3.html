@@ -1,0 +1,471 @@
+<!doctype html>
+<html lang="es-MX">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Entregables 1 a 3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<style>
+/* Reporte de lectura en un carril: cada sección abre con su respuesta en una frase y luego la prueba.
+   Mismos tokens y paleta validada que el simulador y las fichas. */
+:root {
+  --bg: #f4f5f7; --surface: #ffffff; --surface-2: #f8f9fb; --ink: #14171c; --ink-2: #454c59; --ink-3: #6b7280;
+  --rule: #e1e4e9; --rule-strong: #c9ced6; --accent: #b3122a; --accent-soft: #fbe9ec;
+  --sea: #1f63b5; --harp: #b3122a; --best: #0d9488; --worst: #c2410c; --muted: #9aa1ad; --warn: #9a5b00; --warn-soft: #fff4e0;
+  --display: "Barlow Condensed", "Arial Narrow", "Helvetica Neue", sans-serif;
+  --body: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --radius: 10px; --shadow: 0 1px 2px rgb(16 24 40 / 0.04), 0 1px 3px rgb(16 24 40 / 0.06);
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f1216; --surface: #171b21; --surface-2: #1c2128; --ink: #eceef2; --ink-2: #b8bfca; --ink-3: #8d95a3;
+    --rule: #2a3039; --rule-strong: #3a414c; --accent: #ff5a6e; --accent-soft: #3a1b22;
+    --sea: #4f8ad6; --harp: #ec4459; --best: #14a394; --worst: #d9692a; --muted: #5d6573; --warn: #f2b45a; --warn-soft: #2e2413;
+    --shadow: none; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0f1216; --surface: #171b21; --surface-2: #1c2128; --ink: #eceef2; --ink-2: #b8bfca; --ink-3: #8d95a3;
+  --rule: #2a3039; --rule-strong: #3a414c; --accent: #ff5a6e; --accent-soft: #3a1b22;
+  --sea: #4f8ad6; --harp: #ec4459; --best: #14a394; --worst: #d9692a; --muted: #5d6573; --warn: #f2b45a; --warn-soft: #2e2413;
+  --shadow: none; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 400 1rem/1.6 var(--body); padding: 0 16px 80px; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+p { margin: 0; }
+main { max-width: 60rem; margin-inline: auto; display: grid; gap: 64px; }
+h1, h2, h3 { margin: 0; text-wrap: balance; }
+h1 { font: 700 clamp(2.25rem, 5vw, 3.25rem)/1.02 var(--display); }
+h2 { font: 700 2rem/1.05 var(--display); }
+h3 { font: 600 1.25rem/1.3 var(--body); }
+.eyebrow { font: 600 0.75rem/1 var(--mono); text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent); }
+.label { font: 600 0.6875rem/1 var(--mono); text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-3); }
+header.top { padding-top: 48px; display: grid; gap: 14px; }
+header.top p { font-size: 1.1875rem; color: var(--ink-2); max-width: 46rem; }
+.toc { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+.toc a { display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 14px; border: 1px solid var(--rule-strong); border-radius: 999px; color: var(--ink); text-decoration: none; font-weight: 600; font-size: 0.9375rem; background: var(--surface); }
+.toc a:hover { border-color: var(--ink-3); }
+.toc b { font: 700 1rem var(--display); color: var(--accent); }
+.kpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); background: var(--surface); border: 1px solid var(--rule); border-radius: var(--radius); box-shadow: var(--shadow); }
+.kpi { padding: 20px; display: grid; gap: 6px; align-content: start; }
+.kpi + .kpi { border-left: 1px solid var(--rule); }
+.kpi b { font: 700 2.75rem/1 var(--display); font-variant-numeric: tabular-nums; }
+.kpi p { font-size: 0.875rem; color: var(--ink-2); }
+@media (max-width: 52rem) { .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); } .kpi:nth-child(3) { border-left: 0; } .kpi:nth-child(n+3) { border-top: 1px solid var(--rule); } }
+@media (max-width: 30rem) { .kpis { grid-template-columns: 1fr; } .kpi + .kpi { border-left: 0; border-top: 1px solid var(--rule); } }
+section.part { display: grid; gap: 24px; scroll-margin-top: 24px; }
+.part-head { display: grid; gap: 10px; border-top: 3px solid var(--ink); padding-top: 18px; }
+.answer { font-size: 1.1875rem; color: var(--ink); max-width: 46rem; }
+.answer b { color: var(--accent); }
+.block { display: grid; gap: 14px; }
+.block > p, .lead { color: var(--ink-2); max-width: 46rem; }
+.lead b, .block > p b { color: var(--ink); }
+.card { background: var(--surface); border: 1px solid var(--rule); border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px; display: grid; gap: 14px; align-content: start; min-width: 0; }
+.scroll { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 0.9375rem; }
+th, td { text-align: left; padding: 10px 10px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+th { font: 600 0.6875rem/1.2 var(--mono); text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-3); }
+td.num, th.num { text-align: right; font-family: var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+tr:last-child td { border-bottom: 0; }
+.chart { width: 100%; height: auto; display: block; overflow: visible; }
+.chart text { fill: var(--ink-2); font: 400 12px var(--mono); }
+.chart .name { fill: var(--ink); font: 600 13px var(--body); }
+.chart .sub { fill: var(--ink-3); font: 400 11px var(--body); }
+.chart .grid { stroke: var(--rule); }
+.chart .zero { stroke: var(--ink-3); }
+.chart .hit { fill: transparent; cursor: default; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 0.875rem; color: var(--ink-2); }
+.legend span { display: inline-flex; align-items: center; gap: 7px; }
+.legend i { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+.legend i.diamond { border-radius: 1px; transform: rotate(45deg); width: 9px; height: 9px; }
+.legend i.line { width: 18px; height: 2px; border-radius: 1px; }
+figcaption, .caption { font-size: 0.8125rem; color: var(--ink-3); }
+details.table-view summary { cursor: pointer; font-size: 0.875rem; color: var(--ink-2); font-weight: 600; }
+details.table-view[open] summary { margin-bottom: 8px; }
+.evidence { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+@media (max-width: 40rem) { .evidence { grid-template-columns: 1fr; } }
+.ev { border: 1px solid var(--rule); border-radius: var(--radius); padding: 14px 16px; background: var(--surface); display: grid; gap: 6px; }
+.ev p { font-size: 0.875rem; color: var(--ink-2); }
+.badge { display: inline-flex; align-items: center; gap: 6px; font: 600 0.75rem/1 var(--body); padding: 5px 9px; border-radius: 999px; width: fit-content; }
+.badge svg { width: 13px; height: 13px; }
+.badge.strong { background: color-mix(in srgb, var(--best) 16%, transparent); color: var(--ink); }
+.badge.trend { background: var(--warn-soft); color: var(--warn); }
+.badge.none { background: var(--surface-2); color: var(--ink-3); border: 1px solid var(--rule); }
+.kbar { display: inline-block; height: 8px; border-radius: 4px; background: var(--ink-3); vertical-align: middle; margin-left: 8px; }
+.duo { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+@media (max-width: 44rem) { .duo { grid-template-columns: 1fr; } }
+.duo .card h3 { display: flex; align-items: center; gap: 8px; }
+.duo .card h3 svg { width: 20px; height: 20px; }
+.gain h3 { color: var(--best); }
+.lose h3 { color: var(--harp); }
+.duo ul, .plain { margin: 0; padding-left: 18px; display: grid; gap: 8px; color: var(--ink-2); font-size: 0.9375rem; }
+.duo li b, .plain b { color: var(--ink); }
+.steps { display: grid; gap: 12px; counter-reset: step; }
+.step { display: grid; grid-template-columns: 2.5rem 1fr; gap: 12px; align-items: start; }
+.step::before { counter-increment: step; content: counter(step); display: grid; place-items: center; width: 2.25rem; height: 2.25rem; border-radius: 50%; background: var(--ink); color: var(--surface); font: 700 1.125rem var(--display); }
+.step p { color: var(--ink-2); font-size: 0.9375rem; }
+.step b { color: var(--ink); }
+.check td:nth-child(2) { border-left: 3px solid var(--best); }
+.check td:nth-child(3) { border-left: 3px solid var(--worst); }
+.example { border-left: 3px solid var(--accent); background: var(--surface); padding: 16px 20px; border-radius: 0 var(--radius) var(--radius) 0; color: var(--ink-2); font-size: 0.9375rem; display: grid; gap: 8px; }
+.example b { color: var(--ink); }
+.tooltip { position: fixed; z-index: 40; pointer-events: none; background: var(--ink); color: var(--surface); padding: 8px 10px; border-radius: 6px; font: 400 0.8125rem/1.4 var(--body); max-width: 17rem; opacity: 0; transition: opacity 120ms; }
+.tooltip.on { opacity: 1; }
+footer { border-top: 1px solid var(--rule); padding-top: 18px; color: var(--ink-3); font-size: 0.8125rem; display: grid; gap: 6px; }
+footer code { font-family: var(--mono); font-size: 0.75rem; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+@media print { body { background: #fff; } .toc, details.table-view summary { display: none; } details.table-view > * { display: block; } .card, .kpis { box-shadow: none; } section.part { break-inside: avoid-page; } }
+</style>
+</head>
+<body>
+<main>
+  <header class="top">
+    <span class="eyebrow">ISAC Hackathon 2026 · Diablos Rojos · Entregables 1, 2 y 3</span>
+    <h1>Qué pierde en la CDMX, qué arsenal resiste y a quién conviene fichar</h1>
+    <p>Stuff+ ajustado por altitud para el Harp Helú (2,240 m). Cada cifra sale de pitchers que lanzaron en las dos altitudes o de la liga completa, con intervalos de 95 % que remuestrean pitchers completos. Datos 2024–2025; 2026 no se usó para estas conclusiones.</p>
+    <nav class="toc" aria-label="Contenido">
+      <a href="#scores"><b>1</b>Scores y efecto altitud</a>
+      <a href="#perfil"><b>2</b>Perfil físico ideal</a>
+      <a href="#recomendaciones"><b>3</b>Recomendaciones operativas</a>
+    </nav>
+  </header>
+
+  <div class="kpis" id="kpis" aria-label="Cifras clave"></div>
+
+  <!-- 1 -->
+  <section class="part" id="scores" aria-labelledby="t1">
+    <div class="part-head">
+      <span class="label">Entregable 1</span>
+      <h2 id="t1">Stuff+ por pitch, pitcher y arsenal</h2>
+      <p class="answer" id="answer-1"></p>
+    </div>
+
+    <div class="block">
+      <h3>El efecto altitud, por tipo de pitch</h3>
+      <p class="lead">Mismo pitcher y mismo pitch en altitud extrema y a nivel del mar (50+ pitches por lado). Cuántos puntos de Stuff+ pierde cada tipo en el Harp Helú, en la escala oficial del arsenal (10 puntos = una desviación entre pitchers).</p>
+      <figure class="card" style="margin:0">
+        <div class="legend">
+          <span><i style="background:var(--harp)"></i>pierde, con intervalo fuera de cero</span>
+          <span><i style="background:var(--muted)"></i>el intervalo toca cero</span>
+          <span><i class="line" style="background:var(--ink-3)"></i>intervalo de 95 %</span>
+        </div>
+        <svg class="chart" id="chart-delta" viewBox="0 0 720 300" role="img" aria-labelledby="delta-desc"><desc id="delta-desc">Delta de Stuff+ en el Harp Helú por tipo de pitch con su intervalo de 95 %.</desc></svg>
+        <figcaption>Recta, sinker y cambio pierden con intervalo fuera de cero; slider y curva casi no pierden. La pérdida en carreras está en la tabla.</figcaption>
+        <details class="table-view"><summary>Ver como tabla</summary><div class="scroll"><table id="table-delta"></table></div></details>
+      </figure>
+    </div>
+
+    <div class="block">
+      <h3>¿Qué arsenal produce el Stuff+ más alto en el Harp Helú?</h3>
+      <p class="lead">Cada pitcher-temporada (300+ pitches) se clasificó por su uso con reglas fijadas antes de correr (D-038). El estimado en el Harp Helú resta la pérdida promedio de la liga para su mezcla.</p>
+      <figure class="card" style="margin:0">
+        <div class="legend">
+          <span><i style="background:var(--sea)"></i>Stuff+ a nivel del mar</span>
+          <span><i class="diamond" style="background:var(--harp)"></i>Stuff+ estimado en el Harp Helú</span>
+        </div>
+        <svg class="chart" id="chart-arch" viewBox="0 0 720 260" role="img" aria-labelledby="arch-desc"><desc id="arch-desc">Stuff+ a nivel del mar y en el Harp Helú por arquetipo de arsenal.</desc></svg>
+        <figcaption>Todos bajan en la CDMX porque se comparan contra la liga a nivel del mar; lo que importa es el orden. El pitcher mediano queda en 85.</figcaption>
+      </figure>
+      <div class="card scroll">
+        <table id="table-arch"></table>
+        <p class="caption" id="arch-note"></p>
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>Archivos de scores</h3>
+      <div class="card scroll">
+        <table>
+          <thead><tr><th>Archivo</th><th class="num">Filas</th><th>Qué trae</th></tr></thead>
+          <tbody id="files"></tbody>
+        </table>
+        <p class="caption">Escala por pitch: Stuff+ = 100 − 10 × (valor − media) ÷ desviación, contra su tipo y temporada; es el z(score) de la convocatoria con el signo invertido, porque menos carreras es mejor. Los archivos llevan identificadores anónimos y se entregan aparte.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2 -->
+  <section class="part" id="perfil" aria-labelledby="t2">
+    <div class="part-head">
+      <span class="label">Entregable 2</span>
+      <h2 id="t2">Perfil físico ideal para el Harp Helú</h2>
+      <p class="answer">Un pitcher cuyo valor <b>no dependa del efecto Magnus</b>: rompimiento de calidad, menos dependencia de la recta y el sinker, y que provoque rolling.</p>
+    </div>
+
+    <div class="block">
+      <h3>Por qué: la física</h3>
+      <p class="lead">En el Harp Helú hay unos <b>15 % menos de aire</b>. Menos aire es menos fuerza de Magnus y menos tiempo de vuelo, así que el movimiento inducido cae <b>más</b> que el aire: movimiento ∝ aire<sup>k</sup>, con k mayor que 1. Medimos k con el mismo pitcher en juegos con distinto aire, corregido por error de medición (variable instrumental).</p>
+      <div class="card scroll">
+        <table id="table-k"></table>
+        <p class="caption">Un k más alto significa que ese movimiento pierde más en la CDMX. La slider casi no pierde vertical porque gira como bala (gyro); la corrida del cambio es lo más sensible de la liga.</p>
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>Qué tan sólida es cada pieza</h3>
+      <div class="evidence" id="evidence"></div>
+    </div>
+
+    <div class="block">
+      <h3>El perfil, rasgo por rasgo</h3>
+      <div class="card scroll">
+        <table>
+          <thead><tr><th>Rasgo</th><th>Qué buscar</th><th>Respaldo</th></tr></thead>
+          <tbody id="profile"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 -->
+  <section class="part" id="recomendaciones" aria-labelledby="t3">
+    <div class="part-head">
+      <span class="label">Entregable 3</span>
+      <h2 id="t3">Recomendaciones operativas</h2>
+      <p class="answer">En la CDMX todos pierden algo. <b>Ganar relativo es perder menos que el resto</b>: eso favorece al rompimiento y al rolling, y castiga a la recta de "ride", al sinker y al cambio.</p>
+    </div>
+
+    <div class="duo">
+      <div class="card gain">
+        <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>Ganan terreno relativo</h3>
+        <ul id="gain"></ul>
+      </div>
+      <div class="card lose">
+        <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12l7 7 7-7"/></svg>Pierden en altitud</h3>
+        <ul id="lose"></ul>
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>El riesgo de contacto duro y jonrón</h3>
+      <div class="card scroll">
+        <table id="table-contact"></table>
+        <p class="caption" id="contact-note"></p>
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>Cómo perfilar a un prospecto o agente libre</h3>
+      <div class="card steps">
+        <div class="step"><p><b>Si ya lanzó en la LMB, abrir su ficha.</b> Stuff+, Location+ y Pitching+, su riesgo en el Harp Helú (tercio bajo, medio o alto) y cada pitch de su arsenal contra su tipo.</p></div>
+        <div class="step"><p><b>Si solo hay sus números de TrackMan, meter cada pitch al simulador.</b> Da su Stuff+ a nivel del mar y en el Harp Helú, y si por su forma pierde más o menos que el típico de su tipo.</p></div>
+        <div class="step"><p><b>Pasar la lista de chequeo y pesar la historia.</b> Para proyectar el año siguiente pesa más su historia en la liga; el Stuff+ manda cuando no hay historia o la historia es de otra altitud.</p></div>
+      </div>
+      <div class="card scroll">
+        <table class="check">
+          <thead><tr><th>Pregunta</th><th>Señal verde</th><th>Señal roja</th></tr></thead>
+          <tbody>
+            <tr><td>¿Su mejor pitch sobrevive a la altura?</td><td>Slider o curva con Stuff+ ≥ 100 contra su tipo</td><td>Todo su valor está en la recta o el sinker</td></tr>
+            <tr><td>¿Cómo es su mezcla?</td><td>Slider + curva ≥ 40 % de sus pitches</td><td>Recta + sinker ≥ 60 % sin un rompimiento bueno</td></tr>
+            <tr><td>Si vive de la recta, ¿es élite?</td><td>Stuff+ de la recta ≥ 114 (top 10 %): en la CDMX sigue sobre el promedio</td><td>Recta promedio: en la CDMX queda unos 13 puntos abajo</td></tr>
+            <tr><td>¿Saca rollings?</td><td>Rolling ≥ 48 % (tercio alto; la mediana es 45 %)</td><td>Rolling ≤ 41 % y mucho fly</td></tr>
+            <tr><td>¿Cuánta muestra hay?</td><td>450+ pitches y dos temporadas</td><td>Muestra corta: los componentes se mueven</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="example">
+        <span class="label">Ejemplo de lectura</span>
+        <p>Agente libre con recta de Stuff+ 105 (60 % de uso) y slider de 103. En la CDMX su recta baja a unos <b>92</b> y su slider a unos <b>96</b>. Con 40 % de rolling (tercio bajo), el aire le cobra más en el contacto.</p>
+        <p><b>Lectura:</b> tiene un pitch que resiste la altura, pero hoy no es el principal. Vale como opción si el cuerpo técnico puede trabajar su mezcla, no por su Stuff+ actual.</p>
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>Para el plan de juego en casa</h3>
+      <div class="card"><ul class="plain" id="home"></ul></div>
+    </div>
+
+    <div class="block">
+      <h3>Lo que no recomendamos</h3>
+      <div class="card"><ul class="plain">
+        <li><b>Pedir más spin para compensar la altura.</b> El aire quita movimiento sin cambiar el spin, y con el mismo spin decide el movimiento (H4).</li>
+        <li><b>Buscar cambios "porque ganan en altura".</b> En nuestros datos el cambio pierde casi como el sinker: la H2 de la convocatoria no se sostiene.</li>
+        <li><b>Dar la pérdida exacta en carreras de un pitcher específico.</b> El estimado ordena a los pitchers, pero no es preciso; por eso va en tercios.</li>
+        <li><b>Leer causalidad.</b> Que la slider pierda poco no prueba que lanzar más sliders mejore a un pitcher.</li>
+      </ul></div>
+    </div>
+  </section>
+
+  <footer>
+    <p><b>Fuentes:</b> <code>reportes/etapa_06_scores.json</code> (scores y arquetipos, D-038), <code>reportes/etapa_05_pasaporte.json</code> (pares por tipo, D-034), <code>reportes/etapa_06_riesgo_contacto.json</code>, <code>reportes/etapa_02_resumen.json</code> (k, D-016), <code>reportes/etapa_03_resumen.json</code> (valor del conteo). Detalle en <code>docs/08</code> a <code>docs/10</code>.</p>
+    <p><b>Límites:</b> la altitud viene en tres categorías, no por estadio; la prueba real de arquetipos tiene 15 y 24 pitchers; dentro de cada tipo de pitch ningún rasgo físico tiene evidencia.</p>
+  </footer>
+</main>
+<div class="tooltip" id="tooltip" role="tooltip"></div>
+
+<script>
+const DATA = {"deltas": {"Changeup": {"pitches_de_pitcher": 191, "perdida_por_100": 0.324, "delta_stuff_plus": -9.7, "ic95_delta": [-17.5, -2.8]}, "Curveball": {"pitches_de_pitcher": 136, "perdida_por_100": 0.02, "delta_stuff_plus": -0.7, "ic95_delta": [-9.5, 8.1]}, "Four-Seam": {"pitches_de_pitcher": 567, "perdida_por_100": 0.396, "delta_stuff_plus": -13.0, "ic95_delta": [-17.3, -8.8]}, "Sinker": {"pitches_de_pitcher": 295, "perdida_por_100": 0.316, "delta_stuff_plus": -13.3, "ic95_delta": [-20.5, -6.1]}, "Slider": {"pitches_de_pitcher": 393, "perdida_por_100": 0.182, "delta_stuff_plus": -6.9, "ic95_delta": [-14.8, 1.1]}}, "arquetipos": {"Rompimiento": {"pitchers_temporada": 118, "stuff_plus_mar": 103.1, "stuff_plus_harp_estimado": 90.9, "pitching_plus": 104.0, "rolling_pct": 46.2, "pitchers_con_las_dos_altitudes": 15, "cambio_real_sin_contacto_por_100": 0.068, "ic95_cambio_real": [-0.145, 0.287]}, "Recta y sinker": {"pitchers_temporada": 203, "stuff_plus_mar": 103.7, "stuff_plus_harp_estimado": 86.8, "pitching_plus": 98.2, "rolling_pct": 45.0, "pitchers_con_las_dos_altitudes": 24, "cambio_real_sin_contacto_por_100": 0.3, "ic95_cambio_real": [0.106, 0.5]}, "Cambio o split": {"pitchers_temporada": 76, "stuff_plus_mar": 96.8, "stuff_plus_harp_estimado": 81.0, "pitching_plus": 100.2, "rolling_pct": 43.8, "pitchers_con_las_dos_altitudes": 9}, "Mixto": {"pitchers_temporada": 243, "stuff_plus_mar": 98.9, "stuff_plus_harp_estimado": 83.6, "pitching_plus": 99.9, "rolling_pct": 44.8, "pitchers_con_las_dos_altitudes": 48, "cambio_real_sin_contacto_por_100": 0.281, "ic95_cambio_real": [0.182, 0.397]}, "rompimiento_menos_recta_y_sinker": {"diferencia": -0.232, "ic95": [-0.536, 0.086]}}, "filas": {"por_pitch": 631068, "por_pitcher": 818, "por_arsenal": 2065}, "contacto": {"nota": "2024–2025, batazos sin toques; descriptivo, no elige modelo.", "batazos": {"Extreme Altitude": 24641, "No Altitude": 37213}, "liga": {"jonron_por_fly_pct": {"altitud_extrema": 16.096, "nivel_del_mar": 12.765, "diferencia": 3.331, "ic95_diferencia": [2.187, 4.577]}, "jonron_por_batazo_pct": {"altitud_extrema": 4.424, "nivel_del_mar": 4.144, "diferencia": 0.28, "ic95_diferencia": [-0.024, 0.621]}, "contacto_duro_pct": {"altitud_extrema": 25.454, "nivel_del_mar": 22.414, "diferencia": 3.039, "ic95_diferencia": [2.287, 3.845]}, "rolling_pct": {"altitud_extrema": 47.466, "nivel_del_mar": 43.479, "diferencia": 3.986, "ic95_diferencia": [2.991, 4.953]}, "fly_pct": {"altitud_extrema": 21.708, "nivel_del_mar": 23.156, "diferencia": -1.448, "ic95_diferencia": [-2.161, -0.679]}, "carreras_por_100_batazos": {"altitud_extrema": 6.866, "nivel_del_mar": 3.137, "diferencia": 3.728, "ic95_diferencia": [3.005, 4.487]}}, "valor_por_tipo_de_batazo": {"FlyBall": {"carreras_extrema": 0.1363, "carreras_mar": 0.0393, "diferencia": 0.097, "batazos_extrema": 5349, "batazos_mar": 8617}, "GroundBall": {"carreras_extrema": -0.0196, "carreras_mar": -0.0399, "diferencia": 0.0203, "batazos_extrema": 11696, "batazos_mar": 16180}, "LineDrive": {"carreras_extrema": 0.2943, "carreras_mar": 0.2674, "diferencia": 0.0269, "batazos_extrema": 5576, "batazos_mar": 8769}, "Popup": {"carreras_extrema": -0.2223, "carreras_mar": -0.2384, "diferencia": 0.0161, "batazos_extrema": 2020, "batazos_mar": 3647}}, "por_tipo_de_pitch_mismo_pitcher": {"Four-Seam": {"pitchers": 65, "jonron_por_batazo_pp": {"cambio": -1.133, "ic95": [-2.453, 0.118]}, "contacto_duro_pp": {"cambio": 2.218, "ic95": [-0.171, 4.605]}, "fly_pp": {"cambio": -5.994, "ic95": [-8.512, -3.578]}, "carreras_por_100_batazos": {"cambio": 3.369, "ic95": [1.054, 5.776]}, "fly_pct_liga_mar": 26.45}, "Sinker": {"pitchers": 32, "jonron_por_batazo_pp": {"cambio": 0.377, "ic95": [-0.95, 1.553]}, "contacto_duro_pp": {"cambio": 5.637, "ic95": [2.196, 8.99]}, "fly_pp": {"cambio": -5.416, "ic95": [-8.41, -2.722]}, "carreras_por_100_batazos": {"cambio": 4.495, "ic95": [1.326, 7.614]}, "fly_pct_liga_mar": 18.88}, "Cutter": {"pitchers": 3, "nota": "muestra insuficiente"}, "Slider": {"pitchers": 23, "jonron_por_batazo_pp": {"cambio": -0.496, "ic95": [-1.909, 0.88]}, "contacto_duro_pp": {"cambio": 0.907, "ic95": [-3.19, 4.745]}, "fly_pp": {"cambio": -0.7, "ic95": [-5.541, 4.291]}, "carreras_por_100_batazos": {"cambio": -0.013, "ic95": [-3.751, 3.744]}, "fly_pct_liga_mar": 23.87}, "Curveball": {"pitchers": 2, "nota": "muestra insuficiente"}, "Changeup": {"pitchers": 5, "nota": "muestra insuficiente"}}}, "k": {"Four-Seam": {"ivb": 1.4996, "hb": 1.6383}, "Sinker": {"ivb": 1.3978, "hb": 1.7527}, "Cutter": {"ivb": 1.2795, "hb": 1.6728}, "Slider": {"ivb": 0.6776, "hb": 1.2213}, "Curveball": {"ivb": 1.1896, "hb": 1.6658}, "Changeup": {"ivb": 1.2992, "hb": 2.0558}, "Splitter": {"ivb": 1.3293, "hb": 1.6728}}, "pares": {"Changeup": 51, "Curveball": 35, "Four-Seam": 210, "Sinker": 97, "Slider": 129}, "conteos": {"No Altitude": {"0-0": 0.1214, "0-1": 0.0875, "0-2": 0.0395, "1-0": 0.1526, "1-1": 0.1134, "1-2": 0.0599, "2-0": 0.1924, "2-1": 0.148, "2-2": 0.09, "3-0": 0.2665, "3-1": 0.2231, "3-2": 0.1637}, "Extreme Altitude": {"0-0": 0.1684, "0-1": 0.1256, "0-2": 0.067, "1-0": 0.204, "1-1": 0.1518, "1-2": 0.0885, "2-0": 0.2647, "2-1": 0.2081, "2-2": 0.1277, "3-0": 0.3514, "3-1": 0.2965, "3-2": 0.2189}}};
+const NAMES = { "Four-Seam": "Recta", Sinker: "Sinker", Changeup: "Cambio", Slider: "Slider", Curveball: "Curva", Cutter: "Cutter", Splitter: "Splitter" };
+const ORDER = ["Four-Seam", "Sinker", "Changeup", "Slider", "Curveball"];
+const ARCH_ORDER = ["Rompimiento", "Recta y sinker", "Mixto", "Cambio o split"];
+const RULES = { "Rompimiento": "slider + curva ≥ 40 %", "Recta y sinker": "recta + sinker ≥ 60 %", "Cambio o split": "cambio + splitter ≥ 25 %", "Mixto": "el resto" };
+const el = id => document.getElementById(id);
+const n = (v, d = 1) => v == null ? "—" : Number(v).toLocaleString("es-MX", { minimumFractionDigits: d, maximumFractionDigits: d, useGrouping: false });
+const s = (v, d = 1) => (v > 0 ? "+" : v < 0 ? "−" : "") + n(Math.abs(v), d);
+const ci = ([a, b], d = 1) => `${s(a, d)} a ${s(b, d)}`;
+const ICON_OK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg>';
+const ICON_TREND = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 16l6-6 4 4 6-7"/></svg>';
+const ICON_NONE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 12h12"/></svg>';
+
+const D = DATA.deltas, A = DATA.arquetipos, C = DATA.contacto;
+const fb = D["Four-Seam"], cu = D["Curveball"], hr = C.liga.jonron_por_fly_pct;
+const fly = C.valor_por_tipo_de_batazo.FlyBall, gb = C.valor_por_tipo_de_batazo.GroundBall;
+const flyRatio = fly.carreras_extrema / fly.carreras_mar;
+
+el("kpis").innerHTML = [
+  [s(fb.delta_stuff_plus), "puntos de Stuff+ pierde la recta en el Harp Helú"],
+  [s(cu.delta_stuff_plus), "puntos pierde la curva: casi nada"],
+  [`${s(hr.diferencia)} pts`, `jonrones por fly en la CDMX (${n(hr.altitud_extrema)} % contra ${n(hr.nivel_del_mar)} %)`],
+  [`${n(flyRatio)}×`, "cuesta más un fly en la CDMX que a nivel del mar"],
+].map(([v, t]) => `<div class="kpi"><b>${v}</b><p>${t}</p></div>`).join("");
+
+const bestArch = ARCH_ORDER.reduce((a, b) => (A[b].stuff_plus_harp_estimado > A[a].stuff_plus_harp_estimado ? b : a));
+el("answer-1").innerHTML = `El arsenal de <b>${bestArch.toLowerCase()}</b> conserva el Stuff+ más alto en el Harp Helú (${n(A[bestArch].stuff_plus_harp_estimado)}). La recta pierde ${n(-fb.delta_stuff_plus)} puntos; la curva, ${n(-cu.delta_stuff_plus)}.`;
+
+// Tooltip compartido por las gráficas.
+const tip = el("tooltip");
+function bindTips(svg) {
+  svg.addEventListener("pointermove", e => {
+    const t = e.target.closest("[data-tip]");
+    if (!t) { tip.classList.remove("on"); return; }
+    tip.innerHTML = t.dataset.tip;
+    tip.style.left = `${Math.min(e.clientX + 14, innerWidth - 290)}px`;
+    tip.style.top = `${e.clientY + 14}px`;
+    tip.classList.add("on");
+  });
+  svg.addEventListener("pointerleave", () => tip.classList.remove("on"));
+}
+
+function deltaChart() {
+  const W = 720, left = 150, right = 70, top = 28, row = 50, x0 = -22, x1 = 10;
+  const sx = v => left + (v - x0) / (x1 - x0) * (W - left - right);
+  const H = top + ORDER.length * row + 30;
+  let svg = `<desc id="delta-desc">Delta de Stuff+ en el Harp Helú por tipo de pitch con su intervalo de 95 %.</desc>`;
+  for (let v = -20; v <= 10; v += 5) svg += `<line class="${v === 0 ? "zero" : "grid"}" x1="${sx(v)}" x2="${sx(v)}" y1="${top - 12}" y2="${H - 26}"/><text x="${sx(v)}" y="${H - 8}" text-anchor="middle">${v > 0 ? "+" + v : v}</text>`;
+  svg += `<text x="${sx(0) + 6}" y="${top - 16}" class="sub">sin pérdida</text>`;
+  ORDER.forEach((t, i) => {
+    const d = D[t], y = top + i * row + row / 2, [lo, hi] = d.ic95_delta, sig = hi < 0;
+    const color = sig ? "var(--harp)" : "var(--muted)";
+    const info = `<b>${NAMES[t]}</b>: ${s(d.delta_stuff_plus)} puntos (${ci(d.ic95_delta)})<br>${n(d.perdida_por_100, 2)} carreras por 100 pitches · ${DATA.pares[t]} pares`;
+    svg += `<text class="name" x="0" y="${y - 2}">${NAMES[t]}</text><text class="sub" x="0" y="${y + 14}">${DATA.pares[t]} pares</text>`;
+    svg += `<line x1="${sx(lo)}" x2="${sx(hi)}" y1="${y}" y2="${y}" stroke="var(--ink-3)" stroke-width="2" stroke-linecap="round"/>`;
+    svg += `<circle cx="${sx(d.delta_stuff_plus)}" cy="${y}" r="7" fill="${color}" stroke="var(--surface)" stroke-width="2"/>`;
+    svg += `<text x="${sx(Math.max(hi, d.delta_stuff_plus)) + 12}" y="${y + 4}">${s(d.delta_stuff_plus)}</text>`;
+    svg += `<rect class="hit" x="0" y="${y - row / 2}" width="${W}" height="${row}" data-tip="${info.replace(/"/g, "&quot;")}"/>`;
+  });
+  const chart = el("chart-delta");
+  chart.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  chart.innerHTML = svg;
+  bindTips(chart);
+  el("table-delta").innerHTML = `<thead><tr><th>Tipo</th><th class="num">Pares</th><th class="num">Carreras por 100</th><th class="num">Delta de Stuff+</th><th class="num">IC 95 %</th></tr></thead><tbody>${
+    ORDER.map(t => `<tr><td>${NAMES[t]}</td><td class="num">${DATA.pares[t]}</td><td class="num">${n(D[t].perdida_por_100, 2)}</td><td class="num">${s(D[t].delta_stuff_plus)}</td><td class="num">${ci(D[t].ic95_delta)}</td></tr>`).join("")}</tbody>`;
+}
+
+function archChart() {
+  const order = [...ARCH_ORDER].sort((a, b) => A[b].stuff_plus_harp_estimado - A[a].stuff_plus_harp_estimado);
+  const W = 720, left = 150, right = 40, top = 22, row = 50, x0 = 75, x1 = 110;
+  const sx = v => left + (v - x0) / (x1 - x0) * (W - left - right);
+  const H = top + order.length * row + 30;
+  let svg = `<desc id="arch-desc">Stuff+ a nivel del mar y en el Harp Helú por arquetipo de arsenal.</desc>`;
+  for (let v = 75; v <= 110; v += 5) svg += `<line class="${v === 100 ? "zero" : "grid"}" x1="${sx(v)}" x2="${sx(v)}" y1="${top - 10}" y2="${H - 26}"/><text x="${sx(v)}" y="${H - 8}" text-anchor="middle">${v}</text>`;
+  order.forEach((name, i) => {
+    const a = A[name], y = top + i * row + row / 2;
+    const info = `<b>${name}</b> (${RULES[name]})<br>${a.pitchers_temporada} pitchers-temporada<br>Nivel del mar ${n(a.stuff_plus_mar)} → Harp Helú ${n(a.stuff_plus_harp_estimado)}`;
+    svg += `<text class="name" x="0" y="${y - 2}">${name}</text><text class="sub" x="0" y="${y + 14}">${RULES[name]}</text>`;
+    svg += `<line x1="${sx(a.stuff_plus_harp_estimado)}" x2="${sx(a.stuff_plus_mar)}" y1="${y}" y2="${y}" stroke="var(--rule-strong)" stroke-width="3"/>`;
+    svg += `<circle cx="${sx(a.stuff_plus_mar)}" cy="${y}" r="7" fill="var(--sea)" stroke="var(--surface)" stroke-width="2"/>`;
+    const hx = sx(a.stuff_plus_harp_estimado);
+    svg += `<rect x="${hx - 6.5}" y="${y - 6.5}" width="13" height="13" fill="var(--harp)" stroke="var(--surface)" stroke-width="2" transform="rotate(45 ${hx} ${y})"/>`;
+    svg += `<text x="${hx - 14}" y="${y + 4}" text-anchor="end">${n(a.stuff_plus_harp_estimado)}</text><text x="${sx(a.stuff_plus_mar) + 14}" y="${y + 4}">${n(a.stuff_plus_mar)}</text>`;
+    svg += `<rect class="hit" x="0" y="${y - row / 2}" width="${W}" height="${row}" data-tip="${info.replace(/"/g, "&quot;")}"/>`;
+  });
+  const chart = el("chart-arch");
+  chart.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  chart.innerHTML = svg;
+  bindTips(chart);
+  el("table-arch").innerHTML = `<thead><tr><th>Arquetipo</th><th class="num">Pitchers</th><th class="num">Stuff+ mar</th><th class="num">Stuff+ Harp Helú</th><th class="num">Pitching+</th><th class="num">Pérdida real en altura</th></tr></thead><tbody>${
+    order.map(name => { const a = A[name]; const real = a.cambio_real_sin_contacto_por_100 == null ? `muestra insuficiente (${a.pitchers_con_las_dos_altitudes})`
+      : `${s(a.cambio_real_sin_contacto_por_100, 2)} (${ci(a.ic95_cambio_real, 2)}) · ${a.pitchers_con_las_dos_altitudes} pitchers`;
+      return `<tr><td>${name}</td><td class="num">${a.pitchers_temporada}</td><td class="num">${n(a.stuff_plus_mar)}</td><td class="num"><b>${n(a.stuff_plus_harp_estimado)}</b></td><td class="num">${n(a.pitching_plus)}</td><td class="num">${real}</td></tr>`; }).join("")}</tbody>`;
+  const diff = A.rompimiento_menos_recta_y_sinker;
+  el("arch-note").innerHTML = `Pérdida real: cambio del xRV sin contacto en carreras por 100 pitches, en pitchers con 200+ pitches en cada altitud la misma temporada. Rompimiento menos recta y sinker: ${s(diff.diferencia, 2)} (${ci(diff.ic95, 2)}). Apunta al mismo lado, pero <b>toca cero</b> por la poca muestra: es una tendencia.`;
+}
+
+function files() {
+  el("files").innerHTML = [
+    ["scores_por_pitch.csv", DATA.filas.por_pitch, "Stuff+, Location+ y Pitching+ de cada pitch de 2024–2026, y su Stuff+ en el Harp Helú"],
+    ["scores_por_pitcher.csv", DATA.filas.por_pitcher, "Por pitcher y temporada (300+ pitches): los tres índices, el estimado en el Harp Helú, el riesgo en altura, el rolling y el arquetipo"],
+    ["scores_por_arsenal.csv", DATA.filas.por_arsenal, "Cada pitch de cada pitcher (100+): uso, Stuff+ contra su tipo y en el Harp Helú, y sus componentes"],
+  ].map(([f, rows, what]) => `<tr><td><code>${f}</code></td><td class="num">${rows.toLocaleString("es-MX")}</td><td>${what}</td></tr>`).join("");
+}
+
+function kTable() {
+  const types = ["Four-Seam", "Sinker", "Changeup", "Curveball", "Slider"], max = 2.1;
+  const bar = v => `<span class="kbar" style="width:${(v / max * 70).toFixed(0)}px" aria-hidden="true"></span>`;
+  el("table-k").innerHTML = `<thead><tr><th>Tipo</th><th>k vertical (IVB)</th><th>k horizontal (HB)</th></tr></thead><tbody>${
+    types.map(t => `<tr><td>${NAMES[t]}</td><td><span class="num">${n(DATA.k[t].ivb, 2)}</span>${bar(DATA.k[t].ivb)}</td><td><span class="num">${n(DATA.k[t].hb, 2)}</span>${bar(DATA.k[t].hb)}</td></tr>`).join("")}</tbody>`;
+}
+
+function evidence() {
+  const diff = A.rompimiento_menos_recta_y_sinker;
+  el("evidence").innerHTML = [
+    ["strong", ICON_OK, "Fuerte", "Entre tipos de pitch", `Recta ${s(fb.delta_stuff_plus)}, sinker ${s(D.Sinker.delta_stuff_plus)} y cambio ${s(D.Changeup.delta_stuff_plus)}, con intervalo fuera de cero; slider y curva tocan cero.`],
+    ["strong", ICON_OK, "Fuerte", "El contacto", `Un fly vale ${n(fly.carreras_extrema, 3)} carreras en la CDMX y ${n(fly.carreras_mar, 3)} a nivel del mar; un rolling cambia ${s(gb.diferencia, 3)}.`],
+    ["trend", ICON_TREND, "Tendencia", "El arsenal", `Rompimiento pierde menos que recta y sinker (${s(diff.diferencia, 2)} carreras por 100), pero el intervalo toca cero.`],
+    ["none", ICON_NONE, "Sin evidencia", "Rasgos dentro de cada tipo", "Velocidad, spin, IVB, HB, extensión, Magnus, VAA o diferencia de velocidad: ningún intervalo excluye el cero."],
+  ].map(([cls, icon, tag, title, text]) => `<div class="ev"><span class="badge ${cls}">${icon}${tag}</span><b>${title}</b><p>${text}</p></div>`).join("");
+}
+
+function profile() {
+  el("profile").innerHTML = [
+    ["Pitch principal de rompimiento", "Slider o curva con Stuff+ ≥ 100 contra su tipo", `Pierden ${n(-D.Slider.delta_stuff_plus)} y ${n(-cu.delta_stuff_plus)} puntos, contra ${n(-fb.delta_stuff_plus)} de la recta`],
+    ["Mezcla", "Slider + curva ≥ 40 % de sus pitches", `El arquetipo de rompimiento queda en ${n(A.Rompimiento.stuff_plus_harp_estimado)} en el Harp Helú, el más alto`],
+    ["Rolling", "Tercio alto de la liga (≥ 48 %)", `El fly cuesta ${n(flyRatio)} veces más en la CDMX`],
+    ["Si vive de la recta", "Recta élite a nivel del mar (Stuff+ ≥ 114, top 10 %)", `Llega a la CDMX con unos ${n(-fb.delta_stuff_plus, 0)} puntos menos`],
+    ["Comando", "Location+ alto", "El modelo de ubicación predice en altitud extrema sin haberla visto (D-037); se repite menos de un año a otro (r 0.67) que Stuff+ (0.83)"],
+  ].map(r => `<tr><td><b>${r[0]}</b></td><td>${r[1]}</td><td>${r[2]}</td></tr>`).join("");
+}
+
+function gainLose() {
+  el("gain").innerHTML = [
+    `<b>Curva:</b> ${s(cu.delta_stuff_plus)} puntos (${ci(cu.ic95_delta)}). Su valor casi no cambia en los datos; hipótesis: depende más del contraste de velocidad y del ángulo que del giro.`,
+    `<b>Slider:</b> ${s(D.Slider.delta_stuff_plus)} puntos, intervalo toca cero. Gira como bala: su movimiento vertical depende poco del Magnus (k ${n(DATA.k.Slider.ivb, 2)}).`,
+    `<b>Arsenal de rompimiento:</b> ${n(A.Rompimiento.stuff_plus_harp_estimado)} de Stuff+ estimado en el Harp Helú, contra ${n(A["Recta y sinker"].stuff_plus_harp_estimado)} del de recta y sinker.`,
+    `<b>Pitcher de rolling:</b> un rolling vale casi lo mismo en las dos altitudes (${s(gb.diferencia, 3)} carreras).`,
+  ].map(x => `<li>${x}</li>`).join("");
+  el("lose").innerHTML = [
+    `<b>Recta de "ride":</b> ${s(fb.delta_stuff_plus)} puntos (${ci(fb.ic95_delta)}). Pierde unos 4 in de IVB: el "ride" sale del Magnus.`,
+    `<b>Sinker:</b> ${s(D.Sinker.delta_stuff_plus)} puntos (${ci(D.Sinker.ic95_delta)}). Pierde caída y corrida (k horizontal ${n(DATA.k.Sinker.hb, 2)}).`,
+    `<b>Cambio:</b> ${s(D.Changeup.delta_stuff_plus)} puntos (${ci(D.Changeup.ic95_delta)}). Su corrida es lo más sensible al aire (k ${n(DATA.k.Changeup.hb, 2)}). No gana valor en altura.`,
+  ].map(x => `<li>${x}</li>`).join("");
+}
+
+function contact() {
+  const rows = [["Jonrones por fly", "jonron_por_fly_pct", "%"], ["Contacto duro (95+ mph)", "contacto_duro_pct", "%"], ["Carreras por 100 batazos", "carreras_por_100_batazos", ""]];
+  el("table-contact").innerHTML = `<thead><tr><th>Riesgo</th><th class="num">CDMX</th><th class="num">Nivel del mar</th><th class="num">Diferencia</th><th class="num">IC 95 %</th></tr></thead><tbody>${
+    rows.map(([label, key, unit]) => { const r = C.liga[key];
+      return `<tr><td>${label}</td><td class="num">${n(r.altitud_extrema)}${unit ? " %" : ""}</td><td class="num">${n(r.nivel_del_mar)}${unit ? " %" : ""}</td><td class="num"><b>${s(r.diferencia)}${unit ? " pts" : ""}</b></td><td class="num">${ci(r.ic95_diferencia)}</td></tr>`; }).join("")}
+    <tr><td>Valor de un fly</td><td class="num">${n(fly.carreras_extrema, 3)}</td><td class="num">${n(fly.carreras_mar, 3)}</td><td class="num"><b>${n(flyRatio)}×</b></td><td class="num">—</td></tr></tbody>`;
+  const byType = C.por_tipo_de_pitch_mismo_pitcher, f = byType["Four-Seam"].carreras_por_100_batazos, si = byType.Sinker.carreras_por_100_batazos;
+  el("contact-note").innerHTML = `Mismo pitcher y mismo pitch, carreras por 100 batazos en la CDMX: rectas ${s(f.cambio)} (${ci(f.ic95)}) y sinkers ${s(si.cambio)} (${ci(si.ic95)}). 2024–2025, batazos sin toques.`;
+}
+
+function home() {
+  const sea = DATA.conteos["No Altitude"], alt = DATA.conteos["Extreme Altitude"];
+  const strike = c => c["0-0"] - c["0-1"];
+  el("home").innerHTML = [
+    `<b>Ponerse adelante vale más en la CDMX (probado).</b> Un strike en 0-0 le quita ${n(strike(alt), 3)} carreras al rival, contra ${n(strike(sea), 3)} a nivel del mar.`,
+    `<b>Los flies son el riesgo principal en casa (probado a nivel liga).</b> Cuidar el contacto elevado pesa más ahí que en la costa.`,
+    `<b>Apoyarse más en slider y curva en casa (opción).</b> Pierden menos en altura, pero no está probado que usarlas más mejore el resultado: cambia cómo las espera el bateador.`,
+  ].map(x => `<li>${x}</li>`).join("");
+}
+
+deltaChart(); archChart(); files(); kTable(); evidence(); profile(); gainLose(); contact(); home();
+</script>
+</body>
+</html>
