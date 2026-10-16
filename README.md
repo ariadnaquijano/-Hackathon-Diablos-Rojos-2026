@@ -20,3 +20,12 @@ Trabajaremos en un análisis sencillo, principalmente estadístico, de las hipó
 * H3: Los groundball pitchers son más valiosos en altitud - Ari
 * H4: El spin rate por sí solo resulta insuficiente como predictor de Stuff+ - Alexis 
 
+## Local Stuff+ implementation
+
+A standalone XGBoost training pipeline is available in `stuffplus/`.
+See [setup and commands](README_STUFFPLUS.md) and the
+[complete English model and meeting guide](docs/STUFFPLUS_MODEL_GUIDE.md).
+It produces pitcher/type summaries and altitude movement scenarios from the cleaned
+Parquet file. The first run is experimental: XGBoost did not outperform the linear
+physical baseline. The guide includes the measured results and interpretation limits.
+

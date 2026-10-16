@@ -1,4 +1,10 @@
 # Byte-compiled / optimized / DLL files
+# Local competition data and trained artifacts (never commit these).
+/data/
+/artifacts/
+*.parquet
+*.ubj
+
 __pycache__/
 *.py[codz]
 *$py.class
