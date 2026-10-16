@@ -15,6 +15,8 @@ de la liga en las mismas cuentas, en escala "plus" (100 = promedio de la liga):
 
 Train = split 'train' (2024-2025), test = split 'holdout' (2026).
 """
+from pathlib import Path
+
 import numpy as np
 import pandas as pd
 import pyarrow as pa
@@ -24,7 +26,7 @@ import torch
 from torch import nn
 from sklearn.metrics import brier_score_loss, log_loss, roc_auc_score
 
-ARCHIVO = "pitches_limpios.parquet"
+ARCHIVO = Path(__file__).parent / "pitches_limpios.parquet"
 
 columnas_contexto = ['Balls', 'Strikes', 'count', 'Outs', 'Inning', 'Top/Bottom', 'altitude_category']
 columnas_loc = ['PlateLocHeight', 'PlateLocSide', 'in_strike_zone', 'outside_strike_zone']
