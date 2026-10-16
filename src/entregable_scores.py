@@ -14,7 +14,7 @@ Los archivos con identificadores van a data/entregables/, que no se sube al repo
 identificadores va a reportes/etapa_06_scores.json.
 
 Uso:
-    python src/entregable_scores.py   # requiere modelo_v2, arsenal, pasaporte y ficha
+    python src/entregable_scores.py   # requiere modelo_v3, arsenal, pasaporte y ficha
 """
 
 import json
@@ -28,10 +28,9 @@ from config import HOLDOUT_SEASON, MODEL_PARQUET, REPORTS_DIR, ROOT
 from exploracion_etapa_04 import EXTREME, SEA_LEVEL
 from ficha import altitude_risk, arsenal_table, type_losses
 from modelo import load
-from modelo_v2 import PITCHER_VALUES_V2
+from modelo_v3 import PITCHER_VALUES_V3, official_pitches
 from modelos_base import RANDOM_SEED, TARGET
 from proyeccion import NO_CONTACT
-from validacion_estadio import official_predictions
 
 OUTPUT_DIR = ROOT / "data" / "entregables"
 SUMMARY_JSON = REPORTS_DIR / "etapa_06_scores.json"
@@ -48,7 +47,7 @@ MIXED = "Mixto"
 
 
 def pitch_scores(losses: dict) -> pd.DataFrame:
-    pitches, _, _ = official_predictions(load())
+    pitches, _ = official_pitches(load())
     pitches = pitches[pitches.pitcher_anon_id != "sin_id"].copy()
     extra = duckdb.sql(f"select pitch_seq, PitchUID, hit_type, is_ball_in_play from '{MODEL_PARQUET}'").df()
     pitches = pitches.merge(extra, on="pitch_seq", how="left", validate="one_to_one")
@@ -81,7 +80,7 @@ def archetype(shares: pd.DataFrame) -> pd.Series:
 
 
 def pitcher_scores(pitches: pd.DataFrame, losses: dict) -> pd.DataFrame:
-    values = pd.read_parquet(PITCHER_VALUES_V2)
+    values = pd.read_parquet(PITCHER_VALUES_V3)
     risk = altitude_risk(arsenal_table(losses))
     values = values.merge(risk, on=["pitcher_anon_id", "year"], how="left")
     spread = values.groupby("year").stuff.transform("std")

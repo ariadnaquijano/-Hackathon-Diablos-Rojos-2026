@@ -7,7 +7,7 @@
 > - `scores_por_pitcher.csv`: 818 pitcher-temporada con 300+ pitches.
 > - `scores_por_arsenal.csv`: 2,065 pitcher-temporada-tipo con 100+ pitches.
 >
-> **Modelo:** versión 2 (D-035). 2024–2025 vienen de modelos que no vieron al pitcher; 2026, de
+> **Modelo:** versión 3 (D-040): Stuff+ v1 y el Location+ de Ben en versión neutral. 2024–2025 vienen de modelos que no vieron al pitcher; 2026, de
 > modelos entrenados con 2024–2025.
 
 ## 1. Qué trae cada archivo
@@ -53,14 +53,15 @@ Arquetipos por uso, fijados antes de correr (pitcher-temporada con 300+ pitches,
 
 | Arquetipo | Regla | Pitchers | Stuff+ a nivel del mar | **Stuff+ estimado en el Harp Helú** | Pitching+ |
 |---|---|---|---|---|---|
-| **Rompimiento** | slider + curva ≥ 40 % | 118 | 103.1 | **90.9** | 104.0 |
-| Recta y sinker | recta + sinker ≥ 60 % | 203 | 103.7 | 86.8 | 98.2 |
-| Mixto | el resto | 243 | 98.9 | 83.6 | 99.9 |
-| Cambio o split | cambio + splitter ≥ 25 % | 76 | 96.8 | 81.0 | 100.2 |
+| **Rompimiento** | slider + curva ≥ 40 % | 118 | 103.1 | **90.9** | 100.8 |
+| Recta y sinker | recta + sinker ≥ 60 % | 203 | 103.7 | 86.8 | 102.9 |
+| Mixto | el resto | 243 | 98.9 | 83.6 | 98.8 |
+| Cambio o split | cambio + splitter ≥ 25 % | 76 | 96.8 | 81.0 | 100.6 |
 
 **Respuesta:** el arsenal de **rompimiento** (slider o curva como 40 %+ de los pitches) es el que
 conserva más Stuff+ en el Harp Helú. A nivel del mar tiene el mismo Stuff+ que el de recta y sinker
-(103 contra 104), pero en la CDMX queda 4 puntos arriba. También tiene el mejor Pitching+.
+(103 contra 104), pero en la CDMX queda 4 puntos arriba. Su Pitching+ (100.8) no es el más alto: el de
+recta y sinker llega a 102.9 porque Pitching+ también mide la ubicación, que no depende del tipo de pitch.
 
 **La prueba real, con pitchers que lanzaron 200+ pitches en cada altitud la misma temporada:**
 

@@ -105,5 +105,82 @@
       "pendiente": 0.958
     }
   },
-  "pasa": true
+  "pasa": true,
+  "version_3": {
+    "pitches": 139277,
+    "sin_altitud_extrema": {
+      "stuff": {
+        "mejora_vs_media_conteo_pct": 0.1274,
+        "ic95_pct": [
+          0.07779,
+          0.17671
+        ],
+        "ic95_diferencia_vs_todas_las_altitudes_pct": [
+          -0.07161,
+          -0.03267
+        ]
+      },
+      "location": {
+        "mejora_vs_media_conteo_pct": 4.9116,
+        "ic95_pct": [
+          4.63849,
+          5.20514
+        ],
+        "ic95_diferencia_vs_todas_las_altitudes_pct": [
+          0.05274,
+          0.15817
+        ]
+      },
+      "pitching": {
+        "mejora_vs_media_conteo_pct": 4.9695,
+        "ic95_pct": [
+          4.70499,
+          5.24708
+        ],
+        "ic95_diferencia_vs_todas_las_altitudes_pct": [
+          -0.04473,
+          0.05097
+        ]
+      }
+    },
+    "con_todas_las_altitudes": {
+      "stuff": {
+        "mejora_vs_media_conteo_pct": 0.1798,
+        "ic95_pct": [
+          0.1283,
+          0.22766
+        ]
+      },
+      "location": {
+        "mejora_vs_media_conteo_pct": 4.8034,
+        "ic95_pct": [
+          4.51305,
+          5.11445
+        ]
+      },
+      "pitching": {
+        "mejora_vs_media_conteo_pct": 4.9647,
+        "ic95_pct": [
+          4.68214,
+          5.25345
+        ]
+      }
+    },
+    "calibracion": {
+      "real_por_100": -0.0599,
+      "stuff": {
+        "predicho_por_100": -0.353,
+        "pendiente": 0.838
+      },
+      "location": {
+        "predicho_por_100": -0.2507,
+        "pendiente": 1.002
+      },
+      "pitching": {
+        "predicho_por_100": -0.1345,
+        "pendiente": 1.051
+      }
+    },
+    "pasa": true
+  }
 }

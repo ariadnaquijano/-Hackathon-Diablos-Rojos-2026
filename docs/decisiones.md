@@ -7,6 +7,67 @@ se agrega una nueva entrada que la reemplaza y se marca la anterior como *Reempl
 
 ---
 
+### D-040 · 2026-10-16 · Location+ de Ben en versión neutral: regla fijada antes de correr
+- **Problema detectado en la versión 3:** el modelo de Ben usa la altitud como variable. El mismo
+  pitcher sale 1.00 carreras por 100 peor en altitud extrema que a nivel del mar en Pitching+ v3 (la
+  v2 daba 0.09 y el resultado real 0.57). Castiga al pitcher por el estadio, lo contrario de D-001.
+- **Corrección, sin cambiar su modelo:** cada pitch se predice dos veces, con su altitud real
+  (versión local) y con `altitude_category` = nivel del mar (versión neutral). La neutral es la
+  oficial para Location+ y Pitching+; la local se guarda como contexto.
+- **Qué se reporta (2024–2025, informativo):** la misma comparación de D-039 para la versión neutral
+  y la local, y la consistencia del mismo pitcher entre altitudes. Así se ve cuánto de la ventaja por
+  pitcher venía de conocer el estadio.
+- **Honestidad sobre 2026:** el problema se vio en el reporte de la versión 3 local, que ya incluía
+  2026 (quinta mirada). La corrección no se eligió por su resultado en 2026: aplica el principio de
+  D-001. La versión neutral en 2026 es la **sexta mirada**, también declarada.
+- **Resultado en 2024–2025:**
+  - Por pitcher, la neutral conserva casi toda la ventaja: r con el xRV real 0.36 (local 0.40, v2
+    0.25; neutral menos v2 +0.06 a +0.15) y con el CSW real 0.29 (v2 0.16; +0.08 a +0.18).
+  - Por pitch queda igual que la local: Pitching+ 5.37 % contra 5.65 % del v2 (−0.34 a −0.21).
+  - Repetición de 2024 a 2025: 0.58 contra 0.67 del v2.
+- **Resultado en 2026 (Pitching+ v3 neutral contra v2):**
+  - Por pitcher: r 0.55 contra 0.44; error 0.609 contra 0.695. **Le gana a la lineal observada con
+    intervalo fuera de cero (−0.19 a −0.03)**, la primera vez para un modelo nuestro.
+  - Por pitch: 5.34 % contra 5.51 %; sigue ganándole a todas las bases.
+  - Mismo pitcher entre altitudes: 0.07 carreras por 100 (v2 0.09; local 1.00).
+  - A futuro sigue sin ganarle a la historia del pitcher (Pitching+ r 0.19; proyección 0.32 contra
+    0.38 de la persistencia encogida).
+- **Validación por estadio (D-037) de la versión 3:** con Location+ de Ben también entrenado sin
+  altitud extrema, Pitching+ mejora 4.97 % (4.70 a 5.25) contra el promedio por conteo en altitud
+  extrema. Pasa.
+- **Estado:** Vigente. Modelo oficial versión 3: Stuff+ v1, Location+ de Ben neutral, Pitching+ =
+  0.78 × Stuff + 0.94 × Location. Detalle en `docs/06_location_ben.md`.
+
+### D-039 · 2026-10-16 · Location+ del equipo (Ben) como Location+ oficial: plan fijado antes de correr
+- **Decisión del equipo:** el Location+ oficial pasa a ser el de Ben (PR #2): un árbol de resultados
+  con XGBoost (swing, whiff, strike cantado, golpeado, foul y resultado en juego), con ubicación,
+  cuenta, outs, entrada, altitud y manos. Por pitch da el xCSW y el xRV, este último con los valores
+  de cuenta de su cadena de Markov (`run_value.py`). Location+ = 50 % CSW+ y 50 % RV+, ajustados por
+  cuenta. La adopción **no depende** de la comparación de abajo.
+- **Cómo se integra:**
+  - Se usa su modelo y sus fórmulas tal cual. Las piezas que faltaban en el PR (preparar datos,
+    agregar predicciones y separar validación) se rearman siguiendo `docs/LOCATIONPLUS_MODEL_GUIDE.md`.
+  - Se entrena con los mismos 5 pliegues por pitcher que el resto del modelo, para tener
+    predicciones de 2024–2025 sin ver al pitcher; 2026 se predice con un modelo de 2024–2025.
+  - Su xRV por pitch reemplaza al componente de ubicación de Pitching+, con los pesos reajustados con
+    nuestro target.
+- **Comparación informativa contra Location+ v2, solo 2024–2025:**
+  - Por pitch: mejora del error de Pitching+ contra el promedio por conteo, con cada componente de
+    ubicación, e intervalo de la diferencia.
+  - Por pitcher: correlación de cada Location+ con el xRV real y el CSW real de la misma temporada, y
+    cuánto se repite de 2024 a 2025.
+- **2026:** las métricas del documento se recalculan con el modelo nuevo. Sería la **quinta mirada**,
+  declarada: no se elige nada con ella.
+- **Resultado (2024–2025, 499 mil pitches, modelos sin ver al pitcher):**
+  - Por pitch **pierde**: Pitching+ mejora 5.38 % contra el promedio por conteo con el de Ben y 5.65 %
+    con el v2 (diferencia −0.35 a −0.20). No ve el tipo de pitch.
+  - Por pitcher **gana**: correlación con el xRV real de la temporada 0.40 contra 0.25 (+0.09 a +0.20)
+    y con el CSW real 0.33 contra 0.16 (+0.11 a +0.23). Ajustar por cuenta evita acreditarle al pitcher
+    los conteos en que vive.
+  - Se repite algo menos de 2024 a 2025: 0.59 contra 0.67 (146 pitchers).
+  - Lectura: la adopción tiene sustento donde la usa el club, que es ordenar pitchers.
+- **Estado:** Vigente. Modelo oficial versión 3: Stuff+ v1 y Location+ de Ben.
+
 ### D-038 · 2026-10-16 · Qué arsenal rinde más en el Harp Helú: definición fijada antes de correr
 - **Por qué:** el entregable 1 pregunta qué arsenal produce el Stuff+ más alto en el Harp Helú.
 - **Arquetipos por uso** (pitcher y temporada con 300+ pitches), asignados en este orden:

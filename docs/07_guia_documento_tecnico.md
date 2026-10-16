@@ -158,8 +158,8 @@ de la CDMX y con el de la costa.
 | Pieza | Variables | Modelo |
 |---|---|---|
 | **Stuff+** | Forma a nivel del mar (IVB, HB), velocidad, spin, eje, salida (altura, lado), extensión, VAA relativo; diferencias contra la recta del pitcher (velocidad, IVB, HB, eje, distancia de salida, extensión); tipo de pitch, mano, mismo lado que el bateador | 5 modelos por componentes (abajo) |
-| **Location+** | Altura y lado en el plato, lado del bateador, bolas, strikes, tipo de pitch, mano | 1 regresor del xRV |
-| **Pitching+** | Las predicciones de Stuff+ y Location+ | Regresión lineal: 0.60 × Stuff + 1.03 × Location |
+| **Location+** (de Ben, D-039) | Altura y lado en el plato, dentro o fuera de la zona, bolas, strikes, outs, entrada, mitad de la entrada, manos de pitcher y bateador; la altitud se fija en nivel del mar al predecir (D-040). **No ve el tipo de pitch** | Árbol de resultados: 6 modelos XGBoost (abajo) |
+| **Pitching+** | Las predicciones de Stuff+ y Location+ | Regresión lineal: 0.78 × Stuff + 0.94 × Location |
 
 **Stuff+ por componentes (D-027).** En vez de predecir el xRV directo, se predicen cinco cosas y se
 combinan con el valor promedio de cada desenlace (V):
@@ -175,6 +175,18 @@ Stuff = P(swing) × [P(whiff) × V(whiff) + (1 − P(whiff)) × (P(foul) × V(fo
   P(chase) queda implícito en Location+ (el swing depende de la ubicación). Contacto débil, rolling y
   barril entran a través del valor esperado del batazo. **No modelamos P(out en el turno) por
   separado; si se menciona, que sea como frontera.**
+
+**Location+ como árbol de resultados (D-039).** Seis modelos predicen qué pasa con el pitch según dónde
+cae: P(swing), P(whiff | swing), P(strike cantado | toma), P(golpeado | toma sin strike), P(foul |
+contacto) y el resultado en juego (out, 1B, 2B, 3B o HR). Con eso salen dos cifras por pitch:
+
+- **xCSW** = P(strike cantado) + P(whiff);
+- **xRV** = Σ P(resultado) × valor del resultado en esa cuenta, con los valores de cuenta de una
+  cadena de Markov (`run_value.py`).
+
+**Versión neutral (D-040):** el modelo de Ben usa la altitud como variable. Con su altitud real, el
+mismo pitcher salía 1.00 carreras por 100 peor en la CDMX que a nivel del mar: lo castigaba por el
+estadio. Por eso cada pitch se predice como si fuera a nivel del mar, igual que nuestro Stuff+.
 
 ### 4.3 Por qué estas variables
 
@@ -196,12 +208,18 @@ Stuff = P(swing) × [P(whiff) × V(whiff) + (1 − P(whiff)) × (P(foul) × V(fo
   que LightGBM, que menciona la convocatoria.
 - **Funciones de pérdida:**
   - componentes de sí/no (swing, whiff, foul, strike): **log loss** (entropía cruzada binaria);
-  - valor del batazo y Location+: **error cuadrático**.
-- **Hiperparámetros:** tasa de aprendizaje 0.05, 15 hojas por árbol (31 en Location+ v2), mínimo
-  1,000 pitches por hoja y regularización L2 de 1.0.
+  - valor del batazo: **error cuadrático**;
+  - Location+: **log loss** en sus cinco cabezas de sí/no y **log loss multiclase** en el resultado en
+    juego.
+- **Hiperparámetros de Stuff+:** tasa de aprendizaje 0.05, 15 hojas por árbol, mínimo 1,000 pitches
+  por hoja y regularización L2 de 1.0.
+- **Hiperparámetros de Location+ (XGBoost, los de Ben):** tasa 0.05, profundidad 6, mínimo 50 de
+  peso por hoja, 80 % de filas y de columnas por árbol, L2 de 1.0, hasta 2,000 árboles con *early
+  stopping* de 50 rondas sobre el 10 % de los juegos.
 - **Número de árboles:** se entrena con el 80 % de los pitchers y se elige el número de árboles que
   minimiza el error en el 20 % de pitchers que el modelo no vio (*early stopping* agrupado por
-  pitcher). Árboles finales: swing 502, whiff 418, strike 401, foul 98, batazo 22, Location+ 218.
+  pitcher). Árboles finales de Stuff+: swing 502, whiff 418, strike 401, foul 98, batazo 22. De
+  Location+: swing 303, whiff 199, strike cantado 259, golpeado 257, foul 148, en juego 99.
 - **Por qué gradient boosting y no una red o un modelo bayesiano:** capta interacciones no lineales
   (velocidad × movimiento × tipo) sin suponer una forma, con datos tabulares grandes, y se puede
   explicar por componentes. Un modelo jerárquico bayesiano quedó como trabajo futuro (D-002).
@@ -220,6 +238,7 @@ Usamos tres versiones, y el documento debe decir cuál es cuál:
 | Dónde | Valor | Media y desviación |
 |---|---|---|
 | **Por pitcher** (ficha, tabla de la liga) | Promedio por 100 pitches del pitcher en la temporada (300+ pitches) | Media de la temporada; desviación entre pitchers |
+| **Location+ por pitcher** | Mitad CSW y mitad RV, cada uno contra la liga en la misma cuenta | Ver la fórmula abajo |
 | **Por pitch dentro del arsenal** | Promedio del pitcher con ese tipo (100+ pitches) | Media y desviación de ese tipo de pitch en esa temporada |
 | **Simulador** (un perfil escrito a mano) | Valor del perfil promedio ingresado | Media y desviación de los perfiles promedio de la liga de ese tipo |
 
@@ -229,10 +248,14 @@ Usamos tres versiones, y el documento debe decir cuál es cuál:
 - **Por qué el simulador compara contra perfiles y no contra pitches sueltos:** el coach escribe un
   perfil promedio. Un pitch suelto trae la variación de cada lanzamiento, así que un perfil limpio
   se vería élite. Con perfiles, el pitch mediano de cada tipo queda entre 96 y 102.
-- **Distribución real por pitcher** (p10 / p50 / p90, 2025): Stuff+ 89 / 100 / 115; Pitching+ 87 /
-  101 / 112. La convocatoria dice "120+ élite (percentil ~97)". En nuestros datos, 120 o más de
-  Stuff+ lo tiene el 4 % de los pitchers-temporada, y de Pitching+ el 2 %: coincide con lo que
-  esperan.
+- **Location+ (fórmula de Ben):** a cada pitch se le resta el promedio de la liga en su cuenta (xCSW y
+  xRV), se promedia por pitcher y se estandariza: z_CSW = residuo de xCSW ÷ desviación,
+  z_RV = −residuo de xRV ÷ desviación, z = 0.5 · z_CSW + 0.5 · z_RV, y **Location+ = 100 + 10 · z ÷
+  desv(z)**. Ajustar por cuenta evita acreditarle al pitcher los conteos en que vive.
+- **Distribución real por pitcher** (p10 / p50 / p90, 2025): Stuff+ 89 / 100 / 115; Location+ 87 /
+  101 / 113; Pitching+ 88 / 101 / 114. La convocatoria dice "120+ élite (percentil ~97)". En nuestros
+  datos, 120 o más de Stuff+ lo tiene el 4 % de los pitchers-temporada, y de Pitching+ el 3 %:
+  coincide con lo que esperan.
 
 ---
 
@@ -256,8 +279,8 @@ Fuente: `reportes/etapa_06_metricas_documento.json`.
 
 | | RMSE modelo nulo (promedio por conteo) | RMSE Pitching+ | Diferencia (IC 95 %) | Pendiente de calibración |
 |---|---|---|---|---|
-| Pitcher holdout (2024–2025) | 0.14448 | 0.14034 | −0.0043 a −0.0040 | 1.00 |
-| Season holdout (2026) | 0.14807 | 0.14394 | −0.0044 a −0.0039 | 1.02 |
+| Pitcher holdout (2024–2025) | 0.14448 | 0.14055 | −0.0041 a −0.0038 | 1.00 |
+| Season holdout (2026) | 0.14807 | 0.14408 | −0.0042 a −0.0038 | 1.03 |
 
 - **Calibración:** se ordenan los pitches por su predicción en 10 grupos y se compara el promedio
   predicho con el real. Pendiente 1 = calibrado. En 2026 los deciles van de −5.0 a +6.7 carreras por
@@ -266,7 +289,7 @@ Fuente: `reportes/etapa_06_metricas_documento.json`.
   pesos de Pitching+ se ajustaron con esas mismas predicciones. La de 2026 sí es fuera de muestra.
 - **Escala de la mejora:** el RMSE baja poco en términos absolutos porque **un pitch suelto es casi
   todo azar** (desviación del xRV: 0.145). Por eso el documento reporta también la mejora del error
-  cuadrático en %: +5.5 % de Pitching+ en 2026 contra +0.11 % de la mejor base lineal.
+  cuadrático en %: +5.3 % de Pitching+ en 2026 contra +0.11 % de la mejor base lineal.
 
 ### 6.3 La escalera de modelos base (D-020)
 
@@ -275,9 +298,9 @@ Ningún resultado cuenta si no le gana a un modelo más simple. Resultados en 20
 | Prueba | Resultado |
 |---|---|
 | Por pitch | **Stuff+, Location+ y Pitching+ le ganan** a la media, al promedio por conteo y a las dos regresiones lineales, con intervalo fuera de cero |
-| Por pitcher, misma temporada | Pitching+ tiene el menor error (0.69), pero **empata** con la lineal |
+| Por pitcher, misma temporada | **Pitching+ le gana a las dos lineales** con intervalo fuera de cero: r 0.55, error 0.61 contra 0.72 de la lineal observada (−0.19 a −0.03) y 0.75 de la lineal a nivel del mar (−0.23 a −0.05) |
 | A futuro (predecir 2026 con 2024–2025) | **Ninguno le gana** a la historia del pitcher encogida hacia la media |
-| Altitud (mismo pitcher en las dos altitudes) | El xRV real cambia 0.57 carreras por 100; **Stuff+ solo 0.05** (r 0.92 entre altitudes) |
+| Altitud (mismo pitcher en las dos altitudes) | El xRV real cambia 0.57 carreras por 100; **Stuff+ solo 0.05** (r 0.92 entre altitudes) y Pitching+ 0.07 |
 
 **Escriban los empates y las derrotas.** Un jurado técnico confía más en un documento que dice qué no
 funcionó. La explicación de la derrota a futuro: el contacto es ruido (DIPS) y Location+ no se repite
@@ -289,17 +312,19 @@ En 139,277 pitches de altitud extrema, de 725 pitchers, con modelos que no viero
 altitud extrema. Mejora del error contra el promedio por conteo:
 
 - Stuff+: +0.13 % (0.08 a 0.18);
-- Location+: +5.11 % (4.81 a 5.41);
-- Pitching+: +5.12 % (4.80 a 5.42).
+- Location+ (de Ben, también entrenado sin altitud extrema): +4.91 % (4.64 a 5.21);
+- Pitching+: +4.97 % (4.70 a 5.25).
 
-Pasa la regla. Entrenar con altitud extrema ayuda poco (0.03 a 0.24 puntos). **Hallazgo:** el modelo
+Pasa la regla. Entrenar con altitud extrema no cambia Pitching+ (−0.04 a +0.05). **Hallazgo:** el modelo
 sin altitud es optimista en la CDMX por unas 0.3 carreras por 100 pitches, del tamaño de la pérdida
 por altitud medida aparte. Las dos mediciones coinciden.
 
 ### 6.5 Higiene: cuántas veces miramos 2026
 
-2026 se miró **cuatro veces**, todas declaradas en la bitácora: la exploración, el modelo congelado
-(D-030), la proyección (D-032) y la versión 2 (D-035). Desde D-025 nada se eligió con 2026; las
+2026 se miró **seis veces**, todas declaradas en la bitácora: la exploración, el modelo congelado
+(D-030), la proyección (D-032), la versión 2 (D-035) y la versión 3 local y neutral (D-039 y D-040).
+El Location+ de Ben lo adoptó el equipo antes de mirar 2026, y la versión neutral corrige un
+problema de principio (castigaba al pitcher por el estadio), no un resultado de 2026. Desde D-025 nada se eligió con 2026; las
 elecciones se hicieron con 2024 → 2025. Conviene una frase así en el documento: muestra que no
 buscamos el resultado hasta encontrarlo.
 
@@ -383,7 +408,8 @@ Usen esta lista; cada punto tiene respaldo:
    estadio. El "park holdout" es un *altitude holdout*.
 3. **No hay corredores en base** en los datos: el valor de cada desenlace es un promedio de
    situaciones. Robos, wild pitches y pickoffs no se le cargan a nadie.
-4. **Stuff+ por pitcher empata con la regresión lineal**; gana por pitch.
+4. **Stuff+ por pitcher empata con la regresión lineal**; gana por pitch. Pitching+ sí le gana por
+   pitcher, gracias al Location+ ajustado por cuenta.
 5. **El costo de altitud de un pitcher específico no es preciso**: se da en tercios.
 6. **2026 es una temporada parcial** (178 pitchers con 300+ pitches).
 7. **Asociación, no causalidad:** que la slider pierda poco en altura no prueba que usarla más mejore
@@ -401,7 +427,8 @@ Usen esta lista; cada punto tiene respaldo:
 | ¿Por qué no pusieron la altitud como variable? | Castigaría al pitcher por el estadio. El traductor físico separa al pitcher del aire (D-001), y el park holdout muestra que el modelo funciona en la CDMX sin haberla visto. |
 | ¿Cómo saben que k es correcto? | Se estimó con el mismo pitcher en distintos aires, corregido por atenuación. Después de convertir, la recta del mismo pitcher queda a +0.11 in entre altitudes. |
 | ¿Por qué no le ganan a la historia del pitcher? | Porque el resultado incluye contacto y ubicación, que se repiten poco. Stuff+ es la parte estable y la única disponible para un pitcher nuevo. |
-| ¿Miraron 2026 muchas veces? | Cuatro, declaradas. Nada se eligió con 2026 desde D-025. |
+| ¿Miraron 2026 muchas veces? | Seis, declaradas. Nada se eligió con 2026 desde D-025. |
+| ¿Por qué el Location+ no ve el tipo de pitch? | Mide qué tan buen lugar es ese para un pitch promedio de la liga; el tipo de pitch es Stuff+. Así no se cuenta dos veces. |
 | ¿Qué cambiaría en el reclutamiento? | Las rectas y sinkers de un agente libre pierden ~13 puntos de Stuff+ en el Harp Helú; uno con slider o curva de calidad pierde menos. Y un pitcher de rolling sufre menos el acarreo. |
 
 ---

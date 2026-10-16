@@ -1,0 +1,121 @@
+{
+  "nota": "Comparación informativa (D-039), solo 2024–2025; la adopción la decidió el equipo.",
+  "pitches_comparados": 499243,
+  "arboles": {
+    "2026": {
+      "swing": 303,
+      "whiff_dado_swing": 199,
+      "called_strike_dado_take": 259,
+      "hbp_dado_take_no_strike": 257,
+      "foul_dado_contacto": 148,
+      "resultado_en_juego": 99
+    },
+    "pliegue_1": {
+      "swing": 337,
+      "whiff_dado_swing": 194,
+      "called_strike_dado_take": 257,
+      "hbp_dado_take_no_strike": 420,
+      "foul_dado_contacto": 150,
+      "resultado_en_juego": 105
+    },
+    "pliegue_2": {
+      "swing": 454,
+      "whiff_dado_swing": 200,
+      "called_strike_dado_take": 291,
+      "hbp_dado_take_no_strike": 410,
+      "foul_dado_contacto": 127,
+      "resultado_en_juego": 127
+    },
+    "pliegue_3": {
+      "swing": 322,
+      "whiff_dado_swing": 207,
+      "called_strike_dado_take": 221,
+      "hbp_dado_take_no_strike": 280,
+      "foul_dado_contacto": 196,
+      "resultado_en_juego": 70
+    },
+    "pliegue_4": {
+      "swing": 301,
+      "whiff_dado_swing": 218,
+      "called_strike_dado_take": 308,
+      "hbp_dado_take_no_strike": 405,
+      "foul_dado_contacto": 120,
+      "resultado_en_juego": 117
+    },
+    "pliegue_5": {
+      "swing": 348,
+      "whiff_dado_swing": 256,
+      "called_strike_dado_take": 308,
+      "hbp_dado_take_no_strike": 256,
+      "foul_dado_contacto": 125,
+      "resultado_en_juego": 82
+    }
+  },
+  "run_value_pesos": {
+    "1B": 0.5327774204971544,
+    "2B": 0.8258677600350206,
+    "3B": 1.124131209046068,
+    "HR": 1.426011858137054,
+    "BB": 0.3956203325050682,
+    "HBP": 0.4295306208490055,
+    "K": -0.1232696808006688,
+    "OUT": -0.10805006580376142,
+    "E": -0.10805006580376142,
+    "SAC": -0.10805006580376142,
+    "FC": -0.10805006580376142
+  },
+  "por_pitch_mejora_vs_promedio_por_conteo_pct": {
+    "pitching_v2": 5.6499,
+    "pitching_ben": 5.3752,
+    "pitching_ben_neutral": 5.3707,
+    "location_v2": 5.589,
+    "location_ben": 5.2697,
+    "location_ben_neutral": 5.2675,
+    "ic95_pitching_ben_menos_v2_pct": [
+      -0.34821,
+      -0.19656
+    ],
+    "ic95_location_ben_menos_v2_pct": [
+      -0.39568,
+      -0.23998
+    ],
+    "ic95_pitching_ben_neutral_menos_v2_pct": [
+      -0.33735,
+      -0.21299
+    ]
+  },
+  "por_pitcher": {
+    "r_con_xrv_real": {
+      "location_plus_ben": 0.395,
+      "location_plus_ben_neutral": 0.357,
+      "location_plus_v2": 0.251,
+      "ic95_location_plus_ben_menos_v2": [
+        0.0884,
+        0.1987
+      ],
+      "ic95_location_plus_ben_neutral_menos_v2": [
+        0.0593,
+        0.1537
+      ]
+    },
+    "r_con_CSW": {
+      "location_plus_ben": 0.33,
+      "location_plus_ben_neutral": 0.291,
+      "location_plus_v2": 0.158,
+      "ic95_location_plus_ben_menos_v2": [
+        0.1108,
+        0.2319
+      ],
+      "ic95_location_plus_ben_neutral_menos_v2": [
+        0.0799,
+        0.1811
+      ]
+    },
+    "repeticion_2024_a_2025": {
+      "pitchers": 146,
+      "location_plus_ben": 0.594,
+      "location_plus_ben_neutral": 0.583,
+      "location_plus_v2": 0.67
+    }
+  }
+}
