@@ -33,6 +33,16 @@ se agrega una nueva entrada que la reemplaza y se marca la anterior como *Reempl
     +0.38 (0.10 a 0.64), **probada**; recta − slider +0.21 (−0.04 a +0.45), sinker − slider +0.13
     (−0.12 a +0.43) y cambio − recta −0.07 (−0.35 a +0.20), **no probadas**. Solo la curva pierde
     menos que la recta de forma probada; la H2 queda como no concluyente.
+- **Matices tras la segunda auditoría:**
+  - La versión estricta no es un holdout perfecto de hiperparámetros: los árboles se eligieron con los
+    pitches de nivel normal de todos los pitchers, y los pesos de Pitching+ con las predicciones
+    oficiales de esos pitches.
+  - La pendiente fuera de pliegue (0.999) solo descarta sobreajuste de la combinación; la evidencia
+    de calibración son la pendiente de Stuff+ (0.999 y 0.985 en 2026), la de Pitching+ en 2026 (1.03)
+    y los deciles.
+  - En altitud extrema, el modelo nulo falla por 0.32 carreras por 100: es un corrimiento del nivel de
+    la liga que comparten todos los modelos de nivel del mar. Stuff+ falla 0.03 menos y Pitching+
+    estricto 0.17 menos. Lo que se valida en altura es el orden, no el nivel.
 - **Estado:** Vigente.
 
 ### D-041 · 2026-10-17 · El exponente k se reexpresa en densidad del aire
@@ -48,6 +58,11 @@ se agrega una nueva entrada que la reemplaza y se marca la anterior como *Reempl
   factor 0.70. En densidad: recta 1.05 en IVB (1.02 a 1.07) y 1.14 en HB, sinker 0.98 en IVB, liga
   1.10. La física predice 1.11 (Magnus ∝ ρ y una recta que tarda 1.3 % menos en llegar, medido con
   los datos). Excepciones: HB del cambio 1.43 e IVB de la slider 0.47, sin explicación probada.
+- **Corrección tras la segunda auditoría:** 1.11 es la cota superior. Con la aceleración de Magnus
+  ∝ ρ · v² · C_L, la física predice de 1.00 (C_L constante) a 1.11, y 1.05 con C_L ∝ giro ÷ velocidad.
+  La IVB de la recta (1.05) y la liga (1.10) caen dentro. El HB cae más que la IVB en los cinco tipos
+  (liga 1.17 contra 0.93): no lo explica Magnus y queda abierto (calibración por estadio, marco de
+  referencia o efectos de costura).
 - **Estado:** Vigente. Detalle en `docs/06_fisica_densidad.md`.
 
 ### D-040 · 2026-10-16 · Location+ de Ben en versión neutral: regla fijada antes de correr

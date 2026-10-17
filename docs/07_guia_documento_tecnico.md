@@ -60,13 +60,16 @@ de pitch entre el Harp Helú y nivel del mar) y aplicabilidad (entrevista de 10 
 ### 1.3 El exponente k: cuánto cambia el movimiento con el aire
 
 - Modelo: **movimiento ∝ air_ratio^k**, con el aire medido como frenado.
-- **En densidad:** k_ρ = k · ln(0.8445) ÷ ln(0.785) ≈ 0.70 · k. La física predice k_ρ ≈ 1.11: fuerza de
-  Magnus ∝ ρ, y movimiento = ½ · a · t² con un tiempo de vuelo 1.3 % menor en altura (medido: la recta
-  llega a 85.8 mph en la CDMX contra 83.9 a nivel del mar). **Resultado:** recta 1.05 en IVB y 1.14 en
-  HB, sinker 0.98 en IVB, liga 1.10. La física cuadra.
-- **Excepciones honestas:** el HB del cambio (1.43) y la IVB de la slider (0.47). Hipótesis, sin
-  probar: los efectos de costura (*seam-shifted wake*) del cambio dependen del régimen del flujo, y la
-  IVB de la slider es casi cero, así que su cociente es inestable.
+- **En densidad:** k_ρ = k · ln(0.8445) ÷ ln(0.785) ≈ 0.70 · k.
+- **Qué predice la física:** movimiento = ½ · a · t², con la aceleración de Magnus ∝ ρ · v² · C_L y un
+  tiempo de vuelo 1.3 % menor en altura (medido: la recta llega a 85.8 mph en la CDMX contra 83.9 a
+  nivel del mar). Según cómo dependa C_L de la velocidad, k_ρ va de **1.00 a 1.11**; con C_L ∝
+  giro ÷ velocidad, lo usual en pitcheo, **1.05**.
+- **Resultado:** IVB de la recta 1.05 y movimiento total de la liga 1.10: dentro del rango.
+- **Lo que no cuadra, dicho de frente:** el movimiento horizontal cae más que el vertical en los cinco
+  tipos (liga: HB 1.17 contra IVB 0.93; cambio HB 1.43). El efecto Magnus escala los dos igual.
+  Candidatos sin probar: calibración del TrackMan por estadio, marco de referencia del HB o efectos de
+  costura. La IVB de la slider (0.47) es casi cero y su cociente es inestable.
 - Se estima con el **mismo pitcher y el mismo pitch** en juegos con distinto aire.
 - **Detalle técnico importante (D-016):** el aire de cada juego se mide con ruido. El ruido en la
   variable explicativa *achica* la pendiente; a eso se le llama sesgo de atenuación. La primera
@@ -293,10 +296,12 @@ Fuente: `reportes/etapa_06_metricas_documento.json`.
 | Season holdout (2026) | 0.14807 | 0.14797 | 0.14415 | 0.14408 | −0.0042 a −0.0038 | 1.03 |
 
 - **Sean claros con lo que aporta cada pieza.** Por pitch, casi toda la mejora es de ubicación y
-  cuenta: Stuff+ solo baja el RMSE de 0.14807 a 0.14797 en 2026 (−0.00014 a −0.00007), un 0.15 % de
-  error cuadrático. El valor de Stuff+ está por pitcher: se repite de un año a otro (r 0.83), no
+  cuenta: Stuff+ solo baja el RMSE de 0.14807 a 0.14797 en 2026 (−0.00014 a −0.00007), alrededor de
+  0.15 % de error cuadrático contra la media de la liga. El valor de Stuff+ está por pitcher: se repite de un año a otro (r 0.83), no
   cambia entre altitudes y es lo único disponible para un pitcher sin historia.
-- **Sobre el modelo nulo:** el promedio por conteo empata con la media de la liga (−0.01 %), porque
+- **Sobre el modelo nulo:** en el pitcher holdout, el promedio por conteo se calcula con todo 2024–2025
+  (12 celdas, efecto despreciable), mientras los modelos son fuera de pliegue. Empata con la media de
+  la liga (−0.01 % en altitud extrema), porque
   nuestro target ya descuenta la cuenta (es la diferencia de valor entre cuentas). Además el target
   es el xRV neutral que construimos, no un xRunValue dado por la convocatoria.
 - **Denominadores:** en 2026 se evalúan 131,825 pitches. Los modelos base usaron 134,768; la
@@ -308,21 +313,25 @@ Fuente: `reportes/etapa_06_metricas_documento.json`.
   100 predichas contra −4.92 a +6.58 reales. Esta gráfica luce muy bien en el documento.
 - **Ojo:** la pendiente de 1.00 en el pitcher holdout es **mecánica**: los pesos de Pitching+ se
   ajustaron con esas mismas predicciones, y la pendiente contra los valores ajustados de una regresión
-  lineal es exactamente 1. Con pesos ajustados en otros pitchers (D-042) da **0.999**: la calibración
-  es real. La de 2026 (1.03) y la de Stuff+ (0.999) no tienen ese problema.
+  lineal es exactamente 1. Con pesos ajustados en otros pitchers (D-042) da 0.999, pero eso solo
+  descarta que la combinación esté sobreajustada (son dos coeficientes con medio millón de pitches).
+  **La evidencia de calibración es otra:** la pendiente de Stuff+ (0.999 en 2024–2025 y 0.985 en 2026),
+  la de Pitching+ en 2026 (1.03) y los deciles de 2026.
 - **Escala de la mejora:** el RMSE baja poco en términos absolutos porque **un pitch suelto es casi
   todo azar** (desviación del xRV: 0.145). Por eso el documento reporta también la mejora del error
   cuadrático en %: +5.3 % de Pitching+ en 2026 contra +0.11 % de la mejor base lineal.
 
 ### 6.3 La escalera de modelos base (D-020)
 
-Ningún resultado cuenta si no le gana a un modelo más simple. Resultados en 2026 (`docs/04_modelo.md`):
+Ningún resultado cuenta si no le gana a un modelo más simple. Resultados en 2026 del modelo oficial
+v3 (`reportes/etapa_06_modelo_v3.json`):
 
 | Prueba | Resultado |
 |---|---|
 | Por pitch | **Stuff+, Location+ y Pitching+ le ganan** a la media, al promedio por conteo y a las dos regresiones lineales, con intervalo fuera de cero |
-| Por pitcher, misma temporada | **Pitching+ le gana a las dos lineales en el error** con intervalo fuera de cero: 0.61 contra 0.72 de la lineal observada (−0.19 a −0.03) y 0.75 de la lineal a nivel del mar (−0.23 a −0.05). En la correlación (r 0.55 contra 0.45) la diferencia toca cero (−0.03 a +0.24) |
-| A futuro (predecir 2026 con 2024–2025) | **Ninguno le gana** a la historia del pitcher encogida hacia la media |
+| Por pitcher, misma temporada: Stuff+ | **Empata** con la regresión lineal por tipo: r 0.42 contra 0.45, error 0.74 contra 0.72 (−0.04 a +0.07) |
+| Por pitcher, misma temporada: Pitching+ | **Pitching+ le gana a las dos lineales en el error** con intervalo fuera de cero: 0.61 contra 0.72 de la lineal observada (−0.19 a −0.03) y 0.75 de la lineal a nivel del mar (−0.23 a −0.05). En la correlación (r 0.55 contra 0.45) la diferencia toca cero (−0.03 a +0.24) |
+| A futuro (predecir 2026 con 2024–2025, 114 pitchers) | **Ninguno le gana** a la historia del pitcher encogida hacia la media (r 0.38): proyección 0.32, Stuff+ 0.21, Pitching+ 0.19 |
 | Altitud (mismo pitcher en las dos altitudes) | El xRV real cambia 0.57 carreras por 100; **Stuff+ solo 0.05** (r 0.92 entre altitudes) y Pitching+ 0.07 |
 
 **Escriban los empates y las derrotas.** Un jurado técnico confía más en un documento que dice qué no
@@ -335,7 +344,11 @@ Los datos no traen estadio, solo la categoría de altitud, y "altitud extrema" p
 estadio de gran altura. Llámenlo **altitude holdout** en el documento y explíquenlo así.
 
 Versión estricta (D-042): el número de árboles de Stuff+, los pesos de Pitching+ y el Location+ se
-eligieron y entrenaron **sin ningún pitch de altitud extrema** y sin ver al pitcher. En 139,277
+eligieron y entrenaron **sin ningún pitch de altitud extrema**, y cada pitch lo predice un modelo que
+no vio a su pitcher. Dos matices: los árboles se eligieron con los pitches de nivel normal de todos
+los pitchers, incluidos los que luego se evalúan, y los pesos de Pitching+ se ajustaron con las
+predicciones oficiales de esos pitches de nivel normal. Efecto esperado mínimo, pero no es un
+holdout perfecto de hiperparámetros. En 139,277
 pitches de altitud extrema, de 725 pitchers, mejora del error contra el promedio por conteo:
 
 - Stuff+: +0.13 % (0.08 a 0.18);
@@ -345,10 +358,17 @@ pitches de altitud extrema, de 725 pitchers, mejora del error contra el promedio
 Pasa la regla, igual que la versión no estricta (+4.97 %, de 4.70 a 5.25): la fuga no movía el
 resultado.
 
-**Calibración en altura:** lo real es −0.06 carreras por 100. Stuff+ predice −0.35 (optimista por
-0.29, pendiente 0.83): un modelo de nivel del mar sobrestima al pitcher en la CDMX por una cantidad del
-tamaño de la pérdida por altitud medida aparte. Pitching+ predice −0.21 (pendiente 1.04): la ubicación
-y la cuenta corrigen buena parte.
+**Calibración en altura:** lo real es −0.06 carreras por 100 y **el modelo nulo, que no sabe nada del
+pitch, predice −0.38: falla por 0.32.** Es un corrimiento del nivel de la liga en altitud extrema que
+el target neutral no quita, del tamaño de la pérdida por altitud medida aparte (D-034). Todo modelo
+entrenado a nivel del mar lo comparte:
+
+- Stuff+ falla por 0.29, solo 0.03 menos que el nulo (pendiente 0.83).
+- Pitching+ estricto falla por 0.15, 0.17 menos que el nulo (pendiente 1.04). Parte de esa mejora sale
+  de cómo encoge la combinación (pesos menores a 1 más un intercepto), no solo de la ubicación.
+
+Lectura: el nivel en altura no lo corrige ningún modelo de nivel del mar; el orden de los pitches sí
+se sostiene (la mejora contra el nulo de arriba).
 
 ### 6.5 Higiene: cuántas veces miramos 2026
 
@@ -364,6 +384,9 @@ y la cuenta corrigen buena parte.
    que el equipo adoptara su Location+.
 7. y 8. La versión 3 local y la neutral (D-039 y D-040). La neutral corrige un problema de principio
    (castigaba al pitcher por el estadio), no un resultado de 2026.
+
+Las métricas del documento (RMSE y calibración de 2026) usan las mismas predicciones de la mirada 8:
+es otra métrica, no otra mirada.
 
 Desde D-025, ninguna elección nuestra se hizo con 2026: se hicieron con 2024 → 2025. **El pitcher
 holdout de 2024–2025 y el altitude holdout no usan 2026 para nada**; son las validaciones más limpias
@@ -471,10 +494,12 @@ Usen esta lista; cada punto tiene respaldo:
 |---|---|
 | ¿Por qué Stuff+ mejora tan poco por pitch (0.15 %)? | Un pitch suelto es casi azar. Lo que importa es que le gana a la lineal con intervalo fuera de cero y que es estable por pitcher (r 0.83 entre años). |
 | ¿Por qué no pusieron la altitud como variable? | Castigaría al pitcher por el estadio. El traductor físico separa al pitcher del aire (D-001), y el park holdout muestra que el modelo funciona en la CDMX sin haberla visto. |
-| ¿Cómo saben que k es correcto? | Se estimó con el mismo pitcher en distintos aires, corregido por atenuación. Después de convertir, la recta del mismo pitcher queda a +0.11 in entre altitudes. Y pasado a densidad da 1.05 para la recta y 1.10 en la liga, contra 1.11 que predice la física. |
-| ¿Su k de 1.6 no contradice la física? | Ese k está en frenado, no en densidad. En densidad es 1.10, que es lo que predicen Magnus ∝ ρ y el menor tiempo de vuelo. |
+| ¿Cómo saben que k es correcto? | Se estimó con el mismo pitcher en distintos aires, corregido por atenuación. Después de convertir, la recta del mismo pitcher queda a +0.11 in entre altitudes. Y pasado a densidad, la IVB de la recta da 1.05 y la liga 1.10, dentro del rango de 1.00 a 1.11 que predice la física. |
+| ¿Su k de 1.6 no contradice la física? | Ese k está en frenado, no en densidad. En densidad es 1.10, dentro del rango que predicen Magnus ∝ ρ y el menor tiempo de vuelo (1.00–1.11). |
+| ¿Por qué el HB cae más que la IVB? | No lo sabemos. El efecto Magnus no lo explica; puede ser la calibración del TrackMan por estadio, el marco de referencia del HB o efectos de costura. Lo reportamos como abierto. |
 | ¿Por qué no le ganan a la historia del pitcher? | Porque el resultado incluye contacto y ubicación, que se repiten poco. Stuff+ es la parte estable y la única disponible para un pitcher nuevo. |
 | ¿Miraron 2026 muchas veces? | Ocho veces influyó, todas declaradas (incluida la elección del target y las pruebas de Ben). Desde D-025 nada nuestro se eligió con 2026, y el pitcher holdout y el altitude holdout no lo usan. |
+| Su nulo falla 0.32 en altura con un target "neutral", ¿entonces? | Es un corrimiento del nivel de la liga en altura que todo modelo de nivel del mar comparte; Stuff+ apenas se separa de él. Lo que validamos en altura es el orden de los pitches, no el nivel. |
 | ¿Sus pesos de Pitching+ vieron la altitud extrema? | En la versión original sí; repetimos la prueba con árboles y pesos elegidos sin altitud extrema y el resultado es el mismo (+4.97 %). |
 | ¿Por qué el Location+ no ve el tipo de pitch? | Mide qué tan buen lugar es ese para un pitch promedio de la liga; el tipo de pitch es Stuff+. Así no se cuenta dos veces. |
 | ¿Qué cambiaría en el reclutamiento? | Las rectas y sinkers de un agente libre pierden ~13 puntos de Stuff+ en el Harp Helú; uno con slider o curva de calidad pierde menos. Y un pitcher de rolling sufre menos el acarreo. |

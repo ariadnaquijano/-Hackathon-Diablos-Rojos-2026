@@ -199,7 +199,7 @@ footer code { font-family: var(--mono); font-size: 0.75rem; }
 
     <div class="block">
       <h3>Por qué: la física</h3>
-      <p class="lead">En el Harp Helú el aire es <b>~21 % menos denso</b> que a nivel del mar. La fuerza de Magnus es proporcional a la densidad, así que el pitch se mueve menos. Medimos el aire con el frenado de las rectas (cae 16 %) y el exponente k con el mismo pitcher en juegos con distinto aire, corregido por error de medición (variable instrumental). <b>Pasado a densidad, k es 1.05 para la recta y 1.10 en la liga, justo lo que predice la física (1.11).</b></p>
+      <p class="lead">En el Harp Helú el aire es <b>~21 % menos denso</b> que a nivel del mar. La fuerza de Magnus es proporcional a la densidad, así que el pitch se mueve menos. Medimos el aire con el frenado de las rectas (cae 16 %) y el exponente k con el mismo pitcher en juegos con distinto aire, corregido por error de medición (variable instrumental). <b>Pasado a densidad, k es 1.05 en la IVB de la recta y 1.10 en la liga, dentro del rango que predice la física (1.00 a 1.11).</b> El movimiento horizontal cae algo más que el vertical, sin explicación probada.</p>
       <div class="card scroll">
         <table id="table-k"></table>
         <p class="caption">Un k más alto significa que ese movimiento pierde más en la CDMX. La slider casi no pierde vertical porque gira como bala (gyro); la corrida del cambio es lo más sensible de la liga.</p>
@@ -253,7 +253,7 @@ footer code { font-family: var(--mono); font-size: 0.75rem; }
       <h3>Cómo perfilar a un prospecto o agente libre</h3>
       <div class="card steps">
         <div class="step"><p><b>Si ya lanzó en la LMB, abrir su ficha.</b> Stuff+, Location+ y Pitching+, su riesgo en el Harp Helú (tercio bajo, medio o alto) y cada pitch de su arsenal contra su tipo.</p></div>
-        <div class="step"><p><b>Si solo hay sus números de TrackMan, meter cada pitch al simulador.</b> Da su Stuff+ a nivel del mar y en el Harp Helú, y su lugar en la CDMX contra todos los pitches de la liga.</p></div>
+        <div class="step"><p><b>Si solo hay sus números de TrackMan, meter cada pitch al simulador.</b> Da su Stuff+ a nivel del mar y en el Harp Helú, y la mediana de cada tipo en casa como contexto.</p></div>
         <div class="step"><p><b>Pasar la lista de chequeo y pesar la historia.</b> Para proyectar el año siguiente pesa más su historia en la liga; el Stuff+ manda cuando no hay historia o la historia es de otra altitud.</p></div>
       </div>
       <div class="card scroll">
@@ -262,7 +262,7 @@ footer code { font-family: var(--mono); font-size: 0.75rem; }
           <tbody>
             <tr><td>¿Su mejor pitch sobrevive a la altura?</td><td>Curva (probado) o slider (tendencia) con Stuff+ ≥ 100 contra su tipo</td><td>Todo su valor está en la recta o el sinker</td></tr>
             <tr><td>¿Cómo es su mezcla?</td><td>Slider + curva ≥ 40 % de sus pitches</td><td>Recta + sinker ≥ 60 % sin un rompimiento bueno</td></tr>
-            <tr><td>Si vive de la recta, ¿es élite?</td><td>Stuff+ de la recta ≥ 114 (top 10 %): en la CDMX sigue sobre el promedio</td><td>Recta promedio: en la CDMX queda unos 13 puntos abajo</td></tr>
+            <tr><td>Si vive de la recta, ¿es élite?</td><td>Stuff+ de la recta ≥ 113 en su ficha (top 10 % de las rectas): en la CDMX sigue sobre 100</td><td>Recta promedio: en la CDMX queda unos 13 puntos abajo</td></tr>
             <tr><td>¿Saca rollings?</td><td>Rolling ≥ 48 % (tercio alto; la mediana es 45 %)</td><td>Rolling ≤ 41 % y mucho fly</td></tr>
             <tr><td>¿Cuánta muestra hay?</td><td>450+ pitches y dos temporadas</td><td>Muestra corta: los componentes se mueven</td></tr>
           </tbody>
@@ -426,7 +426,7 @@ function profile() {
     ["Pitch principal de rompimiento", "Curva (probado) o slider (tendencia) con Stuff+ ≥ 100 contra su tipo", `Pierden ${n(-D.Slider.delta_stuff_plus)} y ${n(-cu.delta_stuff_plus)} puntos, contra ${n(-fb.delta_stuff_plus)} de la recta`],
     ["Mezcla", "Slider + curva ≥ 40 % de sus pitches", `El arquetipo de rompimiento queda en ${n(A.Rompimiento.stuff_plus_harp_estimado)} en el Harp Helú, el más alto`],
     ["Rolling", "Tercio alto de la liga (≥ 48 %)", `El fly cuesta ${n(flyRatio)} veces más en la CDMX`],
-    ["Si vive de la recta", "Recta élite a nivel del mar (Stuff+ ≥ 114, top 10 %)", `Llega a la CDMX con unos ${n(-fb.delta_stuff_plus, 0)} puntos menos`],
+    ["Si vive de la recta", "Recta élite a nivel del mar (Stuff+ ≥ 113 en su ficha, top 10 %)", `Llega a la CDMX con unos ${n(-fb.delta_stuff_plus, 0)} puntos menos`],
     ["Comando", "Location+ alto", "El modelo de ubicación predice en altitud extrema sin haberla visto (D-037); se repite menos de un año a otro (r 0.67) que Stuff+ (0.83)"],
   ].map(r => `<tr><td><b>${r[0]}</b></td><td>${r[1]}</td><td>${r[2]}</td></tr>`).join("");
 }
@@ -436,7 +436,7 @@ function gainLose() {
   const chFb = diffs["Changeup menos Four-Seam"];
   el("gain").innerHTML = [
     `<b>Curva (probado):</b> ${s(cu.delta_stuff_plus)} puntos. Pierde ${n(fbCu.carreras_por_100, 2)} carreras por 100 menos que la recta (${ci(fbCu.ic95_carreras, 2)}). Hipótesis: depende más del contraste de velocidad y del ángulo que del giro.`,
-    `<b>Slider (tendencia):</b> ${s(D.Slider.delta_stuff_plus)} puntos. Pierde ${n(fbSl.carreras_por_100, 2)} menos que la recta, sin probarse (${ci(fbSl.ic95_carreras, 2)}). Gira como bala: su movimiento vertical depende poco del Magnus.`,
+    `<b>Slider (tendencia):</b> ${s(D.Slider.delta_stuff_plus)} puntos. Pierde ${n(fbSl.carreras_por_100, 2)} menos que la recta, sin probarse (${ci(fbSl.ic95_carreras, 2)}). Hipótesis: por su giro de bala, su movimiento vertical depende poco del Magnus.`,
     `<b>Arsenal de rompimiento:</b> ${n(A.Rompimiento.stuff_plus_harp_estimado)} de Stuff+ estimado en el Harp Helú, contra ${n(A["Recta y sinker"].stuff_plus_harp_estimado)} del de recta y sinker.`,
     `<b>Pitcher de rolling:</b> un rolling vale casi lo mismo en las dos altitudes (${s(gb.diferencia, 3)} carreras).`,
   ].map(x => `<li>${x}</li>`).join("");

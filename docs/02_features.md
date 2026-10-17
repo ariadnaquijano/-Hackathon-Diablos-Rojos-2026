@@ -67,10 +67,11 @@ bootstrap de 200 remuestreos por pitcher.
 
 **Lectura física (corregida en D-041, `docs/06_fisica_densidad.md`):** `air_ratio` mide el *frenado*
 (densidad × coeficiente de arrastre), no la densidad. En el Harp Helú la densidad estimada es 0.785
-de la del nivel del mar, mientras el frenado medido es 0.84. Reexpresado en densidad, el k de la recta
-es 1.05 y el de la liga 1.10, justo lo que predice la física: fuerza de Magnus ∝ densidad, más un
-tiempo de vuelo 1.3 % menor (predicción: 1.11). Las excepciones son el HB del cambio (1.43 en
-densidad) y la IVB de la slider (0.47); ver el documento.
+de la del nivel del mar, mientras el frenado medido es 0.84. Reexpresado en densidad, la IVB de la
+recta da 1.05 y el movimiento total de la liga 1.10, dentro del rango que predice la física (1.00 a
+1.11 según el coeficiente de Magnus; 1.05 en el caso usual). El movimiento horizontal cae más que el
+vertical en los cinco tipos (liga: 1.17 contra 0.93), algo que el efecto Magnus no explica; ver el
+documento.
 
 **Validación (mismo pitcher, mismo pitch, altitud extrema menos nivel del mar):**
 

@@ -32,8 +32,10 @@ python src/simulador.py   # la primera vez entrena sus modelos (unos 10 minutos)
 ```
 
 Luego abre http://127.0.0.1:8050 (simulador) y http://127.0.0.1:8050/fichas (fichas de pitchers).
-La cadena completa tarda entre 1 y 2 horas en una laptop, sobre todo por los modelos de la etapa 4 y
-el Location+.
+La cadena tarda entre 1 y 2 horas en una laptop, sobre todo por los modelos de la etapa 4 y el
+Location+. Solo arma lo que necesitan el simulador y las fichas: los resúmenes de los entregables 2 y
+3, las validaciones y los reportes ya vienen en `reportes/`. Para regenerarlos, corre la sección
+completa de "Cómo correr el código".
 
 ## Fechas que mandan
 

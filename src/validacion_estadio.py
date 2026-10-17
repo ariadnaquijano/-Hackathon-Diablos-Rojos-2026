@@ -97,10 +97,16 @@ def gains(test: pd.DataFrame, columns: list[str], reference: str = "media_conteo
 
 
 def calibration(test: pd.DataFrame) -> dict:
-    result = {"real_por_100": round(float(100 * test[TARGET].mean()), 4)}
+    """Nivel predicho contra real en altitud extrema. El sesgo de cada modelo se compara con el del nulo,
+    que no sabe nada del pitch: lo que comparten es un corrimiento del nivel de la liga en altura."""
+    real = 100 * test[TARGET].mean()
+    null_bias = 100 * test.media_conteo.mean() - real
+    result = {"real_por_100": round(float(real), 4), "sesgo_nulo_por_100": round(float(null_bias), 4)}
     for name in VALUES:
         slope = np.polyfit(test[name], test[TARGET], 1)[0]
-        result[name] = {"predicho_por_100": round(float(100 * test[name].mean()), 4), "pendiente": round(float(slope), 3)}
+        bias = 100 * test[name].mean() - real
+        result[name] = {"predicho_por_100": round(float(100 * test[name].mean()), 4), "pendiente": round(float(slope), 3),
+                        "sesgo_por_100": round(float(bias), 4), "sesgo_menos_nulo": round(float(bias - null_bias), 4)}
     return result
 
 

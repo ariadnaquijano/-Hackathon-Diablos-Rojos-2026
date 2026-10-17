@@ -16,8 +16,9 @@ la altura.
 - En el Harp Helú el aire es ~21 % menos denso que a nivel del mar (densidad relativa 0.785 con la
   atmósfera estándar; el frenado de las rectas cae 16 %). La fuerza de Magnus es proporcional a la
   densidad y la pelota llega 1.3 % antes, así que el movimiento inducido cae casi igual que la
-  densidad: k en densidad 1.05 para la recta y 1.10 en la liga, contra 1.11 que predice la física
-  (D-041, `docs/06_fisica_densidad.md`).
+  densidad: k en densidad 1.05 en la IVB de la recta y 1.10 en la liga, dentro del rango de 1.00 a
+  1.11 que predice la física. El movimiento horizontal cae algo más que el vertical, sin explicación
+  probada (D-041, `docs/06_fisica_densidad.md`).
 - **Cuánto cae cada pitch** (exponente k: movimiento ∝ aire^k):
 
 | Tipo | k vertical | k horizontal | Qué pasa en la CDMX |
@@ -26,7 +27,7 @@ la altura.
 | Sinker | 1.40 | 1.75 | Pierde caída y corrida hacia el brazo |
 | Cambio | 1.30 | **2.06** | La corrida horizontal es lo más sensible de la liga |
 | Curva | 1.19 | 1.67 | Pierde movimiento, pero su valor depende menos de él |
-| Slider | **0.68** | 1.22 | Casi no pierde vertical: es de giro de bala (*gyro*) |
+| Slider | **0.68** | 1.22 | Casi no pierde vertical; hipótesis: por su giro de bala (*gyro*) recibe poca fuerza de Magnus |
 
 - **El spin no compensa:** el aire baja el movimiento sin cambiar el spin, y con el mismo spin lo que
   decide el resultado es el movimiento (H4, `docs/hipotesis_h4.md`).
@@ -70,7 +71,7 @@ pares de rectas, 97 de sinkers, 129 de sliders, 51 de cambios).
 | **Pitch principal de rompimiento** | Curva, o slider, con Stuff+ ≥ 100 contra su tipo | La curva pierde menos que la recta (probado: 0.38 carreras por 100 menos, de 0.10 a 0.64); la slider apunta igual sin probarse (D-042) |
 | **Mezcla** | Slider + curva ≥ 40 % de sus pitches (arquetipo de rompimiento) | D-038: 90.9 de Stuff+ en el Harp Helú, el más alto |
 | **Rolling** | % de rolling en el tercio alto de la liga (≥ 48 %) | El fly cuesta 3.5 veces más en la CDMX |
-| **Si vive de la recta** | Que su recta sea élite a nivel del mar (Stuff+ ≥ 114, top 10 %), porque llega a la CDMX con unos 13 puntos menos | Delta de la recta |
+| **Si vive de la recta** | Que su recta sea élite a nivel del mar (Stuff+ de la recta ≥ 113 en la escala del arsenal, top 10 %): llega a la CDMX con unos 13 puntos menos y queda sobre 100 | Delta de la recta |
 | **Comando** | Location+ alto | El modelo de ubicación predice en altitud extrema aunque no la haya visto (D-037). Ojo: Location+ se repite menos de un año a otro (r 0.67) que Stuff+ (0.83) |
 
 **Por qué estas features importan más en altitud:** el aire quita la parte del valor que viene del

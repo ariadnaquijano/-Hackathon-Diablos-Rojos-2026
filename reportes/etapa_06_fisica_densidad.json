@@ -23,11 +23,26 @@
       0.798
     ]
   },
-  "k_densidad_esperado_por_la_fisica": 1.11,
-  "k_liga_total": {
-    "k_frenado": 1.5772,
-    "k_densidad": 1.1
+  "k_densidad_esperado_por_la_fisica": {
+    "cl_constante": 1.0,
+    "cl_proporcional_al_giro": 1.054,
+    "cota_superior": 1.107
   },
+  "k_liga": {
+    "total": {
+      "k_frenado": 1.577,
+      "k_densidad": 1.1
+    },
+    "ivb": {
+      "k_frenado": 1.329,
+      "k_densidad": 0.93
+    },
+    "hb": {
+      "k_frenado": 1.673,
+      "k_densidad": 1.17
+    }
+  },
+  "nota_intervalos": "k_densidad_ic95 escala solo el intervalo de k; no incluye la incertidumbre de la densidad, que va aparte en el rango por temperatura.",
   "por_tipo": {
     "Four-Seam": {
       "ivb": {
@@ -177,12 +192,12 @@
   },
   "tiempo_de_vuelo_recta": {
     "velocidad_salida_mph": {
-      "Extreme Altitude": 92.1,
-      "No Altitude": 91.6
+      "No Altitude": 91.6,
+      "Extreme Altitude": 92.1
     },
     "velocidad_plato_mph": {
-      "Extreme Altitude": 85.8,
-      "No Altitude": 83.9
+      "No Altitude": 83.9,
+      "Extreme Altitude": 85.8
     },
     "tiempo_extrema_entre_mar": 0.9871,
     "efecto_en_movimiento_pct": -2.57,

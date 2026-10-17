@@ -7,8 +7,8 @@ El simulador devuelve:
 - **Harp Helú contra nivel del mar:** el mismo pitch con el aire de cada lugar. El movimiento se
   traduce con aire^k por tipo (D-016). El Stuff+ en el Harp Helú resta la pérdida real promedio de su
   tipo en la liga, en los puntos de la escala oficial del arsenal (src/entregable_scores.py). Dentro
-  de un tipo la altura no cambia el orden; lo que cambia es cuánto vale un tipo contra otro, y eso es
-  lo que muestra su percentil contra todos los pitches de la liga en la CDMX.
+  de un tipo la altura no cambia el orden; como contexto se muestra la mediana de cada tipo en casa.
+- El VAA relativo no se pide: se fija en el típico del tipo, porque depende de dónde llega el pitch.
 - Un tipo con menos de 30 perfiles en la liga no recibe Stuff+: la escala no sería confiable.
 - **Mapa de movimiento:** los pitches de la liga de ese tipo (promedio por pitcher y temporada), con
   los más y menos efectivos marcados, y el pitch ingresado en los dos aires.
@@ -248,7 +248,7 @@ def validate(profile: dict) -> dict:
     if profile.get("pitcher_hand") not in HANDS:
         raise ValueError("La mano debe ser derecho o zurdo.")
     air = profile.get("aire_medido")
-    if not isinstance(air, (int, float)) or not 0.7 <= air <= 1.1:
+    if isinstance(air, bool) or not isinstance(air, (int, float)) or not 0.7 <= air <= 1.1:
         raise ValueError("Elige dónde se midió el pitch: nivel del mar o Harp Helú.")
     prefixes = [""] if profile["pitch_class"] == FASTBALL else ["", "fb_"]
     for prefix in prefixes:
@@ -269,6 +269,7 @@ def validate(profile: dict) -> dict:
 def score(bundle: dict, profile: dict) -> dict:
     profile = validate(profile)
     pitch_type = profile["pitch_class"]
+    profile = {**profile, "vaa_rel": bundle["valores_tipicos"][pitch_type]["vaa_rel"]}
     if pitch_type == FASTBALL:
         profile = {**profile, **{f"fb_{c}": profile[c] for c in INPUTS}}
     scale = bundle["escala"][pitch_type]

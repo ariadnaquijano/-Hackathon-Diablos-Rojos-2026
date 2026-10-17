@@ -140,6 +140,10 @@ button:hover { background: var(--surface-2); }
 .tile .big .arrow { color: var(--ink-3); font-weight: 500; margin: 0 4px; }
 .tile p { font-size: 0.8125rem; color: var(--ink-2); }
 .tile p b { color: var(--ink); }
+.medians { display: grid; grid-template-columns: repeat(auto-fill, minmax(6.5rem, 1fr)); gap: 2px 12px; font-size: 0.875rem; }
+.medians span { display: flex; justify-content: space-between; gap: 8px; }
+.medians b { font-family: var(--mono); }
+.medians .own { color: var(--accent); font-weight: 600; }
 @media (max-width: 52rem) { .tiles { grid-template-columns: 1fr; } .tile + .tile { border-left: 0; border-top: 1px solid var(--rule); } }
 .reading { padding: 16px 20px; border-left: 3px solid var(--accent); font-size: 0.9375rem; color: var(--ink-2); }
 .reading b { color: var(--ink); }
@@ -240,9 +244,9 @@ button:hover { background: var(--surface-2); }
         <p>Pulgadas de quiebre vertical inducido (IVB) y hacia el brazo (HB), del mar a la CDMX.</p>
       </div>
       <div class="tile">
-        <span class="label">En la CDMX contra toda la liga</span>
-        <span class="big" id="cross">—</span>
-        <p id="cross-text"></p>
+        <span class="label">Mediana de cada tipo en casa</span>
+        <p id="medians" class="medians"></p>
+        <p>Stuff+ en el Harp Helú del pitch mediano de cada tipo. Sirve de contexto: cada tipo se mide contra sí mismo.</p>
       </div>
       <div class="tile">
         <span class="label">Pérdida real de su tipo</span>
@@ -275,7 +279,8 @@ button:hover { background: var(--surface-2); }
       <ul>
         <li><b>Stuff+ a nivel del mar:</b> el pitch se lleva al aire del mar con aire^k por tipo y lo evalúan cinco modelos (swing, whiff, foul, strike cantado y valor del batazo) que solo ven su física. 100 es el promedio de su tipo en la LMB y 10 puntos es una desviación entre pitchers.</li>
         <li><b>Stuff+ en el Harp Helú:</b> resta la pérdida real promedio de su tipo en altitud extrema, medida con el mismo pitcher en los dos lugares. Es la cifra calibrada.</li>
-        <li><b>Qué cambia la altura:</b> a todos los pitches de un mismo tipo les quita en promedio lo mismo, así que no cambia el orden entre rectas. Sí cambia cuánto vale una recta frente a una slider: por eso el percentil en la CDMX se compara contra todos los tipos.</li>
+        <li><b>Qué cambia la altura:</b> a todos los pitches de un mismo tipo les quita en promedio lo mismo, así que no cambia el orden entre rectas. Es la única cifra calibrada con el mismo pitcher en las dos altitudes; una estimación pitch por pitch no le ganó a este promedio (D-034).</li>
+        <li><b>VAA relativo:</b> no se pide, se fija en el típico de su tipo, porque depende de a qué altura llega el pitch.</li>
         <li><b>Muestra mínima:</b> un tipo con menos de 30 perfiles en la liga (hoy el splitter) no recibe Stuff+.</li>
         <li><b>Rangos:</b> si un valor sale del 1 % al 99 % de la liga para su tipo, el campo se marca: el modelo casi no vio pitches así.</li>
       </ul>
@@ -380,7 +385,7 @@ function validate() {
 }
 
 function profile() {
-  const data = { pitch_class: state.type, pitcher_hand: state.hand, aire_medido: state.air, vaa_rel: CONFIG.valores_tipicos[state.type].vaa_rel };
+  const data = { pitch_class: state.type, pitcher_hand: state.hand, aire_medido: state.air };
   for (const [key] of FIELDS) data[key] = read(el(key));
   if (state.type !== "Four-Seam") for (const [key] of FB_FIELDS) data["fb_" + key] = read(el("fb_" + key));
   return data;
@@ -391,9 +396,7 @@ function percentileOf(type, value) {
   return Math.round(100 * values.filter(v => v < value).length / values.length);
 }
 
-// Stuff+ en la CDMX de todos los perfiles de la liga, de los tipos con pérdida medida y muestra suficiente.
-const HARP_POOL = CONFIG.tipos.filter(t => CONFIG.delta_harp[t] != null && CONFIG.perfiles[t] >= CONFIG.min_perfiles)
-  .flatMap(t => CONFIG.mapa[t].plus.map(v => v + CONFIG.delta_harp[t]));
+// Mediana de cada tipo en el Harp Helú (tipos con pérdida medida y muestra suficiente), como contexto.
 const HARP_MEDIANS = CONFIG.tipos.filter(t => CONFIG.delta_harp[t] != null && CONFIG.perfiles[t] >= CONFIG.min_perfiles)
   .map(t => { const s = CONFIG.mapa[t].plus.map(v => v + CONFIG.delta_harp[t]).sort((a, b) => a - b); return [t, s[Math.floor(s.length / 2)]]; })
   .sort((a, b) => b[1] - a[1]);
@@ -403,15 +406,14 @@ function renderResult(r) {
   el("move-ivb").innerHTML = `IVB ${number(r.mar.ivb)}<span class="arrow">→</span>${number(r.harp.ivb)}`;
   el("move-hb").innerHTML = `HB ${number(r.mar.hb)}<span class="arrow">→</span>${number(r.harp.hb)}`;
   el("league").textContent = r.perdida_liga_por_100 == null ? "—" : number(r.perdida_liga_por_100, 2);
-  const medians = HARP_MEDIANS.map(([t, v]) => `${NAMES[t].toLowerCase()} ${number(v, 0)}`).join(", ");
+  el("medians").innerHTML = HARP_MEDIANS.map(([t, v]) => `<span class="${t === type ? "own" : ""}">${NAMES[t]} <b>${number(v, 0)}</b></span>`).join("");
   if (r.stuff_plus == null) {
-    for (const id of ["score-sea", "score-harp", "cross"]) el(id).textContent = "—";
+    for (const id of ["score-sea", "score-harp"]) el(id).textContent = "—";
     el("delta").textContent = "sin dato"; el("delta").className = "flat";
     document.querySelector("#pbar .fill").style.width = "0%";
     document.querySelector("#pbar .marker").style.left = "50%";
     el("context-sea").innerHTML = `Solo hay <b>${r.perfiles}</b> perfiles de ${plural} en la liga: no damos Stuff+ con tan poca muestra.`;
     el("context-harp").textContent = "Sin Stuff+ a nivel del mar, tampoco hay cifra en la CDMX.";
-    el("cross-text").textContent = `Mediana de cada tipo en la CDMX: ${medians}.`;
     el("reading").innerHTML = `Con ${r.perfiles} perfiles de ${plural} en la LMB, la escala no sería confiable. El mapa y el cambio de movimiento sí se muestran.`;
     return;
   }
@@ -427,13 +429,9 @@ function renderResult(r) {
   el("context-harp").innerHTML = delta == null
     ? `No hay pérdida medida en altura para ${plural}: no se da su cifra en la CDMX.`
     : `Baja <b>${number(-delta)} puntos</b>, lo que pierden en promedio las ${plural} en altitud extrema. A todas las ${plural} les quita lo mismo: no cambia el orden entre ellas.`;
-  const cross = r.stuff_plus_harp == null ? null : Math.round(100 * HARP_POOL.filter(v => v < r.stuff_plus_harp).length / HARP_POOL.length);
-  el("cross").textContent = cross == null ? "—" : `${cross} %`;
-  el("cross-text").innerHTML = cross == null ? `Mediana de cada tipo en la CDMX: ${medians}.`
-    : `Mejor que el <b>${cross} %</b> de todos los pitches de la liga en la CDMX, de cualquier tipo. Mediana de cada tipo en casa: ${medians}.`;
   const outOfRange = document.querySelectorAll(".field.out").length;
   const caution = outOfRange ? ` <b>Ojo:</b> ${outOfRange === 1 ? "un valor está" : `${outOfRange} valores están`} fuera de lo que se ve en la LMB; el modelo extrapola.` : "";
-  const harpLine = delta == null ? "" : ` En el Harp Helú quedaría en <b>${number(r.stuff_plus_harp, 0)}</b>, mejor que el ${cross} % de todos los pitches de la liga en casa.`;
+  const harpLine = delta == null ? "" : ` En el Harp Helú quedaría en <b>${number(r.stuff_plus_harp, 0)}</b>: baja lo que baja en promedio su tipo, así que conserva su lugar entre las ${plural}.`;
   const rankText = pct >= 99.5 ? `en el 1 % más alto de las ${plural} de la liga` : `mejor que el ${pct} % de las ${plural} de la liga`;
   el("reading").innerHTML = `${NAMES[type]} de <b>${number(r.stuff_plus, 0)}</b> de Stuff+: ${rankText}.${harpLine}${caution}`;
 }
@@ -503,7 +501,7 @@ async function calculate() {
   try {
     const response = await fetch("/score", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(profile()) });
     const result = await response.json();
-    if (!response.ok) throw new Error(result.error || "el servidor no pudo calcular");
+    if (!response.ok) { el("error").textContent = result.error || "No se pudo calcular este pitch."; return; }
     if (id !== state.request) return;
     state.result = result;
     renderResult(result);

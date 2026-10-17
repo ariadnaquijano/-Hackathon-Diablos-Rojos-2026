@@ -6,8 +6,11 @@ densidad. Este script:
 1. Estima la densidad relativa del Harp Helú (2,240 m) contra un estadio a nivel del mar con la
    atmósfera estándar y rangos de temperatura de juego (ρ = p ÷ R·T; la humedad mueve menos de 1 %).
 2. Convierte cada k a un exponente en densidad: k_ρ = k · ln(air_ratio) ÷ ln(ρ relativa).
-3. Mide con los datos cuánto cambia el tiempo de vuelo de la recta. El movimiento es ½ · a · t², con la
-   aceleración de Magnus ∝ ρ, así que la física predice k_ρ = 1 + ln(t²_extrema ÷ t²_mar) ÷ ln(ρ relativa).
+3. Mide con los datos cuánto cambia el tiempo de vuelo t de la recta y deriva lo que predice la física.
+   El movimiento es ½ · a · t² y la aceleración de Magnus es ∝ ρ · v² · C_L, con v · t = distancia:
+   - C_L constante: movimiento ∝ ρ, k_ρ = 1.00;
+   - C_L ∝ giro ÷ v (spin bajo, lo usual en pitcheo): movimiento ∝ ρ · t, k_ρ = 1 + ln(t) ÷ ln(ρ);
+   - aceleración que no depende de v (cota superior): movimiento ∝ ρ · t², k_ρ = 1 + ln(t²) ÷ ln(ρ).
 
 No cambia el modelo: la traducción a nivel del mar usa el frenado medido y su k juntos.
 Escribe reportes/etapa_06_fisica_densidad.json.
@@ -76,7 +79,10 @@ def main():
                "rango": sorted([math.log(air) / math.log(low), math.log(air) / math.log(high)])}
     k = json.loads(STAGE_02_JSON.read_text())["exponente_k"]
     flight = flight_time()
-    expected = 1 + math.log(flight["tiempo_extrema_entre_mar"] ** 2) / math.log(densities["central"])
+    time_ratio, log_density = flight["tiempo_extrema_entre_mar"], math.log(densities["central"])
+    expected = {"cl_constante": 1.0,
+                "cl_proporcional_al_giro": round(1 + math.log(time_ratio) / log_density, 3),
+                "cota_superior": round(1 + math.log(time_ratio ** 2) / log_density, 3)}
     exponents = {}
     for pitch_type, components in k["por_tipo"].items():
         exponents[pitch_type] = {}
@@ -97,9 +103,11 @@ def main():
         "frenado_relativo_medido": round(air, 4),
         "cd_relativo_implicito": {"central": round(air / densities["central"], 3), "rango": [round(air / high, 3), round(air / low, 3)]},
         "factor_k_a_densidad": {"central": round(factors["central"], 3), "rango": [round(f, 3) for f in factors["rango"]]},
-        "k_densidad_esperado_por_la_fisica": round(expected, 2),
-        "k_liga_total": {"k_frenado": k["liga"]["movimiento_total"]["k"],
-                         "k_densidad": round(k["liga"]["movimiento_total"]["k"] * factors["central"], 2)},
+        "k_densidad_esperado_por_la_fisica": expected,
+        "k_liga": {component: {"k_frenado": round(k["liga"][key]["k"], 3),
+                               "k_densidad": round(k["liga"][key]["k"] * factors["central"], 2)}
+                   for component, key in (("total", "movimiento_total"), ("ivb", "ivb"), ("hb", "hb"))},
+        "nota_intervalos": "k_densidad_ic95 escala solo el intervalo de k; no incluye la incertidumbre de la densidad, que va aparte en el rango por temperatura.",
         "por_tipo": exponents,
         "tiempo_de_vuelo_recta": flight,
     }

@@ -92,17 +92,24 @@
   },
   "calibracion": {
     "real_por_100": -0.0599,
+    "sesgo_nulo_por_100": -0.3201,
     "stuff": {
       "predicho_por_100": -0.353,
-      "pendiente": 0.838
+      "pendiente": 0.838,
+      "sesgo_por_100": -0.2932,
+      "sesgo_menos_nulo": 0.0269
     },
     "location": {
       "predicho_por_100": -0.3391,
-      "pendiente": 0.994
+      "pendiente": 0.994,
+      "sesgo_por_100": -0.2793,
+      "sesgo_menos_nulo": 0.0408
     },
     "pitching": {
       "predicho_por_100": -0.3971,
-      "pendiente": 0.958
+      "pendiente": 0.958,
+      "sesgo_por_100": -0.3372,
+      "sesgo_menos_nulo": -0.0171
     }
   },
   "pasa": true,
@@ -168,17 +175,24 @@
     },
     "calibracion": {
       "real_por_100": -0.0599,
+      "sesgo_nulo_por_100": -0.3201,
       "stuff": {
         "predicho_por_100": -0.353,
-        "pendiente": 0.838
+        "pendiente": 0.838,
+        "sesgo_por_100": -0.2932,
+        "sesgo_menos_nulo": 0.0269
       },
       "location": {
         "predicho_por_100": -0.2507,
-        "pendiente": 1.002
+        "pendiente": 1.002,
+        "sesgo_por_100": -0.1908,
+        "sesgo_menos_nulo": 0.1293
       },
       "pitching": {
         "predicho_por_100": -0.1345,
-        "pendiente": 1.051
+        "pendiente": 1.051,
+        "sesgo_por_100": -0.0746,
+        "sesgo_menos_nulo": 0.2455
       }
     },
     "pasa": true
@@ -222,17 +236,24 @@
     },
     "calibracion": {
       "real_por_100": -0.0599,
+      "sesgo_nulo_por_100": -0.3201,
       "stuff": {
         "predicho_por_100": -0.3487,
-        "pendiente": 0.831
+        "pendiente": 0.831,
+        "sesgo_por_100": -0.2888,
+        "sesgo_menos_nulo": 0.0313
       },
       "location": {
         "predicho_por_100": -0.2507,
-        "pendiente": 1.002
+        "pendiente": 1.002,
+        "sesgo_por_100": -0.1908,
+        "sesgo_menos_nulo": 0.1293
       },
       "pitching": {
         "predicho_por_100": -0.2095,
-        "pendiente": 1.038
+        "pendiente": 1.038,
+        "sesgo_por_100": -0.1496,
+        "sesgo_menos_nulo": 0.1705
       }
     },
     "pasa": true

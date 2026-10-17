@@ -51,16 +51,18 @@ Mismo pitcher y mismo pitch, carreras por 100 batazos en la CDMX: **rectas +3.4*
     y su arsenal.
 - **Si viene de fuera o solo hay sus números de TrackMan:** meter cada pitch en el simulador.
   - Indicar "Dónde se midió": nivel del mar o Harp Helú.
-  - Da su Stuff+ a nivel del mar y en el Harp Helú, y su lugar en la CDMX contra todos los pitches de
-    la liga, de cualquier tipo.
+  - Da su Stuff+ a nivel del mar y en el Harp Helú, y la mediana de cada tipo en casa como contexto.
 
 ### Paso 2: la lista de chequeo
+
+Los umbrales de Stuff+ están en la escala de la ficha (cada pitch contra su tipo, entre pitchers).
+El simulador usa su propia escala, contra perfiles promedio, así que sus números no son idénticos.
 
 | Pregunta | Señal verde | Señal roja |
 |---|---|---|
 | ¿Su mejor pitch sobrevive a la altura? | Curva (probado) o slider (tendencia) con Stuff+ ≥ 100 contra su tipo | Todo su valor está en la recta o el sinker |
 | ¿Cómo es su mezcla? | Rompimiento ≥ 40 % (o un rompimiento que pueda usar más) | Recta + sinker ≥ 60 % sin un rompimiento bueno |
-| Si vive de la recta, ¿es élite? | Stuff+ de la recta ≥ 114 (top 10 %): en la CDMX queda por encima del promedio | Recta promedio: en la CDMX queda unos 13 puntos abajo |
+| Si vive de la recta, ¿es élite? | Stuff+ de la recta ≥ 113 en su ficha (top 10 % de las rectas): en la CDMX queda sobre 100 | Recta promedio: en la CDMX queda unos 13 puntos abajo |
 | ¿Saca rollings? | Rolling ≥ 48 % (tercio alto; la mediana es 45 %) | Rolling ≤ 41 % y mucho fly |
 | ¿Cuánta muestra hay? | 450+ pitches y dos temporadas | Muestra corta: los componentes se mueven |
 
