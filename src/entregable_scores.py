@@ -26,7 +26,7 @@ import pandas as pd
 from arsenal import ARSENAL_PARQUET
 from config import HOLDOUT_SEASON, MODEL_PARQUET, REPORTS_DIR, ROOT
 from exploracion_etapa_04 import EXTREME, SEA_LEVEL
-from ficha import altitude_risk, arsenal_table, type_losses
+from ficha import altitude_risk, arsenal_table, harp_arsenal, harp_pitcher, type_losses
 from modelo import load
 from modelo_v3 import PITCHER_VALUES_V3, official_pitches
 from modelos_base import RANDOM_SEED, TARGET
@@ -83,8 +83,7 @@ def pitcher_scores(pitches: pd.DataFrame, losses: dict) -> pd.DataFrame:
     values = pd.read_parquet(PITCHER_VALUES_V3)
     risk = altitude_risk(arsenal_table(losses))
     values = values.merge(risk, on=["pitcher_anon_id", "year"], how="left")
-    spread = values.groupby("year").stuff.transform("std")
-    values["stuff_plus_harp_estimado"] = values.stuff_plus - 10 * values.riesgo_altura / spread
+    values["stuff_plus_harp_estimado"] = harp_pitcher(values)
     # Solo bolas en juego: los fouls también traen tipo de batazo y no cuentan para el rolling.
     batted = pitches[(pitches.is_ball_in_play == 1) & pitches.hit_type.notna() & (pitches.hit_type != "Bunt")]
     rolling = batted.groupby(["pitcher_anon_id", "year"]).hit_type.apply(lambda s: 100 * (s == "GroundBall").mean())
@@ -96,9 +95,9 @@ def pitcher_scores(pitches: pd.DataFrame, losses: dict) -> pd.DataFrame:
 def arsenal_scores(losses: dict) -> pd.DataFrame:
     arsenal = pd.read_parquet(ARSENAL_PARQUET)
     arsenal["pitch_class"] = arsenal.pitch_class.astype(str)
-    spread = arsenal.groupby(["year", "pitch_class"]).stuff.transform("std")
-    arsenal["perdida_altura_por_100"] = arsenal.pitch_class.map({t: v["perdida"] for t, v in losses.items()})
-    arsenal["stuff_plus_harp"] = arsenal.stuff_plus - 10 * arsenal.perdida_altura_por_100 / spread
+    arsenal["perdida_altura"] = arsenal.pitch_class.map({t: v["perdida"] for t, v in losses.items()})
+    arsenal["stuff_plus_harp"] = harp_arsenal(arsenal)
+    arsenal = arsenal.rename(columns={"perdida_altura": "perdida_altura_por_100"})
     return arsenal
 
 

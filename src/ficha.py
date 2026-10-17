@@ -4,6 +4,8 @@ Junta en una página local, por pitcher y temporada (300+ pitches):
 
 - Stuff+, Location+ y Pitching+ de la versión 3 (D-040), con su percentil en la liga;
 - el arsenal: Stuff+ de cada pitch dentro de su tipo, su uso y sus componentes (D-033);
+- el Stuff+ en el Harp Helú, del pitcher y de cada pitch: resta la pérdida real promedio de su tipo
+  (D-034) o de su mezcla;
 - el riesgo en el Harp Helú: uso × pérdida promedio de la liga por tipo (D-036), mostrado como
   tercio de la liga porque ordena pero no sirve como cifra exacta, y solo si cubre 60 %+ de sus pitches;
 - lecturas con reglas fijas, descritas en docs/06_ficha.md.
@@ -50,7 +52,20 @@ def arsenal_table(losses: dict) -> pd.DataFrame:
     for component in COMPONENTS:
         arsenal[f"{component}_pct"] = 100 * arsenal.groupby(keys)[component].rank(pct=True)
     arsenal["perdida_altura"] = arsenal.pitch_class.map(lambda t: losses.get(t, {}).get("perdida"))
+    arsenal["stuff_plus_harp"] = harp_arsenal(arsenal)
     return arsenal
+
+
+def harp_arsenal(arsenal: pd.DataFrame) -> pd.Series:
+    """Stuff+ de cada pitch en el Harp Helú: resta la pérdida de su tipo con la desviación de su tipo."""
+    spread = arsenal.groupby(["year", "pitch_class"]).stuff.transform("std")
+    return arsenal.stuff_plus - 10 * arsenal.perdida_altura / spread
+
+
+def harp_pitcher(values: pd.DataFrame) -> pd.Series:
+    """Stuff+ del pitcher en el Harp Helú: resta el riesgo de su mezcla con la desviación entre pitchers."""
+    spread = values.groupby("year").stuff.transform("std")
+    return values.stuff_plus - 10 * values.riesgo_altura / spread
 
 
 def altitude_risk(arsenal: pd.DataFrame) -> pd.DataFrame:
@@ -74,6 +89,9 @@ def pitcher_table(risk: pd.DataFrame) -> pd.DataFrame:
     covered = values[values.cobertura_pct >= MIN_COVERAGE_PCT]
     terciles = covered.groupby("year").riesgo_altura.transform(lambda s: pd.qcut(s, 3, labels=TERCILES))
     values["riesgo_tercio"] = terciles.astype(str).reindex(values.index)
+    # Solo con cobertura suficiente: si no, el estimado lo decidiría un solo pitch, igual que el tercio.
+    values["stuff_plus_harp"] = harp_pitcher(values).where(values.riesgo_tercio.notna())
+    values["stuff_plus_harp_pct"] = 100 * values.groupby("year").stuff_plus_harp.rank(pct=True)
     return values
 
 
@@ -91,8 +109,9 @@ def main():
         "perdidas_por_tipo": losses,
         "repeticion": json.loads((REPORTS_DIR / "etapa_06_modelo_v3.json").read_text())["repeticion_2024_a_2025"],
         "pitchers": records(pitchers, ["pitcher_anon_id", "year", "pitches", *PLUS, *[f"{p}_pct" for p in PLUS],
-                                       "riesgo_altura", "riesgo_tercio", "cobertura_pct"]),
-        "arsenal": records(arsenal, ["pitcher_anon_id", "year", "pitch_class", "pitches", "uso_pct", "stuff_plus",
+                                       "riesgo_altura", "riesgo_tercio", "cobertura_pct", "stuff_plus_harp",
+                                       "stuff_plus_harp_pct"]),
+        "arsenal": records(arsenal, ["pitcher_anon_id", "year", "pitch_class", "pitches", "uso_pct", "stuff_plus", "stuff_plus_harp",
                                      *COMPONENTS, *[f"{c}_pct" for c in COMPONENTS], "perdida_altura"]),
     }
     OUTPUT_HTML.parent.mkdir(parents=True, exist_ok=True)

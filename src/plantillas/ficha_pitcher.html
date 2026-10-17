@@ -91,6 +91,11 @@ th button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px;
 .risk-tag.alto { color: var(--accent); }
 .risk-tag.bajo { color: var(--best); }
 .risk-tag.none { color: var(--ink-3); font-weight: 400; }
+.risk-tag .harp-num { font: 500 0.875rem var(--mono); color: var(--ink); }
+.harp-cell small { display: block; font-size: 0.6875rem; color: var(--ink-3); }
+.harp-note svg { width: 14px; height: 14px; vertical-align: -2px; }
+.harp-note.alto svg { color: var(--accent); }
+.harp-note.bajo svg { color: var(--best); }
 
 /* Ficha */
 .detail { display: grid; gap: 16px; min-width: 0; }
@@ -108,10 +113,6 @@ th button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px;
 .meter { position: relative; height: 6px; border-radius: 999px; background: var(--track); }
 .meter span { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 999px; background: var(--ink-2); }
 .meter i { position: absolute; top: -3px; bottom: -3px; left: 50%; width: 1px; background: var(--rule-strong); }
-.risk { font: 700 2rem/1 var(--display); text-transform: uppercase; display: inline-flex; align-items: center; gap: 8px; }
-.risk svg { width: 22px; height: 22px; }
-.risk.alto { color: var(--accent); }
-.risk.bajo { color: var(--best); }
 @media (max-width: 64rem) { .scores { grid-template-columns: repeat(2, minmax(0, 1fr)); } .score:nth-child(3) { border-left: 0; } .score:nth-child(n+3) { border-top: 1px solid var(--rule); } }
 @media (max-width: 30rem) { .scores { grid-template-columns: 1fr; } .score + .score { border-left: 0; border-top: 1px solid var(--rule); } .score b { font-size: 2.5rem; } }
 .reading { padding: 20px 24px; display: grid; gap: 10px; }
@@ -155,7 +156,7 @@ th button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px;
       <a href="/">Simulador</a>
       <a href="/fichas" aria-current="page">Fichas<span class="long">&nbsp;de pitchers</span></a>
     </nav>
-    <span class="meta">Modelo v2 · LMB 2024–2026</span>
+    <span class="meta">Modelo v3 · LMB 2024–2026</span>
   </div>
 </header>
 
@@ -261,8 +262,10 @@ function renderCard() {
   state.pitcher = p.pitcher_anon_id;
   const arsenal = arsenalOf(p.pitcher_anon_id, p.year);
   const risk = p.riesgo_tercio;
-  const riskText = risk ? `Tercio ${risk} de la liga en pérdida por altura. Cubre ${fmt(p.cobertura_pct)} % de sus pitches.`
-    : `Sin nivel: solo ${fmt(p.cobertura_pct)} % de sus pitches tiene pérdida medida.`;
+  const harp = p.stuff_plus_harp;
+  const harpText = harp == null
+    ? `Sin estimado: solo ${fmt(p.cobertura_pct)} % de sus pitches son de tipos con pérdida medida en altura.`
+    : `Baja ${fmt(p.stuff_plus - harp)} puntos. ${rank(p.stuff_plus_harp_pct).replace("de la liga", "de la liga en casa")}. Riesgo ${risk} ${ICONS[risk]}`;
   const scores = [["stuff_plus", "Stuff+", "Calidad física del pitch"], ["location_plus", "Location+", "Ubicación, ajustada por cuenta"], ["pitching_plus", "Pitching+", "Los dos juntos"]];
   el("ficha").innerHTML = `
     <section class="card" aria-label="Resumen">
@@ -276,9 +279,8 @@ function renderCard() {
           <span class="label">${name}</span><b>${fmt(p[key])}</b>${meter(p[key + "_pct"])}
           <p>${rank(p[key + "_pct"])} · ${hint}</p></div>`).join("")}
         <div class="score">
-          <span class="label">Riesgo en el Harp Helú</span>
-          <span class="risk ${risk ?? ""}">${risk ? ICONS[risk] + risk : "—"}</span>
-          <p>${riskText}</p>
+          <span class="label">Stuff+ en el Harp Helú</span><b>${fmt(harp)}</b>${harp == null ? "" : meter(p.stuff_plus_harp_pct)}
+          <p class="harp-note ${risk ?? ""}">${harpText}</p>
         </div>
       </div>
     </section>
@@ -292,36 +294,43 @@ function renderCard() {
         <div class="legend"><span><i style="background:var(--best)"></i>sobre 100 de su tipo</span><span><i style="background:var(--worst)"></i>bajo 100</span></div>
       </div>
       ${arsenal.length ? `<div class="scroll"><table>
-        <thead><tr><th>Pitch</th><th>Uso</th><th class="num">Stuff+</th><th>70 · 100 · 130</th>
-          ${COMPONENTS.map(([, l]) => `<th class="num">${l}</th>`).join("")}<th>Rol</th><th class="num">Pérdida altura</th></tr></thead>
+        <thead><tr><th>Pitch</th><th>Uso</th><th class="num">Stuff+</th><th class="num">En CDMX</th><th>70 · 100 · 130</th>
+          ${COMPONENTS.map(([, l]) => `<th class="num">${l}</th>`).join("")}<th>Rol</th></tr></thead>
         <tbody>${arsenal.map(a => `<tr>
           <td class="pitch-name">${NAMES[a.pitch_class]}</td>
           <td><div class="use"><span class="num">${fmt(a.uso_pct)} %</span>${meter(a.uso_pct)}</div></td>
           <td class="num"><b>${fmt(a.stuff_plus)}</b></td>
+          <td class="num harp-cell">${a.stuff_plus_harp == null ? "—" : `${fmt(a.stuff_plus_harp)}<small>${fmt(a.stuff_plus_harp - a.stuff_plus)}</small>`}</td>
           <td>${diverge(a.stuff_plus)}</td>
           ${COMPONENTS.map(([c]) => `<td class="num" title="${fmt(a[c], 1)} puntos porcentuales contra su tipo">${pct(a[c + "_pct"])}</td>`).join("")}
-          <td class="roles">${tags(a)}</td>
-          <td class="num">${a.perdida_altura == null ? "sin dato" : fmt(a.perdida_altura, 2)}</td></tr>`).join("")}</tbody>
+          <td class="roles">${tags(a)}</td></tr>`).join("")}</tbody>
       </table></div>
-      <p class="foot">Stuff+ y componentes se comparan contra el mismo tipo de pitch en la liga. Los componentes son percentiles: 90 = mejor que el 90 % de ese tipo; verde es el tercio alto y naranja el bajo. <b>Pérdida en altura:</b> carreras por 100 pitches que pierde ese tipo en altitud extrema, promedio de la liga. Solo pitches con 100+ en la temporada.</p>`
+      <p class="foot">Stuff+ y componentes se comparan contra el mismo tipo de pitch en la liga. <b>En CDMX:</b> su Stuff+ en el Harp Helú, restando lo que pierde su tipo en altura en promedio de la liga (cutter y splitter sin dato). Los componentes son percentiles: 90 = mejor que el 90 % de ese tipo; verde es el tercio alto y naranja el bajo. La baja en CDMX sale de lo que pierde cada tipo en altitud extrema, en carreras por 100 pitches: ${typeLosses()}. Solo pitches con 100+ en la temporada.</p>`
       : `<p class="empty">Ningún pitch llegó a 100 en la temporada: no hay arsenal que mostrar.</p>`}
     </section>
     <section class="card trust" aria-label="Qué tanto creerle">${trust()}</section>`;
+}
+
+function typeLosses() {
+  return Object.entries(DATA.perdidas_por_tipo).sort((a, b) => b[1].perdida - a[1].perdida)
+    .map(([type, loss]) => `${NAMES[type].toLowerCase()} ${fmt(loss.perdida, 2)}`).join(", ");
 }
 
 function trust() {
   const r = DATA.repeticion;
   return `<p><b>Qué tanto creerle.</b> Correlación del mismo pitcher de 2024 a 2025 (${r.pitchers} pitchers): Stuff+ ${fmt(r.stuff, 2)}, Location+ ${fmt(r.location, 2)}, Pitching+ ${fmt(r.pitching, 2)}. Sus carreras reales solo ${fmt(r.xrv_neutral, 2)}.</p>
     <p><b>Riesgo en altura:</b> uso × pérdida promedio de la liga por tipo (D-036). Ordena a los pitchers mejor que el azar, pero no predice carreras exactas; por eso va en tercios y solo si cubre 60 %+ de sus pitches.</p>
+    <p><b>Stuff+ en el Harp Helú:</b> el del pitcher se compara contra los demás pitchers y el de cada pitch contra su mismo tipo. Cada escala tiene su propia desviación, así que la baja del pitcher no es el promedio de la de sus pitches.</p>
     <p>Datos de la liga con identificadores anónimos. Uso interno.</p>`;
 }
 
 const COLUMNS = [["pitcher_anon_id", "Pitcher", false], ["stuff_plus", "Stuff+", true], ["location_plus", "Loc+", true],
-                 ["pitching_plus", "Pitch+", true], ["riesgo_altura", "Altura", true]];
+                 ["pitching_plus", "Pitch+", true], ["stuff_plus_harp", "CDMX", true]];
 
-function riskTag(risk) {
-  if (!risk) return `<span class="risk-tag none" title="Sin nivel: cubre menos del 60 % de sus pitches">—</span>`;
-  return `<span class="risk-tag ${risk}" title="Riesgo ${risk} en el Harp Helú">${ICONS[risk]}${risk}</span>`;
+function harpCell(p) {
+  const risk = p.riesgo_tercio;
+  if (!risk) return `<span class="risk-tag none" title="Sin estimado: cubre menos del 60 % de sus pitches">—</span>`;
+  return `<span class="risk-tag ${risk}" title="Stuff+ en el Harp Helú · riesgo ${risk}">${ICONS[risk]}<span class="harp-num">${fmt(p.stuff_plus_harp)}</span></span>`;
 }
 
 function renderLeague() {
@@ -333,13 +342,13 @@ function renderLeague() {
       if (x == null) return 1; if (y == null) return -1;
       return (x > y ? 1 : x < y ? -1 : 0) * (desc ? -1 : 1);
     });
-  el("count").textContent = `${rows.length} pitchers con 300+ pitches en ${state.year}. Altura “—”: sin nivel, cubre menos del 60 % de sus pitches.`;
+  el("count").textContent = `${rows.length} pitchers con 300+ pitches en ${state.year}. CDMX: su Stuff+ en el Harp Helú; el ícono es su riesgo en altura y “—”, que no hay estimado.`;
   el("league").innerHTML = `<thead><tr>${COLUMNS.map(([k, label, num]) =>
       `<th class="${num ? "num" : ""}" aria-sort="${k === key ? (desc ? "descending" : "ascending") : "none"}"><button data-key="${k}">${label}${k === key ? (desc ? " ↓" : " ↑") : ""}</button></th>`).join("")}</tr></thead>
     <tbody>${rows.map(p => `<tr data-id="${p.pitcher_anon_id}" tabindex="0" aria-selected="${p.pitcher_anon_id === state.pitcher}">
       <td>${p.pitcher_anon_id.replace("pitcher_", "")}</td><td class="num">${fmt(p.stuff_plus)}</td>
       <td class="num">${fmt(p.location_plus)}</td><td class="num"><b>${fmt(p.pitching_plus)}</b></td>
-      <td class="num">${riskTag(p.riesgo_tercio)}</td></tr>`).join("")}</tbody>`;
+      <td class="num">${harpCell(p)}</td></tr>`).join("")}</tbody>`;
 }
 
 function select(id, year) {
@@ -366,7 +375,9 @@ el("league").addEventListener("keydown", e => {
   const row = e.target.closest("tr[data-id]");
   if (row && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); select(row.dataset.id); }
 });
-const best = [...pitchersOf(state.year)].sort((a, b) => b.pitching_plus - a.pitching_plus)[0];
+// Abre con el mejor Pitching+ que tenga estimado en el Harp Helú, para que la ficha se vea completa.
+const ranked = [...pitchersOf(state.year)].sort((a, b) => b.pitching_plus - a.pitching_plus);
+const best = ranked.find(p => p.stuff_plus_harp != null) ?? ranked[0];
 select(best.pitcher_anon_id);
 </script>
 </body>
