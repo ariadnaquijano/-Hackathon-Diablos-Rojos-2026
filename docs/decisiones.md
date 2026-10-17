@@ -7,6 +7,34 @@ se agrega una nueva entrada que la reemplaza y se marca la anterior como *Reempl
 
 ---
 
+### D-042 · 2026-10-17 · Correcciones de rigor de la auditoría: reglas fijadas antes de correr
+- **Validación por estadio estricta.** En D-037, el número de árboles de Stuff+ y los pesos de
+  Pitching+ se eligieron con todas las altitudes, incluida la extrema que luego se evalúa. Se repite:
+  - árboles de cada componente elegidos solo con pitches que no son de altitud extrema;
+  - pesos de Pitching+ ajustados con las predicciones fuera de pliegue de los pitches que no son de
+    altitud extrema.
+  Pasa si Stuff+, Location+ y Pitching+ mejoran contra el promedio por conteo con intervalo fuera de
+  cero, igual que D-037.
+- **Calibración fuera de pliegue.** La pendiente de 1.00 en 2024–2025 es mecánica (los pesos de
+  Pitching+ se ajustaron con esas mismas predicciones). Se recalcula con pesos ajustados en otros
+  pitchers (5 pliegues por pitcher).
+- **Diferencias entre tipos de pitch.** "Slider y curva casi no pierden" nunca se probó como
+  diferencia. Con los pares de D-034 y remuestreo de pitchers, se calcula el intervalo de la pérdida
+  en altura de recta menos slider, recta menos curva, sinker menos slider y cambio menos recta (H2).
+  Una diferencia cuenta si su intervalo excluye el cero.
+- **2026:** no se usa.
+- **Resultado:**
+  - **Validación por estadio estricta: pasa.** Stuff+ +0.13 % (0.08 a 0.18), Location+ +4.91 % (4.64 a
+    5.21), Pitching+ +4.97 % (4.70 a 5.26), igual que antes: la fuga no movía el resultado. Pesos sin
+    altitud extrema: 0.82 × Stuff + 0.95 × Location.
+  - **Calibración fuera de pliegue:** pendiente de Pitching+ en 2024–2025 de 0.999. La calibración es
+    real, no mecánica.
+  - **Diferencias entre tipos** (carreras por 100, positivo = el primero pierde más): recta − curva
+    +0.38 (0.10 a 0.64), **probada**; recta − slider +0.21 (−0.04 a +0.45), sinker − slider +0.13
+    (−0.12 a +0.43) y cambio − recta −0.07 (−0.35 a +0.20), **no probadas**. Solo la curva pierde
+    menos que la recta de forma probada; la H2 queda como no concluyente.
+- **Estado:** Vigente.
+
 ### D-041 · 2026-10-17 · El exponente k se reexpresa en densidad del aire
 - **Por qué (auditoría):** `air_ratio` es un cociente de frenado de las rectas, que es proporcional a
   la densidad por el coeficiente de arrastre (ρ · Cd). No es la densidad. La explicación anterior de

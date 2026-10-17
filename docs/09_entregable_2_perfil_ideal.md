@@ -67,7 +67,7 @@ pares de rectas, 97 de sinkers, 129 de sliders, 51 de cambios).
 
 | Rasgo | Qué buscar | Respaldo |
 |---|---|---|
-| **Pitch principal de rompimiento** | Slider o curva con Stuff+ ≥ 100 contra su tipo | Delta de −0.7 y −6.9 contra −13 de la recta |
+| **Pitch principal de rompimiento** | Curva, o slider, con Stuff+ ≥ 100 contra su tipo | La curva pierde menos que la recta (probado: 0.38 carreras por 100 menos, de 0.10 a 0.64); la slider apunta igual sin probarse (D-042) |
 | **Mezcla** | Slider + curva ≥ 40 % de sus pitches (arquetipo de rompimiento) | D-038: 90.9 de Stuff+ en el Harp Helú, el más alto |
 | **Rolling** | % de rolling en el tercio alto de la liga (≥ 48 %) | El fly cuesta 3.5 veces más en la CDMX |
 | **Si vive de la recta** | Que su recta sea élite a nivel del mar (Stuff+ ≥ 114, top 10 %), porque llega a la CDMX con unos 13 puntos menos | Delta de la recta |

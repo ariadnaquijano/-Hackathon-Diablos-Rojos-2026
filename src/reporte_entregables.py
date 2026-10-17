@@ -41,6 +41,7 @@ def main():
         "k": {t: {"ivb": v["ivb"]["k_usado"], "hb": v["hb"]["k_usado"]} for t, v in k.items()},
         "pares": {t: v["pares"] for t, v in read("etapa_05_pasaporte.json")["chequeo_por_tipo"].items()},
         "conteos": count_values(),
+        "diferencias": read("etapa_06_diferencias_tipo.json")["diferencias"],
     }
     OUTPUT_HTML.write_text(TEMPLATE.read_text().replace("__DATA__", json.dumps(data, ensure_ascii=False)))
     print(f"Reporte escrito en {OUTPUT_HTML}")

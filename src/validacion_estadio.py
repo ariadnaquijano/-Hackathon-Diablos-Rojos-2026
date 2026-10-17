@@ -18,6 +18,7 @@ import json
 
 import numpy as np
 import pandas as pd
+from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import GroupKFold
 
 from afinado import new_model as tuned_model
@@ -29,10 +30,12 @@ from modelo_v2 import SETTING, official_predictions
 from modelo_v3 import SUMMARY_JSON as V3_JSON
 from modelo_v3 import official_pitches
 from modelos_base import TARGET, group_mean, pitcher_bootstrap
-from stuff_componentes import combine, new_model, outcome_values
+from stuff_componentes import choose_iterations, combine, new_model, outcome_values
 
 SUMMARY_JSON = REPORTS_DIR / "etapa_06_validacion_estadio.json"
 HOLDOUT_CACHE = ROOT / "data" / "processed" / "predicciones_estadio.parquet"
+STRICT_CACHE = ROOT / "data" / "processed" / "predicciones_estadio_estricta.parquet"
+STUFF_NAMES = [name for name in SPECS if name != "location"]
 VALUES = ["stuff", "location", "pitching"]
 COUNT = ["Balls", "Strikes"]
 
@@ -42,23 +45,29 @@ def model_for(name: str, iterations: int):
     return tuned_model(kind, SETTING, iterations) if name == "location" else new_model(kind, iterations)
 
 
-def park_holdout(history: pd.DataFrame, iterations: dict, weights: dict) -> pd.DataFrame:
-    """Pitches de altitud extrema, predichos por modelos sin ese pitcher y sin altitud extrema."""
+def park_holdout(history: pd.DataFrame, iterations: dict, weights: dict | None, names: list[str] = list(SPECS)) -> pd.DataFrame:
+    """Pitches de altitud extrema, predichos por modelos sin ese pitcher y sin altitud extrema.
+
+    Sin pesos (versión estricta) solo entrena los componentes pedidos y no arma Pitching+.
+    """
     parts = []
     for fold, (fit_rows, other_rows) in enumerate(GroupKFold(CROSS_FIT_FOLDS).split(history, groups=history.pitcher_anon_id)):
         train = history.iloc[fit_rows]
         train = train[train.altitude_category != EXTREME]
         test = history.iloc[other_rows]
         test = test[test.altitude_category == EXTREME].copy()
-        for name, (kind, rows, label, features) in SPECS.items():
+        for name in names:
+            kind, rows, label, features = SPECS[name]
             subset = train[rows(train)]
             model = model_for(name, iterations[name]).fit(subset[features], label(subset))
             test[name] = predict(model, kind, test, features)
         test["stuff"] = combine(test, outcome_values(train))
-        test["pitching"] = weights["intercepto"] + weights["stuff"] * test.stuff + weights["location"] * test.location
+        if weights is not None:
+            test["pitching"] = weights["intercepto"] + weights["stuff"] * test.stuff + weights["location"] * test.location
         test["media_conteo"] = group_mean(train, test, COUNT)
         test["media_liga"] = train[TARGET].mean()
-        parts.append(test[["pitch_seq", "pitcher_anon_id", TARGET, *VALUES, "media_conteo", "media_liga"]])
+        kept = [c for c in VALUES if c in test]
+        parts.append(test[["pitch_seq", "pitcher_anon_id", TARGET, *kept, "media_conteo", "media_liga"]])
         print(f"pliegue {fold + 1} listo", flush=True)
     return pd.concat(parts, ignore_index=True)
 
@@ -110,6 +119,36 @@ def version_3(holdout: pd.DataFrame, pitches: pd.DataFrame) -> dict:
     return result
 
 
+def strict_version_3(history: pd.DataFrame, pitches: pd.DataFrame) -> dict:
+    """Versión 3 con árboles y pesos de Pitching+ elegidos sin ningún pitch de altitud extrema (D-042)."""
+    others = history[history.altitude_category != EXTREME]
+    if STRICT_CACHE.exists():
+        holdout = pd.read_parquet(STRICT_CACHE)
+        iterations = json.loads(holdout.attrs["arboles"])
+    else:
+        iterations = {}
+        for name in STUFF_NAMES:
+            kind, rows, label, features = SPECS[name]
+            subset = others[rows(others)]
+            iterations[name] = choose_iterations(kind, subset, label(subset), features)
+        holdout = park_holdout(history, iterations, None, STUFF_NAMES)
+        holdout.attrs["arboles"] = json.dumps(iterations)
+        holdout.to_parquet(STRICT_CACHE, index=False)
+    official, _ = official_pitches(pitches)
+    fit_rows = official[(official.year < HOLDOUT_SEASON) & (official.altitude_category != EXTREME)
+                        & (official.pitcher_anon_id != "sin_id")]
+    stack = LinearRegression().fit(fit_rows[["stuff", "location"]], fit_rows[TARGET])
+    ben = pd.read_parquet(PARK_CACHE)[["pitch_seq", "xRV_neutral"]].rename(columns={"xRV_neutral": "location"})
+    test = holdout.merge(ben, on="pitch_seq", validate="one_to_one")
+    test["pitching"] = stack.predict(test[["stuff", "location"]])
+    result = {"pitches": len(test), "arboles": iterations,
+              "pesos_pitching": {"intercepto": round(float(stack.intercept_), 5), "stuff": round(float(stack.coef_[0]), 4),
+                                 "location": round(float(stack.coef_[1]), 4)},
+              "sin_altitud_extrema": gains(test, VALUES), "calibracion": calibration(test)}
+    result["pasa"] = all(result["sin_altitud_extrema"][v]["ic95_pct"][0] > 0 for v in VALUES)
+    return result
+
+
 def main():
     pitches = load()
     official, weights, iterations = official_predictions(pitches)
@@ -130,6 +169,7 @@ def main():
     }
     summary["pasa"] = all(summary["sin_altitud_extrema"][v]["ic95_pct"][0] > 0 for v in VALUES)
     summary["version_3"] = version_3(holdout, pitches)
+    summary["version_3_estricta"] = strict_version_3(history, pitches)
     SUMMARY_JSON.write_text(json.dumps(summary, indent=2, ensure_ascii=False))
     print(json.dumps(summary, indent=2, ensure_ascii=False))
 

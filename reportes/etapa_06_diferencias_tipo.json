@@ -1,0 +1,64 @@
+{
+  "nota": "Pares de D-034 (2024–2025); remuestreo de pitchers completos (D-042). Positivo = el primero pierde más.",
+  "pares_por_tipo": {
+    "Changeup": 51,
+    "Curveball": 35,
+    "Four-Seam": 210,
+    "Sinker": 97,
+    "Slider": 129
+  },
+  "diferencias": {
+    "Four-Seam menos Slider": {
+      "carreras_por_100": 0.214,
+      "ic95_carreras": [
+        -0.0396,
+        0.4531
+      ],
+      "puntos_stuff_plus": -6.1,
+      "ic95_puntos": [
+        -14.9,
+        3.2
+      ],
+      "fuera_de_cero": false
+    },
+    "Four-Seam menos Curveball": {
+      "carreras_por_100": 0.376,
+      "ic95_carreras": [
+        0.0954,
+        0.6432
+      ],
+      "puntos_stuff_plus": -12.3,
+      "ic95_puntos": [
+        -21.4,
+        -2.7
+      ],
+      "fuera_de_cero": true
+    },
+    "Sinker menos Slider": {
+      "carreras_por_100": 0.134,
+      "ic95_carreras": [
+        -0.1189,
+        0.433
+      ],
+      "puntos_stuff_plus": -6.3,
+      "ic95_puntos": [
+        -18.3,
+        3.8
+      ],
+      "fuera_de_cero": false
+    },
+    "Changeup menos Four-Seam": {
+      "carreras_por_100": -0.072,
+      "ic95_carreras": [
+        -0.3524,
+        0.2018
+      ],
+      "puntos_stuff_plus": 3.3,
+      "ic95_puntos": [
+        -5.1,
+        11.9
+      ],
+      "fuera_de_cero": false
+    }
+  }
+}

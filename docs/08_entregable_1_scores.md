@@ -41,7 +41,9 @@ pérdida es de xRV sin contacto, y los puntos están en la escala oficial del ar
 | Curva | 35 | 0.02 (−0.24 a 0.28) | −0.7 (−9.5 a +8.1) |
 
 - **Pierden las que viven del efecto Magnus:** recta, sinker y cambio, con intervalo fuera de cero.
-- **Slider y curva casi no pierden:** su intervalo toca cero.
+- **Slider y curva casi no pierden:** su intervalo toca cero. Contra la recta, solo la curva pierde
+  menos con intervalo fuera de cero (0.38 carreras por 100 menos, de 0.10 a 0.64); la slider apunta
+  igual, sin probarse (0.21, de −0.04 a +0.45). D-042.
 - Cutter y splitter no tienen pares suficientes.
 - **El modelo no castiga al pitcher por el aire:** el Stuff+ del mismo pitcher cambia 0.05 carreras
   por 100 entre altitudes; su resultado real, 0.57 (`docs/04_modelo.md`, sección 2). Por eso el

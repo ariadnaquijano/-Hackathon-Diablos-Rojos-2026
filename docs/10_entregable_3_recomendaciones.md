@@ -17,8 +17,8 @@ el orden de la liga.
 
 | Perfil | Delta en el Harp Helú | Fuerza | Explicación física |
 |---|---|---|---|
-| **Curva** | −0.7 (−9.5 a +8.1) | Su pérdida toca cero (35 pares) | Pierde algo de movimiento (k 1.19), pero en los datos su valor casi no cambia. *Hipótesis:* depende más de la diferencia de velocidad y del ángulo que del giro. |
-| **Slider** | −6.9 (−14.8 a +1.1) | Su pérdida toca cero | Giro de bala (*gyro*): su movimiento vertical depende poco del Magnus (k 0.68, el más bajo). |
+| **Curva** | −0.7 (−9.5 a +8.1) | **Probado:** pierde 0.38 carreras por 100 menos que la recta (0.10 a 0.64) | Pierde algo de movimiento (k 1.19), pero en los datos su valor casi no cambia. *Hipótesis:* depende más de la diferencia de velocidad y del ángulo que del giro. |
+| **Slider** | −6.9 (−14.8 a +1.1) | Tendencia: pierde menos que la recta, sin probarse (0.21 menos, de −0.04 a +0.45) | Giro de bala (*gyro*): su movimiento vertical depende poco del Magnus (k 0.68, el más bajo). |
 | **Arsenal de rompimiento** (slider + curva ≥ 40 %) | Stuff+ en la CDMX 90.9 contra 86.8 del de recta y sinker | Tendencia | Menos de su valor viene del efecto que el aire debilita. |
 | **Pitcher de rolling** | Un rolling vale casi lo mismo en las dos altitudes (+0.02) | Probado a nivel liga; tendencia por pitcher | El aire hace volar los flies, no los rollings. |
 
@@ -28,7 +28,7 @@ el orden de la liga.
 |---|---|---|---|
 | **Recta de "ride"** | −13.0 (−17.3 a −8.8) | Probado | Pierde unos 4 in de IVB: el "ride" que hace fallar por debajo sale del Magnus. |
 | **Sinker** | −13.3 (−20.5 a −6.1) | Probado | Pierde caída y corrida hacia el brazo (k horizontal 1.75). |
-| **Cambio** | −9.7 (−17.5 a −2.8) | Probado | Su corrida horizontal es lo más sensible al aire (k 2.06). **No gana valor en altura** (la H2 de la convocatoria no se sostiene). |
+| **Cambio** | −9.7 (−17.5 a −2.8) | Probado | Su corrida horizontal es lo más sensible al aire (k 2.06). **No gana valor contra la recta en altura:** pierden casi igual (H2 no concluyente). |
 
 **Riesgo adicional de contacto duro y jonrón** (2024–2025, altitud extrema contra nivel del mar):
 
@@ -58,7 +58,7 @@ Mismo pitcher y mismo pitch, carreras por 100 batazos en la CDMX: **rectas +3.4*
 
 | Pregunta | Señal verde | Señal roja |
 |---|---|---|
-| ¿Su mejor pitch sobrevive a la altura? | Slider o curva con Stuff+ ≥ 100 contra su tipo | Todo su valor está en la recta o el sinker |
+| ¿Su mejor pitch sobrevive a la altura? | Curva (probado) o slider (tendencia) con Stuff+ ≥ 100 contra su tipo | Todo su valor está en la recta o el sinker |
 | ¿Cómo es su mezcla? | Rompimiento ≥ 40 % (o un rompimiento que pueda usar más) | Recta + sinker ≥ 60 % sin un rompimiento bueno |
 | Si vive de la recta, ¿es élite? | Stuff+ de la recta ≥ 114 (top 10 %): en la CDMX queda por encima del promedio | Recta promedio: en la CDMX queda unos 13 puntos abajo |
 | ¿Saca rollings? | Rolling ≥ 48 % (tercio alto; la mediana es 45 %) | Rolling ≤ 41 % y mucho fly |
@@ -88,7 +88,8 @@ Mismo pitcher y mismo pitch, carreras por 100 batazos en la CDMX: **rectas +3.4*
   rival, contra 0.034 a nivel del mar. La cuarta bola en 3-2 regala 0.23 contra 0.18.
 - **Los flies son el riesgo principal en casa** (probado a nivel liga). Cuidar el contacto elevado
   pesa más ahí que en la costa.
-- **Apoyarse más en slider y curva en casa** (opción): pierden menos en altura, pero **no está
+- **Apoyarse más en la curva, y quizá la slider, en casa** (opción): la curva pierde menos que la recta
+  (probado); la slider apunta igual sin probarse. Además **no está
   probado** que usarlas más mejore el resultado. Usarlas más cambia cómo las espera el bateador.
 
 ## Lo que NO recomendamos (no hay respaldo)

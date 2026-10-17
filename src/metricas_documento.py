@@ -18,8 +18,11 @@ import json
 
 import numpy as np
 import pandas as pd
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import GroupKFold
 
 from config import HOLDOUT_SEASON, REPORTS_DIR
+from exploracion_etapa_04 import CROSS_FIT_FOLDS
 from modelo import load
 from modelos_base import PREDICTIONS_PARQUET, TARGET, pitcher_bootstrap
 from modelo_v3 import official_pitches
@@ -51,6 +54,15 @@ def calibration(test: pd.DataFrame, column: str = "pitching") -> dict:
             "deciles": table.round(3).reset_index(drop=True).to_dict(orient="list")}
 
 
+def out_of_fold_pitching(history: pd.DataFrame) -> np.ndarray:
+    """Pitching+ con pesos ajustados en otros pitchers (D-042): la pendiente deja de ser 1 por construcción."""
+    prediction = np.empty(len(history))
+    for fit_rows, other_rows in GroupKFold(CROSS_FIT_FOLDS).split(history, groups=history.pitcher_anon_id):
+        stack = LinearRegression().fit(history.iloc[fit_rows][["stuff", "location"]], history.iloc[fit_rows][TARGET])
+        prediction[other_rows] = stack.predict(history.iloc[other_rows][["stuff", "location"]])
+    return prediction
+
+
 def main():
     pitches = load()
     official, _ = official_pitches(pitches)
@@ -63,6 +75,9 @@ def main():
         test = official[rows].reset_index(drop=True)
         summary[name] = {"pitches": len(test), "rmse": rmse_table(test),
                          "calibracion_pitching": calibration(test), "calibracion_stuff": calibration(test, "stuff")}
+        if name.startswith("pitcher"):
+            test["pitching_pesos_fuera_de_pliegue"] = out_of_fold_pitching(test)
+            summary[name]["calibracion_pitching_pesos_fuera_de_pliegue"] = calibration(test, "pitching_pesos_fuera_de_pliegue")
     SUMMARY_JSON.write_text(json.dumps(summary, indent=2, ensure_ascii=False))
     print(json.dumps(summary, indent=2, ensure_ascii=False))
 

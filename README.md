@@ -120,6 +120,7 @@ python modelo_v3.py
 python validacion_estadio.py && python metricas_documento.py
 python riesgo_contacto.py && python perfil_ideal.py
 python fisica_densidad.py               # el exponente k en densidad del aire (D-041)
+python diferencias_tipo.py              # diferencias de pérdida entre tipos de pitch (D-042)
 
 # Entregables y herramientas
 python entregable_scores.py && python reporte_entregables.py

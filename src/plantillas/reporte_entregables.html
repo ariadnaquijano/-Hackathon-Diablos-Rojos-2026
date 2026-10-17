@@ -155,7 +155,7 @@ footer code { font-family: var(--mono); font-size: 0.75rem; }
           <span><i class="line" style="background:var(--ink-3)"></i>intervalo de 95 %</span>
         </div>
         <svg class="chart" id="chart-delta" viewBox="0 0 720 300" role="img" aria-labelledby="delta-desc"><desc id="delta-desc">Delta de Stuff+ en el Harp Helú por tipo de pitch con su intervalo de 95 %.</desc></svg>
-        <figcaption>Recta, sinker y cambio pierden con intervalo fuera de cero; slider y curva casi no pierden. La pérdida en carreras está en la tabla.</figcaption>
+        <figcaption id="delta-caption"></figcaption>
         <details class="table-view"><summary>Ver como tabla</summary><div class="scroll"><table id="table-delta"></table></div></details>
       </figure>
     </div>
@@ -232,7 +232,7 @@ footer code { font-family: var(--mono); font-size: 0.75rem; }
 
     <div class="duo">
       <div class="card gain">
-        <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>Ganan terreno relativo</h3>
+        <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>Pierden menos en altura</h3>
         <ul id="gain"></ul>
       </div>
       <div class="card lose">
@@ -260,7 +260,7 @@ footer code { font-family: var(--mono); font-size: 0.75rem; }
         <table class="check">
           <thead><tr><th>Pregunta</th><th>Señal verde</th><th>Señal roja</th></tr></thead>
           <tbody>
-            <tr><td>¿Su mejor pitch sobrevive a la altura?</td><td>Slider o curva con Stuff+ ≥ 100 contra su tipo</td><td>Todo su valor está en la recta o el sinker</td></tr>
+            <tr><td>¿Su mejor pitch sobrevive a la altura?</td><td>Curva (probado) o slider (tendencia) con Stuff+ ≥ 100 contra su tipo</td><td>Todo su valor está en la recta o el sinker</td></tr>
             <tr><td>¿Cómo es su mezcla?</td><td>Slider + curva ≥ 40 % de sus pitches</td><td>Recta + sinker ≥ 60 % sin un rompimiento bueno</td></tr>
             <tr><td>Si vive de la recta, ¿es élite?</td><td>Stuff+ de la recta ≥ 114 (top 10 %): en la CDMX sigue sobre el promedio</td><td>Recta promedio: en la CDMX queda unos 13 puntos abajo</td></tr>
             <tr><td>¿Saca rollings?</td><td>Rolling ≥ 48 % (tercio alto; la mediana es 45 %)</td><td>Rolling ≤ 41 % y mucho fly</td></tr>
@@ -284,7 +284,7 @@ footer code { font-family: var(--mono); font-size: 0.75rem; }
       <h3>Lo que no recomendamos</h3>
       <div class="card"><ul class="plain">
         <li><b>Pedir más spin para compensar la altura.</b> El aire quita movimiento sin cambiar el spin, y con el mismo spin decide el movimiento (H4).</li>
-        <li><b>Buscar cambios "porque ganan en altura".</b> En nuestros datos el cambio pierde casi como el sinker: la H2 de la convocatoria no se sostiene.</li>
+        <li><b>Buscar cambios "porque ganan en altura".</b> En nuestros datos el cambio pierde casi igual que la recta: la H2 de la convocatoria no es concluyente.</li>
         <li><b>Dar la pérdida exacta en carreras de un pitcher específico.</b> El estimado ordena a los pitchers, pero no es preciso; por eso va en tercios.</li>
         <li><b>Leer causalidad.</b> Que la slider pierda poco no prueba que lanzar más sliders mejore a un pitcher.</li>
       </ul></div>
@@ -423,7 +423,7 @@ function evidence() {
 
 function profile() {
   el("profile").innerHTML = [
-    ["Pitch principal de rompimiento", "Slider o curva con Stuff+ ≥ 100 contra su tipo", `Pierden ${n(-D.Slider.delta_stuff_plus)} y ${n(-cu.delta_stuff_plus)} puntos, contra ${n(-fb.delta_stuff_plus)} de la recta`],
+    ["Pitch principal de rompimiento", "Curva (probado) o slider (tendencia) con Stuff+ ≥ 100 contra su tipo", `Pierden ${n(-D.Slider.delta_stuff_plus)} y ${n(-cu.delta_stuff_plus)} puntos, contra ${n(-fb.delta_stuff_plus)} de la recta`],
     ["Mezcla", "Slider + curva ≥ 40 % de sus pitches", `El arquetipo de rompimiento queda en ${n(A.Rompimiento.stuff_plus_harp_estimado)} en el Harp Helú, el más alto`],
     ["Rolling", "Tercio alto de la liga (≥ 48 %)", `El fly cuesta ${n(flyRatio)} veces más en la CDMX`],
     ["Si vive de la recta", "Recta élite a nivel del mar (Stuff+ ≥ 114, top 10 %)", `Llega a la CDMX con unos ${n(-fb.delta_stuff_plus, 0)} puntos menos`],
@@ -432,16 +432,18 @@ function profile() {
 }
 
 function gainLose() {
+  const diffs = DATA.diferencias, fbCu = diffs["Four-Seam menos Curveball"], fbSl = diffs["Four-Seam menos Slider"];
+  const chFb = diffs["Changeup menos Four-Seam"];
   el("gain").innerHTML = [
-    `<b>Curva:</b> ${s(cu.delta_stuff_plus)} puntos (${ci(cu.ic95_delta)}). Su valor casi no cambia en los datos; hipótesis: depende más del contraste de velocidad y del ángulo que del giro.`,
-    `<b>Slider:</b> ${s(D.Slider.delta_stuff_plus)} puntos, intervalo toca cero. Gira como bala: su movimiento vertical depende poco del Magnus (k ${n(DATA.k.Slider.ivb, 2)}).`,
+    `<b>Curva (probado):</b> ${s(cu.delta_stuff_plus)} puntos. Pierde ${n(fbCu.carreras_por_100, 2)} carreras por 100 menos que la recta (${ci(fbCu.ic95_carreras, 2)}). Hipótesis: depende más del contraste de velocidad y del ángulo que del giro.`,
+    `<b>Slider (tendencia):</b> ${s(D.Slider.delta_stuff_plus)} puntos. Pierde ${n(fbSl.carreras_por_100, 2)} menos que la recta, sin probarse (${ci(fbSl.ic95_carreras, 2)}). Gira como bala: su movimiento vertical depende poco del Magnus.`,
     `<b>Arsenal de rompimiento:</b> ${n(A.Rompimiento.stuff_plus_harp_estimado)} de Stuff+ estimado en el Harp Helú, contra ${n(A["Recta y sinker"].stuff_plus_harp_estimado)} del de recta y sinker.`,
     `<b>Pitcher de rolling:</b> un rolling vale casi lo mismo en las dos altitudes (${s(gb.diferencia, 3)} carreras).`,
   ].map(x => `<li>${x}</li>`).join("");
   el("lose").innerHTML = [
     `<b>Recta de "ride":</b> ${s(fb.delta_stuff_plus)} puntos (${ci(fb.ic95_delta)}). Pierde unos 4 in de IVB: el "ride" sale del Magnus.`,
     `<b>Sinker:</b> ${s(D.Sinker.delta_stuff_plus)} puntos (${ci(D.Sinker.ic95_delta)}). Pierde caída y corrida (k horizontal ${n(DATA.k.Sinker.hb, 2)}).`,
-    `<b>Cambio:</b> ${s(D.Changeup.delta_stuff_plus)} puntos (${ci(D.Changeup.ic95_delta)}). Su corrida es lo más sensible al aire (k ${n(DATA.k.Changeup.hb, 2)}). No gana valor en altura.`,
+    `<b>Cambio:</b> ${s(D.Changeup.delta_stuff_plus)} puntos (${ci(D.Changeup.ic95_delta)}). Su corrida es lo más sensible al aire. Contra la recta pierde casi igual (${ci(chFb.ic95_carreras, 2)}): la H2 no es concluyente.`,
   ].map(x => `<li>${x}</li>`).join("");
 }
 
@@ -465,6 +467,7 @@ function home() {
   ].map(x => `<li>${x}</li>`).join("");
 }
 
+el("delta-caption").innerHTML = `Recta, sinker y cambio pierden con intervalo fuera de cero. Contra la recta, solo la curva pierde menos de forma probada (${n(DATA.diferencias["Four-Seam menos Curveball"].carreras_por_100, 2)} carreras por 100); la slider apunta igual sin probarse.`;
 deltaChart(); archChart(); files(); kTable(); evidence(); profile(); gainLose(); contact(); home();
 </script>
 </body>

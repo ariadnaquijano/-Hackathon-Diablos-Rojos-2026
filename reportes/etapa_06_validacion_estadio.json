@@ -182,5 +182,59 @@
       }
     },
     "pasa": true
+  },
+  "version_3_estricta": {
+    "pitches": 139277,
+    "arboles": {
+      "p_swing": 291,
+      "p_whiff": 327,
+      "p_foul": 132,
+      "p_strike": 331,
+      "valor_batazo": 28
+    },
+    "pesos_pitching": {
+      "intercepto": 0.00316,
+      "stuff": 0.8228,
+      "location": 0.9538
+    },
+    "sin_altitud_extrema": {
+      "stuff": {
+        "mejora_vs_media_conteo_pct": 0.1283,
+        "ic95_pct": [
+          0.07807,
+          0.17773
+        ]
+      },
+      "location": {
+        "mejora_vs_media_conteo_pct": 4.9116,
+        "ic95_pct": [
+          4.63849,
+          5.20514
+        ]
+      },
+      "pitching": {
+        "mejora_vs_media_conteo_pct": 4.9673,
+        "ic95_pct": [
+          4.69971,
+          5.25513
+        ]
+      }
+    },
+    "calibracion": {
+      "real_por_100": -0.0599,
+      "stuff": {
+        "predicho_por_100": -0.3487,
+        "pendiente": 0.831
+      },
+      "location": {
+        "predicho_por_100": -0.2507,
+        "pendiente": 1.002
+      },
+      "pitching": {
+        "predicho_por_100": -0.2095,
+        "pendiente": 1.038
+      }
+    },
+    "pasa": true
   }
 }
