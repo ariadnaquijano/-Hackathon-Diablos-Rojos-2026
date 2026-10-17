@@ -96,7 +96,7 @@ Términos ordenados por tema. Si algo del proyecto no está aquí, agrégalo.
 | **Recta principal** | El pitch rápido (four-seam, sinker o cutter) que más usa un pitcher; referencia para las diferencias de arsenal. |
 | **Platoon** | Si el bateador batea del mismo lado que lanza el pitcher (en general favorece al pitcher). |
 | **Gyro slider** | Slider con mucho spin "de bala" y poco movimiento por Magnus; en los datos casi no pierde efectividad en altitud. |
-| **Exponente k** | Cuánto cambia el movimiento cuando cambia el aire: movimiento ∝ aire^k. k = 1.5 significa que con 10 % menos aire el pitch se mueve ~15 % menos. |
+| **Exponente k** | Cuánto cambia el movimiento cuando cambia el aire: movimiento ∝ aire^k. Lo estimamos con el aire medido como frenado de las rectas (k ≈ 1.5); pasado a densidad del aire es ≈ 1.1, lo que predice la física (D-041). |
 | **Atenuación** | Cuando la variable explicativa se mide con ruido, la pendiente estimada sale más chica que la real. |
 | **Variable instrumental** | Técnica para corregir la atenuación: se usa solo la parte de la variable que explica otra medida precisa (aquí, el aire típico de la categoría de altitud). |
 | **Leave-one-out** | Calcular un promedio excluyendo el dato que se está evaluando, para no contarlo dos veces. |

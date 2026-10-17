@@ -60,6 +60,7 @@ Lee los documentos en este orden; cada uno se apoya en el anterior.
 10. [`docs/04_modelo.md`](docs/04_modelo.md) — el modelo y su evaluación en 2026 (etapa 4; afinado en `docs/04_afinado.md`).
 11. [`docs/05_arsenal.md`](docs/05_arsenal.md) y [`docs/05_pasaporte_altitud.md`](docs/05_pasaporte_altitud.md) — arsenal y altitud (etapa 5).
 12. [`docs/06_location_ben.md`](docs/06_location_ben.md) — el Location+ del equipo en el modelo oficial (v3).
+    También [`docs/06_fisica_densidad.md`](docs/06_fisica_densidad.md): la física del aire, con k en densidad.
 13. [`docs/07_guia_documento_tecnico.md`](docs/07_guia_documento_tecnico.md) — guía técnica para el documento final.
 14. [`docs/08_entregable_1_scores.md`](docs/08_entregable_1_scores.md), [`docs/09`](docs/09_entregable_2_perfil_ideal.md) y [`docs/10`](docs/10_entregable_3_recomendaciones.md) — entregables 1 a 3.
 
@@ -118,6 +119,7 @@ python location_ben.py && python location_ben.py --estadio
 python modelo_v3.py
 python validacion_estadio.py && python metricas_documento.py
 python riesgo_contacto.py && python perfil_ideal.py
+python fisica_densidad.py               # el exponente k en densidad del aire (D-041)
 
 # Entregables y herramientas
 python entregable_scores.py && python reporte_entregables.py

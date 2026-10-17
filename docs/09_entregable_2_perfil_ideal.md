@@ -13,8 +13,11 @@ la altura.
 
 ## 1. Lo que dice la física
 
-- En el Harp Helú hay unos 15 % menos de aire (`air_ratio` mediano 0.84). Con menos aire hay menos
-  fuerza de Magnus y menos tiempo de vuelo: el movimiento inducido cae **más** que el aire (k > 1).
+- En el Harp Helú el aire es ~21 % menos denso que a nivel del mar (densidad relativa 0.785 con la
+  atmósfera estándar; el frenado de las rectas cae 16 %). La fuerza de Magnus es proporcional a la
+  densidad y la pelota llega 1.3 % antes, así que el movimiento inducido cae casi igual que la
+  densidad: k en densidad 1.05 para la recta y 1.10 en la liga, contra 1.11 que predice la física
+  (D-041, `docs/06_fisica_densidad.md`).
 - **Cuánto cae cada pitch** (exponente k: movimiento ∝ aire^k):
 
 | Tipo | k vertical | k horizontal | Qué pasa en la CDMX |

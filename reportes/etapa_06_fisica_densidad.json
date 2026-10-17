@@ -1,0 +1,191 @@
+{
+  "nota": "Atmósfera estándar y temperaturas de juego supuestas; no hay datos de clima ni de estadio (D-041).",
+  "presion_harp_kpa": 77.2,
+  "densidad_relativa_harp": {
+    "central": 0.785,
+    "rango": [
+      0.761,
+      0.809
+    ]
+  },
+  "frenado_relativo_medido": 0.8445,
+  "cd_relativo_implicito": {
+    "central": 1.076,
+    "rango": [
+      1.044,
+      1.109
+    ]
+  },
+  "factor_k_a_densidad": {
+    "central": 0.698,
+    "rango": [
+      0.62,
+      0.798
+    ]
+  },
+  "k_densidad_esperado_por_la_fisica": 1.11,
+  "k_liga_total": {
+    "k_frenado": 1.5772,
+    "k_densidad": 1.1
+  },
+  "por_tipo": {
+    "Four-Seam": {
+      "ivb": {
+        "k_frenado": 1.5,
+        "k_densidad": 1.05,
+        "k_densidad_rango_temperatura": [
+          0.93,
+          1.2
+        ],
+        "k_densidad_ic95": [
+          1.02,
+          1.07
+        ]
+      },
+      "hb": {
+        "k_frenado": 1.64,
+        "k_densidad": 1.14,
+        "k_densidad_rango_temperatura": [
+          1.02,
+          1.31
+        ],
+        "k_densidad_ic95": [
+          1.1,
+          1.18
+        ]
+      }
+    },
+    "Sinker": {
+      "ivb": {
+        "k_frenado": 1.4,
+        "k_densidad": 0.98,
+        "k_densidad_rango_temperatura": [
+          0.87,
+          1.12
+        ],
+        "k_densidad_ic95": [
+          0.93,
+          1.02
+        ]
+      },
+      "hb": {
+        "k_frenado": 1.75,
+        "k_densidad": 1.22,
+        "k_densidad_rango_temperatura": [
+          1.09,
+          1.4
+        ],
+        "k_densidad_ic95": [
+          1.18,
+          1.26
+        ]
+      }
+    },
+    "Cutter": {
+      "ivb": {
+        "k_frenado": 1.28,
+        "k_densidad": 0.89,
+        "k_densidad_rango_temperatura": [
+          0.79,
+          1.02
+        ],
+        "k_densidad_ic95": [
+          0.81,
+          0.98
+        ]
+      }
+    },
+    "Slider": {
+      "ivb": {
+        "k_frenado": 0.68,
+        "k_densidad": 0.47,
+        "k_densidad_rango_temperatura": [
+          0.42,
+          0.54
+        ],
+        "k_densidad_ic95": [
+          0.42,
+          0.53
+        ]
+      },
+      "hb": {
+        "k_frenado": 1.22,
+        "k_densidad": 0.85,
+        "k_densidad_rango_temperatura": [
+          0.76,
+          0.97
+        ],
+        "k_densidad_ic95": [
+          0.78,
+          0.94
+        ]
+      }
+    },
+    "Curveball": {
+      "ivb": {
+        "k_frenado": 1.19,
+        "k_densidad": 0.83,
+        "k_densidad_rango_temperatura": [
+          0.74,
+          0.95
+        ],
+        "k_densidad_ic95": [
+          0.75,
+          0.93
+        ]
+      },
+      "hb": {
+        "k_frenado": 1.67,
+        "k_densidad": 1.16,
+        "k_densidad_rango_temperatura": [
+          1.03,
+          1.33
+        ],
+        "k_densidad_ic95": [
+          1.08,
+          1.26
+        ]
+      }
+    },
+    "Changeup": {
+      "ivb": {
+        "k_frenado": 1.3,
+        "k_densidad": 0.91,
+        "k_densidad_rango_temperatura": [
+          0.81,
+          1.04
+        ],
+        "k_densidad_ic95": [
+          0.8,
+          0.98
+        ]
+      },
+      "hb": {
+        "k_frenado": 2.06,
+        "k_densidad": 1.43,
+        "k_densidad_rango_temperatura": [
+          1.27,
+          1.64
+        ],
+        "k_densidad_ic95": [
+          1.36,
+          1.48
+        ]
+      }
+    },
+    "Splitter": {}
+  },
+  "tiempo_de_vuelo_recta": {
+    "velocidad_salida_mph": {
+      "Extreme Altitude": 92.1,
+      "No Altitude": 91.6
+    },
+    "velocidad_plato_mph": {
+      "Extreme Altitude": 85.8,
+      "No Altitude": 83.9
+    },
+    "tiempo_extrema_entre_mar": 0.9871,
+    "efecto_en_movimiento_pct": -2.57,
+    "tiempo_de_vuelo_mar_s": 0.427
+  }
+}

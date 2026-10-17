@@ -49,14 +49,24 @@ de pitch entre el Harp Helú y nivel del mar) y aplicabilidad (entrevista de 10 
   2. llega un poco antes, con menos tiempo para moverse;
   3. el batazo vuela más (menos arrastre).
 - **Cómo medimos el aire sin datos de clima.** Con el propio TrackMan: el frenado de las rectas de
-  cada juego es proporcional a la densidad. `air_ratio` = frenado mediano de las rectas del juego ÷
-  frenado mediano a nivel del mar esa temporada. Mediana en altitud extrema: 0.85 (2024) y 0.84 (2025).
-  Es decir, unos 15 % menos de aire. Fuente: `docs/02_features.md`, sección 1.
+  cada juego. `air_ratio` = frenado mediano de las rectas del juego ÷ frenado mediano a nivel del mar
+  esa temporada. Mediana en altitud extrema: 0.85 (2024) y 0.84 (2025): **16 % menos frenado**.
+- **Ojo, frenado no es densidad (D-041).** El frenado es densidad × coeficiente de arrastre (ρ · Cd).
+  Con la atmósfera estándar (77.2 kPa a 2,240 m) y temperaturas de juego, la densidad del Harp Helú es
+  **0.785** de la del nivel del mar (rango 0.76–0.81). El frenado cae menos que la densidad porque el
+  coeficiente de arrastre sube ~8 % con aire menos denso (menor número de Reynolds); esto último es una
+  explicación plausible, no medida. Fuente: `docs/06_fisica_densidad.md`.
 
 ### 1.3 El exponente k: cuánto cambia el movimiento con el aire
 
-- Modelo: **movimiento ∝ air_ratio^k**. Si k = 1, el movimiento cae igual que la densidad. Si k > 1,
-  cae más, porque se suman menos Magnus y menos tiempo de vuelo.
+- Modelo: **movimiento ∝ air_ratio^k**, con el aire medido como frenado.
+- **En densidad:** k_ρ = k · ln(0.8445) ÷ ln(0.785) ≈ 0.70 · k. La física predice k_ρ ≈ 1.11: fuerza de
+  Magnus ∝ ρ, y movimiento = ½ · a · t² con un tiempo de vuelo 1.3 % menor en altura (medido: la recta
+  llega a 85.8 mph en la CDMX contra 83.9 a nivel del mar). **Resultado:** recta 1.05 en IVB y 1.14 en
+  HB, sinker 0.98 en IVB, liga 1.10. La física cuadra.
+- **Excepciones honestas:** el HB del cambio (1.43) y la IVB de la slider (0.47). Hipótesis, sin
+  probar: los efectos de costura (*seam-shifted wake*) del cambio dependen del régimen del flujo, y la
+  IVB de la slider es casi cero, así que su cociente es inestable.
 - Se estima con el **mismo pitcher y el mismo pitch** en juegos con distinto aire.
 - **Detalle técnico importante (D-016):** el aire de cada juego se mide con ruido. El ruido en la
   variable explicativa *achica* la pendiente; a eso se le llama sesgo de atenuación. La primera
@@ -425,7 +435,8 @@ Usen esta lista; cada punto tiene respaldo:
 |---|---|
 | ¿Por qué Stuff+ mejora tan poco por pitch (0.15 %)? | Un pitch suelto es casi azar. Lo que importa es que le gana a la lineal con intervalo fuera de cero y que es estable por pitcher (r 0.83 entre años). |
 | ¿Por qué no pusieron la altitud como variable? | Castigaría al pitcher por el estadio. El traductor físico separa al pitcher del aire (D-001), y el park holdout muestra que el modelo funciona en la CDMX sin haberla visto. |
-| ¿Cómo saben que k es correcto? | Se estimó con el mismo pitcher en distintos aires, corregido por atenuación. Después de convertir, la recta del mismo pitcher queda a +0.11 in entre altitudes. |
+| ¿Cómo saben que k es correcto? | Se estimó con el mismo pitcher en distintos aires, corregido por atenuación. Después de convertir, la recta del mismo pitcher queda a +0.11 in entre altitudes. Y pasado a densidad da 1.05 para la recta y 1.10 en la liga, contra 1.11 que predice la física. |
+| ¿Su k de 1.6 no contradice la física? | Ese k está en frenado, no en densidad. En densidad es 1.10, que es lo que predicen Magnus ∝ ρ y el menor tiempo de vuelo. |
 | ¿Por qué no le ganan a la historia del pitcher? | Porque el resultado incluye contacto y ubicación, que se repiten poco. Stuff+ es la parte estable y la única disponible para un pitcher nuevo. |
 | ¿Miraron 2026 muchas veces? | Seis, declaradas. Nada se eligió con 2026 desde D-025. |
 | ¿Por qué el Location+ no ve el tipo de pitch? | Mide qué tan buen lugar es ese para un pitch promedio de la liga; el tipo de pitch es Stuff+. Así no se cuenta dos veces. |

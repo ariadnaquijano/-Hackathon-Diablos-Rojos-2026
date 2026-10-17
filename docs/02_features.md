@@ -65,10 +65,12 @@ la categoría de altitud y temporada, que se mide con mucha precisión.
 Un tipo usa su propio k si tiene al menos 100 pitchers; si no, el de la liga. Los intervalos son
 bootstrap de 200 remuestreos por pitcher.
 
-**Lectura beisbolística:** k > 1 significa que el movimiento cae más que la densidad del aire. Tiene
-sentido: con menos aire hay menos fuerza de Magnus *y* la pelota llega antes, así que tiene menos
-tiempo para moverse. El movimiento horizontal del cambio es el más sensible (k = 2.06). La slider es
-la menos sensible en vertical (0.68), coherente con que su movimiento depende poco del spin.
+**Lectura física (corregida en D-041, `docs/06_fisica_densidad.md`):** `air_ratio` mide el *frenado*
+(densidad × coeficiente de arrastre), no la densidad. En el Harp Helú la densidad estimada es 0.785
+de la del nivel del mar, mientras el frenado medido es 0.84. Reexpresado en densidad, el k de la recta
+es 1.05 y el de la liga 1.10, justo lo que predice la física: fuerza de Magnus ∝ densidad, más un
+tiempo de vuelo 1.3 % menor (predicción: 1.11). Las excepciones son el HB del cambio (1.43 en
+densidad) y la IVB de la slider (0.47); ver el documento.
 
 **Validación (mismo pitcher, mismo pitch, altitud extrema menos nivel del mar):**
 

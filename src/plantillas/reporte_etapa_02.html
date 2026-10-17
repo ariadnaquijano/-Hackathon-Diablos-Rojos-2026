@@ -312,7 +312,7 @@ function renderK() {
   kChart("k-hb", "hb");
   const l = DATA.exponente_k.liga.movimiento_total;
   document.getElementById("k-lead").innerHTML =
-    `Para el movimiento total de la liga, k pasa de ${fixed(l.k_sin_corregir_atenuacion)} sin corregir a <strong>${fixed(l.k)}</strong> (IC 95 % ${fixed(l.ic95[0])}–${fixed(l.ic95[1])}). k mayor que 1 significa que el movimiento cae más que el aire: hay menos fuerza de Magnus y además la pelota llega antes.`;
+    `Para el movimiento total de la liga, k pasa de ${fixed(l.k_sin_corregir_atenuacion)} sin corregir a <strong>${fixed(l.k)}</strong> (IC 95 % ${fixed(l.ic95[0])}–${fixed(l.ic95[1])}). Este k está en frenado de las rectas, no en densidad: pasado a densidad del aire queda cerca de 1.1, lo que predicen la fuerza de Magnus y el menor tiempo de vuelo (ver docs/06_fisica_densidad.md).`;
 }
 
 function renderShape() {

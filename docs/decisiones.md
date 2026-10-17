@@ -7,6 +7,21 @@ se agrega una nueva entrada que la reemplaza y se marca la anterior como *Reempl
 
 ---
 
+### D-041 · 2026-10-17 · El exponente k se reexpresa en densidad del aire
+- **Por qué (auditoría):** `air_ratio` es un cociente de frenado de las rectas, que es proporcional a
+  la densidad por el coeficiente de arrastre (ρ · Cd). No es la densidad. La explicación anterior de
+  k > 1 ("la pelota llega antes") no alcanza: el tiempo de vuelo cambia apenas un par de por ciento.
+- **Qué se hace:** se estima la densidad relativa del Harp Helú con la atmósfera estándar
+  (presión a 2,240 m) y rangos de temperatura de juego, y se convierte cada k a un exponente en
+  densidad: k_ρ = k · ln(air_ratio) ÷ ln(ρ relativa). La física del efecto Magnus predice k_ρ ≈ 1.
+- **Qué no cambia:** el modelo. La traducción a nivel del mar usa el frenado medido y su k estimado
+  juntos; reexpresarlos en densidad no mueve ninguna predicción.
+- **Resultado:** densidad relativa 0.785 (0.76–0.81 según temperaturas) contra un frenado de 0.8445;
+  factor 0.70. En densidad: recta 1.05 en IVB (1.02 a 1.07) y 1.14 en HB, sinker 0.98 en IVB, liga
+  1.10. La física predice 1.11 (Magnus ∝ ρ y una recta que tarda 1.3 % menos en llegar, medido con
+  los datos). Excepciones: HB del cambio 1.43 e IVB de la slider 0.47, sin explicación probada.
+- **Estado:** Vigente. Detalle en `docs/06_fisica_densidad.md`.
+
 ### D-040 · 2026-10-16 · Location+ de Ben en versión neutral: regla fijada antes de correr
 - **Problema detectado en la versión 3:** el modelo de Ben usa la altitud como variable. El mismo
   pitcher sale 1.00 carreras por 100 peor en altitud extrema que a nivel del mar en Pitching+ v3 (la
