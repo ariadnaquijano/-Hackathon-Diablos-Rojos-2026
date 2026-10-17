@@ -7,6 +7,35 @@ se agrega una nueva entrada que la reemplaza y se marca la anterior como *Reempl
 
 ---
 
+### D-043 · 2026-10-17 · Placebo de calibración y estimado de altura por pitcher: reglas fijadas antes de correr
+- **Placebo de calibración (pregunta abierta de la auditoría).** Si el exponente k viniera de la
+  calibración del TrackMan de cada estadio, y no de la física, k estimado con altitud media contra nivel
+  del mar diferiría del estimado con altitud extrema contra nivel del mar. Se estima con el mismo método
+  de D-016 (variable instrumental, mismo pitcher) en los dos subconjuntos, para la liga (total, IVB y
+  HB), la recta y el sinker.
+  - **Consistente con la física** si la diferencia entre los dos k tiene intervalo que incluye el cero.
+  - **El patrón HB > IVB:** si aparece también en altitud media, no es exclusivo de los estadios de
+    altitud extrema; si solo aparece en extrema, apunta a algo propio de esos estadios.
+- **Estimado de altura por pitcher.** Hoy la pérdida en altura de cada pitch es la promedio de su tipo.
+  Candidato: promedio del tipo + w · (costo del pasaporte − costo promedio del tipo), con w ajustado
+  en otros pitchers (5 pliegues por pitcher), sobre los pares de D-034.
+  - **Se adopta** solo si su error contra el cambio real es menor que el del promedio del tipo, con
+    intervalo fuera de cero (remuestreo de pitchers). Si no, se queda el promedio del tipo.
+- **2026:** no se usa para la segunda prueba. La primera usa los juegos de las tres temporadas, igual
+  que D-016, porque es una medición física y no elige nada del modelo.
+- **Resultado del placebo:** según la regla, **no es consistente**. En 6 de 7 casos el k de altitud
+  media sale entre 5 y 9 % mayor que el de extrema (liga total 1.63 contra 1.56, diferencia −0.07, de
+  −0.12 a −0.01). Puede ser algo propio de cada estadio o que la ley de potencia con un solo k sea una
+  aproximación; no se pueden separar. Efecto en el modelo: usar el k de extrema en vez del general
+  cambia el movimiento traducido de la recta en menos de 0.3 %.
+- **Patrón HB > IVB:** aparece igual en altitud media (+0.33, de 0.24 a 0.40) que en extrema (+0.35,
+  de 0.30 a 0.40). No es propio del Harp Helú ni de los estadios más altos.
+- **Resultado del estimado por pitcher: no se adopta.** Error 0.961 contra 0.959 del promedio del tipo
+  (diferencia −0.008 a +0.014; 522 pares de 298 pitchers). Dentro de un tipo, lo que el pasaporte ve
+  en la forma no se relaciona con lo que el pitcher pierde de verdad (r 0.01). Se queda el promedio
+  del tipo.
+- **Estado:** Vigente.
+
 ### D-042 · 2026-10-17 · Correcciones de rigor de la auditoría: reglas fijadas antes de correr
 - **Validación por estadio estricta.** En D-037, el número de árboles de Stuff+ y los pesos de
   Pitching+ se eligieron con todas las altitudes, incluida la extrema que luego se evalúa. Se repite:

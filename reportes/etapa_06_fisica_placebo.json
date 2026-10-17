@@ -1,0 +1,161 @@
+{
+  "nota": "Mismo método que D-016, separado por categoría de altitud (D-043).",
+  "k_por_comparacion": {
+    "liga_total": {
+      "k_media": 1.633,
+      "ic95_media": [
+        1.581,
+        1.686
+      ],
+      "pitchers_media": 963,
+      "k_extrema": 1.563,
+      "ic95_extrema": [
+        1.534,
+        1.606
+      ],
+      "pitchers_extrema": 998,
+      "extrema_menos_media": -0.07,
+      "ic95_diferencia": [
+        -0.121,
+        -0.006
+      ],
+      "consistente": false
+    },
+    "liga_ivb": {
+      "k_media": 1.413,
+      "ic95_media": [
+        1.367,
+        1.468
+      ],
+      "pitchers_media": 961,
+      "k_extrema": 1.312,
+      "ic95_extrema": [
+        1.277,
+        1.342
+      ],
+      "pitchers_extrema": 991,
+      "extrema_menos_media": -0.102,
+      "ic95_diferencia": [
+        -0.178,
+        -0.044
+      ],
+      "consistente": false
+    },
+    "liga_hb": {
+      "k_media": 1.745,
+      "ic95_media": [
+        1.681,
+        1.814
+      ],
+      "pitchers_media": 953,
+      "k_extrema": 1.659,
+      "ic95_extrema": [
+        1.625,
+        1.703
+      ],
+      "pitchers_extrema": 987,
+      "extrema_menos_media": -0.086,
+      "ic95_diferencia": [
+        -0.149,
+        -0.004
+      ],
+      "consistente": false
+    },
+    "Four-Seam_ivb": {
+      "k_media": 1.548,
+      "ic95_media": [
+        1.498,
+        1.592
+      ],
+      "pitchers_media": 845,
+      "k_extrema": 1.484,
+      "ic95_extrema": [
+        1.447,
+        1.517
+      ],
+      "pitchers_extrema": 883,
+      "extrema_menos_media": -0.064,
+      "ic95_diferencia": [
+        -0.124,
+        -0.004
+      ],
+      "consistente": false
+    },
+    "Four-Seam_hb": {
+      "k_media": 1.746,
+      "ic95_media": [
+        1.642,
+        1.833
+      ],
+      "pitchers_media": 830,
+      "k_extrema": 1.617,
+      "ic95_extrema": [
+        1.558,
+        1.676
+      ],
+      "pitchers_extrema": 861,
+      "extrema_menos_media": -0.129,
+      "ic95_diferencia": [
+        -0.223,
+        -0.02
+      ],
+      "consistente": false
+    },
+    "Sinker_ivb": {
+      "k_media": 1.516,
+      "ic95_media": [
+        1.435,
+        1.594
+      ],
+      "pitchers_media": 636,
+      "k_extrema": 1.376,
+      "ic95_extrema": [
+        1.3,
+        1.447
+      ],
+      "pitchers_extrema": 644,
+      "extrema_menos_media": -0.14,
+      "ic95_diferencia": [
+        -0.246,
+        -0.03
+      ],
+      "consistente": false
+    },
+    "Sinker_hb": {
+      "k_media": 1.78,
+      "ic95_media": [
+        1.69,
+        1.858
+      ],
+      "pitchers_media": 642,
+      "k_extrema": 1.751,
+      "ic95_extrema": [
+        1.682,
+        1.805
+      ],
+      "pitchers_extrema": 650,
+      "extrema_menos_media": -0.029,
+      "ic95_diferencia": [
+        -0.127,
+        0.076
+      ],
+      "consistente": true
+    }
+  },
+  "patron_hb_mayor_que_ivb": {
+    "media_contra_mar": {
+      "hb_menos_ivb": 0.332,
+      "ic95": [
+        0.244,
+        0.395
+      ]
+    },
+    "extrema_contra_mar": {
+      "hb_menos_ivb": 0.347,
+      "ic95": [
+        0.298,
+        0.396
+      ]
+    }
+  }
+}

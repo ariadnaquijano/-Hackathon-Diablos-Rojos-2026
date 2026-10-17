@@ -73,8 +73,9 @@ temperatura.
   predice la física.** La IVB de la recta es el "ride", lo que más pierde valor en altura.
 - **Patrón que no explica la física: el movimiento horizontal cae más que el vertical en los cinco
   tipos** (liga: HB 1.17 contra IVB 0.93). El efecto Magnus escala los dos componentes igual, así que
-  una brecha sistemática apunta a otra cosa. Candidatos, sin probar: la calibración del TrackMan por
-  estadio (el mismo instrumento mide el frenado y el movimiento), el marco de referencia del
+  una brecha sistemática apunta a otra cosa. **El placebo de D-043 descarta que sea algo del Harp
+  Helú:** la brecha aparece igual comparando altitud media contra nivel del mar (+0.33) que altitud
+  extrema contra nivel del mar (+0.35). Candidatos que quedan, sin probar: el marco de referencia del
   movimiento horizontal o los efectos de costura (*seam-shifted wake*), que dependen del régimen del
   flujo. El HB del cambio (1.43) es el caso más extremo de este patrón.
 - **IVB de la slider (0.47):** su IVB promedio es casi cero (≈ 3 in), así que el cociente es inestable.
@@ -87,5 +88,7 @@ temperatura.
 - No hay datos de clima ni de estadio: la densidad es un cálculo con supuestos, no una medición.
 - El tiempo de vuelo usa medianas de toda la liga en cada altitud, no el mismo pitcher en las dos; la
   velocidad de salida difiere 0.5 mph entre altitudes por la mezcla de pitchers.
-- El instrumento de k es la categoría de altitud × temporada. Si la calibración del TrackMan cambia por
-  estadio, ese sesgo entraría igual en el frenado y en el movimiento; no lo podemos descartar.
+- El instrumento de k es la categoría de altitud × temporada. **Placebo (D-043):** el k estimado con
+  altitud media sale entre 5 y 9 % mayor que con altitud extrema (liga 1.63 contra 1.56). Puede ser
+  calibración propia de cada estadio o que un solo k sea una aproximación; no se pueden separar. Para
+  el modelo pesa poco: usar el k de extrema cambia el movimiento traducido de la recta en 0.3 %.

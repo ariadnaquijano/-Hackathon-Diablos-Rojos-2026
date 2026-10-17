@@ -496,12 +496,14 @@ Usen esta lista; cada punto tiene respaldo:
 | ¿Por qué no pusieron la altitud como variable? | Castigaría al pitcher por el estadio. El traductor físico separa al pitcher del aire (D-001), y el park holdout muestra que el modelo funciona en la CDMX sin haberla visto. |
 | ¿Cómo saben que k es correcto? | Se estimó con el mismo pitcher en distintos aires, corregido por atenuación. Después de convertir, la recta del mismo pitcher queda a +0.11 in entre altitudes. Y pasado a densidad, la IVB de la recta da 1.05 y la liga 1.10, dentro del rango de 1.00 a 1.11 que predice la física. |
 | ¿Su k de 1.6 no contradice la física? | Ese k está en frenado, no en densidad. En densidad es 1.10, dentro del rango que predicen Magnus ∝ ρ y el menor tiempo de vuelo (1.00–1.11). |
-| ¿Por qué el HB cae más que la IVB? | No lo sabemos. El efecto Magnus no lo explica; puede ser la calibración del TrackMan por estadio, el marco de referencia del HB o efectos de costura. Lo reportamos como abierto. |
+| ¿Por qué el HB cae más que la IVB? | No lo sabemos. El efecto Magnus no lo explica. Un placebo descarta que sea el TrackMan del Harp Helú: la brecha es igual con altitud media que con extrema (D-043). Quedan el marco de referencia del HB o efectos de costura. |
+| ¿No será la calibración del TrackMan por estadio? | Probamos k por separado con altitud media y con extrema: difieren 5–9 %, así que no lo descartamos del todo, pero su efecto en el modelo es de 0.3 % del movimiento. |
 | ¿Por qué no le ganan a la historia del pitcher? | Porque el resultado incluye contacto y ubicación, que se repiten poco. Stuff+ es la parte estable y la única disponible para un pitcher nuevo. |
 | ¿Miraron 2026 muchas veces? | Ocho veces influyó, todas declaradas (incluida la elección del target y las pruebas de Ben). Desde D-025 nada nuestro se eligió con 2026, y el pitcher holdout y el altitude holdout no lo usan. |
 | Su nulo falla 0.32 en altura con un target "neutral", ¿entonces? | Es un corrimiento del nivel de la liga en altura que todo modelo de nivel del mar comparte; Stuff+ apenas se separa de él. Lo que validamos en altura es el orden de los pitches, no el nivel. |
 | ¿Sus pesos de Pitching+ vieron la altitud extrema? | En la versión original sí; repetimos la prueba con árboles y pesos elegidos sin altitud extrema y el resultado es el mismo (+4.97 %). |
 | ¿Por qué el Location+ no ve el tipo de pitch? | Mide qué tan buen lugar es ese para un pitch promedio de la liga; el tipo de pitch es Stuff+. Así no se cuenta dos veces. |
+| ¿Qué me dice el modelo de *mi* pitcher en altura? | Lo probamos: combinar lo que el pasaporte ve en su forma con el promedio de su tipo no mejora nada (r 0.01 dentro del tipo, D-043). Con dos temporadas, lo que predice la pérdida en altura es el tipo de pitch, no la forma; para personalizar hay que verlo lanzar en la CDMX. |
 | ¿Qué cambiaría en el reclutamiento? | Las rectas y sinkers de un agente libre pierden ~13 puntos de Stuff+ en el Harp Helú; uno con slider o curva de calidad pierde menos. Y un pitcher de rolling sufre menos el acarreo. |
 
 ---

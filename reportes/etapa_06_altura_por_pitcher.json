@@ -1,0 +1,20 @@
+{
+  "nota": "Pares de D-034 (2024–2025); w y promedios del tipo ajustados en otros pitchers (D-043).",
+  "pares": 522,
+  "pitchers": 298,
+  "peso_w_por_pliegue": [
+    0.285,
+    0.459,
+    0.328,
+    0.53,
+    0.135
+  ],
+  "ecm_promedio_tipo": 0.9586,
+  "ecm_encogido": 0.9611,
+  "ic95_encogido_menos_promedio": [
+    -0.008,
+    0.0138
+  ],
+  "se_adopta": false,
+  "r_encogido_con_real_dentro_del_tipo": 0.014
+}

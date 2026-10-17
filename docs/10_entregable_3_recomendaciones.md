@@ -99,3 +99,6 @@ El simulador usa su propia escala, contra perfiles promedio, así que sus númer
 - Pedir más spin para compensar la altura: el aire quita movimiento sin cambiar el spin.
 - Buscar cambios "porque ganan en altura": en nuestros datos pierden casi como el sinker.
 - Dar la pérdida exacta en carreras de un pitcher específico: el estimado ordena, pero no es preciso.
+- Esperar que la forma del pitch diga cuánto pierde en altura dentro de su tipo: lo probamos y no
+  aporta (r 0.01, D-043). Lo que predice la pérdida es el tipo de pitch; para un pitcher concreto, lo
+  mejor es verlo lanzar en la CDMX.
