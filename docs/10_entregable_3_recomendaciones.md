@@ -51,8 +51,8 @@ Mismo pitcher y mismo pitch, carreras por 100 batazos en la CDMX: **rectas +3.4*
     y su arsenal.
 - **Si viene de fuera o solo hay sus números de TrackMan:** meter cada pitch en el simulador.
   - Indicar "Dónde se midió": nivel del mar o Harp Helú.
-  - Da su Stuff+ a nivel del mar y en el Harp Helú, y si por su forma pierde más o menos que el típico
-    de su tipo.
+  - Da su Stuff+ a nivel del mar y en el Harp Helú, y su lugar en la CDMX contra todos los pitches de
+    la liga, de cualquier tipo.
 
 ### Paso 2: la lista de chequeo
 

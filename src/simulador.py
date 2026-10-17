@@ -6,9 +6,10 @@ El simulador devuelve:
 - **Stuff+ oficial** (D-027): el pitch llevado a nivel del mar y comparado contra su tipo en la liga.
 - **Harp Helú contra nivel del mar:** el mismo pitch con el aire de cada lugar. El movimiento se
   traduce con aire^k por tipo (D-016). El Stuff+ en el Harp Helú resta la pérdida real promedio de su
-  tipo en la liga, en los puntos de la escala oficial del arsenal (src/entregable_scores.py). El pasaporte (D-034) solo dice si este pitch, por su
-  forma, pierde más o menos que el típico de su tipo, como percentil: en la prueba ordenó a los
-  pitches, pero exageró la cifra de las rectas.
+  tipo en la liga, en los puntos de la escala oficial del arsenal (src/entregable_scores.py). Dentro
+  de un tipo la altura no cambia el orden; lo que cambia es cuánto vale un tipo contra otro, y eso es
+  lo que muestra su percentil contra todos los pitches de la liga en la CDMX.
+- Un tipo con menos de 30 perfiles en la liga no recibe Stuff+: la escala no sería confiable.
 - **Mapa de movimiento:** los pitches de la liga de ese tipo (promedio por pitcher y temporada), con
   los más y menos efectivos marcados, y el pitch ingresado en los dos aires.
 
@@ -34,7 +35,7 @@ import pandas as pd
 from config import HOLDOUT_SEASON, REPORTS_DIR, ROOT
 from exploracion_etapa_04 import EXTREME, SEA_LEVEL
 from modelo import PREDICTIONS_CACHE, SPECS, predict
-from pasaporte_altitud import FASTBALL, LOCAL_FEATURES, PASSPORT_PARQUET, exponents, extreme_air, load_pitches
+from pasaporte_altitud import FASTBALL, exponents, extreme_air, load_pitches
 from stuff_componentes import FEATURES, choose_iterations, combine, new_model, outcome_values
 
 BUNDLE = ROOT / "data" / "modelos" / "simulador.joblib"
@@ -48,6 +49,13 @@ MIN_PITCHES_PER_PITCH_TYPE = 100
 # Lo que el coach ingresa, en la convención de TrackMan.
 INPUTS = ["RelSpeed", "SpinRate", "SpinAxis", "InducedVertBreak", "HorzBreak", "RelHeight", "RelSide", "Extension"]
 STUFF_MODELS = [name for name in SPECS if name != "location"]
+MIN_PROFILES = 30
+HANDS = ("Right", "Left")
+# Límites físicos de cada entrada (TrackMan): fuera de ellos el valor no es un pitch posible.
+PHYSICAL_LIMITS = {"RelSpeed": (40, 110), "SpinRate": (0, 4000), "SpinAxis": (0, 360), "InducedVertBreak": (-35, 35),
+                   "HorzBreak": (-35, 35), "RelHeight": (0, 9), "RelSide": (-6, 6), "Extension": (3, 9)}
+LABELS = {"RelSpeed": "la velocidad", "SpinRate": "el spin", "SpinAxis": "el eje de giro", "InducedVertBreak": "el IVB",
+          "HorzBreak": "el HB", "RelHeight": "la altura de salida", "RelSide": "la salida lateral", "Extension": "la extensión"}
 
 
 def raw_columns(frame: pd.DataFrame) -> pd.DataFrame:
@@ -140,13 +148,6 @@ def league_ranges(pitches: pd.DataFrame) -> dict:
     return {t: {c: [float(low.loc[t, c]), float(high.loc[t, c])] for c in INPUTS} for t in PITCH_TYPES}
 
 
-def passport_costs() -> dict:
-    """Costo del pasaporte de cada pitch de la liga (100+ pitches a nivel del mar), para dar percentiles."""
-    passport = pd.read_parquet(PASSPORT_PARQUET)
-    passport = passport[passport.pitches >= MIN_PITCHES_PER_PITCH_TYPE]
-    return {t: np.sort(passport.loc[passport.pitch_class == t, "costo_por_100"].to_numpy()) for t in PITCH_TYPES}
-
-
 def metadata(pitches: pd.DataFrame, models: dict, values: pd.Series) -> dict:
     """Todo lo que el simulador necesita además de los modelos: escala, mapa, rangos y pérdidas."""
     k_by_type, k_league = exponents()
@@ -164,7 +165,6 @@ def metadata(pitches: pd.DataFrame, models: dict, values: pd.Series) -> dict:
         "dispersion_salida": float(pitches.loc[pitches.pitch_class == FASTBALL, "release_dist_vs_fb"].median()),
         "perdida_liga": {t: v["cambio_real_sin_contacto_por_100"] for t, v in by_type.items()},
         "delta_harp": {t: v["delta_stuff_plus"] for t, v in json.loads(SCORES_JSON.read_text())["stuff_plus_harp_promedio_por_tipo"].items()},
-        "costos_pasaporte": passport_costs(),
     }
 
 
@@ -178,7 +178,6 @@ def train() -> dict:
     iterations = json.loads(pd.read_parquet(PREDICTIONS_CACHE).attrs["arboles"])
     bundle = {
         "oficial": fit_models(pitches, FEATURES, iterations),
-        "local": fit_models(pitches, LOCAL_FEATURES, {}),
         "valores": outcome_values(pitches),
     }
     bundle.update(metadata(pitches, bundle["oficial"], bundle["valores"]))
@@ -242,38 +241,56 @@ def runs(bundle: dict, models: str, rows: pd.DataFrame, features: list[str]) -> 
     return float(np.mean(combine(predicted, bundle["valores"])))
 
 
+def validate(profile: dict) -> dict:
+    """Revisa que el pitch sea posible antes de evaluarlo; los errores van en español para el coach."""
+    if profile.get("pitch_class") not in PITCH_TYPES:
+        raise ValueError("Elige un tipo de pitch de la lista.")
+    if profile.get("pitcher_hand") not in HANDS:
+        raise ValueError("La mano debe ser derecho o zurdo.")
+    air = profile.get("aire_medido")
+    if not isinstance(air, (int, float)) or not 0.7 <= air <= 1.1:
+        raise ValueError("Elige dónde se midió el pitch: nivel del mar o Harp Helú.")
+    prefixes = [""] if profile["pitch_class"] == FASTBALL else ["", "fb_"]
+    for prefix in prefixes:
+        for key, (low, high) in PHYSICAL_LIMITS.items():
+            if prefix and key == "SpinRate":
+                continue
+            value = profile.get(prefix + key)
+            owner = "de la recta de referencia" if prefix else "del pitch"
+            if value is None:
+                raise ValueError(f"Falta {LABELS[key]} {owner}.")
+            if isinstance(value, bool) or not isinstance(value, (int, float)) or not np.isfinite(value):
+                raise ValueError(f"{LABELS[key].capitalize()} {owner} debe ser un número.")
+            if not low <= value <= high:
+                raise ValueError(f"{LABELS[key].capitalize()} {owner} debe estar entre {low} y {high}.")
+    return profile
+
+
 def score(bundle: dict, profile: dict) -> dict:
+    profile = validate(profile)
     pitch_type = profile["pitch_class"]
     if pitch_type == FASTBALL:
         profile = {**profile, **{f"fb_{c}": profile[c] for c in INPUTS}}
     scale = bundle["escala"][pitch_type]
-
-    def plus(value):
-        return 100 - 10 * (value - scale["media"]) / scale["desviacion"]
-
     sea_rows = pitch_rows(bundle, profile, bundle["aire"]["mar"])
     harp_rows = pitch_rows(bundle, profile, bundle["aire"]["harp"])
-    official = runs(bundle, "oficial", sea_rows, FEATURES)
-    local_sea = runs(bundle, "local", sea_rows, LOCAL_FEATURES)
-    local_harp = runs(bundle, "local", harp_rows, LOCAL_FEATURES)
-    stuff_plus = plus(official)
-    loss = bundle["perdida_liga"].get(pitch_type)
-    cost = 100 * (local_harp - local_sea)
-    league_costs = bundle["costos_pasaporte"][pitch_type]
-    return {
-        "stuff_plus": round(stuff_plus, 1),
-        "stuff_plus_harp": None if loss is None else round(stuff_plus + bundle["delta_harp"][pitch_type], 1),
-        "perdida_liga_por_100": loss,
-        "mar": {"ivb": round(float(sea_rows.InducedVertBreak[0]), 1), "hb": round(float(sea_rows.hb_arm_side[0]), 1)},
-        "harp": {"ivb": round(float(harp_rows.InducedVertBreak[0]), 1), "hb": round(float(harp_rows.hb_arm_side[0]), 1)},
-        "percentil_costo_forma": None if len(league_costs) == 0
-        else round(100 * float(np.searchsorted(league_costs, cost)) / len(league_costs)),
-    }
+    movement = {"mar": {"ivb": round(float(sea_rows.InducedVertBreak[0]), 1), "hb": round(float(sea_rows.hb_arm_side[0]), 1)},
+                "harp": {"ivb": round(float(harp_rows.InducedVertBreak[0]), 1), "hb": round(float(harp_rows.hb_arm_side[0]), 1)}}
+    if scale["perfiles"] < MIN_PROFILES:
+        return {"stuff_plus": None, "stuff_plus_harp": None, "perfiles": scale["perfiles"], **movement}
+    stuff_plus = 100 - 10 * (runs(bundle, "oficial", sea_rows, FEATURES) - scale["media"]) / scale["desviacion"]
+    delta = bundle["delta_harp"].get(pitch_type)
+    return {"stuff_plus": round(stuff_plus, 1),
+            "stuff_plus_harp": None if delta is None else round(stuff_plus + delta, 1),
+            "perdida_liga_por_100": bundle["perdida_liga"].get(pitch_type),
+            "perfiles": scale["perfiles"], **movement}
 
 
 def page(bundle: dict) -> bytes:
-    config = {key: bundle[key] for key in ("mapa", "valores_tipicos", "rangos", "aire", "perdida_liga", "k")}
+    config = {key: bundle[key] for key in ("mapa", "valores_tipicos", "rangos", "aire", "perdida_liga", "k", "delta_harp")}
     config["tipos"] = PITCH_TYPES
+    config["perfiles"] = {t: bundle["escala"][t]["perfiles"] for t in PITCH_TYPES}
+    config["min_perfiles"] = MIN_PROFILES
     return TEMPLATE.read_text().replace("__CONFIG__", json.dumps(config, ensure_ascii=False)).encode()
 
 
@@ -295,12 +312,20 @@ def serve(bundle: dict):
             self.send(200, "text/html; charset=utf-8", routes[path] or cards_page())
 
         def do_POST(self):
+            if self.path.split("?")[0] != "/score":
+                self.send(404, "application/json", json.dumps({"error": "No existe"}).encode())
+                return
             try:
-                profile = json.loads(self.rfile.read(int(self.headers["Content-Length"])))
-                result = json.dumps(score(bundle, profile)).encode()
-                self.send(200, "application/json", result)
-            except (KeyError, TypeError, ValueError) as error:
-                self.send(400, "application/json", json.dumps({"error": str(error)}).encode())
+                profile = json.loads(self.rfile.read(int(self.headers.get("Content-Length", 0))))
+                if not isinstance(profile, dict):
+                    raise ValueError("La petición debe ser un pitch.")
+                self.send(200, "application/json", json.dumps(score(bundle, profile)).encode())
+            except json.JSONDecodeError:
+                self.send(400, "application/json", json.dumps({"error": "La petición no es un JSON válido."}, ensure_ascii=False).encode())
+            except ValueError as error:
+                self.send(400, "application/json", json.dumps({"error": str(error)}, ensure_ascii=False).encode())
+            except Exception:  # cualquier otro fallo: mensaje claro en vez de cortar la conexión
+                self.send(500, "application/json", json.dumps({"error": "No se pudo calcular este pitch."}, ensure_ascii=False).encode())
 
         def send(self, status, content_type, payload):
             self.send_response(status)

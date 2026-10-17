@@ -4,23 +4,36 @@ Construimos un modelo Stuff+ calibrado para la Liga Mexicana de Béisbol que exp
 **qué tan bueno es cada pitch en el Harp Helú (2,240 m)** y **qué debe hacer el club con esa
 información**: a quién fichar, cómo planear el juego en casa y cómo ajustar a cada pitcher.
 
-## En lo que estamos trabajando ahora...
-**Próxima reunión**: Martes 6 de octubre, 3:00 pm
+## Dónde estamos
 
-### 1. Revisión inicial de los datos
-- Revisar la estructura general del dataset.
-- Consultar el diccionario de variables.
-- Identificar valores faltantes, variables relevantes y posibles problemas de calidad.
-- Definir qué limpieza mínima es necesaria para comenzar los análisis (SIN HACERLLA!!)
+El modelo oficial es la **versión 3** (`docs/decisiones.md`, D-040): Stuff+ por componentes con la
+forma llevada a nivel del mar, el Location+ del equipo predicho a nivel del mar y Pitching+ como suma
+pesada de los dos. Los entregables 1 a 4 están hechos; el 5 (documento técnico) lo escribe el equipo
+con la guía `docs/07_guia_documento_tecnico.md`.
 
-### 2. Análisis preliminar de las hipótesis
-Trabajaremos en un análisis sencillo, principalmente estadístico, de las hipótesis dadas para el proyecto.
-**No vamos a demostrar definitivamente las hipótesis**, solo queremos identificar patrones y relaciones para decidir qué análisis vale la pena desarrollar más adelante. Trabajaremos sobre el dataset original.
+| # | Entregable de la convocatoria | Dónde está |
+|---|---|---|
+| 1 | Scores por pitch, pitcher y arsenal | `docs/08_entregable_1_scores.md`; archivos en `data/entregables/` (no se suben) |
+| 2 | Perfil físico ideal | `docs/09_entregable_2_perfil_ideal.md` |
+| 3 | Recomendaciones operativas | `docs/10_entregable_3_recomendaciones.md` |
+| 1–3 | Reporte visual de los tres | `reportes/entregables_1_a_3.html` |
+| 4 | Dashboard simulador y fichas de pitchers | `python src/simulador.py` → http://127.0.0.1:8050 |
+| 5 | Documento técnico (6–10 páginas) | Guía: `docs/07_guia_documento_tecnico.md` |
 
-* H1: La baja densidad reduce el movimiento inducido por spin - Max
-* H2: Los pitcheos basados en diferencial de velocidad ganan valor relativo - Ben
-* H3: Los groundball pitchers son más valiosos en altitud - Ari
-* H4: El spin rate por sí solo resulta insuficiente como predictor de Stuff+ - Alexis
+## Demo en 3 comandos
+
+Requisitos: Python 3.12+, los datos en `data/raw/` (ver "Datos") y, en Mac, `brew install libomp`
+(lo necesita XGBoost).
+
+```bash
+python -m venv .venv && source .venv/bin/activate && pip install -r requirements.txt
+bash -c 'cd src && for s in limpieza features target modelos_base modelo modelo_v2 arsenal pasaporte_altitud location_ben modelo_v3 ficha entregable_scores; do python $s.py || exit 1; done'
+python src/simulador.py   # la primera vez entrena sus modelos (unos 10 minutos) y abre el servidor
+```
+
+Luego abre http://127.0.0.1:8050 (simulador) y http://127.0.0.1:8050/fichas (fichas de pitchers).
+La cadena completa tarda entre 1 y 2 horas en una laptop, sobre todo por los modelos de la etapa 4 y
+el Location+.
 
 ## Fechas que mandan
 
@@ -44,6 +57,11 @@ Lee los documentos en este orden; cada uno se apoya en el anterior.
 7. [`docs/retroalimentacion_experto.md`](docs/retroalimentacion_experto.md) — lo que nos dijo un lanzador y qué cambió.
 8. [`docs/hipotesis_h4.md`](docs/hipotesis_h4.md) — H4: ¿el spin rate basta para predecir un buen pitch? (reporte: `reportes/h4_spin_rate.html`).
 9. [`docs/03_target.md`](docs/03_target.md) — target de carreras esperadas y modelos base (etapa 3; plan en `docs/03_plan_target.md`).
+10. [`docs/04_modelo.md`](docs/04_modelo.md) — el modelo y su evaluación en 2026 (etapa 4; afinado en `docs/04_afinado.md`).
+11. [`docs/05_arsenal.md`](docs/05_arsenal.md) y [`docs/05_pasaporte_altitud.md`](docs/05_pasaporte_altitud.md) — arsenal y altitud (etapa 5).
+12. [`docs/06_location_ben.md`](docs/06_location_ben.md) — el Location+ del equipo en el modelo oficial (v3).
+13. [`docs/07_guia_documento_tecnico.md`](docs/07_guia_documento_tecnico.md) — guía técnica para el documento final.
+14. [`docs/08_entregable_1_scores.md`](docs/08_entregable_1_scores.md), [`docs/09`](docs/09_entregable_2_perfil_ideal.md) y [`docs/10`](docs/10_entregable_3_recomendaciones.md) — entregables 1 a 3.
 
 ## Estructura
 
@@ -61,40 +79,56 @@ Lee los documentos en este orden; cada uno se apoya en el anterior.
 
 ## Etapas
 
-| # | Etapa | Estado | Documento | Reporte |
-|---|---|---|---|---|
-| 0 | Exploración y validación del enfoque | ✅ Hecha | `docs/00_contexto_y_approach.md` | — |
-| 1 | Limpieza de datos | ✅ Hecha | `docs/01_limpieza.md` | `reportes/etapa_01_limpieza.html` |
-| 2 | Features (física, arsenal, aire, secuencia) | ✅ Hecha | `docs/02_features.md` | `reportes/etapa_02_features.html` |
-| 3 | Target xRunValue y modelos base | ✅ Hecha | `docs/03_target.md` | `reportes/etapa_03_target.html` |
-| 4 | Modelo de dos etapas (forma → resultado) | ⏳ | — | — |
-| 5 | Validación (pitcher, temporada, altitud) | ⏳ | — | — |
-| 6 | Herramientas: pasaporte, índice Magnus, punto de mira | ⏳ | — | — |
-| 7 | Dashboard | ⏳ | — | — |
-| 8 | Documento técnico y entrevista | ⏳ | — | — |
+| # | Etapa | Documento | Reporte |
+|---|---|---|---|
+| 0 | Exploración y validación del enfoque | `docs/00_contexto_y_approach.md` | — |
+| 1 | Limpieza de datos | `docs/01_limpieza.md` | `reportes/etapa_01_limpieza.html` |
+| 2 | Features (física, arsenal, aire, secuencia) | `docs/02_features.md` | `reportes/etapa_02_features.html` |
+| 3 | Target xRunValue y modelos base | `docs/03_target.md` | `reportes/etapa_03_target.html` |
+| 4 | Modelo: Stuff+ por componentes, Location+, Pitching+, proyección y afinado | `docs/04_*.md` | `reportes/etapa_04_modelo.html` |
+| 5 | Arsenal y pasaporte de altitud | `docs/05_arsenal.md`, `docs/05_pasaporte_altitud.md` | `reportes/etapa_05_arsenal_altitud.html` |
+| 6 | Location+ del equipo (v3), validación por estadio, ficha y entregables | `docs/06_*.md`, `docs/08` a `docs/10` | `reportes/entregables_1_a_3.html` |
 
 ## Cómo correr el código
 
 ```bash
 python -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
+pip install -r requirements.txt        # en Mac, antes: brew install libomp
 
 # Coloca los archivos del hackathon en data/raw/ (no vienen en el repo)
-python src/exploracion_preliminar.py   # cifras de docs/00
-python src/perfil_calidad_datos.py     # mediciones que justifican las reglas de limpieza
-python src/limpieza.py                 # etapa 1: genera data/processed/ y el resumen
-python src/reporte_limpieza.py         # etapa 1: genera reportes/etapa_01_limpieza.html
-python src/exploracion_etapa_02.py     # evidencia del plan de features
-python src/decisiones_etapa_02.py      # reporte de las tres decisiones de features
-python src/features.py                 # etapa 2: genera data/processed/features.parquet y el resumen
-python src/reporte_features.py         # etapa 2: genera reportes/etapa_02_features.html
-python src/hipotesis_h4.py             # H4: análisis y reporte reportes/h4_spin_rate.html
-python src/evidencia_acarreo.py        # acarreo de batazos en altitud (jonrones regalados por el aire)
-python src/exploracion_etapa_03.py     # evidencia del plan del target
-python src/target.py                   # etapa 3: genera data/processed/dataset_modelo.parquet y el resumen
-python src/modelos_base.py             # etapa 3: modelos base a superar
-python src/reporte_target.py           # etapa 3: genera reportes/etapa_03_target.html
+cd src
+
+# Etapas 1 a 3: datos, features y target
+python limpieza.py && python reporte_limpieza.py
+python features.py && python reporte_features.py
+python target.py && python modelos_base.py && python reporte_target.py
+
+# Etapa 4: modelo (v1, afinado v2 y proyección)
+python stuff_componentes.py            # Stuff+ por componentes contra las bases (2024 → 2025)
+python modelo.py && python reporte_modelo.py
+python afinado.py && python modelo_v2.py
+python proyeccion.py
+
+# Etapa 5: arsenal y altitud
+python arsenal.py && python pasaporte_altitud.py && python riesgo_altitud.py
+python reporte_arsenal_altitud.py
+
+# Etapa 6: Location+ del equipo (modelo oficial v3) y validaciones
+python location_ben.py && python location_ben.py --estadio
+python modelo_v3.py
+python validacion_estadio.py && python metricas_documento.py
+python riesgo_contacto.py && python perfil_ideal.py
+
+# Entregables y herramientas
+python entregable_scores.py && python reporte_entregables.py
+python ficha.py
+python simulador.py                    # http://127.0.0.1:8050 y /fichas
 ```
+
+Los análisis de apoyo (`exploracion_*.py`, `hipotesis_h4.py`, `evidencia_acarreo.py`,
+`relacion_componentes.py`, `location_sin_conteo.py`) generan las cifras de sus documentos y no son
+necesarios para la demo. `location_plus.py`, `location_plus_xgb.py` y `run_value.py` en la raíz son los
+originales del Location+ de Ben (PR #2); el modelo oficial los usa a través de `src/location_ben.py`.
 
 ## Datos
 
