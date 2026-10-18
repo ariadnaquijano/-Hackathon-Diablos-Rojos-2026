@@ -17,7 +17,7 @@ con la guía `docs/07_guia_documento_tecnico.md`.
 | 2 | Perfil físico ideal | `docs/09_entregable_2_perfil_ideal.md` |
 | 3 | Recomendaciones operativas | `docs/10_entregable_3_recomendaciones.md` |
 | 1–3 | Reporte visual de los tres | `reportes/entregables_1_a_3.html` |
-| 4 | Dashboard simulador y fichas de pitchers | `python src/simulador.py` → http://127.0.0.1:8050 |
+| 4 | Dashboard simulador y fichas de pitchers | Páginas sueltas, sin servidor: `python src/simulador.py --estatico` → `data/publicar/` |
 | 5 | Documento técnico (6–10 páginas) | Guía: `docs/07_guia_documento_tecnico.md` |
 
 ## Demo en 3 comandos
@@ -28,10 +28,14 @@ Requisitos: Python 3.12+, los datos en `data/raw/` (ver "Datos") y, en Mac, `bre
 ```bash
 python -m venv .venv && source .venv/bin/activate && pip install -r requirements.txt
 bash -c 'cd src && for s in limpieza features target modelos_base modelo modelo_v2 arsenal pasaporte_altitud location_ben modelo_v3 ficha entregable_scores; do python $s.py || exit 1; done'
-python src/simulador.py   # la primera vez entrena sus modelos (unos 10 minutos) y abre el servidor
+python src/simulador.py --estatico   # la primera vez entrena sus modelos (unos 10 minutos)
 ```
 
-Luego abre http://127.0.0.1:8050 (simulador) y http://127.0.0.1:8050/fichas (fichas de pitchers).
+Queda la carpeta de entrega `data/publicar/`: `index.html` (portada), `simulador.html`, `fichas.html` y
+`entregables_1_a_3.html`. El PDF del documento técnico se pone ahí como `documento_tecnico.pdf`.
+El jurado no ejecuta código: el simulador calcula el Stuff+ en el navegador con los árboles del modelo,
+así que las dos páginas funcionan en cualquier hosting estático. `python src/verificar_simulador.py`
+comprueba que el navegador da lo mismo que Python (2,000 pitches al azar: diferencia máxima 0.0).
 La cadena tarda entre 1 y 2 horas en una laptop, sobre todo por los modelos de la etapa 4 y el
 Location+. Solo arma lo que necesitan el simulador y las fichas: los resúmenes de los entregables 2 y
 3, las validaciones y los reportes ya vienen en `reportes/`. Para regenerarlos, corre la sección
@@ -129,7 +133,8 @@ python altura_por_pitcher.py            # estimado de altura por pitcher con enc
 # Entregables y herramientas
 python entregable_scores.py && python reporte_entregables.py
 python ficha.py
-python simulador.py                    # http://127.0.0.1:8050 y /fichas
+python simulador.py --estatico         # carpeta de entrega en data/publicar/
+python verificar_simulador.py          # el simulador del navegador contra el de Python
 ```
 
 Los análisis de apoyo (`exploracion_*.py`, `hipotesis_h4.py`, `evidencia_acarreo.py`,

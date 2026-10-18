@@ -47,7 +47,7 @@ p { margin: 0; }
 /* Barra superior */
 .appbar { position: sticky; top: 0; z-index: 20; background: var(--surface); border-bottom: 1px solid var(--rule); }
 .appbar-inner { max-width: 84rem; margin-inline: auto; padding: 0 16px; height: 56px; display: flex; align-items: center; gap: 24px; }
-.brand { display: flex; align-items: baseline; gap: 10px; white-space: nowrap; }
+.brand { display: flex; align-items: baseline; gap: 10px; white-space: nowrap; text-decoration: none; }
 .brand b { font: 700 1.25rem/1 var(--display); letter-spacing: 0.02em; text-transform: uppercase; color: var(--accent); }
 .brand span { font: 500 0.8125rem/1 var(--body); color: var(--ink-3); }
 .tabs { display: flex; gap: 4px; height: 100%; }
@@ -104,7 +104,6 @@ button:hover { background: var(--surface-2); }
 
 /* Resultados */
 .results { display: grid; gap: 16px; min-width: 0; transition: opacity 150ms var(--ease); }
-.results.is-loading { opacity: 0.55; }
 .verdict { display: grid; grid-template-columns: 1fr auto 1fr; align-items: stretch; }
 .verdict .side { padding: 20px 24px; display: grid; gap: 10px; align-content: start; }
 .verdict .side + .side { border-left: 1px solid var(--rule); }
@@ -179,10 +178,10 @@ button:hover { background: var(--surface-2); }
 <a class="skip" href="#resultado">Saltar al resultado</a>
 <header class="appbar">
   <div class="appbar-inner">
-    <div class="brand"><b>Diablos Rojos</b><span>Laboratorio de pitcheo</span></div>
+    <a class="brand" href="index.html" title="Inicio de la entrega"><b>Diablos Rojos</b><span>Laboratorio de pitcheo</span></a>
     <nav class="tabs" aria-label="Secciones">
-      <a href="/" aria-current="page">Simulador</a>
-      <a href="/fichas">Fichas<span class="long">&nbsp;de pitchers</span></a>
+      <a href="simulador.html" aria-current="page">Simulador</a>
+      <a href="fichas.html">Fichas<span class="long">&nbsp;de pitchers</span></a>
     </nav>
     <span class="meta">Modelo v3 · LMB 2024–2025</span>
   </div>
@@ -217,7 +216,7 @@ button:hover { background: var(--surface-2); }
     <div class="actions"><button type="button" id="reset">Cargar un pitch mediano de la LMB</button></div>
   </form>
 
-  <main class="results" id="resultado" aria-live="polite" aria-busy="false">
+  <main class="results" id="resultado" aria-live="polite">
     <section class="card verdict" aria-label="Stuff+ en los dos estadios">
       <div class="side">
         <span class="place"><i style="background:var(--sea)"></i>Estadio a nivel del mar</span>
@@ -290,7 +289,11 @@ button:hover { background: var(--surface-2); }
 <div class="tooltip" id="tooltip" role="tooltip"></div>
 
 <script>
+__MOTOR__
+</script>
+<script>
 const CONFIG = __CONFIG__;
+const MODELO = __MODELO__;
 const NAMES = { "Four-Seam": "Recta", Sinker: "Sinker", Cutter: "Cutter", Slider: "Slider", Curveball: "Curva", Changeup: "Cambio", Splitter: "Splitter" };
 const PLURALS = { "Four-Seam": "rectas", Sinker: "sinkers", Cutter: "cutters", Slider: "sliders", Curveball: "curvas", Changeup: "cambios", Splitter: "splitters" };
 const FIELDS = [
@@ -304,7 +307,7 @@ const MIRRORED = new Set(["HorzBreak", "RelSide"]);
 const el = id => document.getElementById(id);
 const number = (v, digits = 1) => v == null || Number.isNaN(v) ? "—" : Number(v).toLocaleString("es-MX", { minimumFractionDigits: digits, maximumFractionDigits: digits, useGrouping: false });
 const signed = (v, digits = 1) => (v > 0 ? "+" : v < 0 ? "−" : "") + number(Math.abs(v), digits);
-const state = { type: "Four-Seam", hand: "Right", air: CONFIG.aire.mar, result: null, timer: null, request: 0 };
+const state = { type: "Four-Seam", hand: "Right", air: CONFIG.aire.mar, result: null, timer: null };
 
 el("types").innerHTML = CONFIG.tipos.map(t =>
   `<label><input type="radio" name="pitch_class" value="${t}" ${t === state.type ? "checked" : ""}><span>${NAMES[t]}</span></label>`).join("");
@@ -492,25 +495,15 @@ el("map").addEventListener("click", event => {
   schedule(0);
 });
 
-async function calculate() {
+// El cálculo corre en el navegador (motor_stuff.js): la página no necesita servidor.
+function calculate() {
   if (!validate()) { el("reading").textContent = "Completa los campos marcados para calcular."; return; }
-  const id = ++state.request;
-  el("resultado").classList.add("is-loading");
-  el("resultado").setAttribute("aria-busy", "true");
-  el("error").textContent = "";
-  try {
-    const response = await fetch("/score", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(profile()) });
-    const result = await response.json();
-    if (!response.ok) { el("error").textContent = result.error || "No se pudo calcular este pitch."; return; }
-    if (id !== state.request) return;
-    state.result = result;
-    renderResult(result);
-    renderMap();
-  } catch (error) {
-    el("error").textContent = `No se pudo calcular: ${error.message}. Revisa que el servidor siga corriendo (python src/simulador.py).`;
-  } finally {
-    if (id === state.request) { el("resultado").classList.remove("is-loading"); el("resultado").setAttribute("aria-busy", "false"); }
-  }
+  const input = profile(), problem = MotorStuff.problem(MODELO, input);
+  el("error").textContent = problem || "";
+  if (problem) return;
+  state.result = MotorStuff.score(MODELO, input);
+  renderResult(state.result);
+  renderMap();
 }
 function schedule(delay = 250) { clearTimeout(state.timer); state.timer = setTimeout(calculate, delay); }
 

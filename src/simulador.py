@@ -14,13 +14,16 @@ El simulador devuelve:
   los más y menos efectivos marcados, y el pitch ingresado en los dos aires.
 
 La primera corrida entrena los modelos con 2024–2025 y los guarda en data/modelos/, que no se sube.
-Después levanta un servidor local en http://127.0.0.1:8050, que también sirve las fichas de los
-pitchers (src/ficha.py) en /fichas.
+El jurado no ejecuta código: la página lleva los árboles del modelo y calcula el Stuff+ en el navegador
+(src/plantillas/motor_stuff.js), así que funciona como archivo suelto. --estatico arma la entrega en
+data/publicar/: portada, simulador, fichas (src/ficha.py) y reporte de los entregables 1 a 3. Sin esa
+opción se sirve lo mismo en http://127.0.0.1:8050.
 
 Uso:
     python src/simulador.py             # entrena si hace falta y abre el servidor
     python src/simulador.py --entrenar  # vuelve a entrenar todo
     python src/simulador.py --metadatos # solo recalcula escala, mapa y rangos, sin reentrenar
+    python src/simulador.py --estatico  # arma la carpeta de entrega en data/publicar/
 """
 
 import json
@@ -40,6 +43,11 @@ from stuff_componentes import FEATURES, choose_iterations, combine, new_model, o
 
 BUNDLE = ROOT / "data" / "modelos" / "simulador.joblib"
 TEMPLATE = Path(__file__).parent / "plantillas" / "simulador.html"
+ENGINE_JS = Path(__file__).parent / "plantillas" / "motor_stuff.js"
+HOME_TEMPLATE = Path(__file__).parent / "plantillas" / "inicio_entrega.html"
+REPORT_HTML = REPORTS_DIR / "entregables_1_a_3.html"
+TECHNICAL_PDF = "documento_tecnico.pdf"
+PUBLISH_DIR = ROOT / "data" / "publicar"
 CARDS_HTML = ROOT / "data" / "fichas" / "fichas_pitchers.html"
 # Delta de Stuff+ por tipo en la escala oficial del arsenal (src/entregable_scores.py), para no dar dos cifras.
 SCORES_JSON = REPORTS_DIR / "etapa_06_scores.json"
@@ -287,12 +295,50 @@ def score(bundle: dict, profile: dict) -> dict:
             "perfiles": scale["perfiles"], **movement}
 
 
+def tree_arrays(predictor) -> dict:
+    """Un árbol en arreglos planos; c es el conjunto de categorías que van a la izquierda (−1 si es numérico)."""
+    nodes = predictor.nodes
+    leaf = nodes["is_leaf"].astype(bool)
+    categorical = nodes["is_categorical"].astype(bool) & ~leaf
+    # Las categorías son menos de 32, así que basta la primera palabra de cada conjunto.
+    left_sets = np.full(len(nodes), -1, dtype=np.int64)
+    left_sets[categorical] = predictor.raw_left_cat_bitsets[nodes["bitset_idx"][categorical], 0]
+    return {"f": np.where(leaf, -1, nodes["feature_idx"]).tolist(),
+            "t": np.where(leaf, nodes["value"], nodes["num_threshold"]).tolist(),
+            "l": nodes["left"].tolist(), "r": nodes["right"].tolist(), "c": left_sets.tolist()}
+
+
+def encoded_order(model) -> list[str]:
+    """Orden de columnas que ven los árboles: el codificador pone las categóricas primero."""
+    return [name for _, _, mask in model._preprocessor.transformers_ for name in model.feature_names_in_[mask]]
+
+
+def browser_model(bundle: dict) -> dict:
+    components = bundle["oficial"]
+    first = next(iter(components.values()))[1]
+    encoder = first._preprocessor.named_transformers_["encoder"]
+    categorical = first.feature_names_in_[first._preprocessor.transformers_[0][2]]
+    return {
+        "orden": encoded_order(first),
+        "categorias": {name: list(values) for name, values in zip(categorical, encoder.categories_)},
+        "componentes": {name: {"kind": kind, "base": float(model._baseline_prediction.ravel()[0]),
+                               "trees": [tree_arrays(tree) for (tree,) in model._predictors]}
+                        for name, (kind, model) in components.items()},
+        "valores": bundle["valores"].to_dict(), "min_perfiles": MIN_PROFILES,
+        "limites": PHYSICAL_LIMITS, "etiquetas": LABELS,
+        **{key: bundle[key] for key in ("k", "aire", "escala", "valores_tipicos", "delta_harp", "perdida_liga", "dispersion_salida")},
+    }
+
+
 def page(bundle: dict) -> bytes:
     config = {key: bundle[key] for key in ("mapa", "valores_tipicos", "rangos", "aire", "perdida_liga", "k", "delta_harp")}
     config["tipos"] = PITCH_TYPES
     config["perfiles"] = {t: bundle["escala"][t]["perfiles"] for t in PITCH_TYPES}
     config["min_perfiles"] = MIN_PROFILES
-    return TEMPLATE.read_text().replace("__CONFIG__", json.dumps(config, ensure_ascii=False)).encode()
+    html = (TEMPLATE.read_text().replace("__CONFIG__", json.dumps(config, ensure_ascii=False))
+            .replace("__MOTOR__", ENGINE_JS.read_text())
+            .replace("__MODELO__", json.dumps(browser_model(bundle), ensure_ascii=False, separators=(",", ":"))))
+    return html.encode()
 
 
 def cards_page() -> bytes:
@@ -301,8 +347,51 @@ def cards_page() -> bytes:
     return "<p>Faltan las fichas: corre <code>python src/ficha.py</code> y recarga.</p>".encode()
 
 
+def card(href: str, label: str, title: str, text: str, main: bool = False) -> str:
+    return (f'<a class="card{" main" if main else ""}" href="{href}"><span class="label">{label}</span>'
+            f'<h2>{title}</h2><p>{text}</p><span class="go">Abrir →</span></a>')
+
+
+def home_page() -> bytes:
+    """Portada de la entrega; el documento técnico aparece cuando su PDF ya está en la carpeta."""
+    has_pdf = (PUBLISH_DIR / TECHNICAL_PDF).exists()
+    cards = [
+        card("simulador.html", "Entregable 4 · Dashboard", "Simulador Stuff+",
+             "Escriba un pitch como lo da TrackMan y vea su Stuff+ a nivel del mar y en el Harp Helú.", main=True),
+        card("fichas.html", "Entregables 1 y 4", "Fichas de pitchers",
+             "Stuff+, Location+ y Pitching+ de cada pitcher, su arsenal y su riesgo en altura."),
+        card("entregables_1_a_3.html", "Entregables 1, 2 y 3", "Scores, perfil ideal y recomendaciones",
+             "Qué pierde cada pitch en la CDMX, qué perfil resiste y a quién conviene fichar."),
+    ]
+    if has_pdf:
+        cards.append(card(TECHNICAL_PDF, "Entregable 5", "Documento técnico",
+                          "Metodología, validación fuera de muestra y límites del modelo."))
+    technical = f'<a href="{TECHNICAL_PDF}">Documento técnico</a>' if has_pdf else "Documento técnico (PDF)"
+    rows = [("1", "Scores por pitch, pitcher y arsenal",
+             '<a href="entregables_1_a_3.html">Reporte</a> y <a href="fichas.html">fichas</a>'),
+            ("2", "Perfil físico ideal", '<a href="entregables_1_a_3.html#t2">Reporte, sección 2</a>'),
+            ("3", "Recomendaciones operativas", '<a href="entregables_1_a_3.html#t3">Reporte, sección 3</a>'),
+            ("4", "Dashboard simulador", '<a href="simulador.html">Simulador</a> y <a href="fichas.html">fichas</a>'),
+            ("5", "Documento técnico", technical)]
+    html = (HOME_TEMPLATE.read_text().replace("__CARDS__", "".join(cards))
+            .replace("__ROWS__", "".join(f"<tr><td>{n}</td><td>{what}</td><td>{where}</td></tr>" for n, what, where in rows)))
+    return html.encode()
+
+
+def publish(bundle: dict):
+    """La entrega como archivos sueltos y enlazados: se abre con doble clic o en cualquier hosting estático."""
+    PUBLISH_DIR.mkdir(parents=True, exist_ok=True)
+    pages = {"index.html": home_page(), "simulador.html": page(bundle), "fichas.html": cards_page(),
+             "entregables_1_a_3.html": REPORT_HTML.read_bytes()}
+    for name, content in pages.items():
+        (PUBLISH_DIR / name).write_bytes(content)
+    print(f"Entrega en {PUBLISH_DIR}: {', '.join(pages)}", flush=True)
+
+
 def serve(bundle: dict):
-    routes = {"/": page(bundle), "/fichas": None}
+    simulator = page(bundle)
+    routes = {"/": home_page, "/index.html": home_page, "/simulador.html": lambda: simulator,
+              "/fichas.html": cards_page, "/entregables_1_a_3.html": REPORT_HTML.read_bytes}
 
     class Handler(BaseHTTPRequestHandler):
         def do_GET(self):
@@ -310,23 +399,7 @@ def serve(bundle: dict):
             if path not in routes:
                 self.send(404, "text/plain; charset=utf-8", "No existe".encode())
                 return
-            self.send(200, "text/html; charset=utf-8", routes[path] or cards_page())
-
-        def do_POST(self):
-            if self.path.split("?")[0] != "/score":
-                self.send(404, "application/json", json.dumps({"error": "No existe"}).encode())
-                return
-            try:
-                profile = json.loads(self.rfile.read(int(self.headers.get("Content-Length", 0))))
-                if not isinstance(profile, dict):
-                    raise ValueError("La petición debe ser un pitch.")
-                self.send(200, "application/json", json.dumps(score(bundle, profile)).encode())
-            except json.JSONDecodeError:
-                self.send(400, "application/json", json.dumps({"error": "La petición no es un JSON válido."}, ensure_ascii=False).encode())
-            except ValueError as error:
-                self.send(400, "application/json", json.dumps({"error": str(error)}, ensure_ascii=False).encode())
-            except Exception:  # cualquier otro fallo: mensaje claro en vez de cortar la conexión
-                self.send(500, "application/json", json.dumps({"error": "No se pudo calcular este pitch."}, ensure_ascii=False).encode())
+            self.send(200, "text/html; charset=utf-8", routes[path]())
 
         def send(self, status, content_type, payload):
             self.send_response(status)
@@ -339,7 +412,7 @@ def serve(bundle: dict):
         def log_message(self, *args):
             pass
 
-    print(f"Simulador en http://{HOST}:{PORT} · fichas en http://{HOST}:{PORT}/fichas", flush=True)
+    print(f"Entrega en http://{HOST}:{PORT}", flush=True)
     ThreadingHTTPServer((HOST, PORT), Handler).serve_forever()
 
 
@@ -350,7 +423,10 @@ def main():
         bundle = refresh_metadata()
     else:
         bundle = joblib.load(BUNDLE)
-    serve(bundle)
+    if "--estatico" in sys.argv:
+        publish(bundle)
+    else:
+        serve(bundle)
 
 
 if __name__ == "__main__":

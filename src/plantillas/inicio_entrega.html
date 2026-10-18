@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="es-MX">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Diablos Rojos · Entrega</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<style>
+/* Portada de la entrega: el jurado abre este archivo y llega a todo con un clic, sin ejecutar nada.
+   Mismos tokens que el simulador, las fichas y el reporte. */
+:root {
+  --bg: #f4f5f7; --surface: #ffffff; --ink: #14171c; --ink-2: #454c59; --ink-3: #6b7280;
+  --rule: #e1e4e9; --rule-strong: #c9ced6; --accent: #b3122a; --accent-soft: #fbe9ec;
+  --display: "Barlow Condensed", "Arial Narrow", "Helvetica Neue", sans-serif;
+  --body: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --radius: 10px; --shadow: 0 1px 2px rgb(16 24 40 / 0.04), 0 1px 3px rgb(16 24 40 / 0.06);
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f1216; --surface: #171b21; --ink: #eceef2; --ink-2: #b8bfca; --ink-3: #8d95a3;
+    --rule: #2a3039; --rule-strong: #3a414c; --accent: #ff5a6e; --accent-soft: #3a1b22; --shadow: none; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0f1216; --surface: #171b21; --ink: #eceef2; --ink-2: #b8bfca; --ink-3: #8d95a3;
+  --rule: #2a3039; --rule-strong: #3a414c; --accent: #ff5a6e; --accent-soft: #3a1b22; --shadow: none; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 400 1rem/1.6 var(--body); padding: 0 16px 80px; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+main { max-width: 56rem; margin-inline: auto; display: grid; gap: 40px; padding-top: 56px; }
+p { margin: 0; }
+.eyebrow { font: 600 0.75rem/1 var(--mono); text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent); }
+h1 { margin: 12px 0 14px; font: 700 clamp(2.25rem, 5vw, 3.25rem)/1.02 var(--display); text-wrap: balance; }
+h2 { margin: 0; font: 700 1.5rem/1.1 var(--display); }
+.lede { font-size: 1.1875rem; color: var(--ink-2); max-width: 44rem; }
+.cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+@media (max-width: 40rem) { .cards { grid-template-columns: 1fr; } }
+.card { display: grid; gap: 10px; align-content: start; padding: 22px; background: var(--surface); border: 1px solid var(--rule);
+  border-radius: var(--radius); box-shadow: var(--shadow); color: inherit; text-decoration: none; }
+a.card:hover { border-color: var(--ink-3); }
+.card.main { grid-column: 1 / -1; border-top: 3px solid var(--accent); }
+.card .label { font: 600 0.6875rem/1 var(--mono); text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-3); }
+.card p { color: var(--ink-2); font-size: 0.9375rem; }
+.card .go { font-weight: 600; color: var(--accent); font-size: 0.9375rem; }
+.card.pending { border-style: dashed; box-shadow: none; }
+.card.pending .go { color: var(--ink-3); }
+table { width: 100%; border-collapse: collapse; font-size: 0.9375rem; background: var(--surface); border: 1px solid var(--rule); border-radius: var(--radius); overflow: hidden; }
+th, td { text-align: left; padding: 12px 16px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+th { font: 600 0.6875rem/1.2 var(--mono); text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-3); }
+tr:last-child td { border-bottom: 0; }
+td:first-child { font: 700 1.125rem/1.2 var(--display); color: var(--accent); width: 3rem; }
+td a { color: var(--ink); font-weight: 600; }
+.note { font-size: 0.875rem; color: var(--ink-3); }
+section { display: grid; gap: 14px; }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <p class="eyebrow">ISAC Hackathon 2026 · Diablos Rojos del México</p>
+    <h1>Stuff+, Location+ y Pitching+ ajustados por altura para el Harp Helú</h1>
+    <p class="lede">Todo se abre en el navegador, sin instalar ni ejecutar nada. El simulador calcula el Stuff+ en la propia página con el modelo oficial.</p>
+  </header>
+
+  <div class="cards">__CARDS__</div>
+
+  <section aria-labelledby="mapa">
+    <h2 id="mapa">Dónde está cada entregable</h2>
+    <table>
+      <thead><tr><th>#</th><th>Entregable</th><th>Dónde</th></tr></thead>
+      <tbody>__ROWS__</tbody>
+    </table>
+    <p class="note">Abra los archivos desde la misma carpeta: las páginas se enlazan entre sí. Sin internet solo cambia la tipografía.</p>
+  </section>
+</main>
+</body>
+</html>

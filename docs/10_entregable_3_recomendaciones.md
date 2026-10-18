@@ -3,8 +3,8 @@
 > **Para quién:** pitching coach y director deportivo.
 > **Evidencia:** las mismas fuentes de `docs/08_entregable_1_scores.md` y
 > `docs/09_entregable_2_perfil_ideal.md`, más `docs/03_target.md` (valor del conteo).
-> **Herramientas:** simulador (`python src/simulador.py`, http://127.0.0.1:8050) y fichas de pitchers
-> (/fichas).
+> **Herramientas:** simulador (`simulador.html`) y fichas de pitchers
+> (`fichas.html`), páginas que funcionan sin servidor (`python src/simulador.py --estatico`).
 > **Cómo leer la fuerza de cada recomendación:**
 > - **Probado:** intervalo de 95 % fuera de cero.
 > - **Tendencia:** apunta al mismo lado, pero el intervalo toca cero.
@@ -46,7 +46,7 @@ Mismo pitcher y mismo pitch, carreras por 100 batazos en la CDMX: **rectas +3.4*
 
 ### Paso 1: su Stuff+ y lo que le cobra la CDMX
 
-- **Si ya lanzó en la LMB:** abrir su ficha (/fichas).
+- **Si ya lanzó en la LMB:** abrir su ficha (`fichas.html`).
   - Revisar Stuff+, Location+ y Pitching+, el **riesgo en el Harp Helú** (tercio bajo, medio o alto)
     y su arsenal.
 - **Si viene de fuera o solo hay sus números de TrackMan:** meter cada pitch en el simulador.

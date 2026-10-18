@@ -1,0 +1,10 @@
+{
+  "pitches": 2000,
+  "diferencia_maxima": {
+    "stuff_plus": 0.0,
+    "stuff_plus_harp": 0.0,
+    "movimiento": 0.0
+  },
+  "tolerancia": 0.1,
+  "pasa": true
+}
