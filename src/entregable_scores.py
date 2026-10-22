@@ -26,7 +26,7 @@ import pandas as pd
 from arsenal import ARSENAL_PARQUET
 from config import HOLDOUT_SEASON, MODEL_PARQUET, REPORTS_DIR, ROOT
 from exploracion_etapa_04 import EXTREME, SEA_LEVEL
-from ficha import altitude_risk, arsenal_table, harp_arsenal, harp_pitcher, type_losses
+from ficha import altitude_risk, arsenal_table, harp_arsenal, harp_pitcher, risk_terciles, type_losses
 from modelo import load
 from modelo_v3 import PITCHER_VALUES_V3, official_pitches
 from modelos_base import RANDOM_SEED, TARGET
@@ -84,6 +84,8 @@ def pitcher_scores(pitches: pd.DataFrame, losses: dict) -> pd.DataFrame:
     risk = altitude_risk(arsenal_table(losses))
     values = values.merge(risk, on=["pitcher_anon_id", "year"], how="left")
     values["stuff_plus_harp_estimado"] = harp_pitcher(values)
+    # El índice solo ordena; el tercio es la lectura que usan las fichas.
+    values["riesgo_tercio"] = risk_terciles(values)
     # Solo bolas en juego: los fouls también traen tipo de batazo y no cuentan para el rolling.
     batted = pitches[(pitches.is_ball_in_play == 1) & pitches.hit_type.notna() & (pitches.hit_type != "Bunt")]
     rolling = batted.groupby(["pitcher_anon_id", "year"]).hit_type.apply(lambda s: 100 * (s == "GroundBall").mean())
@@ -169,7 +171,7 @@ def main():
                                          "stuff", "location", "pitching", TARGET])
     export(pitchers, "scores_por_pitcher", ["pitcher_anon_id", "year", "pitches", "stuff_plus", "location_plus",
                                             "pitching_plus", "stuff_plus_harp_estimado", "riesgo_altura",
-                                            "cobertura_pct", "rolling_pct", "arquetipo", "p_swing", "p_whiff",
+                                            "riesgo_tercio", "cobertura_pct", "rolling_pct", "arquetipo", "p_swing", "p_whiff",
                                             "p_foul", "p_strike"])
     export(arsenal, "scores_por_arsenal", ["pitcher_anon_id", "year", "pitch_class", "pitches", "uso_pct",
                                            "stuff_plus", "stuff_plus_harp", "perdida_altura_por_100", "p_swing",

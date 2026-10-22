@@ -182,6 +182,8 @@ button:hover { background: var(--surface-2); }
     <nav class="tabs" aria-label="Secciones">
       <a href="simulador.html" aria-current="page">Simulador</a>
       <a href="fichas.html">Fichas<span class="long">&nbsp;de pitchers</span></a>
+      <a href="entregables_1_a_3.html">Perfil<span class="long">&nbsp;y recomendaciones</span></a>
+      <a href="documento_tecnico.pdf">Documento<span class="long">&nbsp;técnico</span></a>
     </nav>
     <span class="meta">Modelo v3 · LMB 2024–2025</span>
   </div>
@@ -277,10 +279,12 @@ button:hover { background: var(--surface-2); }
       <summary>Cómo se calcula</summary>
       <ul>
         <li><b>Stuff+ a nivel del mar:</b> el pitch se lleva al aire del mar con aire^k por tipo y lo evalúan cinco modelos (swing, whiff, foul, strike cantado y valor del batazo) que solo ven su física. 100 es el promedio de su tipo en la LMB y 10 puntos es una desviación entre pitchers.</li>
+        <li><b>Qué es el aire:</b> el frenado relativo de las rectas de cada juego (≈0.84 en el Harp Helú; la densidad del aire ahí es ≈0.79). k está en esa escala: la recta usa 1.50 en IVB, que en densidad equivale a 1.05, dentro de lo que predice la física (1.00 a 1.11).</li>
         <li><b>Stuff+ en el Harp Helú:</b> resta la pérdida real promedio de su tipo en altitud extrema, medida con el mismo pitcher en los dos lugares. Es la cifra calibrada.</li>
-        <li><b>Qué cambia la altura:</b> a todos los pitches de un mismo tipo les quita en promedio lo mismo, así que no cambia el orden entre rectas. Es la única cifra calibrada con el mismo pitcher en las dos altitudes; una estimación pitch por pitch no le ganó a este promedio (D-034).</li>
+        <li><b>Qué cambia la altura:</b> a todos los pitches de un mismo tipo les quita en promedio lo mismo, así que no cambia el orden entre rectas. Es la única cifra calibrada con el mismo pitcher en las dos altitudes; una estimación pitch por pitch no le ganó a este promedio.</li>
         <li><b>VAA relativo:</b> no se pide, se fija en el típico de su tipo, porque depende de a qué altura llega el pitch.</li>
         <li><b>Muestra mínima:</b> un tipo con menos de 30 perfiles en la liga (hoy el splitter) no recibe Stuff+.</li>
+        <li><b>Una variable a la vez:</b> cada campo se mueve solo, pero en los pitches reales velocidad, spin y movimiento cambian juntos. Por eso subir una sola variable no siempre sube el Stuff+; por ejemplo, la velocidad de la recta con todo lo demás fijo deja de sumar arriba de 94 mph. Para un pitcher real, su ficha usa sus pitches lanzados.</li>
         <li><b>Rangos:</b> si un valor sale del 1 % al 99 % de la liga para su tipo, el campo se marca: el modelo casi no vio pitches así.</li>
       </ul>
     </details>

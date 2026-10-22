@@ -39,6 +39,8 @@ def main():
         "filas": scores["filas"],
         "contacto": read("etapa_06_riesgo_contacto.json"),
         "k": {t: {"ivb": v["ivb"]["k_usado"], "hb": v["hb"]["k_usado"]} for t, v in k.items()},
+        "k_densidad": {t: {c: v[c]["k_densidad"] for c in ("ivb", "hb") if c in v}
+                       for t, v in read("etapa_06_fisica_densidad.json")["por_tipo"].items()},
         "pares": {t: v["pares"] for t, v in read("etapa_05_pasaporte.json")["chequeo_por_tipo"].items()},
         "conteos": count_values(),
         "diferencias": read("etapa_06_diferencias_tipo.json")["diferencias"],

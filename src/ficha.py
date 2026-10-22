@@ -81,14 +81,19 @@ def altitude_risk(arsenal: pd.DataFrame) -> pd.DataFrame:
     return table.reset_index()
 
 
+def risk_terciles(values: pd.DataFrame) -> pd.Series:
+    """Tercio de riesgo en altura por temporada; vacío si el estimado no cubre 60 %+ de sus pitches."""
+    covered = values[values.cobertura_pct >= MIN_COVERAGE_PCT]
+    terciles = covered.groupby("year").riesgo_altura.transform(lambda s: pd.qcut(s, 3, labels=TERCILES))
+    return terciles.astype(str).reindex(values.index)
+
+
 def pitcher_table(risk: pd.DataFrame) -> pd.DataFrame:
     values = pd.read_parquet(PITCHER_VALUES_V3)
     for plus in PLUS:
         values[f"{plus}_pct"] = 100 * values.groupby("year")[plus].rank(pct=True)
     values = values.merge(risk, on=["pitcher_anon_id", "year"], how="left")
-    covered = values[values.cobertura_pct >= MIN_COVERAGE_PCT]
-    terciles = covered.groupby("year").riesgo_altura.transform(lambda s: pd.qcut(s, 3, labels=TERCILES))
-    values["riesgo_tercio"] = terciles.astype(str).reindex(values.index)
+    values["riesgo_tercio"] = risk_terciles(values)
     # Solo con cobertura suficiente: si no, el estimado lo decidiría un solo pitch, igual que el tercio.
     values["stuff_plus_harp"] = harp_pitcher(values).where(values.riesgo_tercio.notna())
     values["stuff_plus_harp_pct"] = 100 * values.groupby("year").stuff_plus_harp.rank(pct=True)

@@ -85,6 +85,9 @@ tr:last-child td { border-bottom: 0; }
 .legend i.diamond { border-radius: 1px; transform: rotate(45deg); width: 9px; height: 9px; }
 .legend i.line { width: 18px; height: 2px; border-radius: 1px; }
 figcaption, .caption { font-size: 0.8125rem; color: var(--ink-3); }
+.dens { margin-left: 8px; font: 500 0.8125rem var(--mono); color: var(--ink-3); }
+.backnav { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 0.9375rem; }
+.backnav a { color: var(--ink-2); font-weight: 600; }
 details.table-view summary { cursor: pointer; font-size: 0.875rem; color: var(--ink-2); font-weight: 600; }
 details.table-view[open] summary { margin-bottom: 8px; }
 .evidence { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
@@ -125,6 +128,7 @@ footer code { font-family: var(--mono); font-size: 0.75rem; }
 <body>
 <main>
   <header class="top">
+    <nav class="backnav" aria-label="Entrega"><a href="index.html">← Inicio</a><a href="simulador.html">Simulador</a><a href="fichas.html">Fichas de pitchers</a><a href="documento_tecnico.pdf">Documento técnico</a></nav>
     <span class="eyebrow">ISAC Hackathon 2026 · Diablos Rojos · Entregables 1, 2 y 3</span>
     <h1>Qué pierde en la CDMX, qué arsenal resiste y a quién conviene fichar</h1>
     <p>Stuff+ ajustado por altitud para el Harp Helú (2,240 m). Cada cifra sale de pitchers que lanzaron en las dos altitudes o de la liga completa, con intervalos de 95 % que remuestrean pitchers completos. Datos 2024–2025; 2026 no se usó para estas conclusiones.</p>
@@ -162,7 +166,7 @@ footer code { font-family: var(--mono); font-size: 0.75rem; }
 
     <div class="block">
       <h3>¿Qué arsenal produce el Stuff+ más alto en el Harp Helú?</h3>
-      <p class="lead">Cada pitcher-temporada (300+ pitches) se clasificó por su uso con reglas fijadas antes de correr (D-038). El estimado en el Harp Helú resta la pérdida promedio de la liga para su mezcla.</p>
+      <p class="lead">Cada pitcher-temporada (300+ pitches) se clasificó por su uso con reglas fijadas antes de correr. El estimado en el Harp Helú resta la pérdida promedio de la liga para su mezcla.</p>
       <figure class="card" style="margin:0">
         <div class="legend">
           <span><i style="background:var(--sea)"></i>Stuff+ a nivel del mar</span>
@@ -184,7 +188,7 @@ footer code { font-family: var(--mono); font-size: 0.75rem; }
           <thead><tr><th>Archivo</th><th class="num">Filas</th><th>Qué trae</th></tr></thead>
           <tbody id="files"></tbody>
         </table>
-        <p class="caption">Escala por pitch: Stuff+ = 100 − 10 × (valor − media) ÷ desviación, contra su tipo y temporada; es el z(score) de la convocatoria con el signo invertido, porque menos carreras es mejor. Los archivos llevan identificadores anónimos y se entregan aparte.</p>
+        <p class="caption">Escala por pitch: Stuff+ = 100 − 10 × (valor − media) ÷ desviación, contra su tipo y temporada; es el z(score) de la convocatoria con el signo invertido, porque menos carreras es mejor. Los scores completos llevan identificadores anónimos y están en la carpeta <code>scores/</code> de esta entrega: por pitch (<code>scores_por_pitch.zip</code>), por pitcher y por arsenal.</p>
       </div>
     </div>
   </section>
@@ -199,10 +203,10 @@ footer code { font-family: var(--mono); font-size: 0.75rem; }
 
     <div class="block">
       <h3>Por qué: la física</h3>
-      <p class="lead">En el Harp Helú el aire es <b>~21 % menos denso</b> que a nivel del mar. La fuerza de Magnus es proporcional a la densidad, así que el pitch se mueve menos. Medimos el aire con el frenado de las rectas (cae 16 %) y el exponente k con el mismo pitcher en juegos con distinto aire, corregido por error de medición (variable instrumental). <b>Pasado a densidad, k es 1.05 en la IVB de la recta y 1.10 en la liga, dentro del rango que predice la física (1.00 a 1.11).</b> El movimiento horizontal cae algo más que el vertical, sin explicación probada.</p>
+      <p class="lead">En el Harp Helú el aire es <b>~21 % menos denso</b> que a nivel del mar. La fuerza de Magnus es proporcional a la densidad (Nathan, 2008), así que el pitch se mueve menos. Medimos el aire con el frenado de las rectas (cae 16 %) y el exponente k con el mismo pitcher en juegos con distinto aire, corregido por error de medición (variable instrumental). <b>Pasado a densidad, k es 1.05 en la IVB de la recta y 1.10 en la liga, dentro del rango que predice la física (1.00 a 1.11).</b> El movimiento horizontal cae algo más que el vertical, y por igual en altitud media que en extrema (k horizontal menos vertical, en escala de frenado: +0.33 contra +0.35), así que no es un problema de la calibración del Harp Helú; su causa no está probada. Un solo k es una aproximación: estimado con altitud media sale entre 5 y 9 % mayor que con altitud extrema (liga 1.63 contra 1.56), lo que cambia el movimiento traducido de la recta en 0.3 %. En Coors Field también se reportó que las rectas pierden más movimiento que las sliders y que la corrida hacia el brazo cae casi 3 pulgadas (Maahs, 2019).</p>
       <div class="card scroll">
         <table id="table-k"></table>
-        <p class="caption">Un k más alto significa que ese movimiento pierde más en la CDMX. La slider casi no pierde vertical porque gira como bala (gyro); la corrida del cambio es lo más sensible de la liga.</p>
+        <p class="caption">Un k más alto significa que ese movimiento pierde más en la CDMX. El k se estima con el frenado de las rectas; en densidad del aire vale unas 0.70 veces el de frenado (columna gris), y la física predice entre 1.00 y 1.11. La slider casi no pierde vertical porque gira como bala (gyro); la corrida del cambio es lo más sensible de la liga.</p>
       </div>
     </div>
 
@@ -292,7 +296,7 @@ footer code { font-family: var(--mono); font-size: 0.75rem; }
   </section>
 
   <footer>
-    <p><b>Fuentes:</b> <code>reportes/etapa_06_scores.json</code> (scores y arquetipos, D-038), <code>reportes/etapa_05_pasaporte.json</code> (pares por tipo, D-034), <code>reportes/etapa_06_riesgo_contacto.json</code>, <code>reportes/etapa_02_resumen.json</code> (k, D-016), <code>reportes/etapa_03_resumen.json</code> (valor del conteo). Detalle en <code>docs/08</code> a <code>docs/10</code>.</p>
+    <p><b>Fuentes:</b> cálculos del equipo con los datos de la LMB 2024–2025; la metodología y la validación están en el <a href="documento_tecnico.pdf">documento técnico</a>. Literatura citada: Nathan, A. M. (2008), <i>Baseball at high altitude</i>, University of Illinois; Maahs, A. (2019), <i>An analysis of pitch movement at Coors Field</i>, FanGraphs Community.</p>
     <p><b>Límites:</b> la altitud viene en tres categorías, no por estadio; la prueba real de arquetipos tiene 15 y 24 pitchers; dentro de cada tipo de pitch ningún rasgo físico tiene evidencia.</p>
   </footer>
 </main>
@@ -408,7 +412,7 @@ function kTable() {
   const types = ["Four-Seam", "Sinker", "Changeup", "Curveball", "Slider"], max = 2.1;
   const bar = v => `<span class="kbar" style="width:${(v / max * 70).toFixed(0)}px" aria-hidden="true"></span>`;
   el("table-k").innerHTML = `<thead><tr><th>Tipo</th><th>k vertical (IVB)</th><th>k horizontal (HB)</th></tr></thead><tbody>${
-    types.map(t => `<tr><td>${NAMES[t]}</td><td><span class="num">${n(DATA.k[t].ivb, 2)}</span>${bar(DATA.k[t].ivb)}</td><td><span class="num">${n(DATA.k[t].hb, 2)}</span>${bar(DATA.k[t].hb)}</td></tr>`).join("")}</tbody>`;
+    types.map(t => `<tr><td>${NAMES[t]}</td><td><span class="num">${n(DATA.k[t].ivb, 2)}</span>${bar(DATA.k[t].ivb)}<span class="dens">${n(DATA.k_densidad[t].ivb, 2)}</span></td><td><span class="num">${n(DATA.k[t].hb, 2)}</span>${bar(DATA.k[t].hb)}<span class="dens">${n(DATA.k_densidad[t].hb, 2)}</span></td></tr>`).join("")}</tbody>`;
 }
 
 function evidence() {
@@ -427,7 +431,7 @@ function profile() {
     ["Mezcla", "Slider + curva ≥ 40 % de sus pitches", `El arquetipo de rompimiento queda en ${n(A.Rompimiento.stuff_plus_harp_estimado)} en el Harp Helú, el más alto`],
     ["Rolling", "Tercio alto de la liga (≥ 48 %)", `El fly cuesta ${n(flyRatio)} veces más en la CDMX`],
     ["Si vive de la recta", "Recta élite a nivel del mar (Stuff+ ≥ 113 en su ficha, top 10 %)", `Llega a la CDMX con unos ${n(-fb.delta_stuff_plus, 0)} puntos menos`],
-    ["Comando", "Location+ alto", "El modelo de ubicación predice en altitud extrema sin haberla visto (D-037); se repite menos de un año a otro (r 0.67) que Stuff+ (0.83)"],
+    ["Comando", "Location+ alto", "El modelo de ubicación predice en altitud extrema sin haberla visto; se repite menos de un año a otro (r 0.67) que Stuff+ (0.83)"],
   ].map(r => `<tr><td><b>${r[0]}</b></td><td>${r[1]}</td><td>${r[2]}</td></tr>`).join("");
 }
 

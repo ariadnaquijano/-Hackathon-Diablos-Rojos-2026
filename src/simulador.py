@@ -16,8 +16,8 @@ El simulador devuelve:
 La primera corrida entrena los modelos con 2024–2025 y los guarda en data/modelos/, que no se sube.
 El jurado no ejecuta código: la página lleva los árboles del modelo y calcula el Stuff+ en el navegador
 (src/plantillas/motor_stuff.js), así que funciona como archivo suelto. --estatico arma la entrega en
-data/publicar/: portada, simulador, fichas (src/ficha.py) y reporte de los entregables 1 a 3. Sin esa
-opción se sirve lo mismo en http://127.0.0.1:8050.
+data/publicar/: portada, simulador, fichas (src/ficha.py), reporte de los entregables 1 a 3 y los scores
+completos (src/entregable_scores.py). Sin esa opción se sirve lo mismo en http://127.0.0.1:8050.
 
 Uso:
     python src/simulador.py             # entrena si hace falta y abre el servidor
@@ -27,7 +27,9 @@ Uso:
 """
 
 import json
+import shutil
 import sys
+import zipfile
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
@@ -47,6 +49,10 @@ ENGINE_JS = Path(__file__).parent / "plantillas" / "motor_stuff.js"
 HOME_TEMPLATE = Path(__file__).parent / "plantillas" / "inicio_entrega.html"
 REPORT_HTML = REPORTS_DIR / "entregables_1_a_3.html"
 TECHNICAL_PDF = "documento_tecnico.pdf"
+# Los scores del entregable 1 (src/entregable_scores.py); el de pitch va comprimido porque pesa 85 MB.
+SCORES_DIR = ROOT / "data" / "entregables"
+SCORE_FILES = {"scores_por_pitch.zip": "scores_por_pitch.csv", "scores_por_pitcher.csv": "scores_por_pitcher.csv",
+               "scores_por_arsenal.csv": "scores_por_arsenal.csv"}
 PUBLISH_DIR = ROOT / "data" / "publicar"
 CARDS_HTML = ROOT / "data" / "fichas" / "fichas_pitchers.html"
 # Delta de Stuff+ por tipo en la escala oficial del arsenal (src/entregable_scores.py), para no dar dos cifras.
@@ -352,6 +358,46 @@ def card(href: str, label: str, title: str, text: str, main: bool = False) -> st
             f'<h2>{title}</h2><p>{text}</p><span class="go">Abrir →</span></a>')
 
 
+def ci(values: list[float], digits: int = 2) -> str:
+    return f"{values[0]:.{digits}f} a {values[1]:.{digits}f}"
+
+
+def validation_html() -> str:
+    """Resumen de la validación para la portada, leído de los reportes para que nunca se desfase."""
+    metrics = json.loads((REPORTS_DIR / "etapa_06_metricas_documento.json").read_text())
+    park = json.loads((REPORTS_DIR / "etapa_06_validacion_estadio.json").read_text())["version_3_estricta"]
+    v3 = json.loads((REPORTS_DIR / "etapa_06_modelo_v3.json").read_text())
+    models = ("media_conteo", "stuff", "location", "pitching")
+    rows = []
+    for label, key in (("Pitchers que el modelo no vio (2024–2025, 5 pliegues)", "pitcher_holdout_2024_2025"),
+                       ("Temporada 2026 (entrenado con 2024–2025)", "season_holdout_2026")):
+        test = metrics[key]
+        cells = "".join(f"<td>{test['rmse'][m]['rmse']:.5f}</td>" for m in models)
+        rows.append(f"<tr><th scope='row'>{label}<span>{test['pitches']:,} pitches · RMSE</span></th>{cells}</tr>")
+    gains = park["sin_altitud_extrema"]
+    cells = "<td>—</td>" + "".join(f"<td>+{gains[m]['mejora_vs_media_conteo_pct']:.2f} %<span>{ci(gains[m]['ic95_pct'])}</span></td>"
+                                   for m in models[1:])
+    rows.append(f"<tr><th scope='row'>Altitud extrema sin verla al entrenar<span>{park['pitches']:,} pitches · mejora del error"
+                f" contra el nulo</span></th>{cells}</tr>")
+    per_pitcher = v3["por_pitcher_2026"]["contra_lineal_observada"]
+    future, repeat, altitude = v3["a_futuro_2026"], v3["repeticion_2024_a_2025"], v3["altitud_mismo_pitcher"]
+    calibration = park["calibracion"]
+    notes = [
+        f"<b>Por pitcher en 2026</b> ({v3['por_pitcher_2026']['pitchers']} pitchers): Pitching+ correlaciona {per_pitcher['pitching']['r']:.2f}"
+        f" con el valor real, contra {per_pitcher['lineal_por_tipo']['r']:.2f} de una regresión lineal por tipo de pitch.",
+        f"<b>Estable:</b> el Stuff+ de un pitcher repite con r {repeat['stuff']:.2f} de 2024 a 2025 (el valor real, {repeat['xrv_neutral']:.2f})"
+        f" y con r {altitude['stuff']['r_entre_altitudes']:.2f} entre nivel del mar y altitud extrema.",
+        f"<b>Calibración en altitud extrema:</b> Pitching+ se desvía {abs(calibration['pitching']['sesgo_por_100']):.2f} carreras por 100 pitches;"
+        f" el modelo nulo, {abs(calibration['sesgo_nulo_por_100']):.2f}.",
+        f"<b>Límite:</b> para predecir la temporada siguiente ({future['pitchers']} pitchers), la historia del pitcher (r"
+        f" {future['persistencia_encogida']['r']:.2f}) le gana a Stuff+ ({future['stuff']['r']:.2f}) y a Pitching+ ({future['pitching']['r']:.2f}).",
+    ]
+    head = "<tr><th scope='col'>Prueba</th><th scope='col'>Nulo (promedio por conteo)</th><th scope='col'>Stuff+</th>" \
+           "<th scope='col'>Location+</th><th scope='col'>Pitching+</th></tr>"
+    return (f"<div class='scroll'><table class='validation'><thead>{head}</thead><tbody>{''.join(rows)}</tbody></table></div>"
+            f"<ul class='notes'>{''.join(f'<li>{n}</li>' for n in notes)}</ul>")
+
+
 def home_page() -> bytes:
     """Portada de la entrega; el documento técnico aparece cuando su PDF ya está en la carpeta."""
     has_pdf = (PUBLISH_DIR / TECHNICAL_PDF).exists()
@@ -367,14 +413,16 @@ def home_page() -> bytes:
         cards.append(card(TECHNICAL_PDF, "Entregable 5", "Documento técnico",
                           "Metodología, validación fuera de muestra y límites del modelo."))
     technical = f'<a href="{TECHNICAL_PDF}">Documento técnico</a>' if has_pdf else "Documento técnico (PDF)"
+    files = ", ".join(f'<a href="scores/{name}">{name}</a>' for name in SCORE_FILES)
     rows = [("1", "Scores por pitch, pitcher y arsenal",
-             '<a href="entregables_1_a_3.html">Reporte</a> y <a href="fichas.html">fichas</a>'),
+             f'<a href="entregables_1_a_3.html">Reporte</a>, <a href="fichas.html">fichas</a> y los archivos completos: {files}'),
             ("2", "Perfil físico ideal", '<a href="entregables_1_a_3.html#t2">Reporte, sección 2</a>'),
             ("3", "Recomendaciones operativas", '<a href="entregables_1_a_3.html#t3">Reporte, sección 3</a>'),
             ("4", "Dashboard simulador", '<a href="simulador.html">Simulador</a> y <a href="fichas.html">fichas</a>'),
             ("5", "Documento técnico", technical)]
     html = (HOME_TEMPLATE.read_text().replace("__CARDS__", "".join(cards))
-            .replace("__ROWS__", "".join(f"<tr><td>{n}</td><td>{what}</td><td>{where}</td></tr>" for n, what, where in rows)))
+            .replace("__ROWS__", "".join(f"<tr><td>{n}</td><td>{what}</td><td>{where}</td></tr>" for n, what, where in rows))
+            .replace("__VALIDACION__", validation_html()))
     return html.encode()
 
 
@@ -385,7 +433,19 @@ def publish(bundle: dict):
              "entregables_1_a_3.html": REPORT_HTML.read_bytes()}
     for name, content in pages.items():
         (PUBLISH_DIR / name).write_bytes(content)
-    print(f"Entrega en {PUBLISH_DIR}: {', '.join(pages)}", flush=True)
+    copy_scores()
+    print(f"Entrega en {PUBLISH_DIR}: {', '.join(pages)} y scores/", flush=True)
+
+
+def copy_scores():
+    folder = PUBLISH_DIR / "scores"
+    folder.mkdir(exist_ok=True)
+    for published, source in SCORE_FILES.items():
+        if published.endswith(".zip"):
+            with zipfile.ZipFile(folder / published, "w", zipfile.ZIP_DEFLATED) as archive:
+                archive.write(SCORES_DIR / source, source)
+        else:
+            shutil.copyfile(SCORES_DIR / source, folder / published)
 
 
 def serve(bundle: dict):
