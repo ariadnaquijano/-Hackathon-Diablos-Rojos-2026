@@ -236,3 +236,6 @@ __marimo__/
 
 # Datos
 pitches_limpios.parquet
+
+# Modelos entrenados
+*.pt

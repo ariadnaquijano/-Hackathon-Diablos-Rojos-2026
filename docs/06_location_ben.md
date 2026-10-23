@@ -4,7 +4,7 @@
 > **Evidencia:** `src/location_ben.py` → `reportes/etapa_06_location_ben.json` (comparación, 2024–2025);
 > `src/modelo_v3.py` → `reportes/etapa_06_modelo_v3.json` (2026); `reportes/etapa_06_validacion_estadio.json`
 > (`version_3`).
-> **Origen:** PR #2 de Ben (`location_plus_xgb.py`, `run_value.py`, `docs/LOCATIONPLUS_MODEL_GUIDE.md`).
+> **Origen:** PR #2 de Ben (hoy en `location_plus_original/` y `src/run_value.py`).
 
 ## Qué es
 

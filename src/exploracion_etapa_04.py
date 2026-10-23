@@ -24,7 +24,7 @@ from sklearn.ensemble import HistGradientBoostingRegressor
 from sklearn.model_selection import GroupKFold, GroupShuffleSplit
 
 from config import HOLDOUT_SEASON, MODEL_PARQUET, REPORTS_DIR, ROOT
-from modelos_base import (BASELINES, MIN_PITCHES_PER_PERIOD, PREDICTIONS_PARQUET, RANDOM_SEED, TARGET,
+from modelos_base import (BASELINES, PREDICTIONS_PARQUET, RANDOM_SEED, TARGET,
                           center_by_season, pitcher_bootstrap, pitcher_table, shrunk_persistence)
 
 SUMMARY_JSON = REPORTS_DIR / "etapa_04_exploracion.json"

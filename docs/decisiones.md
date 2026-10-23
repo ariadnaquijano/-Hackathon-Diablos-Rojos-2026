@@ -133,7 +133,7 @@ se agrega una nueva entrada que la reemplaza y se marca la anterior como *Reempl
   cuenta. La adopción **no depende** de la comparación de abajo.
 - **Cómo se integra:**
   - Se usa su modelo y sus fórmulas tal cual. Las piezas que faltaban en el PR (preparar datos,
-    agregar predicciones y separar validación) se rearman siguiendo `docs/LOCATIONPLUS_MODEL_GUIDE.md`.
+    agregar predicciones y separar validación) se rearman siguiendo su guía (`location_plus_original/GUIA_MODELO.md`).
   - Se entrena con los mismos 5 pliegues por pitcher que el resto del modelo, para tener
     predicciones de 2024–2025 sin ver al pitcher; 2026 se predice con un modelo de 2024–2025.
   - Su xRV por pitch reemplaza al componente de ubicación de Pitching+, con los pesos reajustados con

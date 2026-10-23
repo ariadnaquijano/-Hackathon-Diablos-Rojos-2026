@@ -1,8 +1,8 @@
 """Location+ del equipo (Ben, PR #2) dentro del modelo oficial (D-039).
 
-Usa el diseño de `location_plus_xgb.py` y `docs/LOCATIONPLUS_MODEL_GUIDE.md` sin cambios: un XGBoost por
+Usa el diseño de `location_plus_original/location_plus_xgb.py` y su guía sin cambios: un XGBoost por
 cabeza del árbol de resultados (swing, whiff, strike cantado, golpeado, foul y resultado en juego),
-las mismas variables, los mismos hiperparámetros, el run value de `run_value.py` y las fórmulas de
+las mismas variables, los mismos hiperparámetros, el run value de `src/run_value.py` y las fórmulas de
 xCSW, xRV y Location+ (50 % CSW+ y 50 % RV+, ajustados por cuenta). Las piezas que el PR importaba
 pero no traía (preparar datos, agregar predicciones y separar validación) se rearman con la guía.
 
@@ -36,15 +36,14 @@ from modelo import load
 from modelos_base import MIN_PITCHES_PER_PERIOD, PREDICTIONS_PARQUET, RANDOM_SEED, TARGET, pitcher_bootstrap
 from modelo_v2 import official_predictions
 
-sys.path.append(str(ROOT))  # run_value.py vive en la raíz del repo, como lo dejó el PR #2
-from run_value import COLUMNAS_RV, RunValue, transiciones  # noqa: E402
+from run_value import COLUMNAS_RV, RunValue, transiciones
 
 CLEAN_PARQUET = ROOT / "data" / "processed" / "pitches_limpios.parquet"
 PREDICTIONS_CACHE = ROOT / "data" / "processed" / "predicciones_location_ben.parquet"
 PARK_CACHE = ROOT / "data" / "processed" / "predicciones_location_ben_estadio.parquet"
 SUMMARY_JSON = REPORTS_DIR / "etapa_06_location_ben.json"
 
-# Variables y cabezas de location_plus.py (PR #2)
+# Variables y cabezas de location_plus_original/location_plus.py (PR #2)
 CONTEXT = ["Balls", "Strikes", "count", "Outs", "Inning", "Top/Bottom", "altitude_category"]
 LOCATION = ["PlateLocHeight", "PlateLocSide", "in_strike_zone", "outside_strike_zone"]
 HANDS = ["pitcher_hand", "batter_side"]
@@ -58,7 +57,7 @@ CSW_WEIGHT = 0.5
 PLUS_COLUMNS = ["location_plus_ben", "location_plus_ben_neutral", "location_plus_v2"]
 VALIDATION_SHARE = 0.1
 BEN_SEED = 42
-# Hiperparámetros de location_plus_xgb.py (PR #2)
+# Hiperparámetros de location_plus_original/location_plus_xgb.py (PR #2)
 PARAMETERS = dict(n_estimators=2000, learning_rate=0.05, max_depth=6, min_child_weight=50, subsample=0.8,
                   colsample_bytree=0.8, reg_lambda=1.0, tree_method="hist", enable_categorical=True,
                   early_stopping_rounds=50, random_state=BEN_SEED, n_jobs=-1)

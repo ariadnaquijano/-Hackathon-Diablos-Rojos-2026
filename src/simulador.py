@@ -38,7 +38,7 @@ import numpy as np
 import pandas as pd
 
 from config import HOLDOUT_SEASON, REPORTS_DIR, ROOT
-from exploracion_etapa_04 import EXTREME, SEA_LEVEL
+from exploracion_etapa_04 import SEA_LEVEL
 from modelo import PREDICTIONS_CACHE, SPECS, predict
 from pasaporte_altitud import FASTBALL, exponents, extreme_air, load_pitches
 from stuff_componentes import FEATURES, choose_iterations, combine, new_model, outcome_values

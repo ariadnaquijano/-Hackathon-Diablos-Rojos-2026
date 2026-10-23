@@ -195,7 +195,7 @@ contacto) y el resultado en juego (out, 1B, 2B, 3B o HR). Con eso salen dos cifr
 
 - **xCSW** = P(strike cantado) + P(whiff);
 - **xRV** = Σ P(resultado) × valor del resultado en esa cuenta, con los valores de cuenta de una
-  cadena de Markov (`run_value.py`).
+  cadena de Markov (`src/run_value.py`).
 
 **Versión neutral (D-040):** el modelo de Ben usa la altitud como variable. Con su altitud real, el
 mismo pitcher salía 1.00 carreras por 100 peor en la CDMX que a nivel del mar: lo castigaba por el

@@ -297,7 +297,7 @@ def sweeper_cut(con) -> dict:
     Ajusta una mezcla de dos normales con los datos de entrenamiento. Si los grupos no están
     claramente separados (D de Ashman < 2), se usa el corte de partida de 12 in.
     """
-    sample = con.sql(f"""
+    sample = con.sql("""
         select hb_sea_level from shaped
         where usable_stuff and split = 'train' and pitch_group = 'Slider' and hb_sea_level is not null
         order by pitch_seq""").df()

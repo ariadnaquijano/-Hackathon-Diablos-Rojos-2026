@@ -30,7 +30,7 @@ from sklearn.model_selection import GroupKFold
 from config import HOLDOUT_SEASON, MODEL_PARQUET, REPORTS_DIR, ROOT
 from exploracion_etapa_04 import (CROSS_FIT_FOLDS, MODELS, altitude_consistency, compare_pitchers,
                                   load_pitches)
-from modelos_base import (MIN_PITCHES_PER_PERIOD, PREDICTIONS_PARQUET, TARGET, center_by_season,
+from modelos_base import (PREDICTIONS_PARQUET, TARGET, center_by_season,
                           group_mean, linear_by_type, pitcher_bootstrap, pitcher_table, shrunk_persistence)
 from stuff_componentes import (COMPONENTS, FEATURES as STUFF_FEATURES, OUTCOME, SEA_LEVEL_LINEAR, choose_iterations,
                                combine, new_model, outcome_values)
