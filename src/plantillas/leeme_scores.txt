@@ -2,15 +2,10 @@ Scores del entregable 1 · Diablos Rojos · ISAC Hackathon 2026
 
 Escalas "plus" (stuff_plus, location_plus, pitching_plus, stuff_plus_harp*): 100 es el promedio y 10 puntos
 son una desviación. Mayor es mejor para el pitcher. Cada archivo usa su propia desviación, así que la misma
-pérdida en altura se ve distinta: una recta baja unos 6.5 puntos por pitch, 13.0 en el arsenal y unos 15 en el
-pitcher.
+pérdida en altura se ve distinta: una recta baja 13.0 puntos en el arsenal y unos 15 en el pitcher.
 
-scores_por_pitch.csv (dentro de scores_por_pitch.zip): un renglón por pitch, 2024–2026.
-  PitchUID, pitcher_anon_id, year, altitude_category, pitch_class: identificadores de la base de la liga.
-  stuff_plus: contra su tipo de pitch y temporada. location_plus, pitching_plus: contra la temporada.
-  stuff_plus_harp: su Stuff+ con la pérdida promedio de su tipo en altitud extrema; vacío en cutter y splitter.
-  stuff, location, pitching: valor esperado en carreras del pitch. Menor es mejor para el pitcher.
-  xrv_neutral: valor real en carreras del pitch con valores de nivel del mar. Menor es mejor para el pitcher.
+Los scores de cada pitch no se incluyen: con 631,068 filas son casi la base completa. Se generan con
+src/entregable_scores.py.
 
 scores_por_pitcher.csv: un renglón por pitcher y temporada con 300+ pitches.
   stuff_plus, location_plus, pitching_plus: contra los pitchers de la misma temporada.

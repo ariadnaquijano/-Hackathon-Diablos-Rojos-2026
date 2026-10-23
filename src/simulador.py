@@ -29,7 +29,6 @@ Uso:
 import json
 import shutil
 import sys
-import zipfile
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
@@ -49,11 +48,11 @@ ENGINE_JS = Path(__file__).parent / "plantillas" / "motor_stuff.js"
 HOME_TEMPLATE = Path(__file__).parent / "plantillas" / "inicio_entrega.html"
 REPORT_HTML = REPORTS_DIR / "entregables_1_a_3.html"
 TECHNICAL_PDF = "documento_tecnico.pdf"
-# Los scores del entregable 1 (src/entregable_scores.py); el de pitch va comprimido porque pesa 85 MB.
+# Los scores del entregable 1 (src/entregable_scores.py). El de cada pitch no se publica: con 631,068 filas
+# es casi la base completa, y la convocatoria pide no subirla.
 SCORES_DIR = ROOT / "data" / "entregables"
 SCORES_README = Path(__file__).parent / "plantillas" / "leeme_scores.txt"
-SCORE_FILES = {"scores_por_pitch.zip": "scores_por_pitch.csv", "scores_por_pitcher.csv": "scores_por_pitcher.csv",
-               "scores_por_arsenal.csv": "scores_por_arsenal.csv"}
+SCORE_FILES = ["scores_por_pitcher.csv", "scores_por_arsenal.csv"]
 PUBLISH_DIR = ROOT / "data" / "publicar"
 CARDS_HTML = ROOT / "data" / "fichas" / "fichas_pitchers.html"
 # Delta de Stuff+ por tipo en la escala oficial del arsenal (src/entregable_scores.py), para no dar dos cifras.
@@ -480,12 +479,8 @@ def copy_scores():
     folder = PUBLISH_DIR / "scores"
     folder.mkdir(exist_ok=True)
     shutil.copyfile(SCORES_README, folder / "LEEME.txt")
-    for published, source in SCORE_FILES.items():
-        if published.endswith(".zip"):
-            with zipfile.ZipFile(folder / published, "w", zipfile.ZIP_DEFLATED) as archive:
-                archive.write(SCORES_DIR / source, source)
-        else:
-            shutil.copyfile(SCORES_DIR / source, folder / published)
+    for name in SCORE_FILES:
+        shutil.copyfile(SCORES_DIR / name, folder / name)
 
 
 def serve(bundle: dict):

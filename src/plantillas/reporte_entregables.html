@@ -176,7 +176,7 @@ footer code { font-family: var(--mono); font-size: 0.75rem; }
           <thead><tr><th>Archivo</th><th class="num">Filas</th><th>Qué trae</th></tr></thead>
           <tbody id="files"></tbody>
         </table>
-        <p class="caption">Escala por pitch: Stuff+ = 100 − 10 × (valor − media) ÷ desviación, contra su tipo y temporada; es el z(score) de la convocatoria con el signo invertido, porque menos carreras es mejor. Los scores completos llevan identificadores anónimos y están en la carpeta <code>scores/</code> de esta entrega: por pitch (<code>scores_por_pitch.zip</code>), por pitcher y por arsenal.</p>
+        <p class="caption">Escala por pitch: Stuff+ = 100 − 10 × (valor − media) ÷ desviación, contra su tipo y temporada; es el z(score) de la convocatoria con el signo invertido, porque menos carreras es mejor. Los scores completos llevan identificadores anónimos y por pitcher y por arsenal están en la carpeta <code>scores/</code> de esta entrega.</p>
       </div>
     </div>
     <details class="more">
@@ -416,10 +416,10 @@ function archChart() {
 
 function files() {
   el("files").innerHTML = [
-    ["scores_por_pitch.zip", DATA.filas.por_pitch, "Stuff+, Location+ y Pitching+ de cada pitch de 2024–2026, y su Stuff+ en el Harp Helú. Ojo con la escala: aquí 10 puntos son una desviación entre pitches, así que una recta baja unos 6.5 puntos; en el arsenal (desviación entre pitchers del mismo tipo) la misma pérdida son 13.0"],
+    ["scores_por_pitch", DATA.filas.por_pitch, "Stuff+, Location+ y Pitching+ de cada pitch de 2024–2026, y su Stuff+ en el Harp Helú. No se incluye: es casi la base completa y la convocatoria pide no subirla. Se genera con src/entregable_scores.py y lo entregamos si el jurado lo pide"],
     ["scores_por_pitcher.csv", DATA.filas.por_pitcher, "Por pitcher y temporada (300+ pitches): los tres índices, el estimado en el Harp Helú y su tercio de riesgo (solo si el estimado cubre 60 %+ de sus pitches), el rolling y el arquetipo"],
     ["scores_por_arsenal.csv", DATA.filas.por_arsenal, "Cada pitch de cada pitcher (100+): uso, Stuff+ contra su tipo y en el Harp Helú, y sus componentes en puntos porcentuales contra la media de su tipo"],
-  ].map(([f, rows, what]) => `<tr><td><a href="scores/${f}"><code>${f}</code></a></td><td class="num">${rows.toLocaleString("es-MX")}</td><td>${what}</td></tr>`).join("");
+  ].map(([f, rows, what]) => `<tr><td>${f.endsWith(".csv") ? `<a href="scores/${f}"><code>${f}</code></a>` : `<code>${f}</code>`}</td><td class="num">${rows.toLocaleString("es-MX")}</td><td>${what}</td></tr>`).join("");
 }
 
 function kTable() {

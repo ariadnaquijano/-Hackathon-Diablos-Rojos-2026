@@ -100,3 +100,19 @@ da lo mismo que Python.
 Los análisis de apoyo (`exploracion_*.py`, `hipotesis_h4.py`, `evidencia_acarreo.py`,
 `relacion_componentes.py`, `location_sin_conteo.py`) generan las cifras de sus documentos y no hacen
 falta para los entregables.
+
+## Uso de IA generativa y trabajo de terceros
+
+**IA generativa.** Usamos Claude (Anthropic), a través de Claude Code, como asistente de programación:
+para escribir y depurar código de `src/` y para revisar el proyecto antes de entregarlo. Las decisiones
+están registradas en `docs/decisiones.md`, con sus reglas fijadas antes de ver los resultados, y todas las
+cifras se pueden reproducir con el código de este repositorio.
+
+**Código de terceros.** pandas, NumPy, DuckDB, scikit-learn (HistGradientBoosting), XGBoost, joblib y
+PyArrow; Node.js solo para verificar el simulador.
+
+**Literatura y definiciones.** La escala de Stuff+, Location+ y Pitching+ sigue a FanGraphs (McGrattan,
+2023). La física de la altitud se apoya en Nathan (2008) y en lo observado en Coors Field (Kalk, 2008;
+Maahs, 2019). Las referencias completas están en el documento técnico.
+
+**Datos.** Datos pitch-by-pitch de la LMB (2024–2026) proporcionados por ISAC y Diablos Rojos. Solo se usan para ella y no se incluyen en el repositorio.
