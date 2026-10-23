@@ -51,6 +51,7 @@ REPORT_HTML = REPORTS_DIR / "entregables_1_a_3.html"
 TECHNICAL_PDF = "documento_tecnico.pdf"
 # Los scores del entregable 1 (src/entregable_scores.py); el de pitch va comprimido porque pesa 85 MB.
 SCORES_DIR = ROOT / "data" / "entregables"
+SCORES_README = Path(__file__).parent / "plantillas" / "leeme_scores.txt"
 SCORE_FILES = {"scores_por_pitch.zip": "scores_por_pitch.csv", "scores_por_pitcher.csv": "scores_por_pitcher.csv",
                "scores_por_arsenal.csv": "scores_por_arsenal.csv"}
 PUBLISH_DIR = ROOT / "data" / "publicar"
@@ -362,6 +363,18 @@ def ci(values: list[float], digits: int = 2) -> str:
     return f"{values[0]:.{digits}f} a {values[1]:.{digits}f}"
 
 
+def kpis_html() -> str:
+    """Las tres cifras que un juez debe ver primero, leídas de los reportes."""
+    losses = json.loads(SCORES_JSON.read_text())["stuff_plus_harp_promedio_por_tipo"]
+    gain = json.loads((REPORTS_DIR / "etapa_06_validacion_estadio.json").read_text())["version_3_estricta"]["sin_altitud_extrema"]
+    tiles = [
+        (f"{losses['Four-Seam']['delta_stuff_plus']:+.1f}".replace("-", "−"), "puntos de Stuff+ pierde la recta en altitud extrema"),
+        (f"{losses['Curveball']['delta_stuff_plus']:+.1f}".replace("-", "−"), "puntos pierde la curva: el pitch que mejor resiste"),
+        (f"+{gain['pitching']['mejora_vs_media_conteo_pct']:.1f} %", "menos error de Pitching+ en altitud extrema, sin haberla visto al entrenar"),
+    ]
+    return "".join(f"<div class='kpi'><b>{value}</b><p>{text}</p></div>" for value, text in tiles)
+
+
 def validation_html() -> str:
     """Resumen de la validación para la portada, leído de los reportes para que nunca se desfase."""
     metrics = json.loads((REPORTS_DIR / "etapa_06_metricas_documento.json").read_text())
@@ -372,25 +385,49 @@ def validation_html() -> str:
     for label, key in (("Pitchers que el modelo no vio (2024–2025, 5 pliegues)", "pitcher_holdout_2024_2025"),
                        ("Temporada 2026 (entrenado con 2024–2025)", "season_holdout_2026")):
         test = metrics[key]
-        cells = "".join(f"<td>{test['rmse'][m]['rmse']:.5f}</td>" for m in models)
+        cells = "<td>" + f"{test['rmse']['media_conteo']['rmse']:.5f}</td>" + "".join(
+            f"<td>{test['rmse'][m]['rmse']:.5f}<span>{ci(test['rmse'][m]['ic95_diferencia_rmse_vs_nulo'], 5)}</span></td>"
+            for m in models[1:])
         rows.append(f"<tr><th scope='row'>{label}<span>{test['pitches']:,} pitches · RMSE</span></th>{cells}</tr>")
     gains = park["sin_altitud_extrema"]
     cells = "<td>—</td>" + "".join(f"<td>+{gains[m]['mejora_vs_media_conteo_pct']:.2f} %<span>{ci(gains[m]['ic95_pct'])}</span></td>"
                                    for m in models[1:])
     rows.append(f"<tr><th scope='row'>Altitud extrema sin verla al entrenar<span>{park['pitches']:,} pitches · mejora del error"
                 f" contra el nulo</span></th>{cells}</tr>")
+    per_pitch = v3["por_pitch_2026"]
     per_pitcher = v3["por_pitcher_2026"]["contra_lineal_observada"]
     future, repeat, altitude = v3["a_futuro_2026"], v3["repeticion_2024_a_2025"], v3["altitud_mismo_pitcher"]
     calibration = park["calibracion"]
+    weights = v3["pesos_pitching"]
+    lineal, stuff, pitching = per_pitcher["lineal_por_tipo"], per_pitcher["stuff"], per_pitcher["pitching"]
     notes = [
-        f"<b>Por pitcher en 2026</b> ({v3['por_pitcher_2026']['pitchers']} pitchers): Pitching+ correlaciona {per_pitcher['pitching']['r']:.2f}"
-        f" con el valor real, contra {per_pitcher['lineal_por_tipo']['r']:.2f} de una regresión lineal por tipo de pitch.",
-        f"<b>Estable:</b> el Stuff+ de un pitcher repite con r {repeat['stuff']:.2f} de 2024 a 2025 (el valor real, {repeat['xrv_neutral']:.2f})"
-        f" y con r {altitude['stuff']['r_entre_altitudes']:.2f} entre nivel del mar y altitud extrema.",
-        f"<b>Calibración en altitud extrema:</b> Pitching+ se desvía {abs(calibration['pitching']['sesgo_por_100']):.2f} carreras por 100 pitches;"
-        f" el modelo nulo, {abs(calibration['sesgo_nulo_por_100']):.2f}.",
+        f"<b>Contra modelos más simples (2026, por pitch):</b> mejora del error contra el promedio de la liga de"
+        f" +{per_pitch['lineal_por_tipo']['mejora_vs_media_pct']:.2f} % en una regresión lineal por tipo de pitch,"
+        f" +{per_pitch['stuff']['mejora_vs_media_pct']:.2f} % en Stuff+ (le gana a la lineal por"
+        f" {ci(per_pitch['stuff']['ic95_diferencia_vs_lineal_por_tipo_pct'])} puntos) y"
+        f" +{per_pitch['pitching']['mejora_vs_media_pct']:.2f} % en Pitching+. Pitch por pitch casi todo es azar;"
+        " la señal de Stuff+ se ve por pitcher.",
+        f"<b>Por pitcher en 2026</b> ({v3['por_pitcher_2026']['pitchers']} pitchers): Pitching+ comete menos error que la lineal"
+        f" por tipo (error cuadrático {pitching['ecm_por_100']:.2f} contra {lineal['ecm_por_100']:.2f}; diferencia"
+        f" {ci(pitching['ic95_diferencia_ecm_vs_lineal_por_tipo'])}). En correlación ({pitching['r']:.2f} contra {lineal['r']:.2f})"
+        f" la diferencia no es concluyente. Stuff+ empata con la lineal (r {stuff['r']:.2f}; error {stuff['ecm_por_100']:.2f}).",
+        "<b>Por qué normalizar aunque cueste precisión:</b> con el movimiento observado, una lineal predice un poco mejor"
+        f" (+{per_pitch['lineal_por_tipo']['mejora_vs_media_pct']:.2f} % contra +{per_pitch['lineal_nivel_mar']['mejora_vs_media_pct']:.2f} %"
+        " con el movimiento llevado a nivel del mar), porque el movimiento bajo delata que el pitch fue en altura. Usarlo"
+        " castigaría al pitcher por su estadio.",
+        f"<b>Estable:</b> el Stuff+ de un pitcher repite con r {repeat['stuff']:.2f} de 2024 a 2025 (el valor real, {repeat['xrv_neutral']:.2f})."
+        f" Entre nivel del mar y altitud extrema ({altitude['pitcher_tipo']} pares pitcher-tipo), el valor real cambia"
+        f" {altitude['xrv_neutral']['extrema_menos_mar_por_100']:.2f} carreras por 100 y Stuff+ solo"
+        f" {altitude['stuff']['extrema_menos_mar_por_100']:.2f} (r {altitude['stuff']['r_entre_altitudes']:.2f}): Stuff+ ve el movimiento"
+        " llevado a nivel del mar, y la pérdida por altura se mide aparte, en el Entregable 1.",
+        f"<b>Calibración en altitud extrema:</b> lo real es {calibration['real_por_100']:.2f} carreras por 100. El nulo falla por"
+        f" {abs(calibration['sesgo_nulo_por_100']):.2f}, Stuff+ por {abs(calibration['stuff']['sesgo_por_100']):.2f} y Pitching+ por"
+        f" {abs(calibration['pitching']['sesgo_por_100']):.2f}. Ningún modelo entrenado a nivel del mar corrige el nivel en altura;"
+        " el orden de los pitches sí se sostiene.",
         f"<b>Límite:</b> para predecir la temporada siguiente ({future['pitchers']} pitchers), la historia del pitcher (r"
         f" {future['persistencia_encogida']['r']:.2f}) le gana a Stuff+ ({future['stuff']['r']:.2f}) y a Pitching+ ({future['pitching']['r']:.2f}).",
+        f"<b>Pitching+</b> combina Stuff y Location con una regresión lineal ajustada en 2024–2025 con predicciones de modelos que no"
+        f" vieron a cada pitcher (pesos {weights['stuff']:.2f} y {weights['location']:.2f}), y después se lleva a la escala de 100.",
     ]
     head = "<tr><th scope='col'>Prueba</th><th scope='col'>Nulo (promedio por conteo)</th><th scope='col'>Stuff+</th>" \
            "<th scope='col'>Location+</th><th scope='col'>Pitching+</th></tr>"
@@ -403,7 +440,7 @@ def home_page() -> bytes:
     has_pdf = (PUBLISH_DIR / TECHNICAL_PDF).exists()
     cards = [
         card("simulador.html", "Entregable 4 · Dashboard", "Simulador Stuff+",
-             "Escriba un pitch como lo da TrackMan y vea su Stuff+ a nivel del mar y en el Harp Helú.", main=True),
+             "Escribe un pitch como lo da TrackMan y ve su Stuff+ a nivel del mar y en el Harp Helú.", main=True),
         card("fichas.html", "Entregables 1 y 4", "Fichas de pitchers",
              "Stuff+, Location+ y Pitching+ de cada pitcher, su arsenal y su riesgo en altura."),
         card("entregables_1_a_3.html", "Entregables 1, 2 y 3", "Scores, perfil ideal y recomendaciones",
@@ -413,16 +450,17 @@ def home_page() -> bytes:
         cards.append(card(TECHNICAL_PDF, "Entregable 5", "Documento técnico",
                           "Metodología, validación fuera de muestra y límites del modelo."))
     technical = f'<a href="{TECHNICAL_PDF}">Documento técnico</a>' if has_pdf else "Documento técnico (PDF)"
-    files = ", ".join(f'<a href="scores/{name}">{name}</a>' for name in SCORE_FILES)
+    files = ", ".join(f'<a href="scores/{name}">{name}</a>' for name in [*SCORE_FILES, "LEEME.txt"])
     rows = [("1", "Scores por pitch, pitcher y arsenal",
-             f'<a href="entregables_1_a_3.html">Reporte</a>, <a href="fichas.html">fichas</a> y los archivos completos: {files}'),
-            ("2", "Perfil físico ideal", '<a href="entregables_1_a_3.html#t2">Reporte, sección 2</a>'),
-            ("3", "Recomendaciones operativas", '<a href="entregables_1_a_3.html#t3">Reporte, sección 3</a>'),
+             f'<a href="entregables_1_a_3.html">Entregables 1 a 3</a>, <a href="fichas.html">fichas</a> y los archivos completos: {files}'),
+            ("2", "Perfil físico ideal", '<a href="entregables_1_a_3.html#t2">Entregables 1 a 3, sección 2</a>'),
+            ("3", "Recomendaciones operativas", '<a href="entregables_1_a_3.html#t3">Entregables 1 a 3, sección 3</a>'),
             ("4", "Dashboard simulador", '<a href="simulador.html">Simulador</a> y <a href="fichas.html">fichas</a>'),
             ("5", "Documento técnico", technical)]
     html = (HOME_TEMPLATE.read_text().replace("__CARDS__", "".join(cards))
             .replace("__ROWS__", "".join(f"<tr><td>{n}</td><td>{what}</td><td>{where}</td></tr>" for n, what, where in rows))
-            .replace("__VALIDACION__", validation_html()))
+            .replace("__VALIDACION__", validation_html())
+            .replace("__KPIS__", kpis_html()))
     return html.encode()
 
 
@@ -440,6 +478,7 @@ def publish(bundle: dict):
 def copy_scores():
     folder = PUBLISH_DIR / "scores"
     folder.mkdir(exist_ok=True)
+    shutil.copyfile(SCORES_README, folder / "LEEME.txt")
     for published, source in SCORE_FILES.items():
         if published.endswith(".zip"):
             with zipfile.ZipFile(folder / published, "w", zipfile.ZIP_DEFLATED) as archive:

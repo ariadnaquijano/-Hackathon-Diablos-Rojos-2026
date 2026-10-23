@@ -169,13 +169,18 @@ def main():
     export(pitches, "scores_por_pitch", ["PitchUID", "pitcher_anon_id", "year", "altitude_category", "pitch_class",
                                          "stuff_plus", "location_plus", "pitching_plus", "stuff_plus_harp",
                                          "stuff", "location", "pitching", TARGET])
-    export(pitchers, "scores_por_pitcher", ["pitcher_anon_id", "year", "pitches", "stuff_plus", "location_plus",
+    # Igual que las fichas: sin tercio de riesgo (cobertura < 60 %) no hay estimado en el Harp Helú. Solo en el
+    # archivo; los arquetipos de abajo siguen usando el estimado completo.
+    covered = pitchers.stuff_plus_harp_estimado.where(pitchers.riesgo_tercio.notna())
+    export(pitchers.assign(stuff_plus_harp_estimado=covered), "scores_por_pitcher", ["pitcher_anon_id", "year", "pitches", "stuff_plus", "location_plus",
                                             "pitching_plus", "stuff_plus_harp_estimado", "riesgo_altura",
                                             "riesgo_tercio", "cobertura_pct", "rolling_pct", "arquetipo", "p_swing", "p_whiff",
                                             "p_foul", "p_strike"])
-    export(arsenal, "scores_por_arsenal", ["pitcher_anon_id", "year", "pitch_class", "pitches", "uso_pct",
-                                           "stuff_plus", "stuff_plus_harp", "perdida_altura_por_100", "p_swing",
-                                           "p_whiff", "p_foul", "p_strike"])
+    # En el arsenal los componentes son puntos porcentuales contra la media de su tipo; el nombre lo dice.
+    components = {c: f"{c}_vs_tipo_pp" for c in ("p_swing", "p_whiff", "p_foul", "p_strike")}
+    export(arsenal.rename(columns=components), "scores_por_arsenal",
+           ["pitcher_anon_id", "year", "pitch_class", "pitches", "uso_pct", "stuff_plus", "stuff_plus_harp",
+            "perdida_altura_por_100", *components.values()])
     by_type = type_deltas(arsenal[arsenal.year < HOLDOUT_SEASON], losses)
     summary = {
         "nota": "Arquetipos de D-038 con 2024–2025; archivos con identificadores en data/entregables/.",

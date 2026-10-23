@@ -158,7 +158,7 @@ th button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px;
       <a href="entregables_1_a_3.html">Perfil<span class="long">&nbsp;y recomendaciones</span></a>
       <a href="documento_tecnico.pdf">Documento<span class="long">&nbsp;técnico</span></a>
     </nav>
-    <span class="meta">Modelo v3 · LMB 2024–2026</span>
+    <span class="meta">Modelo v3 (entrenado 2024–2025) · scores 2024–2026</span>
   </div>
 </header>
 
@@ -229,7 +229,7 @@ function readings(p, arsenal) {
     if (weak.length) out.push(`A vigilar: <b>${weak.map(a => ARTICLES[a.pitch_class]).join(", ")}</b>, con pocos fallos y Stuff+ bajo su tipo.`);
     const resistant = arsenal.filter(a => a.perdida_altura != null && a.perdida_altura < 0.2 && a.stuff_plus >= 100);
     if (p.riesgo_tercio === "alto" && resistant.length) {
-      out.push(`En el Harp Helú su mezcla pierde más que la mayoría. Tiene pitches buenos de los tipos que casi no pierden en altura: <b>${resistant.map(a => `${ARTICLES[a.pitch_class]} (${fmt(a.stuff_plus)})`).join(", ")}</b>. Opción a considerar en casa; no está probado que usarlos más mejore su resultado.`);
+      out.push(`En el Harp Helú su mezcla pierde más que la mayoría. Tiene pitches buenos de los tipos que pierden menos en altura (curva, probado; slider, tendencia): <b>${resistant.map(a => `${ARTICLES[a.pitch_class]} (${fmt(a.stuff_plus)})`).join(", ")}</b>. Opción a considerar en casa; no está probado que usarlos más mejore su resultado.`);
     } else if (p.riesgo_tercio === "alto") {
       out.push("En el Harp Helú su mezcla pierde más que la mayoría y no tiene un rompimiento bueno que la compense.");
     } else if (p.riesgo_tercio === "bajo") {
@@ -321,8 +321,9 @@ function typeLosses() {
 function trust() {
   const r = DATA.repeticion;
   return `<p><b>Qué tanto creerle.</b> Correlación del mismo pitcher de 2024 a 2025 (${r.pitchers} pitchers): Stuff+ ${fmt(r.stuff, 2)}, Location+ ${fmt(r.location, 2)}, Pitching+ ${fmt(r.pitching, 2)}. Sus carreras reales solo ${fmt(r.xrv_neutral, 2)}.</p>
-    <p><b>Riesgo en altura:</b> uso × pérdida promedio de la liga por tipo (D-036). Ordena a los pitchers mejor que el azar, pero no predice carreras exactas; por eso va en tercios y solo si cubre 60 %+ de sus pitches.</p>
+    <p><b>Riesgo en altura:</b> uso × pérdida promedio de la liga por tipo. Ordena a los pitchers mejor que el azar, pero no predice carreras exactas; por eso va en tercios y solo si cubre 60 %+ de sus pitches.</p>
     <p><b>Stuff+ en el Harp Helú:</b> el del pitcher se compara contra los demás pitchers y el de cada pitch contra su mismo tipo. Cada escala tiene su propia desviación, así que la baja del pitcher no es el promedio de la de sus pitches.</p>
+    <p><b>Scores fuera de muestra:</b> cada pitch de 2024–2025 lo valora un modelo que no vio a ese pitcher (5 pliegues), y los de 2026, un modelo entrenado solo con 2024–2025.</p>
     <p>Datos de la liga con identificadores anónimos. Uso interno.</p>`;
 }
 

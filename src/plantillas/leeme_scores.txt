@@ -1,0 +1,31 @@
+Scores del entregable 1 · Diablos Rojos · ISAC Hackathon 2026
+
+Escalas "plus" (stuff_plus, location_plus, pitching_plus, stuff_plus_harp*): 100 es el promedio y 10 puntos
+son una desviación. Mayor es mejor para el pitcher. Cada archivo usa su propia desviación, así que la misma
+pérdida en altura se ve distinta: una recta baja unos 6.5 puntos por pitch, 13.0 en el arsenal y unos 15 en el
+pitcher.
+
+scores_por_pitch.csv (dentro de scores_por_pitch.zip): un renglón por pitch, 2024–2026.
+  PitchUID, pitcher_anon_id, year, altitude_category, pitch_class: identificadores de la base de la liga.
+  stuff_plus: contra su tipo de pitch y temporada. location_plus, pitching_plus: contra la temporada.
+  stuff_plus_harp: su Stuff+ con la pérdida promedio de su tipo en altitud extrema; vacío en cutter y splitter.
+  stuff, location, pitching: valor esperado en carreras del pitch. Menor es mejor para el pitcher.
+  xrv_neutral: valor real en carreras del pitch con valores de nivel del mar. Menor es mejor para el pitcher.
+
+scores_por_pitcher.csv: un renglón por pitcher y temporada con 300+ pitches.
+  stuff_plus, location_plus, pitching_plus: contra los pitchers de la misma temporada.
+  stuff_plus_harp_estimado: Stuff+ con la pérdida de su mezcla en altura; vacío si cubre menos de 60 % de sus pitches.
+  riesgo_altura: índice que solo sirve para ordenar. Usar riesgo_tercio (bajo, medio, alto).
+  cobertura_pct: % de sus pitches de tipos con pérdida medida.
+  rolling_pct: % de sus bolas en juego que fueron rolling.
+  arquetipo: Rompimiento, Recta y sinker, Cambio o split, o Mixto, según su uso.
+  p_swing, p_whiff, p_foul, p_strike: probabilidades esperadas, en %.
+
+scores_por_arsenal.csv: un renglón por pitcher, temporada y tipo de pitch con 100+ pitches.
+  uso_pct: % de sus pitches de ese tipo.
+  stuff_plus, stuff_plus_harp: contra los pitchers de su mismo tipo de pitch.
+  perdida_altura_por_100: pérdida promedio de su tipo en altitud extrema, en carreras por 100 pitches.
+  p_*_vs_tipo_pp: componente en puntos porcentuales contra la media de su tipo.
+
+Scores fuera de muestra: cada pitch de 2024–2025 lo valora un modelo que no vio a ese pitcher (5 pliegues), y
+los de 2026, un modelo entrenado solo con 2024–2025.
