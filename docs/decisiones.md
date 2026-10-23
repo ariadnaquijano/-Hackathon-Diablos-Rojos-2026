@@ -7,6 +7,23 @@ se agrega una nueva entrada que la reemplaza y se marca la anterior como *Reempl
 
 ---
 
+### D-044 · 2026-10-22 · Los componentes del modelo no anticipan el año siguiente mejor que la historia
+- **Pregunta.** En carreras la historia del pitcher le gana a Stuff+ (D-039), pero el resultado en
+  carreras casi no se repite (r 0.18). ¿Gana el modelo en lo que el pitcher controla?
+- **Prueba** (`src/componentes_futuro.py` → `reportes/etapa_06_componentes_futuro.json`). 146 pitchers
+  con 300+ pitches en 2024 y 2025. Para cada componente, la tasa que estima el modelo en 2024 contra la
+  tasa real de 2024, como predictoras de la tasa real de 2025. Regla fijada antes de correr: el modelo
+  gana si el IC 95 % de la diferencia de correlaciones queda arriba de cero. 2026 no se usa.
+- **Resultado: no gana en ninguno.** Whiff: modelo r 0.42 contra real 0.59 (diferencia −0.31 a −0.03).
+  Swing: 0.12 contra 0.50 (−0.58 a −0.17). Foul: 0.40 contra 0.47 (−0.22 a +0.09). Strike cantado:
+  0.24 contra 0.41 (−0.37 a +0.01). Los componentes del modelo se repiten mucho (r 0.78 a 0.86) porque
+  la forma de los pitches cambia poco, pero repetirse no es predecir; el swing depende de la ubicación,
+  que Stuff+ no ve.
+- **Qué cambia.** Nada del modelo. Se confirma el uso declarado: Stuff+ sirve donde no hay historia
+  (64 de 178 pitchers de 2026) o cuando la historia es de otra altitud, no para pronosticar a un
+  pitcher con historia en la liga.
+- **Estado:** Vigente.
+
 ### D-043 · 2026-10-17 · Placebo de calibración y estimado de altura por pitcher: reglas fijadas antes de correr
 - **Placebo de calibración (pregunta abierta de la auditoría).** Si el exponente k viniera de la
   calibración del TrackMan de cada estadio, y no de la física, k estimado con altitud media contra nivel

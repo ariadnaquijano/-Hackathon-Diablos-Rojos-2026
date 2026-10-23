@@ -19,7 +19,7 @@ a nivel del mar, y cuánto pierde cada pitch en el Estadio Alfredo Harp Helú (C
 |---|---|
 | Los entregables 1 a 4, sin ejecutar nada | La carpeta de entrega (`index.html`); se genera con `python src/simulador.py --estatico` |
 | Scores, perfil ideal y recomendaciones | [`reportes/entregables_1_a_3.html`](reportes/entregables_1_a_3.html) y [`docs/08`](docs/08_entregable_1_scores.md) a [`docs/10`](docs/10_entregable_3_recomendaciones.md) |
-| Cada decisión, con sus alternativas descartadas | [`docs/decisiones.md`](docs/decisiones.md) (D-001 a D-043) |
+| Cada decisión, con sus alternativas descartadas | [`docs/decisiones.md`](docs/decisiones.md) (D-001 a D-044) |
 | Las cifras del documento técnico y su origen | [`docs/07_guia_documento_tecnico.md`](docs/07_guia_documento_tecnico.md) |
 | Términos de béisbol, física y modelado | [`docs/glosario.md`](docs/glosario.md) |
 
@@ -84,6 +84,7 @@ python validacion_estadio.py && python metricas_documento.py
 python riesgo_contacto.py && python perfil_ideal.py
 python fisica_densidad.py && python diferencias_tipo.py
 python fisica_placebo.py && python altura_por_pitcher.py
+python componentes_futuro.py
 
 # Entregables
 python entregable_scores.py && python reporte_entregables.py

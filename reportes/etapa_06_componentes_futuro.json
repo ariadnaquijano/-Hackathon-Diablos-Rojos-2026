@@ -1,0 +1,42 @@
+{
+  "nota": "Tasa real de 2025 predicha con el modelo o con la tasa real de 2024; 2026 no se usa.",
+  "pitchers": 146,
+  "componentes": {
+    "swing": {
+      "r_modelo": 0.124,
+      "r_real_anterior": 0.498,
+      "ic95_diferencia": [
+        -0.5833,
+        -0.1665
+      ],
+      "modelo_predice_mejor": false
+    },
+    "whiff": {
+      "r_modelo": 0.424,
+      "r_real_anterior": 0.59,
+      "ic95_diferencia": [
+        -0.3089,
+        -0.0348
+      ],
+      "modelo_predice_mejor": false
+    },
+    "foul": {
+      "r_modelo": 0.396,
+      "r_real_anterior": 0.465,
+      "ic95_diferencia": [
+        -0.2235,
+        0.0865
+      ],
+      "modelo_predice_mejor": false
+    },
+    "strike_cantado": {
+      "r_modelo": 0.236,
+      "r_real_anterior": 0.409,
+      "ic95_diferencia": [
+        -0.3722,
+        0.0091
+      ],
+      "modelo_predice_mejor": false
+    }
+  }
+}
