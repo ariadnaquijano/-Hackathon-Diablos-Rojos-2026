@@ -115,4 +115,4 @@ PyArrow; Node.js solo para verificar el simulador.
 2023). La física de la altitud se apoya en Nathan (2008) y en lo observado en Coors Field (Kalk, 2008;
 Maahs, 2019). Las referencias completas están en el documento técnico.
 
-**Datos.** Datos pitch-by-pitch de la LMB (2024–2026) proporcionados por ISAC y Diablos Rojos. Solo se usan para ella y no se incluyen en el repositorio.
+**Datos.** Datos pitch-by-pitch de la LMB (2024–2026) proporcionados por ISAC y Diablos Rojos para la competencia. Solo se usan para ella y no se incluyen en el repositorio.
