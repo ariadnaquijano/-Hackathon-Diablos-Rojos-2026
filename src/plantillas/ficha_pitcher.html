@@ -273,7 +273,7 @@ function renderCard() {
     <section class="card" aria-label="Resumen">
       <div class="head">
         <h2>${p.pitcher_anon_id}</h2>
-        <span class="sub">Temporada ${p.year} · ${fmt(p.pitches)} pitches</span>
+        <span class="sub">Temporada ${p.year} · ${fmt(p.pitches)} pitches${p.arquetipo ? ` · arsenal ${p.arquetipo.toLowerCase()}` : ""}${p.rolling_pct == null ? "" : ` · ${fmt(p.rolling_pct)} % de rolling`}</span>
         ${p.pitches < SHORT_SAMPLE ? `<span class="chip warn">Muestra corta</span>` : `<span class="chip">Muestra suficiente</span>`}
       </div>
       <div class="scores">

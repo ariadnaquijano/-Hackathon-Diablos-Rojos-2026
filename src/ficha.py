@@ -17,6 +17,7 @@ Uso:
     python src/modelo_v3.py
     python src/arsenal.py
     python src/pasaporte_altitud.py
+    python src/entregable_scores.py   # da el % de rolling y el arquetipo
     python src/ficha.py
 """
 
@@ -31,6 +32,7 @@ from modelo_v3 import PITCHER_VALUES_V3
 
 TEMPLATE = Path(__file__).parent / "plantillas" / "ficha_pitcher.html"
 OUTPUT_HTML = ROOT / "data" / "fichas" / "fichas_pitchers.html"
+SCORES_CSV = ROOT / "data" / "entregables" / "scores_por_pitcher.csv"
 COMPONENTS = ["p_swing", "p_whiff", "p_foul", "p_strike"]
 PLUS = ["stuff_plus", "location_plus", "pitching_plus"]
 TERCILES = ["bajo", "medio", "alto"]
@@ -100,6 +102,11 @@ def pitcher_table(risk: pd.DataFrame) -> pd.DataFrame:
     return values
 
 
+def rolling_and_archetype() -> pd.DataFrame:
+    """% de rolling y arquetipo de arsenal de cada pitcher-temporada, del archivo de src/entregable_scores.py."""
+    return pd.read_csv(SCORES_CSV, usecols=["pitcher_anon_id", "year", "rolling_pct", "arquetipo"])
+
+
 def records(frame: pd.DataFrame, columns: list[str]) -> list[dict]:
     return json.loads(frame[columns].round(2).to_json(orient="records"))
 
@@ -107,7 +114,7 @@ def records(frame: pd.DataFrame, columns: list[str]) -> list[dict]:
 def main():
     losses = type_losses()
     arsenal = arsenal_table(losses)
-    pitchers = pitcher_table(altitude_risk(arsenal))
+    pitchers = pitcher_table(altitude_risk(arsenal)).merge(rolling_and_archetype(), on=["pitcher_anon_id", "year"], how="left")
     arsenal = arsenal[arsenal.set_index(["pitcher_anon_id", "year"]).index.isin(
         pitchers.set_index(["pitcher_anon_id", "year"]).index)]
     data = {
@@ -115,7 +122,7 @@ def main():
         "repeticion": json.loads((REPORTS_DIR / "etapa_06_modelo_v3.json").read_text())["repeticion_2024_a_2025"],
         "pitchers": records(pitchers, ["pitcher_anon_id", "year", "pitches", *PLUS, *[f"{p}_pct" for p in PLUS],
                                        "riesgo_altura", "riesgo_tercio", "cobertura_pct", "stuff_plus_harp",
-                                       "stuff_plus_harp_pct"]),
+                                       "stuff_plus_harp_pct", "rolling_pct", "arquetipo"]),
         "arsenal": records(arsenal, ["pitcher_anon_id", "year", "pitch_class", "pitches", "uso_pct", "stuff_plus", "stuff_plus_harp",
                                      *COMPONENTS, *[f"{c}_pct" for c in COMPONENTS], "perdida_altura"]),
     }

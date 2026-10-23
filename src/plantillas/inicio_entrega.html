@@ -87,6 +87,7 @@ section { display: grid; gap: 14px; }
   </header>
 
   <div class="kpis">__KPIS__</div>
+  <p class="lede-small">El ajuste sigue la física: el k de la IVB de la recta en densidad es 1.05 (1.02 a 1.07), dentro de lo que predice el efecto Magnus (1.00 a 1.11).</p>
 
   <div class="cards">__CARDS__</div>
 
@@ -99,7 +100,8 @@ section { display: grid; gap: 14px; }
 
   <section aria-labelledby="validacion">
     <h2 id="validacion">Validación fuera de muestra</h2>
-    <p class="note">Cada modelo evaluado en pitches que no vio al entrenar. Las dos primeras filas son RMSE (menor es mejor); la tercera, cuánto baja el error contra el modelo nulo (mayor es mejor). Bajo cada cifra, el intervalo del 95 % de su diferencia contra el nulo, remuestreando pitchers completos 1,000 veces. 2026 se consultó durante el desarrollo; las pruebas más limpias son la de pitchers no vistos y la de altitud extrema.</p>
+    <p class="lede-small">Qué se predice: el valor en carreras de cada pitch con valores de nivel del mar (xRV neutral). Stuff+ solo ve la física del pitch; Location+ ve zona, conteo y manos. Por eso Location+ explica más pitch por pitch.</p>
+    <p class="note">Cada modelo evaluado en pitches que no vio al entrenar. Las dos primeras filas son RMSE (menor es mejor); la tercera, cuánto baja el error cuadrático medio contra el modelo nulo (mayor es mejor; en RMSE equivale a cerca de la mitad). Bajo cada cifra, el intervalo del 95 % de su diferencia contra el nulo, remuestreando pitchers completos 1,000 veces. 2026 se consultó durante el desarrollo; las pruebas más limpias son la de pitchers no vistos y la de altitud extrema.</p>
     __VALIDACION__
   </section>
 

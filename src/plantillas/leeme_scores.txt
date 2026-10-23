@@ -15,7 +15,8 @@ scores_por_pitch.csv (dentro de scores_por_pitch.zip): un renglón por pitch, 20
 scores_por_pitcher.csv: un renglón por pitcher y temporada con 300+ pitches.
   stuff_plus, location_plus, pitching_plus: contra los pitchers de la misma temporada.
   stuff_plus_harp_estimado: Stuff+ con la pérdida de su mezcla en altura; vacío si cubre menos de 60 % de sus pitches.
-  riesgo_altura: índice que solo sirve para ordenar. Usar riesgo_tercio (bajo, medio, alto).
+  riesgo_altura: índice que solo sirve para ordenar; vacío si cubre menos de 60 % de sus pitches. Usar riesgo_tercio
+  (bajo, medio, alto).
   cobertura_pct: % de sus pitches de tipos con pérdida medida.
   rolling_pct: % de sus bolas en juego que fueron rolling.
   arquetipo: Rompimiento, Recta y sinker, Cambio o split, o Mixto, según su uso.

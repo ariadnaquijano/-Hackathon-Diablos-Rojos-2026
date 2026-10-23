@@ -190,7 +190,7 @@ footer code { font-family: var(--mono); font-size: 0.75rem; }
           <span><i class="diamond" style="background:var(--harp)"></i>Stuff+ estimado en el Harp Helú</span>
         </div>
         <svg class="chart" id="chart-arch" viewBox="0 0 720 260" role="img" aria-labelledby="arch-desc"><desc id="arch-desc">Stuff+ a nivel del mar y en el Harp Helú por arquetipo de arsenal.</desc></svg>
-        <figcaption>Todos bajan en la CDMX porque se comparan contra la liga a nivel del mar; lo que importa es el orden. El pitcher mediano queda en 85.</figcaption>
+        <figcaption>Todos bajan en la CDMX porque se comparan contra la liga a nivel del mar; lo que importa es el orden.</figcaption>
       </figure>
       <div class="card scroll">
         <table id="table-arch"></table>
@@ -222,10 +222,10 @@ footer code { font-family: var(--mono); font-size: 0.75rem; }
       <summary>Ver la física y qué tan sólida es cada pieza</summary>
     <div class="block">
       <h3>Por qué: la física</h3>
-      <p class="lead">En el Harp Helú el aire es <b>~21 % menos denso</b> que a nivel del mar. La fuerza de Magnus es proporcional a la densidad (Nathan, 2008), así que el pitch se mueve menos. Medimos el aire con el frenado de las rectas (cae 16 %) y el exponente k con el mismo pitcher en juegos con distinto aire, corregido por error de medición (variable instrumental). <b>Pasado a densidad, k de la IVB de la recta es 1.05 (1.02 a 1.07), dentro de lo que predice la física para el efecto Magnus (1.00 a 1.11).</b> Si la temperatura del juego mueve la densidad entre 0.76 y 0.81, ese 1.05 queda entre 0.93 y 1.20: compatible con la física, sin poder elegir entre sus variantes. En la liga, el vertical sale 0.93 y el horizontal 1.17. El movimiento horizontal cae algo más que el vertical, y por igual en altitud media que en extrema (k horizontal menos vertical, en escala de frenado: +0.33 contra +0.35), así que no es algo propio del Harp Helú. Su causa no está probada; los candidatos son la calibración de cada estadio, el marco de referencia de la medición o la estela por costura (seam-shifted wake), una fuerza lateral que no viene del Magnus (Smith y Smith, 2021; Garrett, 2022). Prueba placebo, con la regla fijada antes de correr: si k fuera solo física, estimado con altitud media saldría igual que con altitud extrema. <b>No pasó:</b> en 6 de 7 casos el de altitud media sale mayor (liga 1.63 contra 1.56; diferencia de −0.12 a −0.01). Un solo k es una aproximación, aunque usar el de altitud extrema cambia el movimiento traducido de la recta en menos de 0.3 %. En Coors Field también se reportó que las rectas pierden más movimiento que las sliders y que la corrida hacia el brazo cae casi 3 pulgadas (Maahs, 2019).</p>
+      <p class="lead">En el Harp Helú el aire es <b>~21 % menos denso</b> que a nivel del mar. La fuerza de Magnus es proporcional a la densidad (Nathan, 2008), así que el pitch se mueve menos. Medimos el aire con el frenado de las rectas (cae 16 %) y el exponente k con el mismo pitcher en juegos con distinto aire, corregido por error de medición (variable instrumental). <b>Pasado a densidad, k de la IVB de la recta es 1.05 (1.02 a 1.07), dentro de lo que predice la física para el efecto Magnus (1.00 a 1.11).</b> Si la temperatura del juego mueve la densidad entre 0.76 y 0.81, ese 1.05 queda entre 0.93 y 1.20: compatible con la física, sin poder elegir entre sus variantes. En la liga, el vertical sale 0.93 y el horizontal 1.17. El movimiento horizontal cae algo más que el vertical, y por igual en altitud media que en extrema (k horizontal menos vertical, en escala de frenado: +0.33 contra +0.35), así que no es algo propio del Harp Helú. Su causa no está probada; los candidatos son la calibración de cada estadio, el marco de referencia de la medición o la estela por costura (seam-shifted wake), una fuerza lateral que no viene del Magnus (Smith y Smith, 2021; Garrett, 2022). Prueba placebo, con la regla fijada antes de correr: si k fuera solo física, estimado con altitud media saldría igual que con altitud extrema. <b>No pasó:</b> el de altitud media sale mayor en los 7 casos, y en 6 con intervalo fuera de cero (liga, en escala de frenado: 1.63 contra 1.56; diferencia de −0.12 a −0.01). Un solo k es una aproximación, aunque usar el de altitud extrema cambia el movimiento traducido de la recta en menos de 0.3 %. En Coors Field también se reportó que las rectas pierden más movimiento que las sliders y que la corrida hacia el brazo cae casi 3 pulgadas (Maahs, 2019).</p>
       <div class="card scroll">
         <table id="table-k"></table>
-        <p class="caption">Un k más alto significa que ese movimiento pierde más en la CDMX. El k se estima con el frenado de las rectas; en densidad del aire vale unas 0.70 veces el de frenado (columna gris), y la física predice entre 1.00 y 1.11. La IVB de la slider casi no cambia con el aire (0.47 en densidad); hipótesis no probada: por su giro de bala, su movimiento vertical depende poco del Magnus. La corrida del cambio es lo más sensible de la liga (1.43 en densidad).</p>
+        <p class="caption">Un k más alto significa que ese movimiento pierde más en la CDMX. El k se estima con el frenado de las rectas; en densidad del aire vale unas 0.70 veces el de frenado (columna gris), y la física predice entre 1.00 y 1.11. La IVB de la slider cambia con el aire la mitad que la de la recta (0.47 contra 1.05 en densidad); hipótesis no probada: por su giro de bala, su movimiento vertical depende poco del Magnus. La corrida del cambio es lo más sensible de la liga (1.43 en densidad).</p>
       </div>
     </div>
 
@@ -337,7 +337,7 @@ const flyRatio = fly.carreras_extrema / fly.carreras_mar;
 
 el("kpis").innerHTML = [
   [s(fb.delta_stuff_plus), "puntos de Stuff+ pierde la recta en el Harp Helú"],
-  [s(cu.delta_stuff_plus), `puntos pierde la curva (${ci(cu.ic95_delta)}): menos que la recta, probado`],
+  [s(cu.delta_stuff_plus), "puntos pierde la curva: menos que la recta, diferencia probada"],
   [`${s(hr.diferencia)} pts`, `jonrones por fly en la CDMX (${n(hr.altitud_extrema)} % contra ${n(hr.nivel_del_mar)} %)`],
   [`${n(flyRatio)}×`, "cuesta más un fly en la CDMX que a nivel del mar"],
 ].map(([v, t]) => `<div class="kpi"><b>${v}</b><p>${t}</p></div>`).join("");
@@ -436,7 +436,7 @@ function evidence() {
     ["strong", ICON_OK, "Fuerte", "El contacto", `Un fly vale ${n(fly.carreras_extrema, 3)} carreras en la CDMX y ${n(fly.carreras_mar, 3)} a nivel del mar; un rolling cambia ${s(gb.diferencia, 3)}.`],
     ["trend", ICON_TREND, "Tendencia", "El arsenal", `Rompimiento pierde menos que recta y sinker (${s(diff.diferencia, 2)} carreras por 100), pero el intervalo toca cero.`],
     ["strong", ICON_OK, "Fuerte", "La física del ajuste", `k de la IVB de la recta en densidad: ${n(DATA.k_densidad["Four-Seam"].ivb, 2)} (1.02 a 1.07), dentro de lo que predice el efecto Magnus (1.00 a 1.11); con la temperatura incierta, 0.93 a 1.20.`],
-    ["trend", ICON_TREND, "Abierto", "HB cae más que IVB", "Pasa igual en altitud media que en extrema (+0.33 y +0.35, en escala de frenado), y el placebo de k no pasó: un solo k es una aproximación."],
+    ["trend", ICON_TREND, "Abierto", "HB cae más que IVB", "Pasa igual en altitud media que en extrema (+0.33 y +0.35, en escala de frenado), y el placebo de k no pasó en ninguno de los 7 casos: un solo k es una aproximación."],
     ["none", ICON_NONE, "Sin evidencia", "Rasgos dentro de cada tipo", "Velocidad, spin, IVB, HB, extensión, Magnus, VAA o diferencia de velocidad: ningún intervalo excluye el cero."],
   ].map(([cls, icon, tag, title, text]) => `<div class="ev"><span class="badge ${cls}">${icon}${tag}</span><b>${title}</b><p>${text}</p></div>`).join("");
 }
@@ -462,7 +462,7 @@ function gainLose() {
   ].map(x => `<li>${x}</li>`).join("");
   el("lose").innerHTML = [
     `<b>Recta de "ride":</b> ${s(fb.delta_stuff_plus)} puntos (${ci(fb.ic95_delta)}). Pierde unos 4 in de IVB: el "ride" sale del Magnus.`,
-    `<b>Sinker:</b> ${s(D.Sinker.delta_stuff_plus)} puntos (${ci(D.Sinker.ic95_delta)}). Pierde caída y corrida (k horizontal ${n(DATA.k.Sinker.hb, 2)}).`,
+    `<b>Sinker:</b> ${s(D.Sinker.delta_stuff_plus)} puntos (${ci(D.Sinker.ic95_delta)}). Pierde caída y corrida (k horizontal ${n(DATA.k_densidad.Sinker.hb, 2)} en densidad).`,
     `<b>Cambio:</b> ${s(D.Changeup.delta_stuff_plus)} puntos (${ci(D.Changeup.ic95_delta)}). Su corrida es lo más sensible al aire. Contra la recta pierde casi igual (${ci(chFb.ic95_carreras, 2)}): la H2 no es concluyente.`,
   ].map(x => `<li>${x}</li>`).join("");
 }
@@ -481,7 +481,7 @@ function home() {
   const sea = DATA.conteos["No Altitude"], alt = DATA.conteos["Extreme Altitude"];
   const strike = c => c["0-0"] - c["0-1"];
   el("home").innerHTML = [
-    `<b>Ponerse adelante vale más en la CDMX (probado).</b> Un strike en 0-0 le quita ${n(strike(alt), 3)} carreras al rival, contra ${n(strike(sea), 3)} a nivel del mar.`,
+    `<b>Ponerse adelante vale más en la CDMX (descriptivo, sin intervalo).</b> Un strike en 0-0 le quita ${n(strike(alt), 3)} carreras al rival, contra ${n(strike(sea), 3)} a nivel del mar.`,
     `<b>Los flies son el riesgo principal en casa (probado a nivel liga).</b> Cuidar el contacto elevado pesa más ahí que en la costa.`,
     `<b>Apoyarse más en slider y curva en casa (opción).</b> Pierden menos en altura, pero no está probado que usarlas más mejore el resultado: cambia cómo las espera el bateador.`,
   ].map(x => `<li>${x}</li>`).join("");

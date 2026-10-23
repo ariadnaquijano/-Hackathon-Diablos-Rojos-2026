@@ -169,10 +169,11 @@ def main():
     export(pitches, "scores_por_pitch", ["PitchUID", "pitcher_anon_id", "year", "altitude_category", "pitch_class",
                                          "stuff_plus", "location_plus", "pitching_plus", "stuff_plus_harp",
                                          "stuff", "location", "pitching", TARGET])
-    # Igual que las fichas: sin tercio de riesgo (cobertura < 60 %) no hay estimado en el Harp Helú. Solo en el
+    # Igual que las fichas: sin tercio de riesgo (cobertura < 60 %) no hay estimado ni índice de riesgo. Solo en el
     # archivo; los arquetipos de abajo siguen usando el estimado completo.
-    covered = pitchers.stuff_plus_harp_estimado.where(pitchers.riesgo_tercio.notna())
-    export(pitchers.assign(stuff_plus_harp_estimado=covered), "scores_por_pitcher", ["pitcher_anon_id", "year", "pitches", "stuff_plus", "location_plus",
+    covered = pitchers.riesgo_tercio.notna()
+    export(pitchers.assign(stuff_plus_harp_estimado=pitchers.stuff_plus_harp_estimado.where(covered),
+                           riesgo_altura=pitchers.riesgo_altura.where(covered)), "scores_por_pitcher", ["pitcher_anon_id", "year", "pitches", "stuff_plus", "location_plus",
                                             "pitching_plus", "stuff_plus_harp_estimado", "riesgo_altura",
                                             "riesgo_tercio", "cobertura_pct", "rolling_pct", "arquetipo", "p_swing", "p_whiff",
                                             "p_foul", "p_strike"])

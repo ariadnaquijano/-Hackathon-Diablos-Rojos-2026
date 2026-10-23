@@ -27,7 +27,7 @@ Requisitos: Python 3.12+, los datos en `data/raw/` (ver "Datos") y, en Mac, `bre
 
 ```bash
 python -m venv .venv && source .venv/bin/activate && pip install -r requirements.txt
-bash -c 'cd src && for s in limpieza features target modelos_base modelo modelo_v2 arsenal pasaporte_altitud location_ben modelo_v3 ficha entregable_scores; do python $s.py || exit 1; done'
+bash -c 'cd src && for s in limpieza features target modelos_base modelo modelo_v2 arsenal pasaporte_altitud location_ben modelo_v3 entregable_scores ficha; do python $s.py || exit 1; done'
 python src/simulador.py --estatico   # la primera vez entrena sus modelos (unos 10 minutos)
 ```
 

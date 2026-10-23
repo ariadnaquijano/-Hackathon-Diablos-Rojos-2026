@@ -369,8 +369,8 @@ def kpis_html() -> str:
     gain = json.loads((REPORTS_DIR / "etapa_06_validacion_estadio.json").read_text())["version_3_estricta"]["sin_altitud_extrema"]
     tiles = [
         (f"{losses['Four-Seam']['delta_stuff_plus']:+.1f}".replace("-", "−"), "puntos de Stuff+ pierde la recta en altitud extrema"),
-        (f"{losses['Curveball']['delta_stuff_plus']:+.1f}".replace("-", "−"), "puntos pierde la curva: el pitch que mejor resiste"),
-        (f"+{gain['pitching']['mejora_vs_media_conteo_pct']:.1f} %", "menos error de Pitching+ en altitud extrema, sin haberla visto al entrenar"),
+        (f"{losses['Curveball']['delta_stuff_plus']:+.1f}".replace("-", "−"), "puntos pierde la curva: menos que la recta, diferencia probada"),
+        (f"+{gain['pitching']['mejora_vs_media_conteo_pct']:.1f} %", "menos error cuadrático de Pitching+ que el modelo nulo en altitud extrema, sin haberla visto al entrenar"),
     ]
     return "".join(f"<div class='kpi'><b>{value}</b><p>{text}</p></div>" for value, text in tiles)
 
@@ -392,8 +392,8 @@ def validation_html() -> str:
     gains = park["sin_altitud_extrema"]
     cells = "<td>—</td>" + "".join(f"<td>+{gains[m]['mejora_vs_media_conteo_pct']:.2f} %<span>{ci(gains[m]['ic95_pct'])}</span></td>"
                                    for m in models[1:])
-    rows.append(f"<tr><th scope='row'>Altitud extrema sin verla al entrenar<span>{park['pitches']:,} pitches · mejora del error"
-                f" contra el nulo</span></th>{cells}</tr>")
+    rows.append(f"<tr><th scope='row'>Altitud extrema sin verla al entrenar<span>{park['pitches']:,} pitches · baja del error"
+                f" cuadrático contra el nulo</span></th>{cells}</tr>")
     per_pitch = v3["por_pitch_2026"]
     per_pitcher = v3["por_pitcher_2026"]["contra_lineal_observada"]
     future, repeat, altitude = v3["a_futuro_2026"], v3["repeticion_2024_a_2025"], v3["altitud_mismo_pitcher"]
@@ -404,7 +404,7 @@ def validation_html() -> str:
         f"<b>Contra modelos más simples (2026, por pitch):</b> mejora del error contra el promedio de la liga de"
         f" +{per_pitch['lineal_por_tipo']['mejora_vs_media_pct']:.2f} % en una regresión lineal por tipo de pitch,"
         f" +{per_pitch['stuff']['mejora_vs_media_pct']:.2f} % en Stuff+ (le gana a la lineal por"
-        f" {ci(per_pitch['stuff']['ic95_diferencia_vs_lineal_por_tipo_pct'])} puntos) y"
+        f" {ci(per_pitch['stuff']['ic95_diferencia_vs_lineal_por_tipo_pct'])} puntos porcentuales) y"
         f" +{per_pitch['pitching']['mejora_vs_media_pct']:.2f} % en Pitching+. Pitch por pitch casi todo es azar;"
         " la señal de Stuff+ se ve por pitcher.",
         f"<b>Por pitcher en 2026</b> ({v3['por_pitcher_2026']['pitchers']} pitchers): Pitching+ comete menos error que la lineal"
@@ -420,10 +420,11 @@ def validation_html() -> str:
         f" {altitude['xrv_neutral']['extrema_menos_mar_por_100']:.2f} carreras por 100 y Stuff+ solo"
         f" {altitude['stuff']['extrema_menos_mar_por_100']:.2f} (r {altitude['stuff']['r_entre_altitudes']:.2f}): Stuff+ ve el movimiento"
         " llevado a nivel del mar, y la pérdida por altura se mide aparte, en el Entregable 1.",
-        f"<b>Calibración en altitud extrema:</b> lo real es {calibration['real_por_100']:.2f} carreras por 100. El nulo falla por"
+        f"<b>Calibración en altitud extrema</b> (versión estricta, que tampoco vio altitud extrema al ajustar los pesos): lo real es"
+        f" {calibration['real_por_100']:.2f} carreras por 100. El nulo falla por"
         f" {abs(calibration['sesgo_nulo_por_100']):.2f}, Stuff+ por {abs(calibration['stuff']['sesgo_por_100']):.2f} y Pitching+ por"
-        f" {abs(calibration['pitching']['sesgo_por_100']):.2f}. Ningún modelo entrenado a nivel del mar corrige el nivel en altura;"
-        " el orden de los pitches sí se sostiene.",
+        f" {abs(calibration['pitching']['sesgo_por_100']):.2f}: Pitching+ reduce el error de nivel a la mitad, pero ningún modelo"
+        " entrenado a nivel del mar lo corrige del todo. El orden de los pitches sí se sostiene.",
         f"<b>Límite:</b> para predecir la temporada siguiente ({future['pitchers']} pitchers), la historia del pitcher (r"
         f" {future['persistencia_encogida']['r']:.2f}) le gana a Stuff+ ({future['stuff']['r']:.2f}) y a Pitching+ ({future['pitching']['r']:.2f}).",
         f"<b>Pitching+</b> combina Stuff y Location con una regresión lineal ajustada en 2024–2025 con predicciones de modelos que no"
