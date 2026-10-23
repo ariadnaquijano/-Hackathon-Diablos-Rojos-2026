@@ -441,7 +441,7 @@ def home_page() -> bytes:
     has_pdf = (PUBLISH_DIR / TECHNICAL_PDF).exists()
     cards = [
         card("simulador.html", "Entregable 4 · Dashboard", "Simulador Stuff+",
-             "Escribe un pitch como lo da TrackMan y ve su Stuff+ a nivel del mar y en el Harp Helú.", main=True),
+             "Escribe un pitch como lo da TrackMan y ve su Stuff+ a nivel del mar y en el Harp Helú, y cuánto ajustar la mira en casa.", main=True),
         card("fichas.html", "Entregables 1 y 4", "Fichas de pitchers",
              "Stuff+, Location+ y Pitching+ de cada pitcher, su arsenal y su riesgo en altura."),
         card("entregables_1_a_3.html", "Entregables 1, 2 y 3", "Scores, perfil ideal y recomendaciones",

@@ -136,6 +136,7 @@ button:hover { background: var(--surface-2); }
 .tile + .tile { border-left: 1px solid var(--rule); }
 .tile .label { margin: 0; }
 .tile .big { font: 700 1.75rem/1 var(--display); font-variant-numeric: tabular-nums; }
+.tile .aim { color: var(--ink); }
 .tile .big .arrow { color: var(--ink-3); font-weight: 500; margin: 0 4px; }
 .tile p { font-size: 0.8125rem; color: var(--ink-2); }
 .tile p b { color: var(--ink); }
@@ -239,10 +240,11 @@ button:hover { background: var(--surface-2); }
 
     <section class="card tiles" aria-label="Detalle del cambio en altura">
       <div class="tile">
-        <span class="label">Movimiento en el Harp Helú</span>
+        <span class="label">Movimiento y punto de mira</span>
         <span class="big" id="move-ivb">—</span>
         <span class="big" id="move-hb">—</span>
         <p>Pulgadas de quiebre vertical inducido (IVB) y hacia el brazo (HB), del mar a la CDMX.</p>
+        <p class="aim" id="aim"></p>
       </div>
       <div class="tile">
         <span class="label">Mediana de cada tipo en casa</span>
@@ -409,10 +411,20 @@ const HARP_MEDIANS = CONFIG.tipos.filter(t => CONFIG.delta_harp[t] != null && CO
   .map(t => { const s = CONFIG.mapa[t].plus.map(v => v + CONFIG.delta_harp[t]).sort((a, b) => a - b); return [t, s[Math.floor(s.length / 2)]]; })
   .sort((a, b) => b[1] - a[1]);
 
+// Corrección de mira para el bullpen: lo que el giro deja de mover en casa, en sentido contrario.
+function aimText(r) {
+  const up = r.mar.ivb - r.harp.ivb, arm = r.mar.hb - r.harp.hb;
+  const part = (v, pos, neg) => Math.abs(v) < 0.3 ? null : `${number(Math.abs(v))} pulg ${v > 0 ? pos : neg}`;
+  const parts = [part(up, "más arriba", "más abajo"), part(arm, "más hacia el brazo", "más hacia el guante")].filter(Boolean);
+  const aim = parts.length ? `apunta ${parts.join(" y ")}` : "casi no cambia";
+  return `<b>En casa, ${aim}.</b> Es lo que el giro deja de mover; además cae un poco menos por gravedad porque llega antes (cerca de 1 pulg en la recta). Estimado físico, no medido con ubicaciones.`;
+}
+
 function renderResult(r) {
   const type = state.type, plural = PLURALS[type];
   el("move-ivb").innerHTML = `IVB ${number(r.mar.ivb)}<span class="arrow">→</span>${number(r.harp.ivb)}`;
   el("move-hb").innerHTML = `HB ${number(r.mar.hb)}<span class="arrow">→</span>${number(r.harp.hb)}`;
+  el("aim").innerHTML = aimText(r);
   el("league").textContent = r.perdida_liga_por_100 == null ? "—" : number(r.perdida_liga_por_100, 2);
   el("medians").innerHTML = HARP_MEDIANS.map(([t, v]) => `<span class="${t === type ? "own" : ""}">${NAMES[t]} <b>${number(v, 0)}</b></span>`).join("");
   if (r.stuff_plus == null) {
